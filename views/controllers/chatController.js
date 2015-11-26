@@ -1,6 +1,9 @@
 angryCartels.controller('chatController', function($scope) {
+
+	// connect the socket so we can do cool stuff, will probably link this with logging in though
+	var socket = io.connect();
+
 	// create a message to display in our view
-	$scope.message = 'Enjoy the fun game!';
 	$scope.messages = [];
 
   	// sends the message that the user wants to send
@@ -13,7 +16,4 @@ angryCartels.controller('chatController', function($scope) {
         $scope.messages.push(msg);
         $scope.$apply();
     });
-    $scope.increment = function() {
-        socket.emit("increment", {"add": 1});
-    }
 });

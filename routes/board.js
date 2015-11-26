@@ -1,4 +1,4 @@
-var board = {
+module.exports = {
 	"biscayne ave": {
 		"type": "property",
 		"quality": "fake red",
