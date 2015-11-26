@@ -23,21 +23,27 @@ function emitAll(call, data) {
 }
 
 function emitInGame(host, call, data) {
-	for(int i = 0; i<games[host]; i++) {
-  		users[games[host]["players"][i]].emit(call, data);
+	for(var index in games[host]["players"]) {
+		var playerName = games[host]["players"][index];
+		users[playerName].emit(call, data);
   	}
 }
 
 module.exports = function(socket){
   console.log('a user connected');
   users[userGenNum] = socket;
-  userGenNum++;
   socket.username = userGenNum;
+  userGenNum++;
 
+  //TODO LOGIN
   socket.on('login', function(username) {
   	socket.username = username;
   	users[username] = socket;
   });
+
+  socket.on('get client name', function() {
+  	socket.emit('send client name', socket.username);
+  })
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -57,13 +63,13 @@ module.exports = function(socket){
   		"players": [socket.username],
   		"data": {}
   	}
-  	socket.inGame = socket.username;
+  	socket.inGame = "" + socket.username;
   	emitAll('updated games', games);
   });
 
   socket.on('stop hosting game', function() {
   	emitInGame(socket.username, 'kick game', {});
-  	delete games[socket.username];
+  	games[socket.username] = null;
   	emitAll('updated games', games);
   	socket.inGame = null;
   });

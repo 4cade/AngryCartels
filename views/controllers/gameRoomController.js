@@ -1,14 +1,18 @@
-angryCartels.controller('gameRoomController', function($scope) {
+angryCartels.controller('gameRoomController', function($scope, $interval) {
     $scope.hostingGame = false;
-
-	  // create a message to display in our view
-	  $scope.games = {};
-    socket.emit('get games', {});
+    $scope.inGame = null;
+    $scope.clientName = null;
+	  // load initial games
+	  socket.emit('get games', {});
+    socket.emit('get client name', {});
+    // check for new games every 5 seconds
+    $interval(function() { socket.emit('get games', {}); }, 5000);
 
   	// sends the message that the user wants to send
   	$scope.createGame = function() {
   		socket.emit('create game', {});
   		$scope.hostingGame = true;
+      $scope.inGame = $scope.clientName;
   	}
 
     $scope.joinGame = function(host) {
@@ -24,6 +28,7 @@ angryCartels.controller('gameRoomController', function($scope) {
     $scope.stopHosting = function() {
       socket.emit('stop hosting game', $scope.inGame);
       $scope.inGame = null;
+      $scope.hostingGame = false;
     }
 
     $scope.startGame = function() {
@@ -37,7 +42,13 @@ angryCartels.controller('gameRoomController', function($scope) {
     });
 
     socket.on('kick game', function() {
+      console.log("I got kicked yooo");
       $scope.inGame = null;
       $scope.hostingGame = false;
+      $scope.$apply();
+    });
+
+    socket.on('send client name', function(name) {
+      $scope.clientName = name;
     })
 });
