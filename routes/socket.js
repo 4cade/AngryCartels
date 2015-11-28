@@ -1,4 +1,4 @@
-var board = require('./board.js')
+var board = require('./board.js');
 
 var users = {};
 var userGenNum = 0;
