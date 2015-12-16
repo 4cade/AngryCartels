@@ -89,10 +89,30 @@ module.exports = function(socket){
 
   socket.on('get games', function() {
   	socket.emit('updated games', games);
-  })
+  });
 
   socket.on('start game', function() {
   	//TODO actually populate the game with stuff and make everyone go into the game
+  });
+
+  socket.on('roll', function() {
+
+  });
+
+  socket.on('trade', function(tradeInfo) {
+
+  });
+
+  socket.on('buy house', function(info) {
+
+  });
+
+  socket.on('sell house', function(info) {
+
+  });
+
+  socket.on('mortgage', function(info) {
+
   })
 }
 
