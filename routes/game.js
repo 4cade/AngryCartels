@@ -19,6 +19,7 @@ game.initializeBoard = function(gameData) {
 		newPlayer.getOutOfJails = 0;
 		newPlayer.forward = true;
 		newPlayer.location = "go"; // all players start on go
+		newPlayer.railroad = null;
 
 		gameData["players"][index] = newPlayer;
 	}
@@ -71,14 +72,52 @@ game.initializeBoard = function(gameData) {
 */
 game.rollDice = function(gameData) {
 	// many things here TODO
+	var die1 = 0; // TODO random number [1,6]
+	var die2 = 0; // TODO random number [1,6]
+	var specialDie = 0; // TODO random number [1,6]
+
+	var diceTotal = die1 + die2;
+	var special = "";
+	// handle specialDie first TODO look up frequencies of everything
+	if(specialDie == "mrmonopoly") {
+		special = "mrmonopoly";
+	}
+	else if(specialDie == "moves") {
+		diceTotal += specialDie;
+	}
+	else {
+		special = "gainbusticket"
+	}
+	var odd = diceTotal % 2 !== 0;
+
+	var player = gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
+
+	var moveInfo = moveLocation(player.location, diceTotal, odd, player.forward, player.railroad);
+
+	// TODO set moveInfo to update player
+
+	if(special === "mrmonopoly") {
+		var moveInfo = mrMonopolyLocation(player.location, odd, player.forward, player.railroad);
+		// TODO handle new moveInfo
+	}
+	else if(special === "gainbusticket") {
+		// TODO gain a bus ticket
+	}
 }
 
 /**
-*
-*
+* Moves the user to the next unowned property in the forward direction, or
+*	 not at all if there are no unowned properties in the forward path
+* @param currentLocation the location the player is on
+* @param odd true if if the sum of dice is odd
+* @param forward true if the player is moving forward
+@ @param railroad true if the player is on the upperTrack for a railroad (innermost)
+* @return a JSON specifying the new location of the player, any money gained along the journey,
+* 	a boolean specifying if the user is on the upper or lower track of a railroad, and an array
+* 	of all of the locations visited in order in case an animation would like to have that 
 */
-var mrMonopolyLocation = function(currentLocation, odd, forward) {
-	var next = nextLocation(currentLocation, forward);
+var mrMonopolyLocation = function(currentLocation, odd, forward, railroad) {
+	var next = nextLocation(currentLocation, forward, railroad);
 	// TODO
 }
 
@@ -90,21 +129,21 @@ var mrMonopolyLocation = function(currentLocation, odd, forward) {
 * @param moves the number of times the player can move
 * @param odd true if the dice roll was odd
 * @param forward true if the player is moving forward
+* @param railroad true if the player is on the upperTrack for a railroad (innermost)
 * 
 * @return a JSON specifying the new location of the player, any money gained along the journey,
 * 	a boolean specifying if the user is on the upper or lower track of a railroad, and an array
 * 	of all of the locations visited in order in case an animation would like to have that 
 */
-var moveLocation = function(currentLocation, moves, odd, forward) {
+var moveLocation = function(currentLocation, moves, odd, forward, railroad) {
 	var moneyGained = 0;
 	var location = currentLocation;
 	// TODO I think this might break if the player starts on a railroad
 	var movesLeft = moves;
 	var locationsMovedTo = [];
-	railroad = null; // true if on upper track for a railroad
 
 	while(movesLeft > 0) {
-		location = nextLocation(location, odd, forward);
+		location = nextLocation(location, odd, forward, railroad);
 		locationsMovedTo.push(location);
 		movesLeft--;
 
@@ -164,8 +203,10 @@ var moveLocation = function(currentLocation, moves, odd, forward) {
 * @param currentLocation the current location of the player
 * @param odd true if the dice roll was odd or even
 * @param forward true if the player is moving in the forward direction
+* @param railroad true if the player is on the upperTrack for a railroad (innermost)
+* @return the next location that the user is going to go to
 */
-var nextLocation = function(currentLocation, odd, forward) {
+var nextLocation = function(currentLocation, odd, forward, railroad) {
 	var direction = "backward";
 
 	if(forward) {
@@ -173,7 +214,7 @@ var nextLocation = function(currentLocation, odd, forward) {
 	}
 
 	var next = board[currentLocation][direction];
-	var upperTrack = isUpperTrack(currentLocation);
+	var upperTrack = isUpperTrack(currentLocation) || railroad;
 	// handles railroad case
 	if(board[currentLocation]["type"] == "railroad") {
 		if(odd && upperTrack) {
@@ -408,12 +449,18 @@ var useBusTicket = function(action, gameData) {
 * @return the modified gameData with any issues stored in the issues field
 */
 var buyProperty = function(property, player, gameData) {
-	gameData["owned"][property] = true;
+	gameData["owned"][property] = player;
 	gameData["players"][player][property].push({
 		"name": property, 
 		"houses": 0,
 		"mortgaged": false});
-	// TODO add functionality to deal with color majority stuff
+	var colorData = gameData["color"][board[property]["quality"]];
+
+	for(var i = 0; i < colorData.length; i++) {
+		if(colorData[i]["property"] === property) {
+			"owner" = player;
+		}
+	}
 	// properties cost twice the mortgage price
 	gameData["players"][player]["money"] -= 2*board[property]["mortgage"];
 	return gameData;
@@ -461,7 +508,8 @@ var buyHouse = function(property, player, gameData) {
 			if(gameData["players"][property][i]["name"] === property) {
 				gameData["players"][player][property][i]["houses"] += 1;
 				setHouseNumberForProperty(color, property, gameData["players"][player][property][i]["houses"]);
-				// TODO handling losing money for buying the house
+				gameData["players"][player]["money"] -= board[property]["house"];
+				gameData["houses"] -= 1;
 			}
 		}
 	}
@@ -472,7 +520,17 @@ var buyHouse = function(property, player, gameData) {
 			if(gameData["players"][property][i]["name"] === property) {
 				gameData["players"][player][property][i]["houses"] += 1;
 				setHouseNumberForProperty(color, property, gameData["players"][player][property][i]["houses"]);
-				// TODO handling losing money for buying the house
+				gameData["players"][player]["money"] -= board[property]["house"];
+				// bought a hotel
+				if(gameData["players"][player][property][i]["houses"] === 5) {
+					gameData["houses"] += 4;
+					gameData["hotels"] -= 1;
+				}
+				// bought a skyscraper
+				else {
+					gameData["hotels"] += 1;
+					gameData["skyscrapers"] -= 1;
+				}
 			}
 		}
 	}
@@ -482,14 +540,15 @@ var buyHouse = function(property, player, gameData) {
 }
 
 /**
-* Simulates the player buying a house on a property (also works for hotels/skyscrapers)
+* Simulates the player selling a house from a property (also works for hotels/skyscrapers)
 * @param property the property to sell a house from
 * @param the player that wants to sell the house
 * @param gameData the JSON of the game
 * @return gameData with changes to the player's data if the house was able to be sold
 */
 var sellHouse = function(property, player, gameData) {
-	// TODO
+	var color = board["property"][property]["quality"];
+	//TODO
 }
 
 /**
@@ -500,7 +559,29 @@ var sellHouse = function(property, player, gameData) {
 * @return gameData with changes to both players' data based on the rent charged
 */
 var payRent = function(property, player, gameData) {
+	if(gameData["owned"][property]) {
+		var rentArray = board[property]["rent"];
+		var owner = gameData["owned"][property];
+		var houseRentIndex = 0;
 
+		var colorSet = gameData["color"][board[property]["quality"]];
+		for(var i = 0; i < colorSet.length; i++) {
+			if(colorSet[i]["property"] === property) {
+				houseRentIndex = colorSet[i]["houses"];
+				if(colorSet[i]["hotel"]) {
+					houseRentIndex = 5;
+				}
+				else if(colorSet[i]["skyscraper"]) {
+					houseRentIndex = 6;
+				}
+			}
+		}
+
+		var cost = rentArray[houseRentIndex];
+		gameData["players"][player]["money"] -= cost;
+		gameData["players"][owner]["money"] += cost;
+	}
+	return gameData;
 }
 
 /**
@@ -527,7 +608,14 @@ var correctIssues = function(gameData) {
 	// TODO
 }
 
-
+/**
+* Tells the owner of the property or false if there is none
+* @param property the name of the property to check
+* @return the owner of the property or false
+*/
+var isOwned = function(property) {
+	return gameData["owned"][property];
+}
 
 
 
