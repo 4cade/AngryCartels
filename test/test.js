@@ -101,7 +101,7 @@ describe('Init', function() {
             });
 
             // test existing user
-            it('should return username when user exists', function (done) {
+            it('should not return error when user exists', function (done) {
                 User.findUserProfile('shu', function(err, result) {
                     assert.equal(err, null);
                     assert.equal(result.username, 'shu');
@@ -110,12 +110,60 @@ describe('Init', function() {
                 });
             });
 
-            // test existing user capitalized
-            it('should return username when user exists even if capitalized', function (done) {
+            // test existing user with different capitalization
+            it('should not return error when user exists even if capitalized', function (done) {
                 User.findUserProfile('Zach', function(err, result) {
                     assert.equal(err, null);
                     assert.equal(result.username, 'zach');
                     assert.equal(result.friends, 100);
+                    done();
+                });
+            });
+
+        });
+
+        //test checkPassword
+        describe('#checkPassword', function () {
+
+            // test nonexistent user
+            it('should return error when user does not exist', function (done) {
+                User.checkPassword('Santa', 'hohoho', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Incorrect username/password combination');
+                    done();
+                });
+            });
+
+            // test incorrect password for existing user
+            it('should return error when password incorrect', function (done) {
+                User.checkPassword('zach', 'testpass', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Incorrect username/password combination');
+                    done();
+                });
+            });
+
+            // test correct password for existing user
+            it('should not return error when user exists', function (done) {
+                User.checkPassword('alex', 'code831', function(err, result) {
+                    assert.equal(err, null);
+                    done();
+                });
+            });
+
+            // test existing user different capitalization
+            it('should not return error when user exists even if capitalized', function (done) {
+                User.checkPassword('Shu', 'kawaii', function(err, result) {
+                    assert.equal(err, null);
+                    done();
+                });
+            });
+
+            // test existing user with password capitalized differently
+            it('should return error when password has different capitalization', function (done) {
+                User.checkPassword('shu', 'KaWaii', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Incorrect username/password combination');
                     done();
                 });
             });
