@@ -8,7 +8,8 @@ var userSchema = mongoose.Schema({
     gamesPlayed: Number,
     wins: Number,
     losses: Number,
-    friends: [{type: mongoose.Schema.Types.ObjectId, ref:'User'}]
+    friendList: [{type: mongoose.Schema.Types.ObjectId, ref:'User'}],
+    friends: Number
 });
 
 /**
@@ -65,6 +66,7 @@ userSchema.statics.findUserProfile = function(username, callback) {
                     wins: result.wins,
                     losses: result.losses
                 },
+                friendList: result.friendList,
                 friends: result.friends
             });
         }
@@ -119,7 +121,8 @@ userSchema.statics.createNewUser = function(rawusername, password, name, rawemai
                                 gamesPlayed: 0,
                                 wins: 0,
                                 losses: 0,
-                                friends: []
+                                friendList: [],
+                                friends: 0
                             });
                             user.save(function(err, result) {
                                 if (err) {
@@ -136,6 +139,64 @@ userSchema.statics.createNewUser = function(rawusername, password, name, rawemai
             } else callback('Password must be at least 6 characters long');
         } else callback('Invalid password');
     } else callback('Invalid username (must be between 3 and 16 characters and consist of letters, numbers, underscores, and hyphens)');
+}
+
+/**
+ * Add user as new friend
+ *
+ * @param username {string} - username
+ * @param userId {string} - user id of friend to be added; must be valid user
+ * @param callback {function} - function to be called with err and result
+ */
+userSchema.statics.addFriend = function(username, userId, callback) {
+    User.findUser(username, function(err, user) {
+        if (err) {
+            callback(err);
+        } else {
+            if (user.friendList.indexOf(userId) > -1) {
+                callback('Already friends');
+            } else {
+                user.friendList.push(userId);
+                user.friends += 1;
+                user.save(function(err, result) {
+                    if (err) {
+                        callback('Error saving user');
+                    } else {
+                        User.findUserProfile(username, callback);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/**
+ * Unfriend a user
+ *
+ * @param username {string} - username
+ * @param userId {string} - user id of user to be unfriended; must be valid user
+ * @param callback {function} - function to be called with err and result
+ */
+userSchema.statics.removeFriend = function(username, userId, callback) {
+    User.findUser(username, function(err, user) {
+        if (err) {
+            callback(err);
+        } else {
+            if (user.friendList.indexOf(userId) == -1) {
+                callback('Not friends');
+            } else {
+                user.friendList.splice(user.friendList.indexOf(userId), 1);
+                user.friends -= 1;
+                user.save(function(err, result) {
+                    if (err) {
+                        callback('Error saving user');
+                    } else {
+                        User.findUserProfile(username, callback);
+                    }
+                });
+            }
+        }
+    });
 }
 
 var User = mongoose.model('User', userSchema);
