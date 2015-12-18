@@ -20,7 +20,7 @@ describe('Init', function() {
                     wins: 0,
                     losses: 0,
                     friendList: [],
-                    friends: 0
+                    friends: 100
                 })).save(function(err, result) {
                     if (!err) {
                         userId1 = result._id;
@@ -30,9 +30,9 @@ describe('Init', function() {
                         password: 'kawaii',
                         name: 'Shu Maiko',
                         email: 'theonlyshu@gmail.com',
-                        gamesPlayed: 0,
-                        wins: 0,
-                        losses: 0,
+                        gamesPlayed: 6,
+                        wins: 5,
+                        losses: 1,
                         friendList: [],
                         friends: 0
                     })).save(function(err, result) {
@@ -51,7 +51,7 @@ describe('Init', function() {
 
         // test findUser
         describe('#findUser', function() {
-            // test nonexistant user
+            // test nonexistent user
             it('should return error when user does not exist', function (done) {
                 User.findUser('hello', function(err, result) {
                     assert.notEqual(err, null);
@@ -72,9 +72,9 @@ describe('Init', function() {
 
         // test authenticateUser
         describe('#authenticateUser', function() {
-            // test nonexistant user
+            // test nonexistent user
             it('should return error when user does not exist', function (done) {
-                User.authenticateUser('hello', function(err, result) {
+                User.authenticateUser('testuser', function(err, result) {
                     assert.notEqual(err, null);
                     done();
                 });
@@ -88,6 +88,38 @@ describe('Init', function() {
                     done();
                 });
             });
+        });
+
+        //test findUserProfile
+        describe('#findUserProfile', function () {
+            // test nonexistent user
+            it('should return error when user does not exist', function (done) {
+                User.findUserProfile('bob', function(err, result) {
+                    assert.notEqual(err, null);
+                    done();
+                });
+            });
+
+            // test existing user
+            it('should return username when user exists', function (done) {
+                User.findUserProfile('shu', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.username, 'shu');
+                    assert.equal(result.stats.gamesPlayed, 6);
+                    done();
+                });
+            });
+
+            // test existing user capitalized
+            it('should return username when user exists even if capitalized', function (done) {
+                User.findUserProfile('Zach', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.username, 'zach');
+                    assert.equal(result.friends, 100);
+                    done();
+                });
+            });
+
         });
 
     });
