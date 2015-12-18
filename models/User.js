@@ -71,6 +71,73 @@ userSchema.statics.findUserProfile = function(username, callback) {
     });
 }
 
+/**
+ * Authenticate a user
+ *
+ * @param username {string} - username to check
+ * @param password {string} - password to check
+ * @param callback {function} - function to be called with err and result
+ */
+userSchema.statics.checkPassword = function(username, password, callback) {
+    User.findUser(username, function(err, result) {
+        if (err) {
+            callback('Incorrect username/password combination');
+        } else {
+            if (result.password === password) {
+                callback(null, {username: result.username});
+            } else {
+                callback('Incorrect username/password combination');
+            }
+        }
+    });
+}
+
+/**
+ * Create a new user
+ * @param rawusername {string} - username to create
+ * @param password {string} - password
+ * @param name {string} - name
+ * @param rawemail {string} - email
+ * @param callback {function} - function to be called with err and result
+ */
+userSchema.statics.createNewUser = function(rawusername, password, name, rawemail, callback) {
+    var username = rawusername.toLowerCase();
+    var email = rawemail.toLowerCase();
+    if (username.match('^[a-z0-9_-]{3,16}$')) {
+        if (typeof password === 'string') {
+            if (password.length >= 6) {
+                if (email.match('.+\@.+\..+')) {
+                    User.find({$or: [{username: username}, {email: email}]}, function(err, result) {
+                        if (err) {
+                            callback(err);
+                        } else if (result.length === 0) {
+                            var user = new User({
+                                username: username,
+                                password: password,
+                                name: name,
+                                email: email,
+                                gamesPlayed: 0,
+                                wins: 0,
+                                losses: 0,
+                                friends: []
+                            });
+                            user.save(function(err, result) {
+                                if (err) {
+                                    callback('Error saving user');
+                                } else {
+                                    callback(null, {username: username});
+                                }
+                            });
+                        } else {
+                            callback('User already exists');
+                        }
+                    });
+                } else callback('Must have valid email address');
+            } else callback('Password must be at least 6 characters long');
+        } else callback('Invalid password');
+    } else callback('Invalid username (must be between 3 and 16 characters and consist of letters, numbers, underscores, and hyphens)');
+}
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
