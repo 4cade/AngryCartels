@@ -199,6 +199,75 @@ userSchema.statics.removeFriend = function(username, userId, callback) {
     });
 }
 
+/**
+ * Increment user's number of games played
+ *
+ * @param username {string} - username
+ * @param callback {function} - function to be called with err and result
+ */
+userSchema.statics.incrementGamesPlayed = function(username, callback) {
+    User.findUser(username, function(err, user) {
+        if (err) {
+            callback(err);
+        } else {
+            user.gamesPlayed += 1;
+            user.save(function(err, result) {
+                if (err) {
+                    callback('Error saving user');
+                } else {
+                    callback(null, {gamesPlayed: user.gamesPlayed});
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Increment user's number of games won
+ *
+ * @param username {string} - username
+ * @param callback {function} - function to be called with err and result
+ */
+userSchema.statics.incrementWins = function(username, callback) {
+    User.findUser(username, function(err, user) {
+        if (err) {
+            callback(err);
+        } else {
+            user.wins += 1;
+            user.save(function(err, result) {
+                if (err) {
+                    callback('Error saving user');
+                } else {
+                    callback(null, {wins: user.wins});
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Increment user's number of games lost
+ *
+ * @param username {string} - username
+ * @param callback {function} - function to be called with err and result
+ */
+userSchema.statics.incrementLosses = function(username, callback) {
+    User.findUser(username, function(err, user) {
+        if (err) {
+            callback(err);
+        } else {
+            user.losses += 1;
+            user.save(function(err, result) {
+                if (err) {
+                    callback('Error saving user');
+                } else {
+                    callback(null, {losses: user.losses});
+                }
+            });
+        }
+    });
+}
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
