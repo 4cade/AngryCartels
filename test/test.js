@@ -90,7 +90,7 @@ describe('Init', function() {
             });
         });
 
-        //test findUserProfile
+        // test findUserProfile
         describe('#findUserProfile', function () {
             // test nonexistent user
             it('should return error when user does not exist', function (done) {
@@ -122,9 +122,8 @@ describe('Init', function() {
 
         });
 
-        //test checkPassword
+        // test checkPassword
         describe('#checkPassword', function () {
-
             // test nonexistent user
             it('should return error when user does not exist', function (done) {
                 User.checkPassword('Santa', 'hohoho', function(err, result) {
@@ -164,6 +163,91 @@ describe('Init', function() {
                 User.checkPassword('shu', 'KaWaii', function(err, result) {
                     assert.notEqual(err, null);
                     assert.equal(err, 'Incorrect username/password combination');
+                    done();
+                });
+            });
+
+        });
+
+        // test createNewUser
+        describe('#createNewUser', function() {
+            // test creating an already existing user
+            it('should return error when user already exists', function (done) {
+                User.createNewUser('alex', 'password', 'name', 'email@gmail.com', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'User already exists');
+                    done();
+                });
+            });
+
+            // test username min length
+            it('should return error when username too short', function (done) {
+                User.createNewUser('hi', 'password', 'name', 'snail@gmail.com', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Invalid username (must be between 3 and 16 characters and consist of letters, numbers, underscores, and hyphens)');
+                    done();
+                });
+            });
+
+            // test username max length
+            it('should return error when username too long', function (done) {
+                User.createNewUser('thisisasuperlongname', 'password', 'name', 'long@gmail.com', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Invalid username (must be between 3 and 16 characters and consist of letters, numbers, underscores, and hyphens)');
+                    done();
+                });
+            });
+
+            // test username with invalid characters
+            it('should return error when username has invalid characters', function (done) {
+                User.createNewUser('mi<>yu', 'password', 'name', 'rushhour@mit.edu', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Invalid username (must be between 3 and 16 characters and consist of letters, numbers, underscores, and hyphens)');
+                    done();
+                });
+            });
+
+            // test email with invalid format
+            it('should return error when email is not in a valid format', function (done) {
+                User.createNewUser('luke', 'password', 'name', 'N0TvalidEma!l', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Must have valid email address');
+                    done();
+                });
+            });
+
+            // test non-unique email
+            it('should return error when email already taken', function (done) {
+                User.createNewUser('bryan', 'password', 'name', 'theonlyshu@gmail.com', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'User already exists');
+                    done();
+                });
+            });
+
+            // test short password
+            it('should return error when password too short', function (done) {
+                User.createNewUser('MIT', 'pass', 'name', 'MIT@mit.edu', function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Password must be at least 6 characters long');
+                    done();
+                });
+            });
+
+            // test creating new user
+            it('should not return error when user does not exist', function (done) {
+                User.createNewUser('n00b', 'password', 'name', 'n00b@gmail.com', function(err, result) {
+                    assert.equal(err, null);
+                    assert.deepEqual(result, {username: 'n00b'});
+                    done();
+                });
+            });
+
+            // test creating new user with different capitalization
+            it('should not return error when username capitalized', function (done) {
+                User.createNewUser('MonoPolY', 'password', 'name', 'richguy@gmail.com', function(err, result) {
+                    assert.equal(err, null);
+                    assert.deepEqual(result, {username: 'monopoly'});
                     done();
                 });
             });
