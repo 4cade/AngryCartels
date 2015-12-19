@@ -254,6 +254,52 @@ describe('Init', function() {
 
         });
 
+        // test addFriend
+        describe('#addFriend', function () {
+            // test adding new friend
+            it('should not return error when adding new friend', function (done) {
+                User.addFriend('alex', userId1, function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.friendList.length, 1);
+                    assert.equal(result.friends, 1);
+                    assert.deepEqual(result.friendList[0], userId1);
+                    done();
+                });
+            });
+
+            // test adding user already in friend list
+            it('should return error when adding existing friend', function (done) {
+                User.addFriend('alex', userId1, function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Already friends');
+                    done();
+                });
+            });
+
+        });
+
+        // test removeFriend
+        describe('#removeFriend', function () {
+            // test removing nonexistent friend
+            it('should return error when not friends', function (done) {
+                User.removeFriend('alex', userId2, function(err, result) {
+                    assert.notEqual(err, null);
+                    assert.equal(err, 'Not friends');
+                    done();
+                });
+            });
+
+            // test removing friend
+            it('should not return error when friend exists', function (done) {
+                User.removeFriend('alex', userId1, function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.friends, 0);
+                    assert.equal(result.friendList.length, 0);
+                    done();
+                });
+            });
+        });
+
     });
 
 });
