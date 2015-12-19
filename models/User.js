@@ -58,6 +58,19 @@ userSchema.statics.findUserProfile = function(username, callback) {
         if (err) {
             callback(err);
         } else {
+            User.find({_id: { $in: result.friendList}}, function(err, friendList) {
+                if (err) {
+                    callback('Users not found');
+                } else {
+                    callback(null, {friendList:
+                        friendList.map(function(item) {
+                            return {
+                                name: item.name
+                            }
+                        });
+                    });
+                }
+            });
             callback(null, {
                 username: result.username,
                 name: result.name,
@@ -66,7 +79,7 @@ userSchema.statics.findUserProfile = function(username, callback) {
                     wins: result.wins,
                     losses: result.losses
                 },
-                friendList: result.friendList,
+                friendList: friendList,
                 friends: result.friends
             });
         }
