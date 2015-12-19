@@ -119,7 +119,6 @@ describe('Init', function() {
                     done();
                 });
             });
-
         });
 
         // test checkPassword
@@ -166,7 +165,6 @@ describe('Init', function() {
                     done();
                 });
             });
-
         });
 
         // test createNewUser
@@ -251,7 +249,6 @@ describe('Init', function() {
                     done();
                 });
             });
-
         });
 
         // test addFriend
@@ -275,7 +272,6 @@ describe('Init', function() {
                     done();
                 });
             });
-
         });
 
         // test removeFriend
@@ -296,6 +292,87 @@ describe('Init', function() {
                     assert.equal(result.friends, 0);
                     assert.equal(result.friendList.length, 0);
                     done();
+                });
+            });
+        });
+
+        // test incrementGamesPlayed
+        describe('#incrementGamesPlayed', function () {
+            // test incrementing with gamesPlayed == 0
+            it('should increment games played from 0 to 1', function (done) {
+                User.incrementGamesPlayed('zach', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.gamesPlayed, 1);
+                    User.findUserProfile('zach', function(err, result) {
+                        assert.equal(result.stats.gamesPlayed, 1);
+                        done();
+                    });
+                });
+            });
+
+            // test incrementing with gamesPlayed > 0
+            it('should increment games played by 1', function (done) {
+                User.incrementGamesPlayed('shu', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.gamesPlayed, 7);
+                    User.findUserProfile('shu', function(err, result) {
+                        assert.equal(result.stats.gamesPlayed, 7);
+                        done();
+                    });
+                });
+            });
+        });
+
+        // test incrementWins
+        describe('#incrementWins', function () {
+            // test incrementing with wins == 0
+            it('should increment wins from 0 to 1', function (done) {
+                User.incrementWins('zach', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.wins, 1);
+                    User.findUserProfile('zach', function(err, result) {
+                        assert.equal(result.stats.wins, 1);
+                        done();
+                    });
+                });
+            });
+
+            // test incrementing with wins > 0
+            it('should increment wins by 1', function (done) {
+                User.incrementWins('shu', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.wins, 6);
+                    User.findUserProfile('shu', function(err, result) {
+                        assert.equal(result.stats.wins, 6);
+                        done();
+                    });
+                });
+            });
+        });
+
+        // test incrementLosses
+        describe('#incrementLosses', function () {
+            // test incrementing with losses == 0
+            it('should increment losses from 0 to 1', function (done) {
+                User.incrementLosses('zach', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.losses, 1);
+                    User.findUserProfile('zach', function(err, result) {
+                        assert.equal(result.stats.losses, 1);
+                        done();
+                    });
+                });
+            });
+
+            // test incrementing with losses > 0
+            it('should increment losses by 1', function (done) {
+                User.incrementLosses('shu', function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(result.losses, 2);
+                    User.findUserProfile('shu', function(err, result) {
+                        assert.equal(result.stats.losses, 2);
+                        done();
+                    });
                 });
             });
         });
