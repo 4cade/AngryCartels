@@ -1,7 +1,7 @@
 var board = require('./board.js');
 
 var users = {};
-var userGenNum = 0;
+var userGenNum = 1;
 var games = {};
 
 function getUsers () {

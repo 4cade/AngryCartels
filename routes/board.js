@@ -862,8 +862,8 @@ module.exports = {
 		"quality": "railroad",
 		"rent": [25, 50, 100, 200],
 		"mortgage": 100,
-		"forward": ["fifth ave", "st james pl"],
-		"backward": ["newbury st", "virginia ave"],
+		"forward": ["st james pl", "fifth ave"],
+		"backward": ["virginia ave", "newbury st"],
 		"track": ["middle", "inner"],
 		"below": ["chance outer west"]
 	},
@@ -882,8 +882,8 @@ module.exports = {
 		"quality": "railroad",
 		"rent": [25, 50, 100, 200],
 		"mortgage": 100,
-		"forward": ["reverse", "chance middle east"],
-		"backward": ["biscayne ave", "pennsylvania ave"],
+		"forward": ["chance middle east", "reverse"],
+		"backward": ["pennsylvania ave", "biscayne ave"],
 		"track": ["middle", "inner"],
 		"below": ["sewage system"]
 	},

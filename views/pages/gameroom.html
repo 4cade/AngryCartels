@@ -1,29 +1,31 @@
-<div ng-if="!hostingGame&&!inGame">
-	<ul class="list-group">
-		<li class="list-group-item" ng-repeat="game in games" ng-if="game.host">{{game.host}} has a game with {{game.players.length}} players
-			<button type="button" class="btn btn-default" ng-click="joinGame(game.host)" ng-if="game.players.length <= 8">
-				Join game
-			</button>
-			<label class="label label-default" ng-if"game.players.length === 8">Game Full</label>
-		</li>
-	</ul>	
-	<button type="button" class="btn btn-default" ng-click="createGame()">Create a game</button>
-</div>
-<div ng-if="hostingGame">
-	You are hosting a game with {{games[inGame].players.length}} players.
-	<button type="button" class="btn btn-default" ng-click="stopHosting()">
-		Stop hosting this game.
-	</button>
-	<button type="button" class="btn btn-default" ng-click="startGame()" ng-if="games[inGame].players.length > 2">
-		Start!
-	</button>
-</div>
-<div ng-if="!hostingGame&&inGame">
-	You are in a game with {{games[inGame].players.length}} players.
-	<button type="button" class="btn btn-default" ng-click="leaveGame()">
-		Leave game
-	</button>
-</div>
-<div ng-if="inGame">
-	<chat></chat>
+<div class="row">
+	<div ng-if="!hostingGame&&!inGame">
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="game in games" ng-if="game.host">{{game.host}} has a game with {{game.players.length}} players
+				<button type="button" class="btn btn-default" ng-click="joinGame(game.host)" ng-if="game.players.length <= 8">
+					Join game
+				</button>
+				<label class="label label-default" ng-if"game.players.length === 8">Game Full</label>
+			</li>
+		</ul>	
+		<button type="button" class="btn btn-default" ng-click="createGame()">Create a game</button>
+	</div>
+	<div ng-if="hostingGame" class="col-sm-10">
+		You are hosting a game with {{games[inGame].players.length}} players.
+		<button type="button" class="btn btn-default" ng-click="stopHosting()">
+			Stop hosting this game.
+		</button>
+		<button type="button" class="btn btn-default" ng-click="startGame()" ng-if="games[inGame].players.length > 2">
+			Start!
+		</button>
+	</div>
+	<div ng-if="!hostingGame&&inGame" class="col-sm-10">
+		You are in a game with {{games[inGame].players.length}} players.
+		<button type="button" class="btn btn-default" ng-click="leaveGame()">
+			Leave game
+		</button>
+	</div>
+	<div ng-if="inGame" class="col-sm-2">
+		<chat></chat>
+	</div>
 </div>

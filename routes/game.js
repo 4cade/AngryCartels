@@ -8,7 +8,7 @@ var game = {};
 *	This heavily mutates gameData.
 * @param gameData the original data used for the game.
 */
-game.initializeBoard = function(gameData) {
+var initializeBoard = function(gameData) {
 	// changes a player from just a string to an actual player
 	for(var index in gameData["players"]) {
 		var newPlayer = {};
@@ -19,7 +19,6 @@ game.initializeBoard = function(gameData) {
 		newPlayer.getOutOfJails = 0;
 		newPlayer.forward = true;
 		newPlayer.location = "go"; // all players start on go
-		newPlayer.railroad = null;
 		newPlayer.track = "middle";
 
 		gameData["players"][index] = newPlayer;
@@ -66,6 +65,8 @@ game.initializeBoard = function(gameData) {
 	gameData["issues"] = [];
 }
 
+game.initializeBoard = initializeBoard;
+
 /**
 * Handles the entire turn of when the user chooses to roll the dice by moving the current 
 *	 player to wherever the dice puts him/her and indicates the next action.
@@ -73,40 +74,42 @@ game.initializeBoard = function(gameData) {
 * @return an object where "gameData" maps to gameData and "action" maps to what should
 *	 happen next
 */
-game.rollDice = function(gameData) {
+var rollDice = function(gameData) {
 	// many things here TODO
-	var die1 = 0; // TODO random number [1,6]
-	var die2 = 0; // TODO random number [1,6]
-	var specialDie = 0; // TODO random number [1,6]
+	var die1 = Math.floor(Math.random()*6+1);
+	var die2 = Math.floor(Math.random()*6+1);
+	var specialDie = Math.floor(Math.random()*6+1);
 
 	var diceTotal = die1 + die2;
 	var special = "";
 	// handle specialDie first TODO look up frequencies of everything
-	if(specialDie == "mrmonopoly") {
+	if(specialDie === 4 || specialDie === 5) {
 		special = "mrmonopoly";
 	}
-	else if(specialDie == "moves") {
-		diceTotal += specialDie;
+	else if(specialDie === 6) {
+		special = "gainbusticket";
 	}
 	else {
-		special = "gainbusticket"
+		diceTotal += specialDie;
 	}
 	var odd = diceTotal % 2 !== 0;
 
 	var player = gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
 
-	var moveInfo = moveLocation(player.location, diceTotal, odd, player.forward, player.railroad);
+	var moveInfo = moveLocation(player.location, diceTotal, odd, player.forward, player.track);
 
 	// TODO set moveInfo to update player
 
 	if(special === "mrmonopoly") {
-		var moveInfo = mrMonopolyLocation(player.location, odd, player.forward, player.railroad);
+		var moveInfo = mrMonopolyLocation(player.location, odd, player.forward, player.track);
 		// TODO handle new moveInfo
 	}
 	else if(special === "gainbusticket") {
 		// TODO gain a bus ticket
 	}
 }
+
+game.rollDice = rollDice;
 
 /**
 * Moves the user to the next unowned property in the forward direction, or
@@ -132,13 +135,12 @@ var mrMonopolyLocation = function(currentLocation, odd, forward, railroad) {
 * @param moves the number of times the player can move
 * @param odd true if the dice roll was odd
 * @param forward true if the player is moving forward
-* @param railroad true if the player is on the upperTrack for a railroad (innermost)
-* 
+* @param track the track that the player is on
+*
 * @return a JSON specifying the new location of the player, any money gained along the journey,
-* 	a boolean specifying if the user is on the upper or lower track of a railroad, and an array
-* 	of all of the locations visited in order in case an animation would like to have that 
+* 	and an array of all of the locations visited in order in case an animation would like to have that 
 */
-var moveLocation = function(currentLocation, moves, odd, forward, railroad) {
+var moveLocation = function(currentLocation, moves, odd, forward, track) {
 	var moneyGained = 0;
 	var location = currentLocation;
 	// TODO I think this might break if the player starts on a railroad
@@ -146,7 +148,7 @@ var moveLocation = function(currentLocation, moves, odd, forward, railroad) {
 	var locationsMovedTo = [];
 
 	while(movesLeft > 0) {
-		location = nextLocation(location, odd, forward, railroad);
+		location = nextLocation(location, odd, forward, track);
 		locationsMovedTo.push(location);
 		movesLeft--;
 
@@ -182,22 +184,10 @@ var moveLocation = function(currentLocation, moves, odd, forward, railroad) {
 		}
 	}
 
-	// special case = finish on railroad
-	if(board[location] == "railroad") {
-		var upper = isUpperTrack(locationsMovedTo[locationsMovedTo.length-2]);
-		if((upper && odd) || (!upper && !odd)) {
-			railroad = true;
-		}
-		else {
-			railroad = false;
-		}
-	}
-
 	var json = {};
 	json.moneyGained = moneyGained;
 	json.currentLocation = location;
 	json.movedTo = locationsMovedTo;
-	json.railroad = railroad;
 	return json;
 }
 
@@ -206,53 +196,39 @@ var moveLocation = function(currentLocation, moves, odd, forward, railroad) {
 * @param currentLocation the current location of the player
 * @param odd true if the dice roll was odd or even
 * @param forward true if the player is moving in the forward direction
-* @param railroad true if the player is on the upperTrack for a railroad (innermost)
-* @return the next location that the user is going to go to
+* @param track the track that the user is on
+* @return JSON with the next location that the user is going to go to, and the track of the user
 */
-var nextLocation = function(currentLocation, odd, forward, railroad) {
+var nextLocation = function(currentLocation, odd, forward, track) {
 	var direction = "backward";
 
 	if(forward) {
 		direction = "forward";
 	}
 
-	var next = board[currentLocation][direction];
-	var upperTrack = isUpperTrack(currentLocation) || railroad;
+	var next = board[currentLocation][direction]; // an array of 1 or 2 locations (only 2 if railroad)
+
+	// json to return
+	var json = {};
+	json.next = next[0]; // assume first location in next, true for most locations
+	json.next = track; // only changes if lands on railroad
+
 	// handles railroad case
-	if(board[currentLocation]["type"] == "railroad") {
-		if(odd && upperTrack) {
-			return next[0];
-		}
-		else if(odd || upperTrack) {
-			return next[1];
+	if(board[currentLocation]["quality"] === "railroad" && track !== "middle") {
+		json.next = next[1]; // works because railroad's next direction has the middle track first always
+	}
+
+	// handles when you first land on a railroad
+	if(board[json.next]["quality"] === "railroad") {
+		if((track === "middle" && !odd)|| (track !== "middle" && odd)) {
+			json.track = board[json.next]["track"][1]; // will be either inner or outer
 		}
 		else {
-			return next[0];
+			json.track = "middle";
 		}
 	}
-	// just a normal location
-	else {
-		return next[0];
-	}
-}
 
-/**
-* Specifies if the location is along an upper track next to a railroad
-* 	precondition: only for spaces around a railroad
-*
-* @param location the location to check if it is on an upper track
-*
-* @return true if it is the upper track
-*/
-var isUpperTrack = function(location) {
-	var upper = {"biscayne ave", "reverse", "fifth ave", "newbury st", "atlantic ave", 
-		"illinois ave", "oriental ave", "income tax"};
-	if(upper[location]) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return json
 }
 
 /**
