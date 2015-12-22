@@ -3,7 +3,8 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-var socket = require('./routes/socket.js')
+var socket = require('./routes/socket.js');
+var mongoose = require('mongoose');
 
 // application -------------------------------------------------------------
 app.use(express.static('views'))
@@ -16,6 +17,13 @@ app.on( 'error', function( error ){
        console.log( error.stack );
     });
 
+// database setup
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
+var db = mongoose.connection;
+db.on('error', function() {console.log('connection error'); });
+db.once('open', function (callback) {
+    console.log("database connected");
+});
 
 // socket stuff
 io.on('connection', socket);
