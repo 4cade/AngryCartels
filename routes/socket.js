@@ -26,7 +26,7 @@ function emitInGame(host, call, data) {
 	for(var index in games[host]["players"]) {
 		var playerName = games[host]["players"][index];
 		users[playerName].emit(call, data);
-  	}
+  }
 }
 
 module.exports = function(socket){
@@ -52,7 +52,7 @@ module.exports = function(socket){
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
-    emitAll('chat message', msg);
+    emitInGame(socket.inGame, 'chat message', msg);
  });
 
   // handle games
@@ -64,6 +64,7 @@ module.exports = function(socket){
   		"data": {}
   	}
   	socket.inGame = "" + socket.username;
+    console.log(socket.username + " created a game");
   	emitAll('updated games', games);
   });
 
@@ -77,12 +78,14 @@ module.exports = function(socket){
   socket.on('join game', function(host) {
   	games[host]["players"].push(socket.username);
   	socket.inGame = host;
+    console.log(socket.username + " joined " + host + "'s game");
   	emitAll('updated games', games);
   });
 
   socket.on('leave game', function(game) {
   	games[game]["players"] = games[game]["players"].filter(
   		function(el) { return el !== socket.username });
+    console.log(socket.username + " left " + socket.inGame + "'s game");
   	emitAll('updated games', games);
   	socket.inGame = null;
   });

@@ -8,7 +8,7 @@ form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 
 #messages li { padding: 5px 10px; }
 #messages li:nth-child(odd) { background: #eee; }
 </style>
-<div>
+<div ng-controller="chatController">
     <ul id="messages">
       <li ng-repeat="message in messages track by $index">{{message}}</li>
     </ul>

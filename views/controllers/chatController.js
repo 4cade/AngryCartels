@@ -5,7 +5,7 @@ angryCartels.controller('chatController', function($scope) {
 
 	// create a message to display in our view
 	$scope.messages = [];
-
+  
   	// sends the message that the user wants to send
   	$scope.sendNewMessage = function() {
   		socket.emit('chat message', $scope.userMessage);
