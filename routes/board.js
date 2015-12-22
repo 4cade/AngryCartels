@@ -6,7 +6,9 @@ module.exports = {
 		"mortgage": 75,
 		"house": 50,
 		"forward": ["short line"],
-		"backward": ["miami ave"]
+		"backward": ["miami ave"],
+		"track": ["inner"],
+		"below": ["pennsylvania ave"]
 	},
 	"miami ave": {
 		"type": "property",
@@ -16,6 +18,8 @@ module.exports = {
 		"house": 50,
 		"forward": ["biscayne ave"],
 		"backward": ["holland tunnel ne"],
+		"track": ["inner"],
+		"below": ["community chest middle east"]
 	},
 	"florida ave": {
 		"type": "property",
@@ -24,7 +28,9 @@ module.exports = {
 		"mortgage": 65,
 		"house": 50,
 		"forward": ["holland tunnel ne"],
-		"backward": ["chance inner ne"]
+		"backward": ["chance inner ne"],
+		"track": ["inner"],
+		"below": ["ventnor ave"]
 	},
 	"lombard st": {
 		"type": "property",
@@ -33,7 +39,9 @@ module.exports = {
 		"mortgage": 105,
 		"house": 100,
 		"forward": ["squeeze play"],
-		"backward": ["reverse"]
+		"backward": ["reverse"],
+		"track": ["inner"],
+		"below": ["park pl"]
 	},
 	"the embarcadero": {
 		"type": "property",
@@ -42,7 +50,9 @@ module.exports = {
 		"mortgage": 105,
 		"house": 100,
 		"forward": ["fisherman's wharf"],
-		"backward": ["squeeze play"]
+		"backward": ["squeeze play"],
+		"track": ["inner"],
+		"below": ["baltic ave"]
 	},
 	"fisherman's wharf": {
 		"type": "property",
@@ -51,7 +61,9 @@ module.exports = {
 		"mortgage": 125,
 		"house": 100,
 		"forward": ["telephone company"],
-		"backward": ["the embarcadero"]
+		"backward": ["the embarcadero"],
+		"track": ["inner"],
+		"below": ["income tax"]
 	},
 	"beacon st": {
 		"type": "property",
@@ -60,7 +72,9 @@ module.exports = {
 		"mortgage": 165,
 		"house": 200,
 		"forward": ["bonus"],
-		"backward": ["community chest inner sw"]
+		"backward": ["community chest inner sw"],
+		"track": ["inner"],
+		"below": ["chance middle south"]
 	},
 	"boylston st": {
 		"type": "property",
@@ -69,7 +83,9 @@ module.exports = {
 		"mortgage": 165,
 		"house": 200,
 		"forward": ["newbury st"],
-		"backward": ["bonus"]
+		"backward": ["bonus"],
+		"track": ["inner"],
+		"below": ["states ave"]
 	},
 	"newbury st": {
 		"type": "property",
@@ -78,7 +94,9 @@ module.exports = {
 		"mortgage": 190,
 		"house": 200,
 		"forward": ["pennsylvania railroad"],
-		"backward": ["boylston st"]
+		"backward": ["boylston st"],
+		"track": ["inner"],
+		"below": ["virginia ave"]
 	},
 	"fifth ave": {
 		"type": "property",
@@ -87,7 +105,9 @@ module.exports = {
 		"mortgage": 215,
 		"house": 300,
 		"forward": ["madison ave"],
-		"backward": ["pennsylvania railroad"]
+		"backward": ["pennsylvania railroad"],
+		"track": ["inner"],
+		"below": ["st james pl"]
 	},
 	"madison ave": {
 		"type": "property",
@@ -96,7 +116,9 @@ module.exports = {
 		"mortgage": 215,
 		"house": 300,
 		"forward": ["stock exchange"],
-		"backward": ["fifth ave"]
+		"backward": ["fifth ave"],
+		"track": ["inner"],
+		"below": ["community chest middle east"]
 	},
 	"wall st": {
 		"type": "property",
@@ -105,7 +127,9 @@ module.exports = {
 		"mortgage": 250,
 		"house": 300,
 		"forward": ["tax refund"],
-		"backward": ["stock exchange"]
+		"backward": ["stock exchange"],
+		"track": ["inner"],
+		"below": ["indiana ave"]
 	},
 	"lake st": {
 		"type": "property",
@@ -114,7 +138,9 @@ module.exports = {
 		"mortgage": 15,
 		"house": 50,
 		"forward": ["community chest outer se"],
-		"backward": ["subway"]
+		"backward": ["subway"],
+		"track": ["outer"],
+		"above": ["go"]
 	},
 	"nicollet ave": {
 		"type": "property",
@@ -123,7 +149,9 @@ module.exports = {
 		"mortgage": 15,
 		"house": 50,
 		"forward": ["hennepin ave"],
-		"backward": ["community chest outer se"]
+		"backward": ["community chest outer se"],
+		"track": ["outer"],
+		"above": ["mediterranean ave"]
 	},
 	"hennepin ave": {
 		"type": "property",
@@ -132,7 +160,9 @@ module.exports = {
 		"mortgage": 30,
 		"house": 50,
 		"forward": ["bus ticket south"],
-		"backward": ["nicollet ave"]
+		"backward": ["nicollet ave"],
+		"track": ["outer"],
+		"above": ["community chest middle south"]
 	},
 	"esplanade ave": {
 		"type": "property",
@@ -141,7 +171,9 @@ module.exports = {
 		"mortgage": 50,
 		"house": 50,
 		"forward": ["canal st"],
-		"backward": ["reading railroad"]
+		"backward": ["reading railroad"],
+		"track": ["outer"],
+		"above": ["oriental ave"]
 	},
 	"katy freeway": {
 		"type": "property",
@@ -150,7 +182,9 @@ module.exports = {
 		"mortgage": 70,
 		"house": 100,
 		"forward": ["westheimer rd"],
-		"backward": ["auction"]
+		"backward": ["auction"],
+		"track": ["outer"],
+		"above": ["jail"]
 	},
 	"westheimer rd": {
 		"type": "property",
@@ -159,7 +193,9 @@ module.exports = {
 		"mortgage": 70,
 		"house": 100,
 		"forward": ["internet service provider"],
-		"backward": ["katy freeway"]
+		"backward": ["katy freeway"],
+		"track": ["outer"],
+		"above": ["st charles pl"]
 	},
 	"kirby dr": {
 		"type": "property",
@@ -168,7 +204,9 @@ module.exports = {
 		"mortgage": 80,
 		"house": 100,
 		"forward": ["cullen blvd"],
-		"backward": ["internet service provider"]
+		"backward": ["internet service provider"],
+		"track": ["outer"],
+		"above": ["states ave"]
 	},
 	"cullen blvd": {
 		"type": "property",
@@ -177,7 +215,9 @@ module.exports = {
 		"mortgage": 80,
 		"house": 100,
 		"forward": ["chance outer west"],
-		"backward": ["kirby dr"]
+		"backward": ["kirby dr"],
+		"track": ["outer"],
+		"above": ["virginia ave"]
 	},
 	"canal st": {
 		"type": "property",
@@ -186,7 +226,9 @@ module.exports = {
 		"mortgage": 50,
 		"house": 50,
 		"forward": ["chance outer south"],
-		"backward": ["esplanade ave"]
+		"backward": ["esplanade ave"],
+		"track": ["outer"],
+		"above": ["chance middle south"]
 	},
 	"magazine st": {
 		"type": "property",
@@ -195,7 +237,9 @@ module.exports = {
 		"mortgage": 60,
 		"house": 50,
 		"forward": ["bourbon st"],
-		"backward": ["cable company"]
+		"backward": ["cable company"],
+		"track": ["outer"],
+		"above": ["jail"]
 	},
 	"bourbon st": {
 		"type": "property",
@@ -204,7 +248,9 @@ module.exports = {
 		"mortgage": 60,
 		"house": 50,
 		"forward": ["holland tunnel sw"],
-		"backward": ["magazine st"]
+		"backward": ["magazine st"],
+		"track": ["outer"],
+		"above": ["jail"]
 	},
 	"dekalb ave": {
 		"type": "property",
@@ -213,7 +259,9 @@ module.exports = {
 		"mortgage": 90,
 		"house": 100,
 		"forward": ["community chest outer nw"],
-		"backward": ["black & white cab co"]
+		"backward": ["black & white cab co"],
+		"track": ["outer"],
+		"above": ["community chest middle west"]
 	},
 	"young int'l blvd": {
 		"type": "property",
@@ -222,7 +270,9 @@ module.exports = {
 		"mortgage": 90,
 		"house": 100,
 		"forward": ["decatur st"],
-		"backward": ["community chest outer nw"]
+		"backward": ["community chest outer nw"],
+		"track": ["outer"],
+		"above": ["new york ave"]
 	},
 	"decatur st": {
 		"type": "property",
@@ -231,7 +281,9 @@ module.exports = {
 		"mortgage": 100,
 		"house": 100,
 		"forward": ["peachtree st"],
-		"backward": ["young int'l blvd"]
+		"backward": ["young int'l blvd"],
+		"track": ["outer"],
+		"above": ["free parking"]
 	},
 	"peachtree st": {
 		"type": "property",
@@ -240,7 +292,9 @@ module.exports = {
 		"mortgage": 100,
 		"house": 100,
 		"forward": ["pay day"],
-		"backward": ["decatur st"]
+		"backward": ["decatur st"],
+		"track": ["outer"],
+		"above": ["free parking"]
 	},
 	"randolph st": {
 		"type": "property",
@@ -249,7 +303,9 @@ module.exports = {
 		"mortgage": 110,
 		"house": 150,
 		"forward": ["chance outer nw"],
-		"backward": ["pay day"]
+		"backward": ["pay day"],
+		"track": ["outer"],
+		"above": ["free parking"]
 	},
 	"lake shore dr": {
 		"type": "property",
@@ -258,7 +314,9 @@ module.exports = {
 		"mortgage": 110,
 		"house": 150,
 		"forward": ["wacker dr"],
-		"backward": ["chance outer nw"]
+		"backward": ["chance outer nw"],
+		"track": ["outer"],
+		"above": ["kentucky ave"]
 	},
 	"wacker dr": {
 		"type": "property",
@@ -267,7 +325,9 @@ module.exports = {
 		"mortgage": 120,
 		"house": 150,
 		"forward": ["michigan ave"],
-		"backward": ["wacker dr"]
+		"backward": ["wacker dr"],
+		"track": ["outer"],
+		"above": ["chance middle north"]
 	},
 	"michigan ave": {
 		"type": "property",
@@ -276,7 +336,9 @@ module.exports = {
 		"mortgage": 120,
 		"house": 150,
 		"forward": ["yellow cab co"],
-		"backward": ["wacker dr"]
+		"backward": ["wacker dr"],
+		"track": ["outer"],
+		"above": ["indiana ave"]
 	},
 	"south temple": {
 		"type": "property",
@@ -285,7 +347,9 @@ module.exports = {
 		"mortgage": 130,
 		"house": 200,
 		"forward": ["west temple"],
-		"backward": ["community chest outer north"]
+		"backward": ["community chest outer north"],
+		"track": ["outer"],
+		"above": ["ventnor ave"]
 	},
 	"west temple": {
 		"type": "property",
@@ -294,7 +358,9 @@ module.exports = {
 		"mortgage": 130,
 		"house": 200,
 		"forward": ["trash collector"],
-		"backward": ["south temple"]
+		"backward": ["south temple"],
+		"track": ["outer"],
+		"above": ["water works"]
 	},
 	"north temple": {
 		"type": "property",
@@ -303,7 +369,9 @@ module.exports = {
 		"mortgage": 140,
 		"house": 200,
 		"forward": ["temple square"],
-		"backward": ["trash collector"]
+		"backward": ["trash collector"],
+		"track": ["outer"],
+		"above": ["roll3"]
 	},
 	"temple square": {
 		"type": "property",
@@ -311,8 +379,10 @@ module.exports = {
 		"rent": [38, 170, 520, 1125, 1275, 1425, 1650],
 		"mortgage": 140,
 		"house": 200,
-		"forward": ["jail"],
-		"backward": ["north temple"]
+		"forward": ["go to jail"],
+		"backward": ["north temple"],
+		"track": ["outer"],
+		"above": ["roll3"]
 	},
 	"south st": {
 		"type": "property",
@@ -321,7 +391,9 @@ module.exports = {
 		"mortgage": 150,
 		"house": 250,
 		"forward": ["broad st"],
-		"backward": ["jail"]
+		"backward": ["go to jail"],
+		"track": ["outer"],
+		"above": ["roll3"]
 	},
 	"broad st": {
 		"type": "property",
@@ -330,7 +402,9 @@ module.exports = {
 		"mortgage": 150,
 		"house": 250,
 		"forward": ["walnut st"],
-		"backward": ["south st"]
+		"backward": ["south st"],
+		"track": ["outer"],
+		"above": ["roll3"]
 	},
 	"walnut st": {
 		"type": "property",
@@ -339,7 +413,9 @@ module.exports = {
 		"mortgage": 160,
 		"house": 250,
 		"forward": ["community chest outer east"],
-		"backward": ["broad st"]
+		"backward": ["broad st"],
+		"track": ["outer"],
+		"above": ["pacific ave"]
 	},
 	"market st": {
 		"type": "property",
@@ -348,7 +424,9 @@ module.exports = {
 		"mortgage": 160,
 		"house": 250,
 		"forward": ["bus ticket east"],
-		"backward": ["community chest outer east"]
+		"backward": ["community chest outer east"],
+		"track": ["outer"],
+		"above": ["community chest middle east"]
 	},
 	"mulholland dr": {
 		"type": "property",
@@ -357,7 +435,9 @@ module.exports = {
 		"mortgage": 175,
 		"house": 300,
 		"forward": ["ventura blvd"],
-		"backward": ["birthday gift"]
+		"backward": ["birthday gift"],
+		"track": ["outer"],
+		"above": ["luxury tax"]
 	},
 	"ventura blvd": {
 		"type": "property",
@@ -366,7 +446,9 @@ module.exports = {
 		"mortgage": 200,
 		"house": 300,
 		"forward": ["chance outer se"],
-		"backward": ["mulholland dr"]
+		"backward": ["mulholland dr"],
+		"track": ["outer"],
+		"above": ["boardwalk"]
 	},
 	"rodeo dr": {
 		"type": "property",
@@ -375,7 +457,9 @@ module.exports = {
 		"mortgage": 250,
 		"house": 300,
 		"forward": ["subway"],
-		"backward": ["chance outer se"]
+		"backward": ["chance outer se"],
+		"track": ["outer"],
+		"above": ["go"]
 	},
 	"mediterranean ave": {
 		"type": "property",
@@ -384,7 +468,10 @@ module.exports = {
 		"mortgage": 30,
 		"house": 50,
 		"forward": ["community chest middle south"],
-		"backward": ["go"]
+		"backward": ["go"],
+		"track": ["middle"],
+		"above": ["squeeze play"],
+		"below": ["nicollet ave"]
 	},
 	"baltic ave": {
 		"type": "property",
@@ -393,7 +480,10 @@ module.exports = {
 		"mortgage": 30,
 		"house": 50,
 		"forward": ["income tax"],
-		"backward": ["community chest middle south"]
+		"backward": ["community chest middle south"],
+		"track": ["middle"],
+		"above": ["the embarcadero"],
+		"below": ["bus ticket south"]
 	},
 	"oriental ave": {
 		"type": "property",
@@ -402,7 +492,10 @@ module.exports = {
 		"mortgage": 50,
 		"house": 50,
 		"forward": ["chance middle south"],
-		"backward": ["reading railroad"]
+		"backward": ["reading railroad"],
+		"track": ["middle"],
+		"above": ["community chest inner sw"],
+		"below": ["esplanade ave"]
 	},
 	"vermont ave": {
 		"type": "property",
@@ -411,7 +504,10 @@ module.exports = {
 		"mortgage": 50,
 		"house": 50,
 		"forward": ["chance middle south"],
-		"backward": ["reading railroad"]
+		"backward": ["reading railroad"],
+		"track": ["middle"],
+		"above": ["bonus"],
+		"below": ["chance outer sw"]
 	},
 	"connecticut ave": {
 		"type": "property",
@@ -420,7 +516,10 @@ module.exports = {
 		"mortgage": 60,
 		"house": 50,
 		"forward": ["in jail"],
-		"backward": ["vermont ave"]
+		"backward": ["vermont ave"],
+		"track": ["middle"],
+		"above": ["bonus"],
+		"below": ["cable company"]
 	},
 	"st charles pl": {
 		"type": "property",
@@ -429,7 +528,10 @@ module.exports = {
 		"mortgage": 70,
 		"house": 100,
 		"forward": ["electric company"],
-		"backward": ["in jail"]
+		"backward": ["in jail"],
+		"track": ["middle"],
+		"above": ["bonus"],
+		"below": ["westheimer rd"]
 	},
 	"states ave": {
 		"type": "property",
@@ -438,7 +540,10 @@ module.exports = {
 		"mortgage": 70,
 		"house": 100,
 		"forward": ["virginia ave"],
-		"backward": ["electric company"]
+		"backward": ["electric company"],
+		"track": ["middle"],
+		"above": ["boylston st"],
+		"below": ["kirby dr"]
 	},
 	"virginia ave": {
 		"type": "property",
@@ -447,7 +552,10 @@ module.exports = {
 		"mortgage": 80,
 		"house": 100,
 		"forward": ["pennsylvania railroad"],
-		"backward": ["states ave"]
+		"backward": ["states ave"],
+		"track": ["middle"],
+		"above": ["newbury st"],
+		"below": ["cullen blvd"]
 	},
 	"st james pl": {
 		"type": "property",
@@ -456,7 +564,10 @@ module.exports = {
 		"mortgage": 90,
 		"house": 100,
 		"forward": ["community chest middle west"],
-		"backward": ["pennsylvania railroad"]
+		"backward": ["pennsylvania railroad"],
+		"track": ["middle"],
+		"above": ["fifth ave"],
+		"below": ["black & white cab co"]
 	},
 	"tennessee ave": {
 		"type": "property",
@@ -465,7 +576,10 @@ module.exports = {
 		"mortgage": 90,
 		"house": 100,
 		"forward": ["new york ave"],
-		"backward": ["community chest middle west"]
+		"backward": ["community chest middle west"],
+		"track": ["middle"],
+		"above": ["stock exchange"],
+		"below": ["community chest outer nw"]
 	},
 	"new york ave": {
 		"type": "property",
@@ -474,7 +588,10 @@ module.exports = {
 		"mortgage": 100,
 		"house": 100,
 		"forward": ["free parking"],
-		"backward": ["tennessee ave"]
+		"backward": ["tennessee ave"],
+		"track": ["middle"],
+		"above": ["stock exchange"],
+		"below": ["young int'l blvd"]
 	},
 	"kentucky ave": {
 		"type": "property",
@@ -483,7 +600,10 @@ module.exports = {
 		"mortgage": 110,
 		"house": 150,
 		"forward": ["chance middle north"],
-		"backward": ["free parking"]
+		"backward": ["free parking"],
+		"track": ["middle"],
+		"above": ["stock exchange"],
+		"below": ["lake shore dr"]
 	},
 	"indiana ave": {
 		"type": "property",
@@ -492,7 +612,10 @@ module.exports = {
 		"mortgage": 110,
 		"house": 150,
 		"forward": ["illinois ave"],
-		"backward": ["chance middle north"]
+		"backward": ["chance middle north"],
+		"track": ["middle"],
+		"above": ["wall st"],
+		"below": ["michigan ave"]
 	},
 	"illinois ave": {
 		"type": "property",
@@ -501,7 +624,10 @@ module.exports = {
 		"mortgage": 120,
 		"house": 150,
 		"forward": ["b&o railroad"],
-		"backward": ["indiana ave"]
+		"backward": ["indiana ave"],
+		"track": ["middle"],
+		"above": ["tax refund"],
+		"below": ["yellow cab co"]
 	},
 	"atlantic ave": {
 		"type": "property",
@@ -510,7 +636,10 @@ module.exports = {
 		"mortgage": 130,
 		"house": 150,
 		"forward": ["ventnor ave"],
-		"backward": ["b&o railroad"]
+		"backward": ["b&o railroad"],
+		"track": ["middle"],
+		"above": ["chance inner ne"],
+		"below": ["community chest outer north"]
 	},
 	"ventnor ave": {
 		"type": "property",
@@ -519,7 +648,10 @@ module.exports = {
 		"mortgage": 130,
 		"house": 150,
 		"forward": ["water works"],
-		"backward": ["atlantic ave"]
+		"backward": ["atlantic ave"],
+		"track": ["middle"],
+		"above": ["florida ave"],
+		"below": ["south temple"]
 	},
 	"marvin gardens": {
 		"type": "property",
@@ -528,7 +660,10 @@ module.exports = {
 		"mortgage": 140,
 		"house": 150,
 		"forward": ["roll3"],
-		"backward": ["water works"]
+		"backward": ["water works"],
+		"track": ["middle"],
+		"above": ["holland tunnel ne"],
+		"below": ["trash collector"]
 	},
 	"pacific ave": {
 		"type": "property",
@@ -537,7 +672,10 @@ module.exports = {
 		"mortgage": 150,
 		"house": 200,
 		"forward": ["north carolina ave"],
-		"backward": ["roll3"]
+		"backward": ["roll3"],
+		"track": ["middle"],
+		"above": ["holland tunnel ne"],
+		"below": ["walnut st"]
 	},
 	"north carolina ave": {
 		"type": "property",
@@ -546,7 +684,10 @@ module.exports = {
 		"mortgage": 150,
 		"house": 200,
 		"forward": ["community chest middle east"],
-		"backward": ["pacific ave"]
+		"backward": ["pacific ave"],
+		"track": ["middle"],
+		"above": ["holland tunnel ne"],
+		"below": ["community chest outer east"]
 	},
 	"pennsylvania ave": {
 		"type": "property",
@@ -555,7 +696,10 @@ module.exports = {
 		"mortgage": 160,
 		"house": 200,
 		"forward": ["short line"],
-		"backward": ["community chest middle east"]
+		"backward": ["community chest middle east"],
+		"track": ["middle"],
+		"above": ["biscayne ave"],
+		"below": ["bus ticket east"]
 	},
 	"park pl": {
 		"type": "property",
@@ -564,7 +708,10 @@ module.exports = {
 		"mortgage": 175,
 		"house": 200,
 		"forward": ["luxury tax"],
-		"backward": ["chance middle east"]
+		"backward": ["chance middle east"],
+		"track": ["middle"],
+		"above": ["lombard st"],
+		"below": ["birthday gift"]
 	},
 	"boardwalk": {
 		"type": "property",
@@ -573,7 +720,10 @@ module.exports = {
 		"mortgage": 200,
 		"house": 200,
 		"forward": ["go"],
-		"backward": ["luxury tax"]
+		"backward": ["luxury tax"],
+		"track": ["middle"],
+		"above": ["squeeze play"],
+		"below": ["ventura blvd"]
 	},
 	"checker cab co": {
 		"type": "transportation",
@@ -581,7 +731,9 @@ module.exports = {
 		"rent": [30, 60, 120, 240],
 		"mortgage": 150,
 		"forward": ["reading railroad"],
-		"backward": ["bus ticket south"]
+		"backward": ["bus ticket south"],
+		"track": ["outer"],
+		"above": ["income tax"]
 	},
 	"black & white cab co": {
 		"type": "transportation",
@@ -589,7 +741,9 @@ module.exports = {
 		"rent": [30, 60, 120, 240],
 		"mortgage": 150,
 		"forward": ["dekalb ave"],
-		"backward": ["chance outer west"]
+		"backward": ["chance outer west"],
+		"track": ["outer"],
+		"above": ["st james pl"]
 	},
 	"yellow cab co": {
 		"type": "transportation",
@@ -597,7 +751,9 @@ module.exports = {
 		"rent": [30, 60, 120, 240],
 		"mortgage": 150,
 		"forward": ["b&o railroad"],
-		"backward": ["michigan ave"]
+		"backward": ["michigan ave"],
+		"track": ["outer"],
+		"above": ["illinois ave"]
 	},
 	"ute cab co": {
 		"type": "transportation",
@@ -605,7 +761,9 @@ module.exports = {
 		"rent": [30, 60, 120, 240],
 		"mortgage": 150,
 		"forward": ["birthday gift"],
-		"backward": ["sewage system"]
+		"backward": ["sewage system"],
+		"track": ["middle"],
+		"above": ["chance middle east"]
 	},
 	"water works": {
 		"type": "utility",
@@ -613,7 +771,10 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["marvin gardens"],
-		"backward": ["ventnor ave"]
+		"backward": ["ventnor ave"],
+		"track": ["middle"],
+		"above": ["holland tunnel ne"],
+		"below": ["west temple"]
 	},
 	"cable company": {
 		"type": "utility",
@@ -621,7 +782,9 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["magazine st"],
-		"backward": ["chance outer south"]
+		"backward": ["chance outer south"],
+		"track": ["outer"],
+		"above": ["connecticut ave"]
 	},
 	"electric company": {
 		"type": "utility",
@@ -629,7 +792,10 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["states ave"],
-		"backward": ["st charles pl"]
+		"backward": ["st charles pl"],
+		"track": ["middle"],
+		"above": ["bonus"],
+		"below": ["internet service provider"]
 	},
 	"internet service provider": {
 		"type": "utility",
@@ -637,7 +803,9 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["westheimer rd"],
-		"backward": ["kirby dr"]
+		"backward": ["kirby dr"],
+		"track": ["outer"],
+		"above": ["electric company"]
 	},
 	"gas company": {
 		"type": "utility",
@@ -645,7 +813,9 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["chance inner ne"],
-		"backward": ["tax refund"]
+		"backward": ["tax refund"],
+		"track": ["inner"],
+		"below": ["b&o railroad"]
 	},
 	"telephone company": {
 		"type": "utility",
@@ -653,7 +823,9 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["community chest inner sw"],
-		"backward": ["fisherman's wharf"]
+		"backward": ["fisherman's wharf"],
+		"track": ["inner"],
+		"below": ["reading railroad"]
 	},
 	"trash collector": {
 		"type": "utility",
@@ -661,7 +833,9 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["north temple"],
-		"backward": ["west temple"]
+		"backward": ["west temple"],
+		"track": ["outer"],
+		"above": ["marvin gardens"]
 	},
 	"sewage system": {
 		"type": "utility",
@@ -669,7 +843,9 @@ module.exports = {
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
 		"forward": ["ute cab co"],
-		"backward": ["bus ticket east"]
+		"backward": ["bus ticket east"],
+		"track": ["outer"],
+		"above": ["short line"]
 	},
 	"reading railroad": {
 		"type": "transportation",
@@ -677,7 +853,9 @@ module.exports = {
 		"rent": [25, 50, 100, 200],
 		"mortgage": 100,
 		"forward": ["oriental ave", "esplanade ave"],
-		"backward": ["income tax", "checker cab co"]
+		"backward": ["income tax", "checker cab co"],
+		"track": ["middle", "outer"],
+		"above": ["telephone company"]
 	},
 	"pennsylvania railroad": {
 		"type": "transportation",
@@ -685,7 +863,9 @@ module.exports = {
 		"rent": [25, 50, 100, 200],
 		"mortgage": 100,
 		"forward": ["fifth ave", "st james pl"],
-		"backward": ["newbury st", "virginia ave"]
+		"backward": ["newbury st", "virginia ave"],
+		"track": ["middle", "inner"],
+		"below": ["chance outer west"]
 	},
 	"b&o railroad": {
 		"type": "transportation",
@@ -693,7 +873,9 @@ module.exports = {
 		"rent": [25, 50, 100, 200],
 		"mortgage": 100,
 		"forward": ["atlantic ave", "community chest outer north"],
-		"backward": ["illinois ave", "yellow cab co"]
+		"backward": ["illinois ave", "yellow cab co"],
+		"track": ["middle", "outer"],
+		"above": ["gas company"]
 	},
 	"short line": {
 		"type": "transportation",
@@ -701,186 +883,272 @@ module.exports = {
 		"rent": [25, 50, 100, 200],
 		"mortgage": 100,
 		"forward": ["reverse", "chance middle east"],
-		"backward": ["biscayne ave", "pennsylvania ave"]
+		"backward": ["biscayne ave", "pennsylvania ave"],
+		"track": ["middle", "inner"],
+		"below": ["sewage system"]
 	},
 	"holland tunnel ne": {
-		"type": "spot",
+		"type": "tunnel",
 		"forward": ["miami ave"],
-		"backward": ["florida ave"]
+		"backward": ["florida ave"],
+		"track": ["inner"],
+		"below": ["roll3", "water works", "marvin gardens", "pacific ave", "north carolina ave"]
 	},
 	"holland tunnel sw": {
-		"type": "spot",
+		"type": "tunnel",
 		"forward": ["auction"],
-		"backward": ["bourbon st"]
+		"backward": ["bourbon st"],
+		"track": ["outer"],
+		"above": ["jail"]
 	},
 	"chance inner ne": {
 		"type": "chance",
 		"forward": ["florida ave"],
-		"backward": ["gas company"]
+		"backward": ["gas company"],
+		"track": ["inner"],
+		"below": ["atlantic ave"]
 	},
 	"chance outer west": {
 		"type": "chance",
 		"forward": ["black & white cab co"],
-		"backward": ["cullen blvd"]
+		"backward": ["cullen blvd"],
+		"track": ["outer"],
+		"above": ["pennsylvania railroad"]
 	},
 	"chance outer nw": {
 		"type": "chance",
 		"forward": ["lake shore dr"],
-		"backward": ["randolph st"]
+		"backward": ["randolph st"],
+		"track": ["outer"],
+		"above": ["free parking"]
 	},
 	"chance outer south": {
 		"type": "chance",
 		"forward": ["cable company"],
-		"backward": ["canal st"]
+		"backward": ["canal st"],
+		"track": ["outer"],
+		"above": ["vermont ave"]
 	},
 	"chance outer se": {
 		"type": "chance",
 		"forward": ["rodeo dr"],
-		"backward": ["ventura blvd"]
+		"backward": ["ventura blvd"],
+		"track": ["outer"],
+		"above": ["go"]
 	},
 	"chance middle east": {
 		"type": "chance",
 		"forward": ["park pl"],
-		"backward": ["short line"]
+		"backward": ["short line"],
+		"track": ["middle"],
+		"above": ["reverse"],
+		"below": ["ute cab co"]
 	},
 	"chance middle south": {
 		"type": "chance",
 		"forward": ["vermont ave"],
-		"backward": ["oriental ave"]
+		"backward": ["oriental ave"],
+		"track": ["middle"],
+		"above": ["beacon st"],
+		"below": ["canal st"]
 	},
 	"chance middle north": {
 		"type": "chance",
 		"forward": ["indiana ave"],
-		"backward": ["kentucky ave"]
+		"backward": ["kentucky ave"],
+		"track": ["middle"],
+		"above": ["stock exchange"],
+		"below": ["wacker dr"]
 	},
 	"squeeze play": {
-		"type": "spot",
+		"type": "squeeze play",
 		"forward": ["the embarcadero"],
-		"backward": ["lombard st"]
+		"backward": ["lombard st"],
+		"track": ["inner"],
+		"below": ["go", "luxury tax", "boardwalk", "mediterranean ave", "community chest middle south"]
 	},
 	"reverse": {
-		"type": "spot",
+		"type": "reverse",
 		"forward": ["lombard st"],
-		"backward": ["short line"]
+		"backward": ["short line"],
+		"track": ["inner"],
+		"below": ["chance middle east"]
 	},
 	"bonus": {
-		"type": "spot",
+		"type": "pay",
 		"forward": ["boylston st"],
-		"backward": ["beacon st"]
+		"backward": ["beacon st"],
+		"track": ["inner"],
+		"below": ["jail", "electric company", "st charles pl", "connecticut ave", "vermont ave"]
 	},
 	"pay day": {
-		"type": "spot",
+		"type": "pay",
 		"forward": ["randolph st"],
-		"backward": ["peachtree st"]
+		"backward": ["peachtree st"],
+		"track": ["outer"],
+		"above": ["free parking"]
 	},
 	"community chest inner sw": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["beacon st"],
-		"backward": ["telephone company"]
+		"backward": ["telephone company"],
+		"track": ["inner"],
+		"below": ["oriental ave"]
 	},
 	"community chest outer se": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["nicollet ave"],
-		"backward": ["lake st"]
+		"backward": ["lake st"],
+		"track": ["outer"],
+		"above": ["go"]
 	},
 	"community chest outer nw": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["young int'l blvd"],
-		"backward": ["dekalb ave"]
+		"backward": ["dekalb ave"],
+		"track": ["outer"],
+		"above": ["tennessee ave"]
 	},
 	"community chest outer north": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["south temple"],
-		"backward": ["b&o railroad"]
+		"backward": ["b&o railroad"],
+		"track": ["outer"],
+		"above": ["atlantic ave"],
 	},
 	"community chest outer east": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["market st"],
-		"backward": ["walnut st"]
+		"backward": ["walnut st"],
+		"track": ["outer"],
+		"above": ["north carolina ave"]
 	},
 	"community chest middle south": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["baltic ave"],
-		"backward": ["mediterranean ave"]
+		"backward": ["mediterranean ave"],
+		"track": ["middle"],
+		"above": ["squeeze play"],
+		"below": ["hennepin ave"]
 	},
 	"community chest middle west": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["tennessee ave"],
-		"backward": ["st james pl"]
+		"backward": ["st james pl"],
+		"track": ["middle"],
+		"above": ["madison ave"],
+		"below": ["dekalb ave"]
 	},
 	"community chest middle east": {
-		"type": "spot",
+		"type": "community chest",
 		"forward": ["pennsylvania ave"],
-		"backward": ["north carolina ave"]
+		"backward": ["north carolina ave"],
+		"track": ["middle"],
+		"above": ["miami ave"],
+		"below": ["market st"]
 	},
 	"stock exchange": {
 		"type": "spot",
 		"forward": ["wall st"],
-		"backward": ["madison ave"]
+		"backward": ["madison ave"],
+		"track": ["inner"],
+		"below": ["free parking", "chance", "kentucky ave", "new york ave", "tennessee ave"]
 	},
 	"tax refund": {
 		"type": "spot",
 		"forward": ["gas company"],
-		"backward": ["wall st"]
+		"backward": ["wall st"],
+		"track": ["inner"],
+		"below": ["illinois ave"]
 	},
 	"subway": {
 		"type": "spot",
 		"forward": ["lake st"],
-		"backward": ["rodeo dr"]
+		"backward": ["rodeo dr"],
+		"track": ["outer"],
+		"above": ["go"]
 	},
 	"bus ticket south": {
 		"type": "spot",
 		"forward": ["checker cab co"],
-		"backward": ["hennepin ave"]	
+		"backward": ["hennepin ave"],
+		"track": ["outer"],
+		"above": ["baltic ave"]
 	},
 	"bus ticket east": {
 		"type": "spot",
 		"forward": ["sewage system"],
-		"backward": ["ute cab co"]	
+		"backward": ["ute cab co"],
+		"track": ["outer"],
+		"above": ["pennsylvania ave"]
 	},
 	"auction": {
 		"type": "spot",
 		"forward": ["katy freeway"],
-		"backward": ["holland tunnel sw"]	
+		"backward": ["holland tunnel sw"],
+		"track": ["outer"],
+		"above": ["jail"]
+	},
+	"go to jail": {
+		"type": "spot",
+		"forward": ["south st"],
+		"backward": ["temple square"],
+		"track": ["outer"],
+		"above": ["roll3"]
 	},
 	"jail": {
 		"type": "spot",
-		"forward": ["south st"],
-		"backward": ["temple square"]	
-	},
-	"in jail": {
-		"type": "spot",
 		"forward": ["st charles pl"],
-		"backward": ["connecticut ave"]	
+		"backward": ["connecticut ave"],
+		"track": ["middle"],
+		"above": ["bonus"],
+		"below": ["holland tunnel sw", "katy freeway", "auction", "bourbon st", "magazine st"]
 	},
 	"birthday gift": {
 		"type": "spot",
 		"forward": ["mulholland dr"],
-		"backward": ["ute cab co"]	
+		"backward": ["ute cab co"],
+		"track": ["outer"],
+		"above": ["park pl"],
 	},
 	"income tax": {
 		"type": "spot",
 		"forward": ["reading railroad"],
-		"backward": ["baltic ave"]	
+		"backward": ["baltic ave"],
+		"track": ["middle"],
+		"above": ["fisherman's wharf"],
+		"below": ["checker cab co"]
 	},
 	"go": {
-		"type": "spot",
+		"type": "pay",
 		"forward": ["mediterranean ave"],
-		"backward": ["boardwalk"]	
+		"backward": ["boardwalk"],
+		"track": ["middle"],
+		"above": ["squeeze play"],
+		"below": ["subway", "chance outer se", "rodeo dr", "lake st", "community chest outer se"]
 	},
 	"free parking": {
 		"type": "spot",
 		"forward": ["kentucky ave"],
-		"backward": ["new york ave"]	
+		"backward": ["new york ave"],
+		"track": ["middle"],
+		"above": ["stock exchange"],
+		"below": ["pay day", "chance outer nw", "randolph st", "peachtree st", "decatur st"]
 	},
 	"roll3": {
 		"type": "spot",
 		"forward": ["pacific ave"],
-		"backward": ["marvin gardens"]	
+		"backward": ["marvin gardens"],
+		"track": ["middle"],
+		"above": ["holland tunnel ne"],
+		"below": ["go to jail", "north temple", "temple square", "south st", "broad st"]
 	},
 	"luxury tax": {
 		"type": "spot",
 		"forward": ["boardwalk"],
-		"backward": ["park pl"]	
+		"backward": ["park pl"],
+		"track": ["middle"],
+		"above": ["squeeze play"],
+		"below": ["mulholland dr"]
 	}
 }
