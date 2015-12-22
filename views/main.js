@@ -26,9 +26,9 @@ angryCartels.config(function($routeProvider) {
 			controller  : 'gameRoomController'
 		})
 
-		// route for the contact page
-		.when('/contact', {
-			templateUrl : 'pages/contact.html',
-			controller  : 'contactController'
+		// route for the game page
+		.when('/game', {
+			templateUrl : 'pages/game.html',
+			controller  : 'gameController'
 		});
 });

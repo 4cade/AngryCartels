@@ -34,20 +34,25 @@ var initializeBoard = function(gameData) {
 			// set spot name in the data to false to represent unowned
 			gameData["owned"][spot] = false;
 
-			// data structure for handling majorities
-			if(!gameData["color"][spot["quality"]]) {
-				gameData["color"][spot["quality"]] = [];
+			
+			var spotData = board[spot];
 
-				// houses should always be [0,4], hotel should only be true if houses == 4,
-				//		skyscraper should only be true if hotel == true
-				gameData["color"][spot["quality"]].push({
-					"property" = spot,
-					"owner" = null,
-					"houses" = 0,
-					"hotel" = false,
-					"skyscraper" = false
-				});
+			// houses should always be [0,4], hotel should only be true if houses == 4,
+			//		skyscraper should only be true if hotel == true
+			var colorData = {
+					"property": spot,
+					"owner": null,
+					"houses": 0,
+					"hotel": false,
+					"skyscraper": false
+				};
+			// data structure for handling majorities
+			if(!gameData["color"][spotData["quality"]]) {
+				gameData["color"][spotData["quality"]] = [];
 			}
+			
+			// make sure actually is present
+			gameData["color"][spotData["quality"]].push(colorData);
 		}
 	}
 
@@ -63,6 +68,7 @@ var initializeBoard = function(gameData) {
 	gameData["turnIndex"] = 0; // 0 <= turnIndex < gameData["turnOrder"].length
 	gameData["doubleCount"] = 0; // reset to 0 at the beginning of a new turn
 	gameData["issues"] = [];
+	return gameData;
 }
 
 game.initializeBoard = initializeBoard;
@@ -143,12 +149,14 @@ var mrMonopolyLocation = function(currentLocation, odd, forward, railroad) {
 var moveLocation = function(currentLocation, moves, odd, forward, track) {
 	var moneyGained = 0;
 	var location = currentLocation;
-	// TODO I think this might break if the player starts on a railroad
+	
 	var movesLeft = moves;
 	var locationsMovedTo = [];
 
 	while(movesLeft > 0) {
-		location = nextLocation(location, odd, forward, track);
+		locationJSON = nextLocation(location, odd, forward, track);
+		location = locationJSON.next;
+		track = locationJSON.track;
 		locationsMovedTo.push(location);
 		movesLeft--;
 
@@ -228,7 +236,7 @@ var nextLocation = function(currentLocation, odd, forward, track) {
 		}
 	}
 
-	return json
+	return json;
 }
 
 /**
@@ -305,7 +313,7 @@ var ownsMajority = function(color, player) {
 		}
 	}
 
-	return count >= colorData.length;
+	return count > colorData.length/2;
 }
 
 /**
@@ -437,7 +445,7 @@ var buyProperty = function(property, player, gameData) {
 
 	for(var i = 0; i < colorData.length; i++) {
 		if(colorData[i]["property"] === property) {
-			"owner" = player;
+			colorData[i]["owner"] = player;
 		}
 	}
 	// properties cost twice the mortgage price

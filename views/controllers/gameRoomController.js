@@ -1,4 +1,4 @@
-angryCartels.controller('gameRoomController', function($scope, $interval) {
+angryCartels.controller('gameRoomController', function($scope, $interval, $location) {
     $scope.hostingGame = false;
     $scope.inGame = null;
     $scope.clientName = null;
@@ -50,5 +50,9 @@ angryCartels.controller('gameRoomController', function($scope, $interval) {
 
     socket.on('send client name', function(name) {
       $scope.clientName = name;
-    })
+    });
+
+    socket.on('start game', function(gameData) {
+      $location.path('/game');
+    });
 });

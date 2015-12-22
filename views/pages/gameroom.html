@@ -15,7 +15,7 @@
 		<button type="button" class="btn btn-default" ng-click="stopHosting()">
 			Stop hosting this game.
 		</button>
-		<button type="button" class="btn btn-default" ng-click="startGame()" ng-if="games[inGame].players.length > 2">
+		<button type="button" class="btn btn-default" ng-click="startGame()" ng-if="games[inGame].players.length >= 2">
 			Start!
 		</button>
 	</div>

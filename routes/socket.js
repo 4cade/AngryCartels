@@ -1,4 +1,5 @@
 var board = require('./board.js');
+var game = require('./game.js');
 
 var users = {};
 var userGenNum = 1;
@@ -24,8 +25,15 @@ function emitAll(call, data) {
 
 function emitInGame(host, call, data) {
 	for(var index in games[host]["players"]) {
-		var playerName = games[host]["players"][index];
-		users[playerName].emit(call, data);
+    // game has not been started yet
+    if(typeof games[host]["players"][index] == "string") {
+      
+    }
+    // game has been started
+		else {
+      var playerName = games[host]["players"][index]["name"];
+      users[playerName].emit(call, data);
+    }
   }
 }
 
@@ -49,6 +57,8 @@ module.exports = function(socket){
     console.log('user disconnected');
     users[socket.username] = null;
   });
+
+  // instant messaging
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
@@ -82,8 +92,8 @@ module.exports = function(socket){
   	emitAll('updated games', games);
   });
 
-  socket.on('leave game', function(game) {
-  	games[game]["players"] = games[game]["players"].filter(
+  socket.on('leave game', function() {
+  	games[socket.inGame]["players"] = games[socket.inGame]["players"].filter(
   		function(el) { return el !== socket.username });
     console.log(socket.username + " left " + socket.inGame + "'s game");
   	emitAll('updated games', games);
@@ -96,6 +106,9 @@ module.exports = function(socket){
 
   socket.on('start game', function() {
   	//TODO actually populate the game with stuff and make everyone go into the game
+    gameData = game.initializeBoard(games[socket.inGame]);
+    
+    emitInGame(socket.inGame, 'start game', gameData);
   });
 
   socket.on('roll', function() {
