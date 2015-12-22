@@ -1,5 +1,10 @@
 <div ng-controller="gameController">
-	<ul>
-		<li ng-repeat="player in players">{{player.name}}</li>
-	</ul>
+	<div class="row">
+		<div class="col-sm-10">
+			<ul>
+				<li ng-repeat="player in players">{{player.name}}</li>
+			</ul>
+		</div>
+		<chat class="col-sm-2"></chat>
+	</div>
 </div>

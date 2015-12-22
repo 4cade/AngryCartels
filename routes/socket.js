@@ -25,13 +25,15 @@ function emitAll(call, data) {
 
 function emitInGame(host, call, data) {
 	for(var index in games[host]["players"]) {
-    // game has not been started yet
-    if(typeof games[host]["players"][index] == "string") {
-      
-    }
-    // game has been started
-		else {
+    // game has started
+    console.log(games[host]["players"][index]);
+    if(typeof games[host]["players"][index] == "object") {
       var playerName = games[host]["players"][index]["name"];
+      users[playerName].emit(call, data);
+    }
+    // game has not been started
+		else {
+      var playerName = games[host]["players"][index];
       users[playerName].emit(call, data);
     }
   }
@@ -105,10 +107,10 @@ module.exports = function(socket){
   });
 
   socket.on('start game', function() {
-  	//TODO actually populate the game with stuff and make everyone go into the game
-    gameData = game.initializeBoard(games[socket.inGame]);
+  	// actually populate the game with stuff and make everyone go into the game
+    games[socket.inGame] = game.initializeBoard(games[socket.inGame]);
     
-    emitInGame(socket.inGame, 'start game', gameData);
+    emitInGame(socket.inGame, 'start game', {});
   });
 
   socket.on('roll', function() {
@@ -129,6 +131,10 @@ module.exports = function(socket){
 
   socket.on('mortgage', function(info) {
 
+  });
+
+  socket.on('request game data', function() {
+    socket.emit('game data', games[socket.inGame]);
   })
 }
 
