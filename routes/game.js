@@ -20,6 +20,7 @@ game.initializeBoard = function(gameData) {
 		newPlayer.forward = true;
 		newPlayer.location = "go"; // all players start on go
 		newPlayer.railroad = null;
+		newPlayer.track = "middle";
 
 		gameData["players"][index] = newPlayer;
 	}
@@ -50,6 +51,8 @@ game.initializeBoard = function(gameData) {
 			}
 		}
 	}
+
+	gameData["freeParking"] = 0;
 
 	// set house, hotel, skyscraper presets
 	gameData["houses"] = 81;
