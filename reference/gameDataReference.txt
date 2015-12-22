@@ -1,0 +1,31 @@
+Inside of the game, the server passes around an object often referred to as "gameData".
+
+The structure of gameData is as follows:
+
+gameData: {
+	"players" : [player, player, player, etc.],
+	"owned": {
+		spotName: false/player that owns it
+	},
+	"color": {
+		colorOfSet: [propertyInColorSet]
+	},
+	"houses": # of houses left for purchase,
+	"hotels": # of hotels left for purchase,
+	"skyscrapers": # of skyscrapers left for purchase,
+	"turnOrder": [playerIndex, playerIndex, etc.], // order of players' turns
+	"turnIndex": indexInTurnOrder, // says index of the player in turnOrder who is going
+	"doubleCount": number, // says how many times the current player has rolled doubles
+	"issues": [issue]
+}
+
+player: {
+	"name": String,
+	"money": int,
+	"property": [property],
+	"busTickets": [busTicket],
+	"getOutOfJails": number,
+	"forward": boolean,
+	"location": current location of the player,
+	"railroad": states whether the user is on the upper track of a railroad
+}
