@@ -26,7 +26,6 @@ function emitAll(call, data) {
 function emitInGame(host, call, data) {
 	for(var index in games[host]["players"]) {
     // game has started
-    console.log(games[host]["players"][index]);
     if(typeof games[host]["players"][index] == "object") {
       var playerName = games[host]["players"][index]["name"];
       users[playerName].emit(call, data);
@@ -64,7 +63,7 @@ module.exports = function(socket){
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
-    emitInGame(socket.inGame, 'chat message', msg);
+    emitInGame(socket.inGame, 'chat message', socket.username + ": " + msg);
  });
 
   // handle games
@@ -107,10 +106,10 @@ module.exports = function(socket){
   });
 
   socket.on('start game', function() {
-  	// actually populate the game with stuff and make everyone go into the game
-    games[socket.inGame] = game.initializeBoard(games[socket.inGame]);
-    
+  	// tell everyone that the game started, do first for minimal lag since next step is intensive
     emitInGame(socket.inGame, 'start game', {});
+    // actually populate the game with stuff and make everyone go into the game
+    games[socket.inGame] = game.initializeBoard(games[socket.inGame]);
   });
 
   socket.on('roll', function() {
@@ -134,6 +133,7 @@ module.exports = function(socket){
   });
 
   socket.on('request game data', function() {
+    console.log("someone wants to get game data");
     socket.emit('game data', games[socket.inGame]);
   })
 }

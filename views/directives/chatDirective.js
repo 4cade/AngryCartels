@@ -4,4 +4,4 @@ angryCartels.directive('chat', function() {
 		controller: "chatController",
 		templateUrl: '/pages/chat.html'
 	}
-})
+});

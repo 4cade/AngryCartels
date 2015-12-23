@@ -1,5 +1,6 @@
-angryCartels.controller('gameRoomController', function($scope, $interval, $location) {
+angryCartels.controller('gameRoomController', function($scope, $interval) {
     $scope.hostingGame = false;
+    $scope.gameGoing = false;
     $scope.inGame = null;
     $scope.clientName = null;
 	  // load initial games
@@ -52,7 +53,8 @@ angryCartels.controller('gameRoomController', function($scope, $interval, $locat
       $scope.clientName = name;
     });
 
-    socket.on('start game', function(gameData) {
-      $location.path('/game');
+    socket.on('start game', function() {
+      $scope.gameGoing = true;
+      console.log("game has started");
     });
 });
