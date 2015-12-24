@@ -5,7 +5,7 @@ var game = {};
 
 /**
 * Create the defaults for the game to begin and commence in way for this file to handle.
-*	This heavily mutates gameData.
+*	This HEAVILY mutates gameData.
 * @param gameData the original data used for the game.
 */
 var initializeBoard = function(gameData) {
@@ -14,8 +14,8 @@ var initializeBoard = function(gameData) {
 		var newPlayer = {};
 		newPlayer.name = gameData["players"][index];
 		newPlayer.money = 3200;
-		newPlayer.property = [];
-		newPlayer.busTickets = [];
+		newPlayer.property = {}; // key of property name which maps to a boolean of true if not mortgaged
+		newPlayer.busTickets = {}; // key of bus ticket type to quantity
 		newPlayer.getOutOfJails = 0;
 		newPlayer.forward = true;
 		newPlayer.location = "go"; // all players start on go
@@ -32,7 +32,7 @@ var initializeBoard = function(gameData) {
 		if(board[spot]["type"] === "property" || board[spot]["type"] === "transportation" || 
 			board[spot]["type"] === "utility") {
 			// set spot name in the data to false to represent unowned
-			gameData["owned"][spot] = false;
+			gameData["owned"][spot] = undefined;
 
 			
 			var spotData = board[spot];
@@ -51,7 +51,6 @@ var initializeBoard = function(gameData) {
 				gameData["color"][spotData["quality"]] = [];
 			}
 			
-			// make sure actually is present
 			gameData["color"][spotData["quality"]].push(colorData);
 		}
 	}
@@ -115,6 +114,7 @@ var rollDice = function(gameData) {
 	}
 }
 
+// exports the rollDice function
 game.rollDice = rollDice;
 
 /**
@@ -123,14 +123,66 @@ game.rollDice = rollDice;
 * @param currentLocation the location the player is on
 * @param odd true if if the sum of dice is odd
 * @param forward true if the player is moving forward
-@ @param railroad true if the player is on the upperTrack for a railroad (innermost)
+* @param userTrack true the track that the player is on
+* @param gameData the JSON that carries all essential information about the game
+*
 * @return a JSON specifying the new location of the player, any money gained along the journey,
 * 	a boolean specifying if the user is on the upper or lower track of a railroad, and an array
 * 	of all of the locations visited in order in case an animation would like to have that 
 */
-var mrMonopolyLocation = function(currentLocation, odd, forward, railroad) {
-	var next = nextLocation(currentLocation, forward, railroad);
-	// TODO
+var mrMonopolyLocation = function(currentLocation, odd, forward, userTrack, gameData) {
+	var moneyGained = 0;
+	var location = currentLocation;
+	var track = userTrack;
+	var movesLeft = moves;
+	var locationsMovedTo = [];
+	var firstMove = true;
+
+	while(!firstMove && location !== currentLocation && gameData["owned"][location] !== undefined) {
+		firstMove = false;
+		locationJSON = nextLocation(location, odd, forward, track);
+		location = locationJSON.next;
+		track = locationJSON.track;
+		locationsMovedTo.push(location);
+		movesLeft--;
+
+		// special cases about locations
+		// gaining pay locations
+		if(location == "go") {
+			moneyGained += 200;
+		}
+		else if(location == "pay day") {
+			if(odd) {
+				moneyGained += 300;
+			}
+			else {
+				moneyGained += 400;
+			}
+		}
+		else if(location == "bonus") {
+			if(movesLeft == 0) {
+				moneyGained += 300;
+			}
+			else {
+				moneyGained += 250;
+			}
+		}
+		// tunnels
+		else if(location == "holland tunnel ne") {
+			location = "holland tunnel sw";
+			locationsMovedTo.push(location);
+		}
+		else if(location == "holland tunnel sw") {
+			location = "holland tunnel ne";
+			locationsMovedTo.push(location);
+		}
+	}
+
+	var json = {};
+	json.moneyGained = moneyGained;
+	json.currentLocation = location;
+	json.movedTo = locationsMovedTo;
+	return json;
 }
 
 /**
@@ -141,15 +193,15 @@ var mrMonopolyLocation = function(currentLocation, odd, forward, railroad) {
 * @param moves the number of times the player can move
 * @param odd true if the dice roll was odd
 * @param forward true if the player is moving forward
-* @param track the track that the player is on
+* @param userTrack the track that the player is on
 *
 * @return a JSON specifying the new location of the player, any money gained along the journey,
 * 	and an array of all of the locations visited in order in case an animation would like to have that 
 */
-var moveLocation = function(currentLocation, moves, odd, forward, track) {
+var moveLocation = function(currentLocation, moves, odd, forward, userTrack) {
 	var moneyGained = 0;
 	var location = currentLocation;
-	
+	var track = userTrack;
 	var movesLeft = moves;
 	var locationsMovedTo = [];
 
@@ -205,6 +257,7 @@ var moveLocation = function(currentLocation, moves, odd, forward, track) {
 * @param odd true if the dice roll was odd or even
 * @param forward true if the player is moving in the forward direction
 * @param track the track that the user is on
+*
 * @return JSON with the next location that the user is going to go to, and the track of the user
 */
 var nextLocation = function(currentLocation, odd, forward, track) {
@@ -261,7 +314,7 @@ var executeLocation = function(currentLocation, gameData) {
 var jumpLocation = function(newLocation) {
 	// pretend to be moving onto that location from one step behind to not have to rewrite code
 	oldLocation = newLocation["backward"][0];
-	return moveLocation(oldLocation, 1, true, true);
+	return moveLocation(oldLocation, 1, true, true); // TODO get rid of weird side effects
 }
 
 /**
