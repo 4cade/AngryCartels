@@ -4,11 +4,14 @@ var board = require('./board.js');
 var game = {};
 
 /**
-* Create the defaults for the game to begin and commence in way for this file to handle.
-*	This HEAVILY mutates gameData.
-* @param gameData the original data used for the game.
+* Create the defaults for the game to begin and commence in a way for this file to handle.
+*	
+* @param gamePresets the original data used for the game.
+*
+* @return gameData the data that will be used for the game
 */
-var initializeBoard = function(gameData) {
+var initializeBoard = function(gamePresets) {
+	var gameData = JSON.parse(JSON.stringify(gamePresets));
 	// changes a player from just a string to an actual player
 	for(var index in gameData["players"]) {
 		var newPlayer = {};
@@ -40,18 +43,19 @@ var initializeBoard = function(gameData) {
 			// houses should always be [0,4], hotel should only be true if houses == 4,
 			//		skyscraper should only be true if hotel == true
 			var colorData = {
-					"property": spot,
 					"owner": null,
 					"houses": 0,
 					"hotel": false,
 					"skyscraper": false
 				};
+
 			// data structure for handling majorities
 			if(!gameData["color"][spotData["quality"]]) {
-				gameData["color"][spotData["quality"]] = [];
+				gameData["color"][spotData["quality"]] = {};
+				// can get length by using Object.keys(gameData["color"][color]).length
 			}
 			
-			gameData["color"][spotData["quality"]].push(colorData);
+			gameData["color"][spotData["quality"]][spot] = colorData;
 		}
 	}
 
@@ -179,9 +183,19 @@ var mrMonopolyLocation = function(currentLocation, odd, forward, userTrack, game
 	}
 
 	var json = {};
-	json.moneyGained = moneyGained;
-	json.currentLocation = location;
-	json.movedTo = locationsMovedTo;
+	// actually found a new location
+	if(location !=== currentLocation) {
+		json.moneyGained = moneyGained;
+		json.currentLocation = location;
+		json.movedTo = locationsMovedTo;
+	}
+	// went in a loop and failed to find a new unowned property
+	else {
+		json.moneyGained = 0;
+		json.currentLocation = currentLocation;
+		json.movedTo = [];
+	}
+	
 	return json;
 }
 
@@ -327,22 +341,22 @@ var jumpLocation = function(newLocation) {
 var setHouseNumberForProperty = function(color, property, houseNumber, gameData) {
 	var colorData = gameData["color"][color];
 
-	for(var i = 0; i < colorData.length; i++) {
-		if(colorData[i]["property"] === property) {
+	for(var key in colorData) {
+		if(key === property) {
 			if(houseNumber === 6) {
-				colorData[i]["skyscraper"] = true;
-				colorData[i]["hotel"] = true;
-				colorData[i]["houses"] = 4;
+				colorData[key]["skyscraper"] = true;
+				colorData[key]["hotel"] = true;
+				colorData[key]["houses"] = 4;
 			}
 			else if(houseNumber === 5) {
-				colorData[i]["skyscraper"] = false;
-				colorData[i]["hotel"] = true;
-				colorData[i]["houses"] = 4;
+				colorData[key]["skyscraper"] = false;
+				colorData[key]["hotel"] = true;
+				colorData[key]["houses"] = 4;
 			}
 			else {
-				colorData[i]["skyscraper"] = false;
-				colorData[i]["hotel"] = false;
-				colorData[i]["houses"] = houseNumber;
+				colorData[key]["skyscraper"] = false;
+				colorData[key]["hotel"] = false;
+				colorData[key]["houses"] = houseNumber;
 			}
 		}
 	}
@@ -360,13 +374,13 @@ var ownsMajority = function(color, player) {
 
 	var count = 0;
 
-	for(var i = 0; i < colorData.length; i++) {
-		if(colorData[i]["owner"] === player) {
+	for(var key in colorData) {
+		if(colorData[key]["owner"] === player) {
 			count += 1;
 		}
 	}
 
-	return count > colorData.length/2;
+	return count > Object.keys(colorData).length/2;
 }
 
 /**
@@ -380,13 +394,13 @@ var ownsAll = function(color, player) {
 
 	var count = 0;
 
-	for(var i = 0; i < colorData.length; i++) {
-		if(colorData[i]["owner"] === player) {
+	for(var key in colorData) {
+		if(colorData[key]["owner"] === player) {
 			count += 1;
 		}
 	}
 
-	return count === colorData.length;
+	return count === Object.keys(colorData).length;
 }
 
 /**
@@ -404,16 +418,16 @@ var nextToAdd = function(color, player) {
 	var maxHouse = 0;
 
 	// first determine highest number of houses, hotel(5), or skyscraper(6)
-	for(var i = 0; i < colorData.length; i++) {
-		if(colorData[i]["owner"] === player) {
-			if(colorData[i]["skyscraper"] && maxHouse < 6) {
+	for(var key in colorData) {
+		if(colorData[key]["owner"] === player) {
+			if(colorData[key]["skyscraper"] && maxHouse < 6) {
 				maxHouse = 6;
 			}
-			else if(colorData[i]["hotel"] && maxHouse < 5) {
+			else if(colorData[key]["hotel"] && maxHouse < 5) {
 				maxHouse = 5;
 			}
-			else if(colorData[i]["houses"] > maxHouse) {
-				maxHouse = colorData[i]["houses"];
+			else if(colorData[key]["houses"] > maxHouse) {
+				maxHouse = colorData[key]["houses"];
 			}
 		}
 	}
@@ -425,37 +439,39 @@ var nextToAdd = function(color, player) {
 	// use a while loop just in case need to start additions over
 	var index = 0;
 
-	while(i < colorData.length) {
-		i++; // increment so it doesn't continue forever
+	while(var index < Object.keys(colorData).length) {
+		index++; // increment so it doesn't continue forever
+
+		var key = Object.keys(colorData)[index];
 
 		// TODO condense these if statements together
-		if(colorData[i]["owner"] === player) {
-			if(colorData[i]["houses"] == maxHouse-1) {
+		if(colorData[key]["owner"] === player) {
+			if(colorData[key]["houses"] == maxHouse-1) {
 				// this means that there is an imbalance with the properties and it should be accounted for
 				if(sameMax) {
 					sameMax = false;
-					i = 0;
+					index = 0;
 					nextAdditions = [];
 				}
 				else {
-					nextAdditions.push(colorData[i]["property"]);
+					nextAdditions.push(colorData[key]["property"]);
 				}				
 			}
-			else if(colorData[i]["houses"] == maxHouse && sameMax) {
-				nextAdditions.push(colorData[i]["property"]);
+			else if(colorData[key]["houses"] == maxHouse && sameMax) {
+				nextAdditions.push(colorData[key]["property"]);
 			}
 			else if(colorData[i]["hotel"] && maxHouse == 5 && sameMax) {
-				nextAdditions.push(colorData[i]["property"]);
+				nextAdditions.push(colorData[key]["property"]);
 			}
-			else if(colorData[i]["hotel"] && maxHouse == 6) {
+			else if(colorData[key]["hotel"] && maxHouse == 6) {
 				// this means that there is an imbalance with the properties and it should be accounted for
 				if(sameMax) {
 					sameMax = false;
-					i = 0;
+					index = 0;
 					nextAdditions = [];
 				}
 				else {
-					nextAdditions.push(colorData[i]["property"]);
+					nextAdditions.push(colorData[key]["property"]);
 				}	
 			}
 			// cannot make more additions if it is already at the skyscraper level
@@ -490,19 +506,47 @@ var useBusTicket = function(action, gameData) {
 */
 var buyProperty = function(property, player, gameData) {
 	gameData["owned"][property] = player;
-	gameData["players"][player][property].push({
-		"name": property, 
-		"houses": 0,
-		"mortgaged": false});
+
+	gameData["players"][player]["property"][property] = true; // not mortgaged
+
 	var colorData = gameData["color"][board[property]["quality"]];
 
-	for(var i = 0; i < colorData.length; i++) {
-		if(colorData[i]["property"] === property) {
-			colorData[i]["owner"] = player;
+	for(var key in colorData) {
+		if(key === property) {
+			colorData[key]["owner"] = player;
 		}
 	}
+	// TODO account for house imbalance
+
 	// properties cost twice the mortgage price
 	gameData["players"][player]["money"] -= 2*board[property]["mortgage"];
+	return gameData;
+}
+
+/**
+* Mutates gameData to give the player the property, with any side implications.
+* @param property the property to buy
+* @param player the player that is making the purchase
+* @param price the monetary amount that the player paid for the property
+* @param gameData the JSON of the game
+* @return the modified gameData with any issues stored in the issues field
+*/
+var buyPropertyAuction = function(property, player, price, gameData) {
+	gameData["owned"][property] = player;
+	
+	gameData["players"][player]["property"][property] = true; // not mortgaged
+
+	var colorData = gameData["color"][board[property]["quality"]];
+
+	for(var key in colorData) {
+		if(key === property) {
+			colorData[key]["owner"] = player;
+		}
+	}
+	// TODO account for house imbalance
+
+	// properties cost twice the mortgage price
+	gameData["players"][player]["money"] -= price;
 	return gameData;
 }
 
@@ -512,11 +556,11 @@ var buyProperty = function(property, player, gameData) {
 * @param property the property to mortgage
 * @param the player that wants to mortgage such property
 * @param gameData the JSON of the game
-* @return gameData with the property mortgaged.
+* @return gameData with the property mortgaged if it could be mortgaged
 */
 var mortgageProperty = function(property, player, gameData) {
-	if(!gameData["players"][player][property]["mortgaged"]) {
-		gameData["players"][player][property]["mortgaged"] = true;
+	if(gameData["players"][player]["property"][property]) {
+		gameData["players"][player]["property"][property] = false;
 		gameData["players"][player][money] += board[property]["mortgage"];
 	}
 	return gameData;
@@ -541,37 +585,19 @@ var buyHouse = function(property, player, gameData) {
 			inAdditions = true;
 		}
 	}
-
-	if(ownsMajority(color, player) && inAdditions && gameData["players"][player][property][i]["houses"] < 4) {
-		// find property and increment the houses
-		for(var j = 0; j < gameData["players"][player][property].length; j++) {
-			if(gameData["players"][property][i]["name"] === property) {
-				gameData["players"][player][property][i]["houses"] += 1;
-				setHouseNumberForProperty(color, property, gameData["players"][player][property][i]["houses"]);
-				gameData["players"][player]["money"] -= board[property]["house"];
-				gameData["houses"] -= 1;
-			}
-		}
+	// just if houses
+	if(ownsMajority(color, player) && inAdditions && gameData["color"][color]["houses"] < 4) {
+		var oldHouseNum = gameData["color"][color]["houses"];
+		setHouseNumberForProperty(color, property, oldHouseNum + 1, gameData);
 	}
 	// handles hotels/skyscrapers since need to have the entire set for that
 	else if(ownsAll(color, player) && inAdditions) {
-		// find property and increment the houses
-		for(var j = 0; j < gameData["players"][player][property].length; j++) {
-			if(gameData["players"][property][i]["name"] === property) {
-				gameData["players"][player][property][i]["houses"] += 1;
-				setHouseNumberForProperty(color, property, gameData["players"][player][property][i]["houses"]);
-				gameData["players"][player]["money"] -= board[property]["house"];
-				// bought a hotel
-				if(gameData["players"][player][property][i]["houses"] === 5) {
-					gameData["houses"] += 4;
-					gameData["hotels"] -= 1;
-				}
-				// bought a skyscraper
-				else {
-					gameData["hotels"] += 1;
-					gameData["skyscrapers"] -= 1;
-				}
-			}
+		// not a hotel yet
+		if(!gameData["color"][color]["hotel"]) {
+			setHouseNumberForProperty(color, property, 5, gameData);
+		}
+		else {
+			setHouseNumberForProperty(color, property, 6, gameData);	
 		}
 	}
 
@@ -605,13 +631,13 @@ var payRent = function(property, player, gameData) {
 		var houseRentIndex = 0;
 
 		var colorSet = gameData["color"][board[property]["quality"]];
-		for(var i = 0; i < colorSet.length; i++) {
-			if(colorSet[i]["property"] === property) {
-				houseRentIndex = colorSet[i]["houses"];
-				if(colorSet[i]["hotel"]) {
+		for(var key in colorSet) {
+			if(key === property) {
+				houseRentIndex = colorSet[key]["houses"];
+				if(colorSet[key]["hotel"]) {
 					houseRentIndex = 5;
 				}
-				else if(colorSet[i]["skyscraper"]) {
+				else if(colorSet[key]["skyscraper"]) {
 					houseRentIndex = 6;
 				}
 			}
@@ -645,6 +671,10 @@ var trade = function(player1, player2, properties1, properties2, wealth1, wealth
 * @return gameData with all of issues fixed
 */
 var correctIssues = function(gameData) {
+	// TODO
+}
+
+var rebalanceHouses = function(color, player) {
 	// TODO
 }
 
