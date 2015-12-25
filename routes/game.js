@@ -71,6 +71,9 @@ var initializeBoard = function(gamePresets) {
 	gameData["turnIndex"] = 0; // 0 <= turnIndex < gameData["turnOrder"].length
 	gameData["doubleCount"] = 0; // reset to 0 at the beginning of a new turn
 	gameData["message"] = ""; // any messages pertaining to changes made by some functions
+	gameData["movedTo"] = []; // previous locations moved to in the last turn
+	gameData["recentLocation"] = "go"; // last location moved to
+	gameData["lastOdd"] = true; // says if the last move was an odd
 
 	return gameData;
 }
@@ -78,14 +81,24 @@ var initializeBoard = function(gamePresets) {
 game.initializeBoard = initializeBoard;
 
 /**
+* Makes it so the gameData has the next player in the order to go.
+* @param gameData the data of everything in the game
+* @return modified gameData with the turn put on the next player
+*/
+var nextTurn = function(gameData) {
+	// TODO
+}
+
+game.nextTurn = nextTurn;
+
+/**
 * Handles the entire turn of when the user chooses to roll the dice by moving the current 
 *	 player to wherever the dice puts him/her and indicates the next action.
 * @param gameData the JSON of the game
-* @return an object where "gameData" maps to gameData and "action" maps to what should
-*	 happen next
+* @return gameData with updated player information and gameData.recentLocation has the new location
+*	 of the player and gameData.message will have "mrmonopoly" if the player should go through a mrmonopoly
 */
 var rollDice = function(gameData) {
-	// many things here TODO
 	var die1 = Math.floor(Math.random()*6+1);
 	var die2 = Math.floor(Math.random()*6+1);
 	var specialDie = Math.floor(Math.random()*6+1);
@@ -103,24 +116,54 @@ var rollDice = function(gameData) {
 		diceTotal += specialDie;
 	}
 	var odd = diceTotal % 2 !== 0;
+	gameData.lastOdd = odd;
 
 	var player = gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
 
 	var moveInfo = moveLocation(player.location, diceTotal, odd, player.forward, player.track);
 
-	// TODO set moveInfo to update player
+	// use moveInfo to update player
+	gameData.movedTo = moveInfo.movedTo;
+	gameData.recentLocation = moveInfo.location;
+	player.location = moveInfo.location;
+	player.money += moveInfo.moneyGained;
 
 	if(special === "mrmonopoly") {
-		var moveInfo = mrMonopolyLocation(player.location, odd, player.forward, player.track);
-		// TODO handle new moveInfo
+		//var moveInfo = mrMonopolyLocation(player.location, odd, player.forward, player.track);
+		gameData.message = "mrmonopoly";
 	}
 	else if(special === "gainbusticket") {
 		// TODO gain a bus ticket
 	}
+
+	return gameData;
 }
 
 // exports the rollDice function
 game.rollDice = rollDice;
+
+/**
+* Handles the action of going through a Mr. Monopoly roll, Will move the player to the next unowned
+*	 property unless he/she gets back to his/her currentLocation without encountering one.
+* @param gameData the JSON of the game
+* @return gameData with updated player information and gameData.recentLocation has the new location
+*	 of the player and gameData.message will have "mrmonopoly" if the player should go through a mrmonopoly
+*/
+var unleashMrMonopoly = function(gameData) {
+	var player = gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
+
+	var moveInfo = mrMonopolyLocation(player.location, gameData.lastOdd, player.forward, player.track, gameData);
+
+	// use moveInfo to update player
+	gameData.movedTo = moveInfo.movedTo;
+	gameData.recentLocation = moveInfo.location;
+	player.location = moveInfo.location;
+	player.money += moveInfo.moneyGained;
+
+	return gameData;
+}
+
+game.unleashMrMonopoly = unleashMrMonopoly;
 
 /**
 * Moves the user to the next unowned property in the forward direction, or
@@ -521,7 +564,10 @@ var buyProperty = function(property, player, gameData) {
 			colorData[key]["owner"] = player;
 		}
 	}
-	// TODO account for house imbalance
+
+	var color = board[property]["quality"];
+	// account for house imbalance
+	rebalanceHouses(color, player, gameData);
 
 	// properties cost twice the mortgage price
 	gameData["players"][playerIndex]["money"] -= 2*board[property]["mortgage"];
@@ -550,7 +596,10 @@ var buyPropertyAuction = function(property, player, price, gameData) {
 			colorData[key]["owner"] = player;
 		}
 	}
-	// TODO account for house imbalance
+
+	var color = board[property]["quality"];
+	// account for house imbalance
+	rebalanceHouses(color, player, gameData);
 
 	// charge the auctioned price
 	gameData["players"][playerIndex]["money"] -= price;
@@ -868,7 +917,7 @@ var isOwned = function(property) {
 */
 var getPlayerIndexFromPlayer = function(player, gameData) {
 
-	for(int i = 0; i < gameData["players"].length; i++) {
+	for(var i = 0; i < gameData["players"].length; i++) {
 		if(gameData["players"][i]["name"] === player) {
 			return i;
 		}
