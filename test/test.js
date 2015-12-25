@@ -259,7 +259,7 @@ describe('Init', function() {
                     assert.equal(err, null);
                     assert.equal(result.friendList.length, 1);
                     assert.equal(result.friends, 1);
-                    assert.deepEqual(result.friendList[0], userId1);
+                    assert.deepEqual(result.friendList[0].name, 'Zach Miranda');
                     done();
                 });
             });

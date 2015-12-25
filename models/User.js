@@ -62,25 +62,23 @@ userSchema.statics.findUserProfile = function(username, callback) {
                 if (err) {
                     callback('Users not found');
                 } else {
-                    callback(null, {friendList:
-                        friendList.map(function(item) {
-                            return {
-                                name: item.name
-                            }
-                        });
+                    var listFriends = friendList.map(function(item) {
+                        return {
+                            name: item.name
+                        }
+                    });
+                    callback(null, {
+                        username: result.username,
+                        name: result.name,
+                        stats: {
+                            gamesPlayed: result.gamesPlayed,
+                            wins: result.wins,
+                            losses: result.losses
+                        },
+                        friendList: listFriends,
+                        friends: result.friends
                     });
                 }
-            });
-            callback(null, {
-                username: result.username,
-                name: result.name,
-                stats: {
-                    gamesPlayed: result.gamesPlayed,
-                    wins: result.wins,
-                    losses: result.losses
-                },
-                friendList: friendList,
-                friends: result.friends
             });
         }
     });
