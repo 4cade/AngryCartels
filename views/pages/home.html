@@ -2,4 +2,30 @@
 	<h1>Home Page</h1>
 	
 	<p>{{ message }}</p>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="user-info">
+					<span class="welcome-title">Welcome, {{ name }}!</span>
+					<div class="spacer"></div>
+					<p>Games played: {{ stats.gamesPlayed }}</p>
+					<p>Wins: {{ stats.wins }}</p>
+					<p>Losses: {{ stats.losses }}</p>
+					<p>Friends: {{ friends }}</p>
+				</div>
+			</div>
+			<div class="col-md-4 col-md-offset-4">
+				<div class="user-friends">
+					<span class="content-title">Your friends</span>
+					<div class="spacer"></div>
+					<em ng-if="friendList.length === 0">No friends yet! Find friends in the search bar above.</em>
+					<div ng-if="friendList.length !== 0">
+						<p ng-repeat="friend in friendList">{{ friend }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
