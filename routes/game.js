@@ -184,7 +184,7 @@ var mrMonopolyLocation = function(currentLocation, odd, forward, userTrack, game
 
 	var json = {};
 	// actually found a new location
-	if(location !=== currentLocation) {
+	if(location !== currentLocation) {
 		json.moneyGained = moneyGained;
 		json.currentLocation = location;
 		json.movedTo = locationsMovedTo;
@@ -439,7 +439,7 @@ var nextToAdd = function(color, player) {
 	// use a while loop just in case need to start additions over
 	var index = 0;
 
-	while(var index < Object.keys(colorData).length) {
+	while(index < Object.keys(colorData).length) {
 		index++; // increment so it doesn't continue forever
 
 		var key = Object.keys(colorData)[index];
@@ -600,7 +600,7 @@ var buyHouse = function(property, player, gameData) {
 			setHouseNumberForProperty(color, property, 6, gameData);	
 		}
 	}
-
+	// need to charge player for house TODO
 
 	return gameData;
 }
@@ -614,7 +614,35 @@ var buyHouse = function(property, player, gameData) {
 */
 var sellHouse = function(property, player, gameData) {
 	var color = board["property"][property]["quality"];
-	//TODO
+	var colorData = gameData["color"][color];
+	
+	var cantSell = nextToAdd(color, property, player);
+
+	var sellable = true;
+
+	// there are properties that cannot be sold
+	if(cantSell.length !== Object.keys(colorData).length) {
+		for(var i = 0; i < nextAdditions.length; i++) {
+			if(nextAdditions[i] === property) {
+				sellable = false;
+			}
+		}
+	}
+
+	if(sellable) {
+		if(colorData[property]["skyscraper"]) {
+			setHouseNumberForProperty(color, property, 5, gameData);
+		}
+		else if(colorData[property]["hotel"]) {
+			setHouseNumberForProperty(color, property, 4, gameData);
+		}
+		else if(colorData[property]["houses"] > 0) {
+			var oldHouseNum = colorData[property]["houses"];
+			setHouseNumberForProperty(color, property, oldHouseNum - 1, gameData);
+		}
+	}
+	// need to add money to player for house TODO
+	return gameData;
 }
 
 /**
