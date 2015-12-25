@@ -86,10 +86,27 @@ game.initializeBoard = initializeBoard;
 * @return modified gameData with the turn put on the next player
 */
 var nextTurn = function(gameData) {
-	// TODO
+	gameData["turnIndex"]++;
+
+	if(gameData["turnIndex"] === gameData["turnOrder"].length) {
+		gameData["turnIndex"] = 0;
+	}
+
+	return gameData;
 }
 
 game.nextTurn = nextTurn;
+
+/**
+* Informs whose turn it is.
+* @param gameData the data of everything in the game
+* @return String name of the player whose turn it is
+*/
+var currentPlayer = function(gameData) {
+	return gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
+}
+
+game.currentPlayer = currentPlayer;
 
 /**
 * Handles the entire turn of when the user chooses to roll the dice by moving the current 
@@ -118,7 +135,7 @@ var rollDice = function(gameData) {
 	var odd = diceTotal % 2 !== 0;
 	gameData.lastOdd = odd;
 
-	var player = gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
+	var player = currentPlayer(gameData);
 
 	var moveInfo = moveLocation(player.location, diceTotal, odd, player.forward, player.track);
 
