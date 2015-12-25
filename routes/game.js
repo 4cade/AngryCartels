@@ -71,6 +71,7 @@ var initializeBoard = function(gamePresets) {
 	gameData["turnIndex"] = 0; // 0 <= turnIndex < gameData["turnOrder"].length
 	gameData["doubleCount"] = 0; // reset to 0 at the beginning of a new turn
 	gameData["issues"] = [];
+	gameData["message"] = ""; // any messages pertaining to changes made by some functions
 	return gameData;
 }
 
@@ -91,7 +92,7 @@ var rollDice = function(gameData) {
 
 	var diceTotal = die1 + die2;
 	var special = "";
-	// handle specialDie first TODO look up frequencies of everything
+	
 	if(specialDie === 4 || specialDie === 5) {
 		special = "mrmonopoly";
 	}
@@ -505,9 +506,11 @@ var useBusTicket = function(action, gameData) {
 * @return the modified gameData with any issues stored in the issues field
 */
 var buyProperty = function(property, player, gameData) {
+	var playerIndex = getPlayerIndexFromPlayer(player, gameData);
+
 	gameData["owned"][property] = player;
 
-	gameData["players"][player]["property"][property] = true; // not mortgaged
+	gameData["players"][playerIndex]["property"][property] = true; // not mortgaged
 
 	var colorData = gameData["color"][board[property]["quality"]];
 
@@ -519,7 +522,7 @@ var buyProperty = function(property, player, gameData) {
 	// TODO account for house imbalance
 
 	// properties cost twice the mortgage price
-	gameData["players"][player]["money"] -= 2*board[property]["mortgage"];
+	gameData["players"][playerIndex]["money"] -= 2*board[property]["mortgage"];
 	return gameData;
 }
 
@@ -532,9 +535,11 @@ var buyProperty = function(property, player, gameData) {
 * @return the modified gameData with any issues stored in the issues field
 */
 var buyPropertyAuction = function(property, player, price, gameData) {
+	var playerIndex = getPlayerIndexFromPlayer(player, gameData);
+	
 	gameData["owned"][property] = player;
 	
-	gameData["players"][player]["property"][property] = true; // not mortgaged
+	gameData["players"][playerIndex]["property"][property] = true; // not mortgaged
 
 	var colorData = gameData["color"][board[property]["quality"]];
 
@@ -545,8 +550,8 @@ var buyPropertyAuction = function(property, player, price, gameData) {
 	}
 	// TODO account for house imbalance
 
-	// properties cost twice the mortgage price
-	gameData["players"][player]["money"] -= price;
+	// charge the auctioned price
+	gameData["players"][playerIndex]["money"] -= price;
 	return gameData;
 }
 
@@ -559,9 +564,11 @@ var buyPropertyAuction = function(property, player, price, gameData) {
 * @return gameData with the property mortgaged if it could be mortgaged
 */
 var mortgageProperty = function(property, player, gameData) {
-	if(gameData["players"][player]["property"][property]) {
-		gameData["players"][player]["property"][property] = false;
-		gameData["players"][player][money] += board[property]["mortgage"];
+	var playerIndex = getPlayerIndexFromPlayer(player, gameData);
+
+	if(gameData["players"][playerIndex]["property"][property]) {
+		gameData["players"][playerIndex]["property"][property] = false;
+		gameData["players"][playerIndex][money] += board[property]["mortgage"];
 	}
 	return gameData;
 	
@@ -575,10 +582,11 @@ var mortgageProperty = function(property, player, gameData) {
 * @return gameData with changes to the player's data if the house was able to be bought
 */
 var buyHouse = function(property, player, gameData) {
-	var color = board["property"][property]["quality"];
+	var color = board[property]["quality"];
 	var nextAdditions = nextToAdd(color, property, player);
 
 	var inAdditions = false;
+	var payForHouse = false;
 
 	for(var i = 0; i < nextAdditions.length; i++) {
 		if(nextAdditions[i] === property) {
@@ -589,6 +597,7 @@ var buyHouse = function(property, player, gameData) {
 	if(ownsMajority(color, player) && inAdditions && gameData["color"][color]["houses"] < 4) {
 		var oldHouseNum = gameData["color"][color]["houses"];
 		setHouseNumberForProperty(color, property, oldHouseNum + 1, gameData);
+		payForHouse = true;
 	}
 	// handles hotels/skyscrapers since need to have the entire set for that
 	else if(ownsAll(color, player) && inAdditions) {
@@ -599,8 +608,14 @@ var buyHouse = function(property, player, gameData) {
 		else {
 			setHouseNumberForProperty(color, property, 6, gameData);	
 		}
+		payForHouse = true;
 	}
-	// need to charge player for house TODO
+
+	// need to charge player for house
+	if(payForHouse) {
+		var housePrice = board[property]["house"];
+		gameData["players"][playerIndex]["money"] -= housePrice;
+	}
 
 	return gameData;
 }
@@ -613,12 +628,13 @@ var buyHouse = function(property, player, gameData) {
 * @return gameData with changes to the player's data if the house was able to be sold
 */
 var sellHouse = function(property, player, gameData) {
-	var color = board["property"][property]["quality"];
+	var color = board[property]["quality"];
 	var colorData = gameData["color"][color];
 	
 	var cantSell = nextToAdd(color, property, player);
 
 	var sellable = true;
+	var soldHouse = false;
 
 	// there are properties that cannot be sold
 	if(cantSell.length !== Object.keys(colorData).length) {
@@ -632,16 +648,26 @@ var sellHouse = function(property, player, gameData) {
 	if(sellable) {
 		if(colorData[property]["skyscraper"]) {
 			setHouseNumberForProperty(color, property, 5, gameData);
+			soldHouse = true;
 		}
 		else if(colorData[property]["hotel"]) {
 			setHouseNumberForProperty(color, property, 4, gameData);
+			soldHouse = true;
 		}
 		else if(colorData[property]["houses"] > 0) {
 			var oldHouseNum = colorData[property]["houses"];
 			setHouseNumberForProperty(color, property, oldHouseNum - 1, gameData);
+			soldHouse = true;
 		}
+		// can't put soldHouse variable here in case tried to sell houses on something that had 0
 	}
-	// need to add money to player for house TODO
+	
+	// need to refund player for house
+	if(soldHouse) {
+		var housePrice = board[property]["house"];
+		gameData["players"][playerIndex]["money"] += housePrice/2;
+	}
+
 	return gameData;
 }
 
@@ -658,6 +684,9 @@ var payRent = function(property, player, gameData) {
 		var owner = gameData["owned"][property];
 		var houseRentIndex = 0;
 
+		var ownerIndex = getPlayerIndexFromPlayer(owner, gameData);
+		var playerIndex = getPlayerIndexFromPlayer(player, gameData);
+
 		var colorSet = gameData["color"][board[property]["quality"]];
 		for(var key in colorSet) {
 			if(key === property) {
@@ -672,8 +701,8 @@ var payRent = function(property, player, gameData) {
 		}
 
 		var cost = rentArray[houseRentIndex];
-		gameData["players"][player]["money"] -= cost;
-		gameData["players"][owner]["money"] += cost;
+		gameData["players"][playerIndex]["money"] -= cost;
+		gameData["players"][ownerIndex]["money"] += cost;
 	}
 	return gameData;
 }
@@ -702,7 +731,14 @@ var correctIssues = function(gameData) {
 	// TODO
 }
 
-var rebalanceHouses = function(color, player) {
+/**
+* Maintains the balance of houses when an external transaction can disrupt the balance
+* @param color the color that we need to balance
+* @param player the player whose properties need to be balanced
+* @param gameData the data of the game
+* @return revised gameData with any fixes made, message put in gameData["message"]
+*/
+var rebalanceHouses = function(color, player, gameData) {
 	// TODO
 }
 
@@ -715,11 +751,41 @@ var isOwned = function(property) {
 	return gameData["owned"][property];
 }
 
+/**
+* Tells us what index in gameData["players"] the player is
+* @param player name of the player to find the index of
+* @return an integer of the index of the player specified, returns -1 if cannot be found
+*/
+var getPlayerIndexFromPlayer = function(player, gameData) {
 
+	for(int i = 0; i < gameData["players"].length; i++) {
+		if(gameData["players"][i]["name"] === player) {
+			return i;
+		}
+	}
 
+	return -1;
+}
 
+/**
+* Simulates drawing a chance card and intitiates the action needed to take
+* @param player the player drawing the card
+* @param gameData the main data of the game
+* @return gameData mutated with the result of drawing the card
+*/
+var chanceCard = function(player, gameData) {
+	// TODO
+}
 
-
+/**
+* Simulates drawing a community chest card and intitiates the action needed to take
+* @param player the player drawing the card
+* @param gameData the main data of the game
+* @return gameData mutated with the result of drawing the card
+*/
+var communityChestCard = function(player, gameData) {
+	// TODO
+}
 
 
 
