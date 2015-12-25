@@ -70,8 +70,8 @@ var initializeBoard = function(gamePresets) {
 	gameData["turnOrder"] = []; // has the players in order of their turns
 	gameData["turnIndex"] = 0; // 0 <= turnIndex < gameData["turnOrder"].length
 	gameData["doubleCount"] = 0; // reset to 0 at the beginning of a new turn
-	gameData["issues"] = [];
 	gameData["message"] = ""; // any messages pertaining to changes made by some functions
+
 	return gameData;
 }
 
@@ -368,9 +368,10 @@ var setHouseNumberForProperty = function(color, property, houseNumber, gameData)
 * Checks if the specified player owns the majority of the color
 * @param color the color of the majority to check
 * @param player the player to check if he owns the majority of the color
+* @param gameData the JSON that holds the information about this game
 * @return true if the player owns the majority of the color.
 */
-var ownsMajority = function(color, player) {
+var ownsMajority = function(color, player, gameData) {
 	var colorData = gameData["color"][color];
 
 	var count = 0;
@@ -388,9 +389,10 @@ var ownsMajority = function(color, player) {
 * Checks if the specified player owns all of the color
 * @param color the color to check
 * @param player the player to check if he owns all of the color
+* @param gameData the data of the game that holds everything
 * @return true if the player owns the all of the properties of the color.
 */
-var ownsAll = function(color, player) {
+var ownsAll = function(color, player, gameData) {
 	var colorData = gameData["color"][color];
 
 	var count = 0;
@@ -594,13 +596,13 @@ var buyHouse = function(property, player, gameData) {
 		}
 	}
 	// just if houses
-	if(ownsMajority(color, player) && inAdditions && gameData["color"][color]["houses"] < 4) {
+	if(ownsMajority(color, player, gameData) && inAdditions && gameData["color"][color]["houses"] < 4) {
 		var oldHouseNum = gameData["color"][color]["houses"];
 		setHouseNumberForProperty(color, property, oldHouseNum + 1, gameData);
 		payForHouse = true;
 	}
 	// handles hotels/skyscrapers since need to have the entire set for that
-	else if(ownsAll(color, player) && inAdditions) {
+	else if(ownsAll(color, player, gameData) && inAdditions) {
 		// not a hotel yet
 		if(!gameData["color"][color]["hotel"]) {
 			setHouseNumberForProperty(color, property, 5, gameData);
@@ -723,15 +725,6 @@ var trade = function(player1, player2, properties1, properties2, wealth1, wealth
 }
 
 /**
-* Automatically fixes all of the issues that may be present with the gameData.
-* @param gameData the JSON of the game, which has the issues as a field of the JSON
-* @return gameData with all of issues fixed
-*/
-var correctIssues = function(gameData) {
-	// TODO
-}
-
-/**
 * Maintains the balance of houses when an external transaction can disrupt the balance
 * @param color the color that we need to balance
 * @param player the player whose properties need to be balanced
@@ -739,7 +732,124 @@ var correctIssues = function(gameData) {
 * @return revised gameData with any fixes made, message put in gameData["message"]
 */
 var rebalanceHouses = function(color, player, gameData) {
-	// TODO
+	var colorData = gameData["color"][color]; // can probably be optimized a bit...
+	var playerIndex = getPlayerIndexFromPlayer(player, gameData);
+
+	// special cases: has all and imbalance, has majority and imbalance, has none
+	if(ownsAll(color, player, gameData)) {
+		var totalHouses = countHousesInColor(color, gameData);
+
+		var housesPerProperty = Math.floor(totalHouses/Object.keys(colorData).length);
+
+		for(var key in colorData) {
+			setHouseNumberForProperty(color, key, housesPerProperty, gameData);
+			totalHouses -= housesPerProperty;
+		}
+
+		// need to distribute the rest of the houses, people generally like on most expensive...
+		// 	keys generally in order of least valuable to most, so reverse order to fill valuable first
+		for(var key in Object.keys(colorData).reverse()) {
+			if(totalHouses > 0) {
+				var oldHouseNum = countHousesOnProperty(color, key, gameData);
+				setHouseNumberForProperty(color, key, oldHouseNum+1, gameData);
+				totalHouses -= 1;
+			}
+		}
+	}
+	else if(ownsMajority(color, player, gameData)) {
+		var totalHouses = countHousesInColor(color, gameData);
+
+		// need to count number of properties that belong to this player...
+		var ownedProperties = [];
+		for(var key in colorData) {
+			if(colorData[key]["owner"] === player) {
+				ownedProperties.push(key);
+			}
+		}
+
+		var housesPerProperty = Math.floor(totalHouses/ownedProperties.length);
+
+		// can only put hotels/skyscapers if all are owned 
+		if(housesPerProperty > 4) {
+			housesPerProperty = 4;
+		}
+
+		// check if need to add additional houses by adjusting total of totalHouses
+		totalHouses -= housesPerProperty*ownedProperties.length; // will not evaluate to zero if floored amount was not same
+
+		for(var i = ownedProperties.length-1; i >= 0; i--) {
+			var additionalHouses = 0;
+			if(totalHouses > 0 && housesPerProperty < 4) {
+				additionalHouses = 1;
+				totalHouses -= additionalHouses;
+			}
+			setHouseNumberForProperty(color, key, housesPerProperty + additionalHouses, gameData);
+		}
+
+		// refund remaining houses
+		var housePrice = board[ownedProperties[0]]["house"];
+		gameData["players"][playerIndex]["money"] += totalHouses*housePrice/2;
+	}
+	// need to refund all remaining houses from owned properties
+	else {
+		for(var key in colorData) {
+			if(colorData[key]["owner"] === player) {
+				var houseCount = countHousesOnProperty(color, key, gameData);
+				var housePrice = board[key]["house"];
+
+				setHouseNumberForProperty(color, key, 0, gameData);
+				
+				gameData["players"][playerIndex]["money"] += houseCount*housePrice/2;
+			}
+		}
+	}
+
+	return gameData;
+}
+
+/**
+* Informs of how many houses are on properties in a certain color set
+* @param color the color that we are counting
+* @param gameData the data of the game
+* @return the total number of houses on properties in this color
+*/
+var countHousesInColor = function(color, gameData) {
+	var colorData = gameData["color"][color];
+	var total = 0;
+
+	for(var key in colorData) {
+		if(colorData[key]["skyscraper"]) {
+			total += 6;
+		}
+		else if(colorData[key]["hotel"]) {
+			total += 5;
+		}
+		else {
+			total += colorData[key]["houses"];
+		}
+	}
+
+	return total;
+}
+
+/**
+* Informs of how many houses are a specific property
+* @param color the color that we are counting
+* @param property the property we want the houses of
+* @param gameData the data of the game
+* @return the total number of houses on properties in this color
+*/
+var countHousesOnProperty = function(color, property, gameData) {
+	var propertyData = gameData["color"][color][property];
+	if(propertyData["skyscraper"]) {
+		return 6;
+	}
+	else if(propertyData["hotel"]) {
+		return 5;
+	}
+	else {
+		return propertyData["houses"];
+	}	
 }
 
 /**
