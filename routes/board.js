@@ -1062,28 +1062,28 @@ module.exports = {
 		"below": ["illinois ave"]
 	},
 	"subway": {
-		"type": "spot",
+		"type": "subway",
 		"forward": ["lake st"],
 		"backward": ["rodeo dr"],
 		"track": ["outer"],
 		"above": ["go"]
 	},
 	"bus ticket south": {
-		"type": "spot",
+		"type": "bus",
 		"forward": ["checker cab co"],
 		"backward": ["hennepin ave"],
 		"track": ["outer"],
 		"above": ["baltic ave"]
 	},
 	"bus ticket east": {
-		"type": "spot",
+		"type": "bus",
 		"forward": ["sewage system"],
 		"backward": ["ute cab co"],
 		"track": ["outer"],
 		"above": ["pennsylvania ave"]
 	},
 	"auction": {
-		"type": "spot",
+		"type": "auction",
 		"forward": ["katy freeway"],
 		"backward": ["holland tunnel sw"],
 		"track": ["outer"],
