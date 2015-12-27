@@ -215,6 +215,78 @@ var cards = [
         "play": "immediately",
         "short": "move backwards"
     },
+    {
+        "title": "Assessed for Street Repairs",
+        "description": "$25 per Cab Stand & Transit Station,\n$40 per House, $115 per Hotel, and\n$100 per Skyscraper",
+        "play": "immediately",
+        "short": "street repairs"
+    },
+    {
+        "title": "Advance to this Track's Pay Corner",
+        "description": "Collect your income from the Bank\nOuter Track - \"Payday\" - $400\nCenter Track -\"Go\" - $200\nInner Track - \"Bonus\" - $300",
+        "play": "immediately",
+        "short": "advance to pay corner"
+    },
+    {
+        "title": "Bank Error in Your Favor!",
+        "description": "Collect $200 from the Bank",
+        "play": "immediately",
+        "short": "collect 200"
+    },
+    {
+        "title": "Doctor's Fee",
+        "description": "Pay $50 to the Pool.",
+        "play": "immediately",
+        "short": "pay pool 50"
+    },
+    {
+        "title": "Get Out of Jail Free!",
+        "description": "Keep until needed.\nPlay at any time on your turn.\nThis card may be traded or sold.",
+        "play": "keep",
+        "short": "get out of jail free"
+    },
+    {
+        "title": "Go to Jail!",
+        "description": "Go directly to Jail. Do not pass any Pay\nCorner. Do not collect any money.",
+        "play": "immediately",
+        "short": "go to jail"
+    },
+    {
+        "title": "Income Tax Refund!",
+        "description": "Collect $20 from the Bank",
+        "play": "immediately",
+        "short": "collect 20"
+    },
+    {
+        "title": "Life Insurance Matures",
+        "description": "Collect $100 from the Bank",
+        "play": "immediately",
+        "short": "collect 100"
+    },
+    {
+        "title": "Pay Hospital Bills",
+        "description": "Pay $100 to the Pool.",
+        "play": "immediately",
+        "short": "pay pool 100"
+    },
+    {
+        "title": "Receive Consultancy Fee",
+        "description": "Collect $25 from the Bank",
+        "play": "immediately",
+        "short": "collect 25"
+    },
+    {
+        "title": "You Won a Crossword Contest!",
+        "description": "Collect $100 from the Bank",
+        "play": "immediately",
+        "short": "collect 100"
+    },
+    {
+        "title": "You Win 2nd Place in a Board\nGame Remix Design Contest!",
+        "description": "Collect $10 from the Bank",
+        "play": "immediately",
+        "short": "collect 10"
+    },
 ];
 
 var communityChest = {};
