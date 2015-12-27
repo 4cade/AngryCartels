@@ -71,6 +71,84 @@ var cards = [
         "play": "immediately",
         "short": "move transportation"
     },
+    {
+        "title": "Just Say \"NO\"!",
+        "description": "Play at any time to stop another player's action against you.",
+        "play": "keep",
+        "short": "just say no"
+    },
+    {
+        "title": "Just Say \"NO\"!",
+        "description": "Play at any time to stop another player's action against you.",
+        "play": "keep",
+        "short": "just say no"
+    },
+    {
+        "title": "HOUSE CONDEMNED",
+        "description": "The city condemns one of your houses. Sell\none house back to the Bank at 1/2 the price\nyou paid for it. (Houses only. If you don't own\nany houses, do nothing.)",
+        "play": "immediately",
+        "short": "house condemned"
+    },
+    {
+        "title": "Elected District Attorney",
+        "description": "Send any other player of your choice\ndirectly to Jail.",
+        "play": "keep",
+        "short": "send any player to jail"
+    },
+    {
+        "title": "Changing Lanes",
+        "description": "Move directly to the space that is 1 Track\nbelow this one. If you are on the Outer Track,\ndo nothing.",
+        "play": "immediately",
+        "short": "move to track below"
+    },
+    {
+        "title": "Changing Lanes",
+        "description": "Move directly to the space that is 1 Track\nbelow this one. If you are on the Outer Track,\ndo nothing.",
+        "play": "immediately",
+        "short": "move to track below"
+    },
+    {
+        "title": "Special Online Pricing",
+        "description": "The next time you land on anyone\nelse's railroad, only pay 1/2 the rent.",
+        "play": "keep",
+        "short": "pay half rent on railroad"
+    },
+    {
+        "title": "Renovation Success",
+        "description": "Collect $50 extra rent from the next player\nwho lands on any of your properties.",
+        "play": "keep",
+        "short": "collect 50 extra rent"
+    },
+    {
+        "title": "Changing Lanes",
+        "description": "Move directly to the space that is 1 Track\nabove this one. If you are on the Inner Track,\ndo nothing.",
+        "play": "immediately",
+        "short": "move to track above"
+    },
+    {
+        "title": "Changing Lanes",
+        "description": "Move directly to the space that is 1 Track\above this one. If you are on the Inner Track,\ndo nothing.",
+        "play": "immediately",
+        "short": "move to track above"
+    },
+    {
+        "title": "Entrepreneur of the Year!",
+        "description": "Collect $50 from each player in honor\nof your award.",
+        "play": "immediately",
+        "short": "collect 50 from each player"
+    },
+    {
+        "title": "You're Getting Married",
+        "description": "Collect $25 from each player as\na wedding gift.",
+        "play": "immediately",
+        "short": "collect 25 from each player"
+    },
+    {
+        "title": "",
+        "description": "",
+        "play": "",
+        "short": ""
+    },
 ];
 
 var communityChest = {};
