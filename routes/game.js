@@ -1052,7 +1052,11 @@ var communityChestCard = function(player, gameData) {
 * @return String name of the property with the highest rent
 */
 var highestRent = function(gameData) {
+	// TODO
+}
 
+var advanceToProperty = function(player, property, gameData) {
+	//TODO
 }
 
 
