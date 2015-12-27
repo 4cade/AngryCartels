@@ -287,6 +287,78 @@ var cards = [
         "play": "immediately",
         "short": "collect 10"
     },
+    {
+        "title": "Advance to the Stock Exchange",
+        "description": "If you pass \"Pay Day\" collect $300.",
+        "play": "immediately",
+        "short": "advance to stock exchange"
+    },
+    {
+        "title": "Advance to the Stock Exchange",
+        "description": "If you pass \"Pay Day\" collect $300.",
+        "play": "immediately",
+        "short": "advance to stock exchange"
+    },
+    {
+        "title": "Utility Regulation",
+        "description": "Stockholders in National Utilites must\npay the Pool fines to Dividends.",
+        "play": "immediately",
+        "short": "utility regulation"
+    },
+    {
+        "title": "Unions on Strike",
+        "description": "Stockholders in United Railways, Acme\nMotors, and Allied Steamships must pay the\nPool fines to Dividends.",
+        "play": "immediately",
+        "short": "unions strike"
+    },
+    {
+        "title": "Advance to the Stock Exchange",
+        "description": "If you pass \"Pay Day\" collect $300.",
+        "play": "immediately",
+        "short": "advance to stock exchange"
+    },
+    {
+        "title": "Advance to the Stock Exchange",
+        "description": "If you pass \"Pay Day\" collect $300.",
+        "play": "immediately",
+        "short": "advance to stock exchange"
+    },
+    {
+        "title": "Scandal in Hollywood!",
+        "description": "Stockholders in Motion Pictures and General\nRadio must pay the Pool fines to Dividends.",
+        "play": "immediately",
+        "short": "hollywood scandal"
+    },
+    {
+        "title": "Inherit Stock",
+        "description": "You may choose any 1 share of any\nunpurchased stock to add to your\nportfolio.",
+        "play": "immediately",
+        "short": "inherit stock"
+    },
+    {
+        "title": "Advance to the Stock Exchange",
+        "description": "If you pass \"Pay Day\" collect $300.",
+        "play": "immediately",
+        "short": "advance to stock exchange"
+    },
+    {
+        "title": "Advance to the Stock Exchange",
+        "description": "If you pass \"Pay Day\" collect $300.",
+        "play": "immediately",
+        "short": "advance to stock exchange"
+    },
+    {
+        "title": "Insider Trading",
+        "description": "Pay 1/2 Par Value on your next stock\npurchase. (May NOT be used at auction.)",
+        "play": "keep",
+        "short": "insider trading"
+    },
+    {
+        "title": "Lawyer on Retainer",
+        "description": "Avoid Stock Fine Penalties, \"See you in\nCourt,\" or \"Caught Insider Trading\" cards.",
+        "play": "keep",
+        "short": "lawyer retainer"
+    },
 ];
 
 var communityChest = {};
