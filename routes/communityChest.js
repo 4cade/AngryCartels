@@ -359,6 +359,78 @@ var cards = [
         "play": "keep",
         "short": "lawyer retainer"
     },
+    {
+        "title": "Tornado Hits!",
+        "description": "Remove one House from each property in\nany 1 of your color groups. (Downgrade\nSkyscrapers to Hotels; Hotels to 4 Houses.)",
+        "play": "immediately",
+        "short": "tornado hits"
+    },
+    {
+        "title": "Finders Keepers",
+        "description": "Take a Travel Voucher from any player\nof your choice.",
+        "play": "immediately",
+        "short": "finders keepers"
+    },
+    {
+        "title": "The Insider's Edge",
+        "description": "If you are on the Inner Track, collect $250\nfrom the Bank. If the Outer Track, pay the\nPool $50. If the Center Track, do nothing.",
+        "play": "immediately",
+        "short": "insider's edge"
+    },
+    {
+        "title": "Kickstart some Fun!",
+        "description": "Your idea for a variant of a classic board game\ngrows from a hobby to a crowdfunded\nsuccess story! Collect $200 from the Bank.",
+        "play": "immediately",
+        "short": "collect 200"
+    },
+    {
+        "title": "Business Trip",
+        "description": "Take one Travel Voucher from the deck.",
+        "play": "immediately",
+        "short": "business trip"
+    },
+    {
+        "title": "Share in their Good Fortune",
+        "description": "Take 1/2 of any player's Roll 3! winnings.",
+        "play": "keep",
+        "short": "good fortune"
+    },
+    {
+        "title": "Fluffy Takes First!",
+        "description": "Your pet wins the city pet show! Collect $75.",
+        "play": "immediately",
+        "short": "collect 75"
+    },
+    {
+        "title": "Losers Weepers",
+        "description": "Put 1 of your Travel Vouchers back on the deck.",
+        "play": "immediately",
+        "short": "losers weepers"
+    },
+    {
+        "title": "Advance to Bonus",
+        "description": "Collect $300 from the Bank.",
+        "play": "immediately",
+        "short": "collect 300"
+    },
+    {
+        "title": "Tech Bubble Bursts",
+        "description": "Pay $150 to the Pool.",
+        "play": "immediately",
+        "short": "pay pool 150"
+    },
+    {
+        "title": "IPO",
+        "description": "Your company goes public.\nCollect $500 from the Bank.",
+        "play": "immediately",
+        "short": "collect 500"
+    },
+    {
+        "title": "Shopping Spree",
+        "description": "Go directly to Rodeo Drive. Pay the\nPool $150 for new clothes.",
+        "play": "immediately",
+        "short": "pay pool 150"
+    },
 ];
 
 var communityChest = {};
