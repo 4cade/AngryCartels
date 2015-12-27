@@ -144,13 +144,94 @@ var cards = [
         "short": "collect 25 from each player"
     },
     {
-        "title": "",
-        "description": "",
-        "play": "",
-        "short": ""
+        "title": "Deal Buster",
+        "description": "When another player is about to buy a property,\nplay this card and buy it from the bank yourself.",
+        "play": "keep",
+        "short": "deal buster"
+    },
+    {
+        "title": "Just Say \"NO\"!",
+        "description": "Play at any time to stop another player's action against you.",
+        "play": "keep",
+        "short": "just say no"
+    },
+    {
+        "title": "Just Say \"NO\"!",
+        "description": "Play at any time to stop another player's action against you.",
+        "play": "keep",
+        "short": "just say no"
+    },
+    {
+        "title": "Always Tip Your Driver",
+        "description": "Pay $50 to all other players who own a\nCab Co.",
+        "play": "immediately",
+        "short": "pay 50 to each player"
+    },
+    {
+        "title": "HOSTILE TAKEOVER",
+        "description": "Steal a property card from a player of your\nchoice. It can't be part of a monopoly.",
+        "play": "keep",
+        "short": "steal property"
+    },
+    {
+        "title": "BARGAIN BUSINESS!",
+        "description": "When you land on an unowned property you\nwant, buy it for only $100.",
+        "play": "keep",
+        "short": "buy property for 100"
+    },
+    {
+        "title": "REVERSE RENT!",
+        "description": "Collect the rent due when you land on another\nplayer's property.",
+        "play": "keep",
+        "short": "reverse rent"
+    },
+    {
+        "title": "Game Night!",
+        "description": "Pick an opponent. Both roll. Highest-\nroller collects $200 from the Bank.",
+        "play": "immediately",
+        "short": "game night"
+    },
+    {
+        "title": "Discount Travel",
+        "description": "Advance to nearest unowned transit\nproperty (Railroad or Cab Co.) and buy\nit at 1/2 price (or put it up for auction).",
+        "play": "immediately",
+        "short": "discount travel"
+    },
+    {
+        "title": "VEHICLE IMPOUNDED!",
+        "description": "Pay $50 to the Pool, move directly to\n\"Just Visiting\" to pick up your car.\nLose 1 turn",
+        "play": "immediately",
+        "short": "vehicle impounded"
+    },
+    {
+        "title": "The Rent is Too Darn High!",
+        "description": "Only pay $50 Rent to any owned property.",
+        "play": "keep",
+        "short": "only pay 50 rent"
+    },
+    {
+        "title": "Be Kind, Rewind",
+        "description": "Roll the dice again, move BACKWARDS that\nnumber of spaces. Pay double rent if you\nland on an owned space.",
+        "play": "immediately",
+        "short": "move backwards"
     },
 ];
 
 var communityChest = {};
+
+// Returns a random integer between min (included) and max (excluded)
+// Gives a uniform distribution!
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+/**
+  * Draw a community chest card
+  * @return community chest card object
+  */
+communityChest.drawCard = function() {
+    var index = getRandomInt(0, cards.length);
+    return cards[index];
+}
 
 module.exports = communityChest;
