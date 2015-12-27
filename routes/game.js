@@ -1,4 +1,8 @@
 var board = require('./board.js');
+var bus = require('./bus.js');
+var roll3 = require('./roll3.js');
+var chance = require('./chance.js');
+var communityChest = require('./communityChest.js');
 
 // object that we will export
 var game = {};
@@ -380,7 +384,6 @@ var nextLocation = function(currentLocation, odd, forward, track) {
 * @return String indicating what kind of action should occur?
 */
 var executeLocation = function(gameData) {
-	// TODO
 	var location = gameData.recentLocation;
 	var locationType = board[location]["type"];
 	if (locationType === 'property' || locationType === 'utility' || locationType === 'transportation') {
