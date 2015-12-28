@@ -69,7 +69,7 @@ var cards = [
 		"title": "School Fees",
 		"description": "Pay the pool $150.",
 		"play": "immediately",
-		"short": "pay pool $150"
+		"short": "pay pool 150"
 	},
 	{
 		"title": "Advance to the Stock Exchange",
