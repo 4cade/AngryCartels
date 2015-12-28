@@ -421,17 +421,21 @@ var cards = [
 	}
 ];
 
-
 var chance = {};
 
-/**
-* Simulates drawing a chance card.
-* @return an object representing a chance card
-*/
-chance.draw = function() {
-	var index = Math.floor(Math.random()*cards.length);
-	return cards[index];
+// Returns a random integer between min (included) and max (excluded)
+// Gives a uniform distribution!
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
+/**
+  * Draw a chance card
+  * @return chance card object
+  */
+chance.draw = function() {
+    var index = getRandomInt(0, cards.length);
+    return cards[index];
+}
 
 module.exports = chance;
