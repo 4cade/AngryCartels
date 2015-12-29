@@ -18,9 +18,10 @@
   <script src="controllers/chatController.js"></script>
   <script src="controllers/gameController.js"></script>
   <script src="controllers/gameRoomController.js"></script>
-  <script src="controllers/canvasController.js"></script>
+  <script src="controllers/boardController.js"></script>
   <script src="directives/chatDirective.js"></script>
   <script src="directives/gameDirective.js"></script>
+  <script src="directives/boardDirective.js"></script>
 </head>
 
 <!-- define angular controller -->
@@ -48,34 +49,7 @@
 
   <!-- Canvas Drawings -->
   <script>
-    window.onload = function() {
-      var canvas = document.getElementById('testCanvas');
-      var ctx = canvas.getContext('2d');
-      var startX = 40;
-      var startY = 40;
-      var imgWidth = 500;
-      var imgHeight = 500;
-      // Create an image from scratch
-      var img = new Image();
-      // Set source path
-      img.src = '../../img/game_board.jpg';
-      // Ensure the image has loaded before calling drawImage()
-      img.onload = function() {
-        ctx.drawImage(img, 40, 40, 500, 500);
-        console.log("The image was drawn!");
-      };
-      // Moves the path to the specified point on the canvas, (40, 40), without creating a line
-      ctx.moveTo(40, 40);
-      // Adds a new point at (100, 100) and creates a line TO that point FROM the last specified point in the canvas, (40, 40) in this case
-      ctx.lineTo(100, 100);
-      // Actually draws the path that was defined
-      ctx.stroke();
-      console.log("The line was drawn!");
-      // Draw a filled blue rectangle with dimension 25 by 25
-      ctx.fillStyle = "blue";
-      ctx.fillRect(100, 100, 25, 25);
-      console.log("The rectangle was drawn!");
-    };
+    
   </script>
   
 </body>
