@@ -3,8 +3,6 @@
 }
 
 #testCanvas {
-	width: 1080px;
-	height: 540px;
-	border: 1px solid #000000;
+	border: 5px solid #000000;
 	margin-left: 20px;
 }

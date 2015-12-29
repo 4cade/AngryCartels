@@ -14,12 +14,6 @@ angryCartels.config(function($routeProvider) {
 			controller  : 'homeController'
 		})
 
-		// route for testing canvas
-		.when('/canvas', {
-			templateUrl : 'pages/canvas.html',
-			controller: 'canvasController'
-		})
-
 		// route for the about page
 		.when('/chat', {
 			templateUrl : 'pages/chat.html',
