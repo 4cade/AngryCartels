@@ -15,18 +15,6 @@ var tickets = [
 	"forward 3"
 ];
 
-
-var bus = {};
-
-/**
-* Simulates drawing a bus pass card.
-* @return a String representing a bus pass
-*/
-bus.getBusPass = function() {
-	var index = Math.floor(Math.random()*tickets.length);
-	return tickets[index];
-}
-
 var lines = {
 	"outer top": ["pay day", "randolph st", "chance outer nw", "lake shore dr", "wacker dr",
 					"michigan ave", "yellow cab co", "b&o railroad", "community chest outer north",
@@ -62,6 +50,17 @@ var lines = {
 					"madison ave", "stock exchange"]
 }
 
+var bus = {};
+
+/**
+* Simulates drawing a bus pass card.
+* @return a String representing a bus pass
+*/
+bus.getBusPass = function() {
+	var index = Math.floor(Math.random()*tickets.length);
+	return tickets[index];
+}
+
 /**
 * Gets all of the properties forward on this side of the board.
 * @param property the name of the property that is the current location
@@ -69,22 +68,98 @@ var lines = {
 * @return list of the properties in the forward direction
 */
 bus.getForward = function(property, forward) {
-	var lineString = board[property]["track"];
-	// TODO
+	var side = board[property]["side"];
+	// we know the location on the side but not which side
+	if(side === "edge") {
+		var track = board[property]["track"];
+
+		// check all the edges and the property on the edge should match this one
+		for(var key in Object.keys(lines)) {
+			if(forward) {
+				// this means it will be at the beginning of the list
+				if(lines[key][0] === property) {
+					// return the properties excluding this one
+					return lines[key].slice(1);
+				}
+			}
+			else {
+				// the property will be at the end of the list]
+				var lastIndex = lines[key].length-1;
+				if(lines[key][lastIndex] === property) {
+					// take off property and properties need to be in the reverse order
+					return lines[key].slice(0, lastIndex).reverse();
+				}
+			}
+		}
+		
+	}
+	// we know exactly which side it is just not the location
+	else {
+		var lineString = board[property]["track"] + " " + board[property]["side"];
+		properties = lines[lineString];
+
+		// different order if forward and back
+		if(forward) {
+			for(var i = 0; i < properties.length; i++) {
+				// if the current property is at that index, return all of the ones after
+				if(properties[i] === property) {
+					return lines[key].slice(i+1);
+				}
+			}
+		}
+		else {
+			for(var i = properties.length-1; i >= 0; i--) {
+				// if the current property is at that index, return all of the ones before and reverse to match direction
+				if(properties[i] === property) {
+					return lines[key].slice(0, i).reverse();
+				}
+			}
+		}
+	}
 }
 
+/**
+* Gets the name of the transit station for the player
+* @param property the name of the property that is the current location
+* @param forward boolean that is true if the player is moving forward
+* @return String of the name of the transit station, if returns null something really went wrong
+*/
+bus.getNextTransit = function(property, forward) {
+	var properties = bus.getForward(property, forward);
 
+	// there are railroads on at least every 2 sides so try one side first, then try other side
+	var railroad = getRailroad(properties);
 
+	// try again
+	if(!railroad) {
+		properties = bus.getForward(properties[properties.length-1]);
+		railroad = getRailroad(properties);
+	}
 
+	// if get to this point then it means we were on a side without a railroad or started past a railroad on the current side
+	if(!railroad) {
+		properties = bus.getForward(properties[properties.length-1]);
+		railroad = getRailroad(properties);
+	}
 
+	return railroad;
+}
 
-
-
-
-
-
-
-
+/**
+* Gets a railroad out of a list of properties
+* @param properties a list of property names
+* @return null if no railroad in the list, otherwise a railroad
+*/
+var getRailroad = function(properties) {
+	// check entire list
+	for(var i = 0; i < properties.length; i++) {
+		if(properties[i].contains("railroad")) {
+			return properties[i];
+		}
+	}
+	// did not get one
+	return null;
+}
 
 
 

@@ -104,7 +104,7 @@ game.nextTurn = nextTurn;
 /**
 * Informs whose turn it is.
 * @param gameData the data of everything in the game
-* @return String name of the player whose turn it is
+* @return object of the player whose turn it is
 */
 var currentPlayer = function(gameData) {
 	return gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
@@ -154,7 +154,20 @@ var rollDice = function(gameData) {
 		gameData.message = "mrmonopoly";
 	}
 	else if(special === "gainbusticket") {
-		// TODO gain a bus ticket
+		var ticket = bus.getBusPass();
+
+		// special bus pass where all others expire
+		if(ticket === "forward expire") {
+			player.busTickets = {};
+		}
+
+		// actually give the player the bus pass
+		if(player.busTickets[ticket]) {
+			player.busTickets[ticket] += 1;
+		}
+		else {
+			player.busTickets[ticket] = 1;
+		}
 	}
 
 	return gameData;
@@ -600,11 +613,53 @@ var taxiRide = function() {
 }
 
 /**
-* TODO
-*
+* Executes the action of the specified busTicket and indicates if further action is required
+* @param action the type of bus pass that is being used
+* @param gameData the JSON with all of the info for the game
+* @return gameData updated with an array of properties if further action is required (means move forward)
+* 	in the message location, otherwise the empty string
 */
 var useBusTicket = function(action, gameData) {
-	// many special cases
+	// first get player info
+	var player = currentPlayer(gameData);
+
+	if(action.includes("any") || action.includes("expire")) {
+		// means to move forward to any space
+		var properties = bus.getForward(player.location, player.forward);
+		gameData.message = properties;
+		// will require further use of advance to location
+		return gameData;
+	}
+	else if(action.includes("transit")) {
+		var newLocation = bus.getNextTransit(player.location, player.forward);
+		advanceToProperty(player.name, newLocation, gameData);
+	}
+	else if(action.includes("forward")) {
+		// get rid of "forward " and turn into int
+		var moves = parseInt(action.substring(7));
+		var moveInfo = moveLocation(player.location, moves, moves % 2 == 0, player.forward, player.track);
+
+		// use moveInfo to update player
+		gameData.movedTo = moveInfo.movedTo;
+		gameData.recentLocation = moveInfo.location;
+		player.location = moveInfo.location;
+		player.money += moveInfo.moneyGained;
+		player.forward = moveInfo.reverse;
+	}
+	else if(action.includes("back")){
+		// get rid of "back " and turn into int
+		var moves = parseInt(action.substring(5));
+		var moveInfo = moveLocation(player.location, moves, moves % 2 == 0, player.forward, player.track);
+
+		// use moveInfo to update player
+		gameData.movedTo = moveInfo.movedTo;
+		gameData.recentLocation = moveInfo.location;
+		player.location = moveInfo.location;
+		player.money += moveInfo.moneyGained;
+		player.forward = moveInfo.reverse;
+	}
+	gameData.message = "";
+	return gameData;
 }
 
 /**
