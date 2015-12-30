@@ -254,146 +254,146 @@ locations = [
     {
         "name": "squeeze play",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 693,
+        "midY": 690
     },
     {
         "name": "the embarcadero",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 612,
+        "midY": 690
     },
     {
         "name": "fisherman's wharf",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 556,
+        "midY": 690
     },
     {
         "name": "telephone company",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 500,
+        "midY": 690
     },
     {
         "name": "community chest bottom",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 444,
+        "midY": 690
     },
     {
         "name": "beacon street",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 388,
+        "midY": 690
     },
     {
         "name": "bonus",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 306,
+        "midY": 690
     },
     {
         "name": "boylston street",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 306,
+        "midY": 608
     },
     {
         "name": "newbury street",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 306,
+        "midY": 554
     },
     {
         "name": "transit station left",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 306,
+        "midY": 500
     },
     {
         "name": "fifth avenue",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 306,
+        "midY": 444
     },
     {
         "name": "madison avenue",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 306,
+        "midY": 389
     },
     {
         "name": "stock exchange",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 306,
+        "midY": 306
     },
     {
         "name": "wall street",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 388,
+        "midY": 306
     },
     {
         "name": "tax refund",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 444,
+        "midY": 306
     },
     {
         "name": "gas company",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 500,
+        "midY": 306
     },
     {
         "name": "chance top",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 556,
+        "midY": 306
     },
     {
         "name": "florida avenue",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 612,
+        "midY": 306
     },
     {
         "name": "holland tunnel",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 693,
+        "midY": 306
     },
     {
         "name": "miami avenue",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 693,
+        "midY": 389
     },
     {
         "name": "biscayne avenue",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 693,
+        "midY": 444
     },
     {
         "name": "transit station right",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 693,
+        "midY": 500
     },
     {
         "name": "reverse direction",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 693,
+        "midY": 554
     },
     {
         "name": "lombard street",
         "track": "inner",
-        "midX":
-        "midY":
+        "midX": 693,
+        "midY": 608
     },
     {
         "name":
