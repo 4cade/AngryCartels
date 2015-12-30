@@ -15,241 +15,241 @@ locations = [
         "name": "go",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 812
     },
     {
         "name": "mediterranean avenue",
         "track": "middle",
         "midX": 726,
-        "midY":
+        "midY": 812
     },
     {
         "name": "community chest bottom",
         "track": "middle",
         "midX": 669,
-        "midY":
+        "midY": 812
     },
     {
         "name": "baltic avenue",
         "track": "middle",
         "midX": 613,
-        "midY":
+        "midY": 812
     },
     {
         "name": "income tax",
         "track": "middle",
         "midX": 556,
-        "midY":
+        "midY": 812
     },
     {
         "name": "transit station bottom",
         "track": "middle",
         "midX": 500,
-        "midY":
+        "midY": 812
     },
     {
         "name": "oriental avenue",
         "track": "middle",
         "midX": 443,
-        "midY":
+        "midY": 812
     },
     {
         "name": "chance bottom",
         "track": "middle",
         "midX": 385,
-        "midY":
+        "midY": 812
     },
     {
         "name": "vermont avenue",
         "track": "middle",
         "midX": 328,
-        "midY":
+        "midY": 812
     },
     {
         "name": "connecticut avenue",
         "track": "middle",
         "midX": 272,
-        "midY":
+        "midY": 812
     },
     {
         "name": "jail",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 812
     },
     {
         "name": "st. charles place",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 726
     },
     {
         "name": "electric company",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 669
     },
     {
         "name": "states avenue",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 613
     },
     {
         "name": "virginia avenue",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 556
     },
     {
         "name": "pennsylvania railroad",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 500
     },
     {
         "name": "st. james place",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 443
     },
     {
         "name": "community chest left",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 385
     },
     {
         "name": "tennessee avenue",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 328
     },
     {
         "name": "new york avenue",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 272
     },
     {
         "name": "free parking",
         "track": "middle",
         "midX": 188,
-        "midY":
+        "midY": 188
     },
     {
         "name": "kentucky avenue",
         "track": "middle",
         "midX": 272,
-        "midY":
+        "midY": 188
     },
     {
         "name": "chance top",
         "track": "middle",
         "midX": 328,
-        "midY":
+        "midY": 188
     },
     {
         "name": "indiana avenue",
         "track": "middle",
         "midX": 385,
-        "midY":
+        "midY": 188
     },
     {
         "name": "illinois avenue",
         "track": "middle",
         "midX": 443,
-        "midY":
+        "midY": 188
     },
     {
         "name": "transit station top",
         "track": "middle",
         "midX": 500,
-        "midY":
+        "midY": 188
     },
     {
         "name": "atlantic avenue",
         "track": "middle",
         "midX": 556,
-        "midY":
+        "midY": 188
     },
     {
         "name": "ventnor avenue",
         "track": "middle",
         "midX": 613,
-        "midY":
+        "midY": 188
     },
     {
         "name": "water works",
         "track": "middle",
         "midX": 669,
-        "midY":
+        "midY": 188
     },
     {
         "name": "marvin gardens",
         "track": "middle",
         "midX": 726,
-        "midY":
+        "midY": 188
     },
     {
         "name": "roll three",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 188
     },
     {
         "name": "pacific avenue",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 272
     },
     {
         "name": "north carolina avenue",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 328
     },
     {
         "name": "community chest right",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 385
     },
     {
         "name": "pennsylvania avenue",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 443
     },
     {
         "name": "short line railroad",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 500
     },
     {
         "name": "chance right",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 556
     },
     {
         "name": "park place",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 613
     },
     {
         "name": "luxury tax",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 669
     },
     {
         "name": "boardwalk",
         "track": "middle",
         "midX": 812,
-        "midY":
+        "midY": 726
     },
     {
         "name":
