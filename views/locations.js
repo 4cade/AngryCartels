@@ -12,202 +12,242 @@
 //         All remaining locations have dimension 56 x 110
 locations = [
     {
-        "name": 
+        "name": "go",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "mediterranean avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "community chest bottom",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "baltic avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "income tax",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "transit station bottom",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "oriental avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "chance bottom",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "vermont avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "connecticut avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "jail",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "st. charles place",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "electric company",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "states avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "virginia avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "pennsylvania railroad",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "st. james place",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "community chest left",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "tennessee avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "new york avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "free parking",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "kentucky avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "chance top",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "indiana avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "illinois avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "transit station top",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "atlantic avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "ventnor avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "water works",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "marvin gardens",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "roll three",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "pacific avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "north carolina avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "community chest right",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "pennsylvania avenue",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "short line railroad",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "chance right",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "park place",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "luxury tax",
+        "track": "middle",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "boardwalk",
+        "track": "middle",
         "midX":
         "midY":
     },
