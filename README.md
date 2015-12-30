@@ -8,4 +8,4 @@ Zachery Miranda
 	Main roles: Backend, Application architecture, Frontend support
 
 Alex Luh
-	Main roles: Testing, Frontend
+	Main roles: Testing, Frontend, Backend support, Data models

@@ -1,15 +1,16 @@
 // Here are the calculated X and Y coordinates of the center for each location on the game board
 // A location can be a property, railroad, utility, etc.
+// It should be easy to scale if dimensions are changed
 // Using a board of size 1000 x 1000 (width x height):
 //     Outer track:
 //         The corner locations have dimension 116 x 116
-//         All remaining locations have dimension 58 x 116
+//         All remaining locations have dimension 58 x 116 or 116 x 58
 //     Middle Track:
 //         The corner locations have dimension 112 x 112
-//         All remaining locations have dimension 57 x 112
+//         All remaining locations have dimension 57 x 112 or 112 x 57
 //     Inner Track:
 //         The corner locations have dimension 110 x 110
-//         All remaining locations have dimension 56 x 110
+//         All remaining locations have dimension 56 x 110 or 110 x 56
 locations = [
     {
         "name": "go",
@@ -398,338 +399,338 @@ locations = [
     {
         "name": "subway",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 934
     },
     {
         "name": "lake street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 846,
+        "midY": 934
     },
     {
         "name": "community chest bottom",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 789,
+        "midY": 934
     },
     {
         "name": "nicollet avenue",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 731,
+        "midY": 934
     },
     {
         "name": "hennepin avenue",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 673,
+        "midY": 934
     },
     {
         "name": "bus ticket bottom",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 615,
+        "midY": 934
     },
     {
         "name": "checker cab co.",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 557,
+        "midY": 934
     },
     {
         "name": "reading railroad",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 500,
+        "midY": 934
     },
     {
         "name": "esplanade avenue",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 444,
+        "midY": 934
     },
     {
         "name": "canal street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 385,
+        "midY": 934
     },
     {
         "name": "chance bottom",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 327,
+        "midY": 934
     },
     {
         "name": "cable company",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 269,
+        "midY": 934
     },
     {
         "name": "magazine street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 211,
+        "midY": 934
     },
     {
         "name": "bourbon street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 153,
+        "midY": 934
     },
     {
         "name": "holland tunnel",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 934
     },
     {
         "name": "auction",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 845
     },
     {
         "name": "katy freeway",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 787
     },
     {
         "name": "westheimer road",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 728
     },
     {
         "name": "internet service provider",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 670
     },
     {
         "name": "kirby drive",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 613
     },
     {
         "name": "cullen boulevard",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 556
     },
     {
         "name": "chance left",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 498
     },
     {
         "name": "black & white cab co.",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 440
     },
     {
         "name": "dekalb avenue",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 382
     },
     {
         "name": "community chest left",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 325
     },
     {
         "name": "andrew young intl boulevard",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 268
     },
     {
         "name": "decatur street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 210
     },
     {
         "name": "peachtree street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 68,
+        "midY": 152
     },
     {
         "name": "pay day",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 69,
+        "midY": 69
     },
     {
         "name": "randolph street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 153,
+        "midY": 68
     },
     {
         "name": "chance top",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 211,
+        "midY": 68
     },
     {
         "name": "lake shore drive",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 269,
+        "midY": 68
     },
     {
         "name": "wacker drive",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 327,
+        "midY": 68
     },
     {
         "name": "michigan avenue",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 385,
+        "midY": 68
     },
     {
         "name": "yellow cab co.",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 444,
+        "midY": 68
     },
     {
         "name": "B&O railroad",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 500,
+        "midY": 68
     },
     {
         "name": "community chest top",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 557,
+        "midY": 68
     },
     {
         "name": "south temple",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 615,
+        "midY": 68
     },
     {
         "name": "west temple",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 673,
+        "midY": 68
     },
     {
         "name": "trash collector",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 731,
+        "midY": 68
     },
     {
         "name": "north temple",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 789,
+        "midY": 68
     },
     {
         "name": "temple square",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 846,
+        "midY": 68
     },
     {
         "name": "go to jail",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 68
     },
     {
         "name": "south street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 152
     },
     {
         "name": "broad street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 210
     },
     {
         "name": "walnut street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 268
     },
     {
         "name": "community chest right",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 325
     },
     {
         "name": "market street",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 382
     },
     {
         "name": "bus ticket right",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 440
     },
     {
         "name": "sewage system",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 498
     },
     {
         "name": "ute cab co.",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 556
     },
     {
         "name": "birthday gift",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 613
     },
     {
         "name": "mulholland drive",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 670
     },
     {
         "name": "ventura boulevard",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 728
     },
     {
         "name": "chance right",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 787
     },
     {
         "name": "rodeo drive",
         "track": "outer",
-        "midX":
-        "midY":
+        "midX": 933,
+        "midY": 845
     },
 ];
 
