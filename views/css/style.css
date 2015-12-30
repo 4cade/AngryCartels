@@ -3,6 +3,8 @@
 }
 
 #testCanvas {
-	border: 5px solid #000000;
+	outline-style: solid;
+	outline-color: #000000;
+	outline-width: 5px;
 	margin-left: 20px;
 }
