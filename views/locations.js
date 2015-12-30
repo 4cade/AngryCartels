@@ -396,282 +396,338 @@ locations = [
         "midY": 608
     },
     {
-        "name":
+        "name": "subway",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "lake street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "community chest bottom",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "nicollet avenue",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "hennepin avenue",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "bus ticket bottom",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "checker cab co.",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "reading railroad",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "esplanade avenue",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "canal street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "chance bottom",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "cable company",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "magazine street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "bourbon street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "holland tunnel",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "auction",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "katy freeway",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "westheimer road",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "internet service provider",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "kirby drive",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "cullen boulevard",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "chance left",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "black & white cab co.",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "dekalb avenue",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "community chest left",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "andrew young intl boulevard",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "decatur street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "peachtree street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "pay day",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "randolph street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "chance top",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "lake shore drive",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "wacker drive",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "michigan avenue",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "yellow cab co.",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "B&O railroad",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "community chest top",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "south temple",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "west temple",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "trash collector",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "north temple",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "temple square",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "go to jail",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "south street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "broad street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "walnut street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "community chest right",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "market street",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "bus ticket right",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "sewage system",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "ute cab co.",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "birthday gift",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "mulholland drive",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "ventura boulevard",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "chance right",
+        "track": "outer",
         "midX":
         "midY":
     },
     {
-        "name":
+        "name": "rodeo drive",
+        "track": "outer",
         "midX":
         "midY":
     },
