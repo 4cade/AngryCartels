@@ -7,7 +7,14 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	socket.on('game data', function(gameData) {
 		$scope.gameData = gameData;
-		console.log(gameData);
+	});
+
+	socket.on('movement', function(gameData) {
+		// TODO update locations of players
+	});
+
+	socket.on('actions', function(actions) {
+		// TODO carry out the actions and do associated requests
 	});
 
 	// load players names

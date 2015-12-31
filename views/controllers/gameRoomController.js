@@ -7,7 +7,7 @@ angryCartels.controller('gameRoomController', function($scope, $interval) {
 	  socket.emit('get games', {});
     socket.emit('get client name', {});
     // check for new games every 5 seconds
-    $interval(function() { socket.emit('get games', {}); }, 5000);
+    //$interval(function() { socket.emit('get games', {}); }, 5000);
 
   	// sends the message that the user wants to send
   	$scope.createGame = function() {
@@ -19,6 +19,7 @@ angryCartels.controller('gameRoomController', function($scope, $interval) {
     $scope.joinGame = function(host) {
       socket.emit('join game', host);
       $scope.inGame = host;
+      $scope.$apply();
     }
 
     $scope.leaveGame = function() {
@@ -56,5 +57,6 @@ angryCartels.controller('gameRoomController', function($scope, $interval) {
     socket.on('start game', function() {
       $scope.gameGoing = true;
       console.log("game has started");
+      $scope.$apply();
     });
 });

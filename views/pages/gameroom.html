@@ -3,10 +3,11 @@
 		<div ng-if="!hostingGame&&!inGame">
 			<ul class="list-group">
 				<li class="list-group-item" ng-repeat="game in games" ng-if="game.host">{{game.host}} has a game with {{game.players.length}} players
-					<button type="button" class="btn btn-default" ng-click="joinGame(game.host)" ng-if="game.players.length <= 8">
+					<button type="button" class="btn btn-default" ng-click="joinGame(game.host)" ng-if="game.players.length < 8 && !game.recentLocation">
 						Join game
 					</button>
-					<label class="label label-default" ng-if"game.players.length === 8">Game Full</label>
+					<label class="label label-default" ng-if="game.players.length === 8">Game Full</label>
+					<label class="label label-default" ng-if="game.recentLocation">Started</label>
 				</li>
 			</ul>	
 			<button type="button" class="btn btn-default" ng-click="createGame()">Create a game</button>

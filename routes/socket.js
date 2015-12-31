@@ -80,7 +80,7 @@ module.exports = function(socket){
   });
 
   socket.on('stop hosting game', function() {
-  	emitInGame(socket.username, 'kick game', {});
+    emitInGame(socket.username, 'kick game', {});
   	games[socket.username] = null;
   	emitAll('updated games', games);
   	socket.inGame = null;
@@ -113,23 +113,76 @@ module.exports = function(socket){
   });
 
   socket.on('roll', function() {
+    // simulate actually rolling the dice
+    games[socket.inGame] = game.rollDice(games[socket.inGame]);
 
+    // say something moved
+    emitInGame(socket.inGame, 'movement', {});
+
+    // check if further actions are needed
+    var actions = [];
+    var action1 = game.executeLocation(games[socket.inGame]);
+    if(action1 !== "nothing") {
+      actions.push(action1);
+    }
+    if(games[socket.inGame]["message"] === "mrmonopoly") {
+      actions.push("mrmonopoly");
+      games[socket.inGame]["message"] = "";
+    }
+    emitInGame(socket.inGame, 'game actions', actions);
   });
 
-  socket.on('trade', function(tradeInfo) {
+  socket.on('mrmonopoly', function(info) {
+    games[socket.inGame] = game.unleashMrMonopoly(games[socket.inGame]);
+    var actions = [];
+    var action = game.executeLocation(games[socket.inGame]);
+    if(action !== "nothing") {
+      actions.push(action);
+    }
+    emitInGame(socket.inGame, 'game actions', actions);
+  });
 
+  socket.on('rent', function(info) {
+    games[socket.inGame] = game.payRent(info.property, info.player, games[socket.inGame]);
+    games[socket.inGame]["message"] = info.player + " paid rent to " + info.player2;
+    emitInGame(socket.inGame, 'rent', games[socket.inGame]);
+});
+
+  socket.on('trade', function(tradeInfo) {
+    games[socket.inGame] = game.trade(info.player1, info.player2, info.properties1, info.properties2, info.wealth1, info.wealth2, games[socket.inGame]);
+    games[socket.inGame]["message"] = info.player + " mortgaged " + info.property;
+    emitInGame(socket.inGame, 'trade', games[socket.inGame]);
+  });
+
+  socket.on('buy property', function(info) {
+    // different actions if it was auctioned
+    if(info.auction) {
+        games[socket.inGame] = game.buyPropertyAuction(info.property, info.player, info.price, games[socket.inGame]);
+        games[socket.inGame]["message"] = info.player + " bought " + info.property + " for " + info.price;
+    }
+    else {
+        games[socket.inGame] = game.buyPropertyAuction(info.property, info.player, games[socket.inGame]);
+        games[socket.inGame]["message"] = info.player + " bought " + info.property;
+    }
+    emitInGame(socket.inGame, 'property bought', games[socket.inGame]);
   });
 
   socket.on('buy house', function(info) {
-
+    games[socket.inGame] = game.buyHouse(info.property, info.player, games[socket.inGame]);
+    games[socket.inGame]["message"] = info.player + " upgraded " + info.property;
+    emitInGame(socket.inGame, 'update houses', games[socket.inGame]);
   });
 
   socket.on('sell house', function(info) {
-
+    games[socket.inGame] = game.sellHouse(info.property, info.player, games[socket.inGame]);
+    games[socket.inGame]["message"] = info.player + " downgraded " + info.property;
+    emitInGame(socket.inGame, 'update houses', games[socket.inGame]);
   });
 
   socket.on('mortgage', function(info) {
-
+    games[socket.inGame] = game.mortgageProperty(info.property, info.player, games[socket.inGame]);
+    games[socket.inGame]["message"] = info.player + " mortgaged " + info.property;
+    emitInGame(socket.inGame, 'mortgage', games[socket.inGame]);
   });
 
   socket.on('request game data', function() {

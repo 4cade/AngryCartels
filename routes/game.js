@@ -688,7 +688,7 @@ var buyProperty = function(property, player, gameData) {
 /**
 * Mutates gameData to give the player the property, with any side implications.
 * @param property the property to buy
-* @param player the player that is making the purchase
+* @param player name of the player that is making the purchase
 * @param price the monetary amount that the player paid for the property
 * @param gameData the JSON of the game
 * @return the modified gameData with any issues stored in the issues field
@@ -916,6 +916,8 @@ var trade = function(player1, player2, properties1, properties2, wealth1, wealth
 
 	return gameData;
 }
+
+game.trade = trade;
 
 /**
 * Maintains the balance of houses when an external transaction can disrupt the balance
