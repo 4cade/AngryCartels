@@ -605,14 +605,6 @@ var nextToAdd = function(color, player) {
 }
 
 /**
-* TODO
-*
-*/
-var taxiRide = function() {
-
-}
-
-/**
 * Executes the action of the specified busTicket and indicates if further action is required
 * @param action the type of bus pass that is being used
 * @param gameData the JSON with all of the info for the game
@@ -1056,15 +1048,17 @@ var countHousesOnProperty = function(color, property, gameData) {
 /**
 * Tells the owner of the property or false if there is none
 * @param property the name of the property to check
+* @param gameData the data of the game
 * @return the owner of the property or false
 */
-var isOwned = function(property) {
+var isOwned = function(property, gameData) {
 	return gameData["owned"][property];
 }
 
 /**
 * Tells us what index in gameData["players"] the player is
 * @param player name of the player to find the index of
+* @param gameData the data of the game
 * @return an integer of the index of the player specified, returns -1 if cannot be found
 */
 var getPlayerIndexFromPlayer = function(player, gameData) {
@@ -1076,6 +1070,92 @@ var getPlayerIndexFromPlayer = function(player, gameData) {
 	}
 
 	return -1;
+}
+
+/**
+* Moves the specified player to the location 
+*
+* @param player name of the player to find the index of
+* @param property the name of the property to move to
+* @param gameData the JSON with all of the data of the game
+*
+* @return a JSON specifying the new location of the player, any money gained along the journey,
+* 	and an array of all of the locations visited in order in case an animation would like to have that 
+*/
+var advanceToProperty = function(player, property, gameData) {
+	var moneyGained = 0;
+
+	var playerInfo = getPlayerIndexFromPlayer(player, gameData);
+	var location = playerInfo.location;
+	var track = playerInfo.track;
+	var locationsMovedTo = [];
+	var reverse = forward;
+
+	while(location !== property) {
+		var odd = player.track === board[location]["track"][0];
+		locationJSON = nextLocation(location, odd, reverse, track);
+		location = locationJSON.next;
+		track = locationJSON.track;
+		locationsMovedTo.push(location);
+
+		// special cases about locations
+		// gaining pay locations
+		if(location == "go") {
+			moneyGained += 200;
+		}
+		else if(location === "pay day") {
+			if(odd) {
+				moneyGained += 300;
+			}
+			else {
+				moneyGained += 400;
+			}
+		}
+		else if(location === "bonus") {
+			if(movesLeft === 0) {
+				moneyGained += 300;
+			}
+			else {
+				moneyGained += 250;
+			}
+		}
+		// tunnels
+		else if(location === "holland tunnel ne") {
+			location = "holland tunnel sw";
+			locationsMovedTo.push(location);
+		}
+		else if(location === "holland tunnel sw") {
+			location = "holland tunnel ne";
+			locationsMovedTo.push(location);
+		}
+		else if(location === "reverse") {
+			reverse = !reverse;
+		}
+	}
+
+	var json = {};
+	json.moneyGained = moneyGained;
+	json.currentLocation = location;
+	json.movedTo = locationsMovedTo;
+	json.reverse = reverse;
+	return json;
+}
+
+
+/**
+* Changes the amonut of money the specifed player has by the delta amount
+*
+* @param player the String of the player whose money is going to change
+* @param delta the amount the player's money is changing
+* @param gameData the JSON with all of the data of the game
+*
+* @return gameData with the change in money
+*
+*/
+var changeMoneyForPlayer = function(player, delta, gameData) {
+	var playerIndex = getPlayerIndexFromPlayer(player, gameData);
+	gameData["players"][playerIndex]["money"] += delta;
+	return gameData;
 }
 
 /**
@@ -1104,35 +1184,39 @@ var communityChestCard = function(player, gameData) {
 *
 * @param gameData the JSON with all of the data of the game
 *
-* @return String name of the property with the highest rent
+* @return String name of the property with the highest rent, null if no property owned
 */
 var highestRent = function(gameData) {
-	// TODO
-}
+	
+	var colorData = gameData["color"];
+	var highestProperty = {
+		"name": null,
+		"price": 0
+	}
 
-var advanceToProperty = function(player, property, gameData) {
-	//TODO
+	// loop through every property
+	for(var color in colorData) {
+		for(var property in colorData[color]) {
+			var houses = countHousesOnProperty(color, property, gameData);
+			var price = board[property]["rent"][houses];
+			if(price > highestProperty["price"] && isOwned(property, gameData)) {
+				highestProperty["name"] = property;
+				highestProperty["price"] = price;
+			}
+		}
+	}
+
+	return highestProperty["name"];
 }
 
 
 /**
-* Changes the amonut of money the specifed player has by the delta amount
-*
-* @param player the String of the player whose money is going to change
-* @param delta the amount the player's money is changing
-* @param gameData the JSON with all of the data of the game
-*
-* @return gameData with the change in money
+* TODO
 *
 */
-var changeMoneyForPlayer = function(player, delta, gameData) {
-	var playerIndex = getPlayerIndexFromPlayer(player, gameData);
-	gameData["players"][playerIndex]["money"] += delta;
-	return gameData;
+var taxiRide = function() {
+
 }
-
-
-
 
 
 
