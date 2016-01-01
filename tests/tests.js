@@ -67,6 +67,32 @@ QUnit.test("test calcMult function", function(assert) {
     assert.ok(result === 21, "worked");
 });
 
+// Sample test using function in ../routes/sample3.js
+// This test passes
+// Object method correctly defined inside object
+QUnit.test("Student constructor test", function(assert) {
+    var student = new Student(4);
+    var classes = student.getNumClasses();
+    assert.ok(classes === 4, "worked");
+});
+
+// Sample test using function in ../routes/sample3.js
+// This test passes
+// Object method correctly defined inside object
+QUnit.test("Student addClass function", function(assert) {
+    var boss = new Student(5);
+    var moreClass = boss.addClass();
+    assert.ok(moreClass === 6, "worked");
+});
+
+// Sample test using function in ../routes/sample3.js
+// Test failed: calcDiff is not defined
+// As expected, this method wasn't attached to the object when created in sample3.js, and is not testable
+QUnit.test("test calcDiff function", function(assert) {
+    var result = calcDiff(20, 6);
+    assert.ok(result === 14, "worked");
+});
+
 // Check that game was initialized correctly
 QUnit.test("Test initializeBoard", function(assert) {
     // assuming you've changed the initializeBoard function to return a new gameData object?
