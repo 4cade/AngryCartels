@@ -3,9 +3,6 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	socket.emit('get client name', {});
 	socket.emit('request game data', {});
 
-	// get the initial game data to populate stuff
-	//$interval(function() { socket.emit('request game data', {}); }, 5000);
-
 	socket.on('game data', function(gameData) {
 		$scope.gameData = gameData;
 		console.log("got data");
@@ -47,6 +44,22 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	$scope.assignOrder = function() {
 		socket.emit('set order', {});
+	}
+
+	$scope.askBus = function() {
+		// TODO
+	}
+
+	$scope.askBuyHouse = function() {
+		// TODO
+	}
+
+	$scope.buyHouse = function() {
+		// TODO
+	}
+
+	$scope.startAction = function() {
+		// TODO
 	}
 
 	$scope.endTurn = function() {

@@ -9,12 +9,12 @@
 			<button ng-if="gameData['turnOrder'].length === 0" ng-click="assignOrder()">Give turns</button>
 			<p>Turns: {{gameData['turnOrder']}}</p>
 			<p ng-if="currentTurn"> {{currentTurn}}'s turn</p>
-			<div ng-if="currentTurn === username">
+			<div ng-show="currentTurn === username">
 				<button ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
 				<button ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
 			</div>
 			Players:
-			<div ng-repeat="player in gameData['players']">
+			<div ng-repeat="player in players">
 				<div>Name: {{player.name}} </div>
 				<div>Location: {{player.location}} </div>
 				<div>Money: {{player.money}} </div>

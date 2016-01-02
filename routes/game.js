@@ -76,6 +76,7 @@ var initializeBoard = function(gamePresets) {
 	gameData["recentLocation"] = "go"; // last location moved to
 	gameData["lastOdd"] = true; // says if the last move was an odd
 	gameData["canRoll"] = true; // says if the current player can roll the dice
+	gameData["rolled"] = []; // holds the data of the dice that were rolled
 
 	return gameData;
 }
@@ -153,14 +154,20 @@ var rollDice = function(gameData) {
 	var diceTotal = die1 + die2;
 	var special = "";
 	
+	// set the values of the dice roll
+	gameData["rolled"] = [die1, die2];
+
 	if(specialDie === 4 || specialDie === 5) {
 		special = "mrmonopoly";
+		gameData["rolled"].push("mrmonopoly");
 	}
 	else if(specialDie === 6) {
 		special = "gainbusticket";
+		gameData["rolled"].push("gainbusticket");
 	}
 	else {
 		diceTotal += specialDie;
+		gameData["rolled"].push(specialDie);
 	}
 
 	// got a double
@@ -188,7 +195,7 @@ var rollDice = function(gameData) {
 	// use moveInfo to update player
 	gameData.movedTo = moveInfo.movedTo;
 	gameData.recentLocation = moveInfo.currentLocation;
-	console.log(moveInfo);
+	
 	player.location = moveInfo.currentLocation;
 	player.money += moveInfo.moneyGained;
 	player.forward = moveInfo.reverse;
@@ -258,7 +265,7 @@ var mrMonopolyLocation = function(currentLocation, odd, forward, userTrack, game
 	var locationsMovedTo = [];
 	var firstMove = true;
 
-	while(!firstMove && location !== currentLocation && gameData["owned"][location] !== undefined) {
+	while(!firstMove && location !== currentLocation && canBuy(location, gameData)) {
 		firstMove = false;
 		locationJSON = nextLocation(location, odd, forward, track);
 		location = locationJSON.next;
@@ -286,15 +293,6 @@ var mrMonopolyLocation = function(currentLocation, odd, forward, userTrack, game
 			else {
 				moneyGained += 250;
 			}
-		}
-		// tunnels
-		else if(location == "holland tunnel ne") {
-			location = "holland tunnel sw";
-			locationsMovedTo.push(location);
-		}
-		else if(location == "holland tunnel sw") {
-			location = "holland tunnel ne";
-			locationsMovedTo.push(location);
 		}
 	}
 
@@ -365,15 +363,15 @@ var moveLocation = function(currentLocation, moves, odd, forward, userTrack) {
 			}
 		}
 		// tunnels
-		else if(location === "holland tunnel ne") {
+		else if(location === "holland tunnel ne" && movesLeft === 0) {
 			location = "holland tunnel sw";
 			locationsMovedTo.push(location);
 		}
-		else if(location === "holland tunnel sw") {
+		else if(location === "holland tunnel sw" && movesLeft === 0) {
 			location = "holland tunnel ne";
 			locationsMovedTo.push(location);
 		}
-		else if(location === "reverse") {
+		else if(location === "reverse" && movesLeft === 0) {
 			reverse = !reverse;
 		}
 	}
@@ -1105,6 +1103,17 @@ var isOwned = function(property, gameData) {
 }
 
 /**
+* States whether or not the current location can be bought
+* @param the name of a location
+* @param gameData the data of the game
+* @return true if the location can be bought, otherwise false
+*/
+var canBuy  = function(location, gameData) {
+	var locationType = board[location]["type"];
+	return (locationType === 'property' || locationType === 'utility' || locationType === 'transportation') && !isOwned(property, gameData);
+}
+
+/**
 * Tells us what index in gameData["players"] the player is
 * @param player name of the player to find the index of
 * @param gameData the data of the game
@@ -1169,15 +1178,15 @@ var advanceToProperty = function(player, property, gameData) {
 			}
 		}
 		// tunnels
-		else if(location === "holland tunnel ne") {
+		else if(location === "holland tunnel ne" && movesLeft === 0) {
 			location = "holland tunnel sw";
 			locationsMovedTo.push(location);
 		}
-		else if(location === "holland tunnel sw") {
+		else if(location === "holland tunnel sw" && movesLeft === 0) {
 			location = "holland tunnel ne";
 			locationsMovedTo.push(location);
 		}
-		else if(location === "reverse") {
+		else if(location === "reverse" && movesLeft === 0) {
 			reverse = !reverse;
 		}
 	}
