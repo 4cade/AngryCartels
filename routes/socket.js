@@ -71,8 +71,7 @@ module.exports = function(socket){
   socket.on('create game', function() {
   	games[socket.username] = {
   		"host": socket.username,
-  		"players": [socket.username],
-  		"data": {}
+  		"players": [socket.username]
   	}
   	socket.inGame = "" + socket.username;
     console.log(socket.username + " created a game");
@@ -110,6 +109,15 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'start game', {});
     // actually populate the game with stuff and make everyone go into the game
     games[socket.inGame] = game.initializeBoard(games[socket.inGame]);
+
+    emitInGame(socket.inGame, 'game data', games[socket.inGame]);
+  });
+
+  socket.on('set order', function() {
+    // assign a turn order
+    games[socket.inGame] = game.setOrder(games[socket.inGame]);
+    console.log('set order');
+    emitInGame(socket.inGame, 'game data', games[socket.inGame]);
   });
 
   socket.on('roll', function() {
@@ -117,7 +125,7 @@ module.exports = function(socket){
     games[socket.inGame] = game.rollDice(games[socket.inGame]);
 
     // say something moved
-    emitInGame(socket.inGame, 'movement', {});
+    emitInGame(socket.inGame, 'movement', games[socket.inGame]);
 
     // check if further actions are needed
     var actions = [];
@@ -184,6 +192,11 @@ module.exports = function(socket){
     games[socket.inGame]["message"] = info.player + " mortgaged " + info.property;
     emitInGame(socket.inGame, 'mortgage', games[socket.inGame]);
   });
+
+  socket.on('end turn', function() {
+    games[socket.inGame] = game.nextTurn(games[socket.inGame]);
+    emitInGame(socket.inGame, 'game data', games[socket.inGame]);
+  }); 
 
   socket.on('request game data', function() {
     console.log("someone wants to get game data");

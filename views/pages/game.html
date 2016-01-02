@@ -1,11 +1,24 @@
 <div ng-controller="gameController">
 	<div class="row">
-		<div class="col-sm-1">
-		<div class="col-sm-11">
+		{{username}}
+		<div class="col-sm-8">
+			{{gameData}}
 			<board></board>
-			<ul>
-				<li ng-repeat="player in gameData['players']">{{player["name"]}}</li>
-			</ul>
 		</div>
+		<div class="col-sm-4">
+			<button ng-if="gameData['turnOrder'].length === 0" ng-click="assignOrder()">Give turns</button>
+			<p>Turns: {{gameData['turnOrder']}}</p>
+			<p ng-if="currentTurn"> {{currentTurn}}'s turn</p>
+			<div ng-if="currentTurn === username">
+				<button ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
+				<button ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
+			</div>
+			Players:
+			<div ng-repeat="player in gameData['players']">
+				<div>Name: {{player.name}} </div>
+				<div>Location: {{player.location}} </div>
+				<div>Money: {{player.money}} </div>
+			</div>
+		</div>	
 	</div>
 </div>

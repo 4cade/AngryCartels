@@ -4,9 +4,6 @@ var roll3 = require('./roll3.js');
 var chance = require('./chance.js');
 var communityChest = require('./communityChest.js');
 
-// object that we will export
-var game = {};
-
 /**
 * Create the defaults for the game to begin and commence in a way for this file to handle.
 *	
@@ -78,11 +75,37 @@ var initializeBoard = function(gamePresets) {
 	gameData["movedTo"] = []; // previous locations moved to in the last turn
 	gameData["recentLocation"] = "go"; // last location moved to
 	gameData["lastOdd"] = true; // says if the last move was an odd
+	gameData["canRoll"] = true; // says if the current player can roll the dice
 
 	return gameData;
 }
 
-game.initializeBoard = initializeBoard;
+/**
+* Chooses the order of the players for the game.
+* @param gameData the data of everything in the game
+* @return modified gameData with the turnOrder field filled out with all of the players in a random order
+*/
+var setOrder = function(gameData) {
+	var players = gameData["players"];
+	var turns = [];
+
+	for(var index in players) {
+		var roll = Math.floor(Math.random()*6+1)*Math.floor(Math.random()*6+1);
+		turns.push({
+			"value": roll,
+			"player": index
+		});
+	}
+
+	turns.sort(function(a, b) {return a["value"] < b["value"]});
+
+	for(var i = 0; i < turns.length; i++) {
+		var index = turns[i]["player"];
+		gameData["turnOrder"].push(gameData["players"][index]["name"]);
+	}
+
+	return gameData;
+}
 
 /**
 * Makes it so the gameData has the next player in the order to go.
@@ -91,6 +114,7 @@ game.initializeBoard = initializeBoard;
 */
 var nextTurn = function(gameData) {
 	gameData["turnIndex"]++;
+	gameData["canRoll"] = true;
 
 	if(gameData["turnIndex"] === gameData["turnOrder"].length) {
 		gameData["turnIndex"] = 0;
@@ -99,18 +123,20 @@ var nextTurn = function(gameData) {
 	return gameData;
 }
 
-game.nextTurn = nextTurn;
-
 /**
 * Informs whose turn it is.
 * @param gameData the data of everything in the game
 * @return object of the player whose turn it is
 */
 var currentPlayer = function(gameData) {
-	return gameData["players"][gameData["turnOrder"][gameData["turnIndex"]]];
+	var players = gameData["players"];
+	for(var index in players) {
+		var currentPlayer = gameData["turnOrder"][gameData["turnIndex"]];
+		if(players[index]["name"] === currentPlayer) {
+			return players[index];
+		}
+	}
 }
-
-game.currentPlayer = currentPlayer;
 
 /**
 * Handles the entire turn of when the user chooses to roll the dice by moving the current 
@@ -136,6 +162,22 @@ var rollDice = function(gameData) {
 	else {
 		diceTotal += specialDie;
 	}
+
+	// got a double
+	if(die1 === die2) {
+		gameData["doubleCount"] += 1;
+		// rolled a double 3 times
+		if(gameData["doubleCount"] === 3) {
+			jumpLocation("jail");
+			gameData["doubleCount"] = 0;
+			return gameData;	
+		}
+	}
+	else {
+		gameData["doubleCount"] = 0;
+		gameData["canRoll"] = false;
+	}
+
 	var odd = diceTotal % 2 !== 0;
 	gameData.lastOdd = odd;
 
@@ -145,8 +187,9 @@ var rollDice = function(gameData) {
 
 	// use moveInfo to update player
 	gameData.movedTo = moveInfo.movedTo;
-	gameData.recentLocation = moveInfo.location;
-	player.location = moveInfo.location;
+	gameData.recentLocation = moveInfo.currentLocation;
+	console.log(moveInfo);
+	player.location = moveInfo.currentLocation;
 	player.money += moveInfo.moneyGained;
 	player.forward = moveInfo.reverse;
 
@@ -173,9 +216,6 @@ var rollDice = function(gameData) {
 	return gameData;
 }
 
-// exports the rollDice function
-game.rollDice = rollDice;
-
 /**
 * Handles the action of going through a Mr. Monopoly roll, Will move the player to the next unowned
 *	 property unless he/she gets back to his/her currentLocation without encountering one.
@@ -190,14 +230,12 @@ var unleashMrMonopoly = function(gameData) {
 
 	// use moveInfo to update player
 	gameData.movedTo = moveInfo.movedTo;
-	gameData.recentLocation = moveInfo.location;
-	player.location = moveInfo.location;
+	gameData.recentLocation = moveInfo.currentLocation;
+	player.location = moveInfo.currentLocation;
 	player.money += moveInfo.moneyGained;
 
 	return gameData;
 }
-
-game.unleashMrMonopoly = unleashMrMonopoly;
 
 /**
 * Moves the user to the next unowned property in the forward direction, or
@@ -369,7 +407,7 @@ var nextLocation = function(currentLocation, odd, forward, track) {
 	// json to return
 	var json = {};
 	json.next = next[0]; // assume first location in next, true for most locations
-	json.next = track; // only changes if lands on railroad
+	json.track = track; // only changes if lands on railroad
 
 	// handles railroad case
 	if(board[currentLocation]["quality"] === "railroad" && track !== "middle") {
@@ -401,7 +439,7 @@ var executeLocation = function(gameData) {
 	var locationType = board[location]["type"];
 	if (locationType === 'property' || locationType === 'utility' || locationType === 'transportation') {
 		// check if owned => buy, else rent
-		if(!isOwned(property)) {
+		if(!isOwned(property, gameData)) {
 			return "buy";
 		}
 		else {
@@ -448,8 +486,9 @@ var executeLocation = function(gameData) {
 */
 var jumpLocation = function(newLocation) {
 	// pretend to be moving onto that location from one step behind to not have to rewrite code
-	oldLocation = newLocation["backward"][0];
-	return moveLocation(oldLocation, 1, true, true); // TODO get rid of weird side effects
+	var oldLocation = newLocation["backward"][0];
+	var track = board[oldLocation]["track"];
+	return moveLocation(oldLocation, 1, true, true, track); // TODO get rid of weird side effects
 }
 
 /**
@@ -633,8 +672,8 @@ var useBusTicket = function(action, gameData) {
 
 		// use moveInfo to update player
 		gameData.movedTo = moveInfo.movedTo;
-		gameData.recentLocation = moveInfo.location;
-		player.location = moveInfo.location;
+		gameData.recentLocation = moveInfo.currentLocation;
+		player.location = moveInfo.currentLocation;
 		player.money += moveInfo.moneyGained;
 		player.forward = moveInfo.reverse;
 	}
@@ -645,8 +684,8 @@ var useBusTicket = function(action, gameData) {
 
 		// use moveInfo to update player
 		gameData.movedTo = moveInfo.movedTo;
-		gameData.recentLocation = moveInfo.location;
-		player.location = moveInfo.location;
+		gameData.recentLocation = moveInfo.currentLocation;
+		player.location = moveInfo.currentLocation;
 		player.money += moveInfo.moneyGained;
 		player.forward = moveInfo.reverse;
 	}
@@ -756,21 +795,27 @@ var buyHouse = function(property, player, gameData) {
 		}
 	}
 	// just if houses
-	if(ownsMajority(color, player, gameData) && inAdditions && gameData["color"][color]["houses"] < 4) {
+	if(ownsMajority(color, player, gameData) && inAdditions && gameData["color"][color]["houses"] < 4 && gameData["houses"] > 0) {
 		var oldHouseNum = gameData["color"][color]["houses"];
 		setHouseNumberForProperty(color, property, oldHouseNum + 1, gameData);
 		payForHouse = true;
+		gameData["houses"] -= 1;
 	}
 	// handles hotels/skyscrapers since need to have the entire set for that
 	else if(ownsAll(color, player, gameData) && inAdditions) {
 		// not a hotel yet
-		if(!gameData["color"][color]["hotel"]) {
+		if(!gameData["color"][color]["hotel"] && gameData["hotels"] > 0) {
 			setHouseNumberForProperty(color, property, 5, gameData);
+			gameData["houses"] -= 4;
+			gameData["hotels"] += 1;
+			payForHouse = true;
 		}
-		else {
-			setHouseNumberForProperty(color, property, 6, gameData);	
+		else if(gameData["skyscrapers"] > 0) {
+			setHouseNumberForProperty(color, property, 6, gameData);
+			gameData["skyscrapers"] += 1;
+			gameData["hotels"] -= 1;
+			payForHouse = true;
 		}
-		payForHouse = true;
 	}
 
 	// need to charge player for house
@@ -808,17 +853,21 @@ var sellHouse = function(property, player, gameData) {
 	}
 
 	if(sellable) {
-		if(colorData[property]["skyscraper"]) {
+		if(colorData[property]["skyscraper"] && gameData["hotels"] >= 1) {
 			setHouseNumberForProperty(color, property, 5, gameData);
+			gameData["skyscrapers"] += 1;
 			soldHouse = true;
 		}
-		else if(colorData[property]["hotel"]) {
+		else if(colorData[property]["hotel"] && gameData["houses"] >= 4) {
 			setHouseNumberForProperty(color, property, 4, gameData);
+			gameData["hotels"] += 1;
+			gameData["houses"] -= 1;
 			soldHouse = true;
 		}
 		else if(colorData[property]["houses"] > 0) {
 			var oldHouseNum = colorData[property]["houses"];
 			setHouseNumberForProperty(color, property, oldHouseNum - 1, gameData);
+			gameData["houses"] += 1;
 			soldHouse = true;
 		}
 		// can't put soldHouse variable here in case tried to sell houses on something that had 0
@@ -916,8 +965,6 @@ var trade = function(player1, player2, properties1, properties2, wealth1, wealth
 
 	return gameData;
 }
-
-game.trade = trade;
 
 /**
 * Maintains the balance of houses when an external transaction can disrupt the balance
@@ -1220,10 +1267,23 @@ var taxiRide = function() {
 
 }
 
+// object that we will export
+var game = {};
 
-
-
-
-
+game.initializeBoard = initializeBoard;
+game.setOrder = setOrder;
+game.nextTurn = nextTurn;
+game.currentPlayer = currentPlayer;
+game.rollDice = rollDice;
+game.unleashMrMonopoly = unleashMrMonopoly;
+game.executeLocation = executeLocation;
+game.useBusTicket = useBusTicket;
+game.buyProperty = buyProperty;
+game.buyPropertyAuction = buyPropertyAuction;
+game.mortgageProperty = mortgageProperty;
+game.buyHouse = buyHouse;
+game.payRent = payRent;
+game.trade = trade;
+game.taxiRide = taxiRide;
 
 module.exports = game;
