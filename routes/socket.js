@@ -1,6 +1,5 @@
 var board = require('./board.js');
-var game2 = require('./game.js');
-var Game = require('./game2.js');
+var Game = require('./game.js');
 
 var users = {};
 var userGenNum = 1;
@@ -140,7 +139,7 @@ module.exports = function(socket){
     }
     if(games[socket.inGame]["message"] === "mrmonopoly") {
       actions.push("mrmonopoly");
-      games[socket.inGame]["message"] = "";
+      games[socket.inGame].setMessage("");
     }
     emitInGame(socket.inGame, 'game actions', actions);
   });
@@ -156,51 +155,58 @@ module.exports = function(socket){
   });
 
   socket.on('rent', function(info) {
-    games[socket.inGame] = game.payRent(info.property, info.player, games[socket.inGame]);
-    games[socket.inGame]["message"] = info.player + " paid rent to " + info.player2;
-    emitInGame(socket.inGame, 'rent', games[socket.inGame]);
+    games[socket.inGame].payRent(info.property, info.player);
+    var message = info.player + " paid rent to " + info.player2;
+    games[socket.inGame].setMessage(message);
+    emitInGame(socket.inGame, 'rent', games[socket.inGame].getData());
 });
 
   socket.on('trade', function(tradeInfo) {
-    games[socket.inGame] = game.trade(info.player1, info.player2, info.properties1, info.properties2, info.wealth1, info.wealth2, games[socket.inGame]);
-    games[socket.inGame]["message"] = info.player + " mortgaged " + info.property;
-    emitInGame(socket.inGame, 'trade', games[socket.inGame]);
+    games[socket.inGame].trade(info.player1, info.player2, info.properties1, info.properties2, info.wealth1, info.wealth2);
+    var message = info.player + " mortgaged " + info.property;
+    games[socket.inGame].setMessage(message);
+    emitInGame(socket.inGame, 'trade', games[socket.inGame].getData());
   });
 
   socket.on('buy property', function(info) {
     // different actions if it was auctioned
     if(info.auction) {
-        games[socket.inGame] = game.buyPropertyAuction(info.property, info.player, info.price, games[socket.inGame]);
-        games[socket.inGame]["message"] = info.player + " bought " + info.property + " for " + info.price;
+        games[socket.inGame].buyPropertyAuction(info.property, info.player, info.price);
+        var message = info.player + " bought " + info.property + " for " + info.price;
+        games[socket.inGame].setMessage(message);
     }
     else {
-        games[socket.inGame] = game.buyPropertyAuction(info.property, info.player, games[socket.inGame]);
-        games[socket.inGame]["message"] = info.player + " bought " + info.property;
+        games[socket.inGame].buyPropertyAuction(info.property, info.player);
+        var message = info.player + " bought " + info.property;
+        games[socket.inGame].setMessage(message);
     }
-    emitInGame(socket.inGame, 'property bought', games[socket.inGame]);
+    emitInGame(socket.inGame, 'property bought', games[socket.inGame].getData());
   });
 
   socket.on('buy house', function(info) {
-    games[socket.inGame] = game.buyHouse(info.property, info.player, games[socket.inGame]);
-    games[socket.inGame]["message"] = info.player + " upgraded " + info.property;
-    emitInGame(socket.inGame, 'update houses', games[socket.inGame]);
+    games[socket.inGame].buyHouse(info.property, info.player);
+    var message = info.player + " upgraded " + info.property;
+    games[socket.inGame].setMessage(message);
+    emitInGame(socket.inGame, 'update houses', games[socket.inGame].getData());
   });
 
   socket.on('sell house', function(info) {
-    games[socket.inGame] = game.sellHouse(info.property, info.player, games[socket.inGame]);
-    games[socket.inGame]["message"] = info.player + " downgraded " + info.property;
-    emitInGame(socket.inGame, 'update houses', games[socket.inGame]);
+    games[socket.inGame].sellHouse(info.property, info.player);
+    var message = info.player + " downgraded " + info.property;
+    games[socket.inGame].setMessage(message);
+    emitInGame(socket.inGame, 'update houses', games[socket.inGame].getData());
   });
 
   socket.on('mortgage', function(info) {
-    games[socket.inGame] = game.mortgageProperty(info.property, info.player, games[socket.inGame]);
-    games[socket.inGame]["message"] = info.player + " mortgaged " + info.property;
-    emitInGame(socket.inGame, 'mortgage', games[socket.inGame]);
+    games[socket.inGame].mortgageProperty(info.property, info.player);
+    var message = info.player + " mortgaged " + info.property;
+    games[socket.inGame].setMessage(message);
+    emitInGame(socket.inGame, 'mortgage', games[socket.inGame].getData());
   });
 
   socket.on('end turn', function() {
-    games[socket.inGame] = game.nextTurn(games[socket.inGame]);
-    emitInGame(socket.inGame, 'game data', games[socket.inGame]);
+    games[socket.inGame].nextTurn();
+    emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
   }); 
 
   socket.on('request game data', function() {
