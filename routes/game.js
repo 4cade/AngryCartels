@@ -373,6 +373,7 @@ var Game = function(gamePresets) {
         // handles railroad case
         if (board[currentLocation]["quality"] === "railroad" && track !== "middle") {
             json.next = next[1]; // works because railroad's next direction has the middle track first always
+            console.log(next);
         }
 
         // handles when you first land on a railroad
