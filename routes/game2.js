@@ -75,8 +75,6 @@ var Game = function(gamePresets) {
 
     /**
      * Chooses the order of the players for the game.
-     *
-     * @return modified gameData with the turnOrder field filled out with all of the players in a random order
      */
     this.setOrder = function() {
         var players = this.gameData["players"];
@@ -91,19 +89,16 @@ var Game = function(gamePresets) {
         }
 
         turns.sort(function(a, b) {return a["value"] < b["value"]});
+        this.gameData["turnOrder"] = [];
 
         for (var i = 0; i < turns.length; i++) {
             var index = turns[i]["player"];
             this.gameData["turnOrder"].push(this.gameData["players"][index]["name"]);
         }
-
-        return this.gameData;
     }
 
     /**
      * Makes it so the gameData has the next player in the order to go.
-     *
-     * @return modified gameData with the turn put on the next player
      */
     this.nextTurn = function() {
         this.gameData["turnIndex"]++;
@@ -112,8 +107,6 @@ var Game = function(gamePresets) {
         if (this.gameData["turnIndex"] === this.gameData["turnOrder"].length) {
             this.gameData["turnIndex"] = 0;
         }
-
-        return this.gameData;
     }
 
     /**
@@ -134,8 +127,7 @@ var Game = function(gamePresets) {
     /**
      * Handles the entire turn of when the user chooses to roll the dice by moving the current 
      *     player to wherever the dice puts him/her and indicates the next action.
-     *
-     * @return gameData with updated player information and gameData.recentLocation has the new location
+     *     Updated player information and gameData.recentLocation has the new location
      *     of the player and gameData.message will have "mrmonopoly" if the player should go through a mrmonopoly
      */
     this.rollDice = function() {
@@ -174,6 +166,8 @@ var Game = function(gamePresets) {
             this.gameData["canRoll"] = false;
         }
 
+        // TODO got a triple
+
         var odd = diceTotal % 2 !== 0;
         this.gameData.lastOdd = odd;
 
@@ -206,15 +200,12 @@ var Game = function(gamePresets) {
                 player.busTickets[ticket] = 1;
             }
         }
-
-        return this.gameData;
     }
 
     /**
      * Handles the action of going through a Mr. Monopoly roll, Will move the player to the next unowned
      *     property unless he/she gets back to his/her currentLocation without encountering one.
-     *
-     * @return gameData with updated player information and gameData.recentLocation has the new location
+     *     Updates gameData with updated player information and gameData.recentLocation has the new location
      *     of the player and gameData.message will have "mrmonopoly" if the player should go through a mrmonopoly
      */
     this.unleashMrMonopoly = function() {
@@ -227,8 +218,6 @@ var Game = function(gamePresets) {
         this.gameData.recentLocation = moveInfo.currentLocation;
         player.location = moveInfo.currentLocation;
         player.money += moveInfo.moneyGained;
-
-        return this.gameData;
     }
 
     /**
@@ -316,7 +305,7 @@ var Game = function(gamePresets) {
         var reverse = forward;
 
         while (movesLeft > 0) {
-            locationJSON = nextLocation(location, odd, reverse, track);
+            locationJSON = this.nextLocation(location, odd, reverse, track);
             location = locationJSON.next;
             track = locationJSON.track;
             locationsMovedTo.push(location);
@@ -408,7 +397,7 @@ var Game = function(gamePresets) {
         var locationType = board[location]["type"];
         if (locationType === 'property' || locationType === 'utility' || locationType === 'transportation') {
             // check if owned => buy, else rent
-            if (!isOwned(property)) {
+            if (!this.isOwned(property)) {
                 return "buy";
             } else {
                 return "rent";
@@ -602,11 +591,9 @@ var Game = function(gamePresets) {
 
     /**
      * Executes the action of the specified busTicket and indicates if further action is required
-     *
-     * @param action the type of bus pass that is being used
-     *
-     * @return gameData updated with an array of properties if further action is required (means move forward)
+     *   gameData updated with an array of properties if further action is required (means move forward)
      *   in the message location, otherwise the empty string
+     * @param action the type of bus pass that is being used
      */
     this.useBusTicket = function(action) {
         // first get player info
@@ -645,7 +632,6 @@ var Game = function(gamePresets) {
             player.forward = moveInfo.reverse;
         }
         this.gameData.message = "";
-        return this.gameData;
     }
 
     /**
@@ -653,8 +639,6 @@ var Game = function(gamePresets) {
      *
      * @param property the property to buy
      * @param player the player that is making the purchase
-     *
-     * @return the modified gameData with any issues stored in the issues field
      */
     this.buyProperty = function(property, player) {
         var playerIndex = this.getPlayerIndexFromPlayer(player);
@@ -677,7 +661,6 @@ var Game = function(gamePresets) {
 
         // properties cost twice the mortgage price
         this.gameData["players"][playerIndex]["money"] -= 2*board[property]["mortgage"];
-        return this.gameData;
     }
 
     /**
@@ -686,8 +669,6 @@ var Game = function(gamePresets) {
      * @param property the property to buy
      * @param player name of the player that is making the purchase
      * @param price the monetary amount that the player paid for the property
-     *
-     * @return the modified gameData with any issues stored in the issues field
      */
     this.buyPropertyAuction = function(property, player, price) {
         var playerIndex = this.getPlayerIndexFromPlayer(player);
@@ -710,7 +691,6 @@ var Game = function(gamePresets) {
 
         // charge the auctioned price
         this.gameData["players"][playerIndex]["money"] -= price;
-        return this.gameData;
     }
 
     /**
@@ -719,8 +699,6 @@ var Game = function(gamePresets) {
      *
      * @param property the property to mortgage
      * @param the player that wants to mortgage such property
-     *
-     * @return gameData with the property mortgaged if it could be mortgaged
      */
     this.mortgageProperty = function(property, player) {
         var playerIndex = this.getPlayerIndexFromPlayer(player);
@@ -729,7 +707,6 @@ var Game = function(gamePresets) {
             this.gameData["players"][playerIndex]["property"][property] = false;
             this.gameData["players"][playerIndex][money] += board[property]["mortgage"];
         }
-        return this.gameData;
     }
 
     /**
@@ -737,8 +714,6 @@ var Game = function(gamePresets) {
      *
      * @param property the property to buy a house on
      * @param the player that wants to buy the house
-     *
-     * @return gameData with changes to the player's data if the house was able to be bought
      */
     this.buyHouse = function(property, player) {
         var color = board[property]["quality"];
@@ -778,8 +753,6 @@ var Game = function(gamePresets) {
             var housePrice = board[property]["house"];
             this.gameData["players"][playerIndex]["money"] -= housePrice;
         }
-
-        return this.gameData;
     }
 
     /**
@@ -787,8 +760,6 @@ var Game = function(gamePresets) {
      *
      * @param property the property to sell a house from
      * @param the player that wants to sell the house
-     *
-     * @return gameData with changes to the player's data if the house was able to be sold
      */
     this.sellHouse = function(property, player) {
         var color = board[property]["quality"];
@@ -832,8 +803,6 @@ var Game = function(gamePresets) {
             var housePrice = board[property]["house"];
             this.gameData["players"][playerIndex]["money"] += housePrice/2;
         }
-
-        return this.gameData;
     }
 
     /**
@@ -841,8 +810,6 @@ var Game = function(gamePresets) {
      *
      * @param property the location landed on that needs rent charged
      * @param player the player that is going to pay rent
-     *
-     * @return gameData with changes to both players' data based on the rent charged
      */
     this.payRent = function(property, player) {
         if (this.gameData["owned"][property]) {
@@ -869,7 +836,6 @@ var Game = function(gamePresets) {
             this.gameData["players"][playerIndex]["money"] -= cost;
             this.gameData["players"][ownerIndex]["money"] += cost;
         }
-        return this.gameData;
     }
 
     /**
@@ -881,8 +847,6 @@ var Game = function(gamePresets) {
      * @param properties2 the properties player2 is giving up
      * @param wealth1 the amount of money player1 is giving up
      * @param wealth2 the amount of money player2 is giving up
-     *
-     * @return gameData with the trade and any issues that happened
      */
     this.trade = function(player1, player2, properties1, properties2, wealth1, wealth2) {
         var player1Index = this.getPlayerIndexFromPlayer(player1);
@@ -917,8 +881,6 @@ var Game = function(gamePresets) {
         this.changeMoneyForPlayer(player1, wealth2);
         this.changeMoneyForPlayer(player2, -1*wealth2);
         this.changeMoneyForPlayer(player2, wealth1);
-
-        return this.gameData;
     }
 
     /**
@@ -926,8 +888,6 @@ var Game = function(gamePresets) {
      *
      * @param color the color that we need to balance
      * @param player the player whose properties need to be balanced
-     *
-     * @return revised gameData with any fixes made, message put in gameData["message"]
      */
     this.rebalanceHouses = function(color, player) {
         var colorData = this.gameData["color"][color]; // can probably be optimized a bit...
@@ -998,8 +958,6 @@ var Game = function(gamePresets) {
                 }
             }
         }
-
-        return this.gameData;
     }
 
     /**
@@ -1150,22 +1108,16 @@ var Game = function(gamePresets) {
      *
      * @param player the String of the player whose money is going to change
      * @param delta the amount the player's money is changing
-     *
-     * @return gameData with the change in money
-     *
      */
     this.changeMoneyForPlayer = function(player, delta) {
         var playerIndex = this.getPlayerIndexFromPlayer(player);
         this.gameData["players"][playerIndex]["money"] += delta;
-        return this.gameData;
     }
 
     /**
      * Simulates drawing a chance card and intitiates the action needed to take
      *
      * @param player the player drawing the card
-     *
-     * @return gameData mutated with the result of drawing the card
      */
     this.chanceCard = function(player) {
         // TODO
@@ -1175,8 +1127,6 @@ var Game = function(gamePresets) {
      * Simulates drawing a community chest card and intitiates the action needed to take
      *
      * @param player the player drawing the card
-     *
-     * @return gameData mutated with the result of drawing the card
      */
     this.communityChestCard = function(player) {
         // TODO
@@ -1219,4 +1169,21 @@ var Game = function(gamePresets) {
     this.taxiRide = function() {
 
     }
+
+    /**
+    * @return the gameData stored in this object
+    */
+    this.getData = function() {
+        return this.gameData;
+    }
+
+    /**
+    * Sets the message field in the gameData to message
+    * @param message the message that is to be set
+    */
+    this.setMessage = function(message) {
+
+    }
 }
+
+module.exports = Game;
