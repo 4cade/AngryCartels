@@ -1,5 +1,6 @@
 var board = require('./board.js');
-var game = require('./game.js');
+var game2 = require('./game.js');
+var Game = require('./game2.js');
 
 var users = {};
 var userGenNum = 1;
@@ -24,18 +25,21 @@ function emitAll(call, data) {
 }
 
 function emitInGame(host, call, data) {
-	for(var index in games[host]["players"]) {
     // game has started
-    if(typeof games[host]["players"][index] == "object") {
-      var playerName = games[host]["players"][index]["name"];
-      users[playerName].emit(call, data);
+    if(games[host]["players"] == undefined) {
+        for(var index in games[host].getData()["players"]) {
+            var playerName = games[host].getData()["players"][index]["name"];
+            users[playerName].emit(call, data);
+        }
+      
     }
     // game has not been started
-		else {
-      var playerName = games[host]["players"][index];
-      users[playerName].emit(call, data);
+    else {
+        for(var index in games[host]["players"]) {
+            var playerName = games[host]["players"][index];
+            users[playerName].emit(call, data);
+        }
     }
-  }
 }
 
 module.exports = function(socket){
@@ -108,28 +112,29 @@ module.exports = function(socket){
   	// tell everyone that the game started, do first for minimal lag since next step is intensive
     emitInGame(socket.inGame, 'start game', {});
     // actually populate the game with stuff and make everyone go into the game
-    games[socket.inGame] = game.initializeBoard(games[socket.inGame]);
-
-    emitInGame(socket.inGame, 'game data', games[socket.inGame]);
+    games[socket.inGame] = new Game(games[socket.inGame]);//game.initializeBoard(games[socket.inGame]);
+    console.log("started game");
+    emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
   });
 
   socket.on('set order', function() {
     // assign a turn order
-    games[socket.inGame] = game.setOrder(games[socket.inGame]);
+    games[socket.inGame].setOrder();
     console.log('set order');
-    emitInGame(socket.inGame, 'game data', games[socket.inGame]);
+    emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
+    console.log('set order2');
   });
 
   socket.on('roll', function() {
     // simulate actually rolling the dice
-    games[socket.inGame] = game.rollDice(games[socket.inGame]);
+    games[socket.inGame].rollDice();
 
     // say something moved
-    emitInGame(socket.inGame, 'movement', games[socket.inGame]);
+    emitInGame(socket.inGame, 'movement', games[socket.inGame].getData());
 
     // check if further actions are needed
     var actions = [];
-    var action1 = game.executeLocation(games[socket.inGame]);
+    var action1 = games[socket.inGame].executeLocation();
     if(action1 !== "nothing") {
       actions.push(action1);
     }
@@ -141,9 +146,9 @@ module.exports = function(socket){
   });
 
   socket.on('mrmonopoly', function(info) {
-    games[socket.inGame] = game.unleashMrMonopoly(games[socket.inGame]);
+    games[socket.inGame].unleashMrMonopoly();
     var actions = [];
-    var action = game.executeLocation(games[socket.inGame]);
+    var action = games[socket.inGame].executeLocation();
     if(action !== "nothing") {
       actions.push(action);
     }
@@ -200,7 +205,7 @@ module.exports = function(socket){
 
   socket.on('request game data', function() {
     console.log("someone wants to get game data");
-    socket.emit('game data', games[socket.inGame]);
+    socket.emit('game data', games[socket.inGame].getData());
   })
 }
 

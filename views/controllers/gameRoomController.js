@@ -35,6 +35,7 @@ angryCartels.controller('gameRoomController', function($scope, $interval) {
 
     $scope.startGame = function() {
       socket.emit('start game', $scope.inGame);
+      console.log('started');
     }
 
   	// gets a new games

@@ -5,7 +5,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	socket.on('game data', function(gameData) {
 		$scope.gameData = gameData;
-		console.log("got data");
+		console.log("got game data");
 		$scope.setup();
 		$scope.$apply();
 	});
