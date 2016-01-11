@@ -119,9 +119,7 @@ module.exports = function(socket){
   socket.on('set order', function() {
     // assign a turn order
     games[socket.inGame].setOrder();
-    console.log('set order');
     emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
-    console.log('set order2');
   });
 
   socket.on('roll', function() {
@@ -206,13 +204,27 @@ module.exports = function(socket){
 
   socket.on('end turn', function() {
     games[socket.inGame].nextTurn();
+    console.log(games[socket.inGame].currentPlayer());
     emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
-  }); 
+  });
+
+  socket.on('property info', function(property) {
+    socket.emit('property info', games[socket.inGame].getPropertyInfo(property));
+  });
+
+  socket.on('rent info', function(property) {
+    socket.emit('rent info', games[socket.inGame].rentOfProperty(property));
+  })
+
+  socket.on('highest rent', function() {
+    var highest = games[socket.inGame].highestRent();
+    socket.emit('highest rent', games[socket.inGame].getPropertyInfo(highest));
+  })
 
   socket.on('request game data', function() {
     console.log("someone wants to get game data");
     socket.emit('game data', games[socket.inGame].getData());
-  })
+  });
 }
 
 

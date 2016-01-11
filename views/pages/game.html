@@ -1,17 +1,53 @@
 <div ng-controller="gameController">
 	<div class="row">
-		{{username}}
+		Username: {{username}}
 		<div class="col-sm-8">
-			{{gameData}}
 			<board></board>
 		</div>
 		<div class="col-sm-4">
 			<button ng-if="gameData['turnOrder'].length === 0" ng-click="assignOrder()">Give turns</button>
 			<p>Turns: {{gameData['turnOrder']}}</p>
 			<p ng-if="currentTurn"> {{currentTurn}}'s turn</p>
+			<div ng-show="actions.length > 0">
+				<div ng-if="actions[0] === 'buy'">
+
+				</div>
+				<div ng-if="actions[0] === 'mrmonopoly'">
+
+				</div>
+				<div ng-if="actions[0] === 'rent'">
+
+				</div>
+				<div ng-if="actions[0] === 'subway'">
+
+				</div>
+				<div ng-if="actions[0] === 'chance'">
+
+				</div>
+				<div ng-if="actions[0] === 'community chest'">
+
+				</div>
+				<div ng-if="actions[0] === 'bus'">
+
+				</div>
+				<div ng-if="actions[0] === 'auction choice'">
+
+				</div>
+				<div ng-if="actions[0] === 'auction'">
+
+				</div>
+				<div ng-if="actions[0] === 'highest rent'">
+
+				</div>
+				<div ng-if="actions[0] === 'nothing'">
+
+				</div>
+			</div>
 			<div ng-show="currentTurn === username">
-				<button ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
-				<button ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
+				<div ng-hide="actions.length > 0">
+					<button ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
+					<button ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
+				</div>
 			</div>
 			Players:
 			<div ng-repeat="player in players">

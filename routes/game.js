@@ -391,7 +391,7 @@ var Game = function(gamePresets) {
     /**
      * Specifies what kind of action should occur on the current location that was landed on.
      *
-     * @return String indicating what kind of action should occur?
+     * @return String indicating what kind of action should occur
      */
     this.executeLocation = function() {
         var location = this.gameData.recentLocation;
@@ -403,25 +403,36 @@ var Game = function(gamePresets) {
             } else {
                 return "rent";
             }
-        } else if (locationType === 'subway') {
+        } 
+        else if (locationType === 'subway') {
             // allow teleport anywhere
             return "subway";
-        } else if (locationType === 'chance') {
+        } 
+        else if (locationType === 'chance') {
             return "chance";
-        } else if (locationType === 'community chest') {
+        } 
+        else if (locationType === 'community chest') {
             return "community chest";
-        } else if (locationType === 'bus') {
+        } 
+        else if (locationType === 'bus') {
             return "bus";
-        } else if (locationType === 'auction') {
+        } 
+        else if (locationType === 'auction') {
             // check if any unowned left, if not then go to one with highest rent
+            var someLeft = false;
             for (var property in this.gameData["owned"]) {
                 if (!this.gameData["owned"][property]) {
-                    return "auction";
-                } else {
-                    return "highest rent";
+                    someLeft = true;
                 }
             }
-        } else {
+            if(someLeft) {
+                return "auction choice";
+            } 
+            else {
+                return "highest rent";
+            }
+        } 
+        else {
             // do nothing
             return "nothing";
         }
@@ -814,12 +825,27 @@ var Game = function(gamePresets) {
      */
     this.payRent = function(property, player) {
         if (this.gameData["owned"][property]) {
-            var rentArray = board[property]["rent"];
             var owner = this.gameData["owned"][property];
-            var houseRentIndex = 0;
 
             var ownerIndex = this.getPlayerIndexFromPlayer(owner);
             var playerIndex = this.getPlayerIndexFromPlayer(player);
+
+            var cost = this.rentOfProperty(property);
+            this.gameData["players"][playerIndex]["money"] -= cost;
+            this.gameData["players"][ownerIndex]["money"] += cost;
+        }
+    }
+
+    /**
+     * Tells what the cost of the rent of the property is.
+     *
+     * @param property the location that information is requested about
+     * @return the cost of rent for the property
+     */
+    this.rentOfProperty = function(property) {
+        if (this.gameData["owned"][property]) {
+            var rentArray = board[property]["rent"];
+            var houseRentIndex = 0;
 
             var colorSet = this.gameData["color"][board[property]["quality"]];
             for (var key in colorSet) {
@@ -834,8 +860,10 @@ var Game = function(gamePresets) {
             }
 
             var cost = rentArray[houseRentIndex];
-            this.gameData["players"][playerIndex]["money"] -= cost;
-            this.gameData["players"][ownerIndex]["money"] += cost;
+            return cost;
+        }
+        else {
+            return 0;
         }
     }
 
@@ -1184,6 +1212,32 @@ var Game = function(gamePresets) {
     */
     this.setMessage = function(message) {
         this.gameData["message"] = message;
+    }
+
+    /**
+    * Gives relevant information about the requested property
+    * @param property name of the property info is requested for
+    * @return json with relevant information about the property
+    */
+    this.getPropertyInfo = function(property) {
+        var info = {}; // info we will return
+        var boardInfo = board[property]; // straight info from board.js
+
+        info["name"] = boardInfo["name"];
+        info["rent"] = boardInfo["rent"];
+        info["mortgage"] = boardInfo["mortgage"];
+        info["price"] = 2*boardInfo["mortgage"];
+        if(boardInfo["type"] === "property") {
+            info["type"] = boardInfo["quality"];
+        }
+        else {
+            info["type"] = boardInfo["type"];
+        }
+        if(this.isOwned(property)) {
+            info["owner"] = this.isOwned(property);
+        }
+
+        return info;
     }
 }
 
