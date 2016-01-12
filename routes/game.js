@@ -9,6 +9,8 @@ var communityChest = require('./communityChest.js');
 var Game = function(gamePresets) {
     this.gameData = JSON.parse(JSON.stringify(gamePresets));
     // changes a player from just a string to an actual player
+    this.auctionPrices = {};
+
     for (var index in this.gameData["players"]) {
         var newPlayer = {};
         newPlayer.name = this.gameData["players"][index];
@@ -19,6 +21,9 @@ var Game = function(gamePresets) {
         newPlayer.forward = true;
         newPlayer.location = "go"; // all players start on go
         newPlayer.track = "middle";
+
+        // set player spot in auction
+        this.auctionPrices[newPlayer.name] = null;
 
         this.gameData["players"][index] = newPlayer;
     }
@@ -1190,6 +1195,58 @@ var Game = function(gamePresets) {
         return highestProperty["name"];
     }
 
+    /*
+    * Sets all of the prices in the auction to null
+    */
+    this.newAuction = function() {
+        for(var player in Object.keys(this.auctionPrices)) {
+            this.auctionPrices[player] = null;
+        }
+    }
+
+    /*
+    * Sets all of the prices in the auction to null
+    */
+    this.addBid = function(player, price) {
+        this.auctionPrices[player] = price;
+        if(this.biddingOver()) {
+            return this.auctionWinner();
+        }
+    }
+
+    /*
+    * Says if everyone has placed a bid
+    * @return true if everyone has placed a bid
+    */
+    this.biddingOver = function() {
+        for(var player in Object.keys(this.auctionPrices)) {
+            if(!this.auctionPrices[player]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /*
+    * Tells who the winner of the auction is if there is one
+    * @return the name of the winner of the auction if bidding is over, otherwise false
+    */
+    this.auctionWinner = function() {
+        if(!biddingOver()) {
+            return false;
+        }
+
+        var top = Object.keys(this.auctionPrices)[0];
+
+        for(var player in Object.keys(this.auctionPrices)) {
+            if(this.auctionPrices[player] > this.auctionPrices[top]) {
+                top = player;
+            }
+        }
+
+        return true;
+    }
 
     /**
     * TODO
@@ -1212,6 +1269,19 @@ var Game = function(gamePresets) {
     */
     this.setMessage = function(message) {
         this.gameData["message"] = message;
+    }
+
+    /**
+    * @return a list of the all of the locations on the board
+    */
+    this.getAllLocations = function() {
+        var all = [];
+
+        for(var place in Object.keys(board)) {
+            all.push(place);
+        }
+
+        return all;
     }
 
     /**

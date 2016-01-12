@@ -4,6 +4,8 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	socket.emit('get client name', {});
 	socket.emit('request game data', {});
 
+	// TODO investigate which of the $scope.$apply()s are needed
+
 	socket.on('game data', function(gameData) {
 		$scope.gameData = gameData;
 		console.log("got game data");
@@ -21,6 +23,8 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	socket.on('actions', function(actions) {
 		$scope.actions.push.apply($scope.actions, actions); // extends the list
+		console.log($scope.actions);
+		$scope.$apply();
 		// TODO carry out the actions and do associated requests
 	});
 
@@ -30,16 +34,28 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	});
 
 	socket.on('property info', function(info) {
-		// TODO
+		$scope.propertyInfo = info;
+		$scope.$apply();
 	});
 
 	socket.on('rent info', function(info) {
-		// TODO
+		$scope.rentCost = info;
+		$scope.$apply();
 	});
 
 	socket.on('highest rent', function(info) {
 		// TODO
 	});
+
+	socket.on('all locations', function(locations) {
+		$scope.locationList = locations;
+		$scope.$apply();
+	});
+
+	socket.on('auction choices', function(locations) {
+		$scope.locationList = locations;
+		$scope.$apply();
+	})
 
 	// load players names
 	$scope.players = $scope.gameData["players"];
@@ -61,7 +77,15 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		socket.emit('set order', {});
 	}
 
-	$scope.askBus = function() {
+	$scope.drawBusPass = function() {
+		// TODO
+	}
+
+	$scope.drawChance = function() {
+		// TODO
+	}
+
+	$scope.drawCommunityChest = function() {
 		// TODO
 	}
 
@@ -77,6 +101,30 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		// TODO
 	}
 
+	$scope.buyProperty = function(property) {
+		// TODO
+	}
+
+	$scope.selectLocation = function(location) {
+		$scope.selectedLocation = location;
+	}
+
+	$scope.upForAuction = function() {
+		// TODO make this the auctioned property for everyone (use scope.selectedLocation)
+	}
+
+	$scope.setAuctionPrice = function(property) {
+		// TODO
+	}
+
+	$scope.winAuction = function(property) {
+		// TODO
+	}
+
+	$scope.startMrMonopoly = function() {
+		socket.emit('mrmonopoly', {});
+	}
+
 	$scope.startAction = function() {
 		var action = $scope.actions[0];
 
@@ -84,13 +132,13 @@ angryCartels.controller('gameController', function($scope, $interval) {
 			socket.emit('property info', $scope.recentLocation);
 		}
 		else if(action === 'mrmonopoly') {
-			// TODO check if should just unleash mrmonpoly immediately
+			// don't need to do anything because acts upon button press
 		}
 		else if(action === 'rent') {
 			socket.emit('rent info', $scope.recentLocation);
 		}
 		else if(action === 'subway') {
-			// TODO see where needs to go
+			socket.emit('all locations', {});
 		}
 		else if(action === 'chance') {
 			// TODO
@@ -129,6 +177,10 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		delete $scope.actions[0];
 		$scope.actions.filter(function(el) {return el !== undefined});
 		$scope.canAct = true;
+	}
+
+	$scope.startTrade = function() {
+		// TODO set it up to give options by selecting player first and stuffsssss
 	}
 
 	$scope.$watch('actions', function() {

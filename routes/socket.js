@@ -139,7 +139,7 @@ module.exports = function(socket){
       actions.push("mrmonopoly");
       games[socket.inGame].setMessage("");
     }
-    emitInGame(socket.inGame, 'game actions', actions);
+    socket.emit('actions', actions);
   });
 
   socket.on('mrmonopoly', function(info) {
@@ -149,7 +149,7 @@ module.exports = function(socket){
     if(action !== "nothing") {
       actions.push(action);
     }
-    emitInGame(socket.inGame, 'game actions', actions);
+    emitInGame(socket.inGame, 'actions', actions);
   });
 
   socket.on('rent', function(info) {
@@ -214,11 +214,15 @@ module.exports = function(socket){
 
   socket.on('rent info', function(property) {
     socket.emit('rent info', games[socket.inGame].rentOfProperty(property));
-  })
+  });
 
   socket.on('highest rent', function() {
     var highest = games[socket.inGame].highestRent();
     socket.emit('highest rent', games[socket.inGame].getPropertyInfo(highest));
+  });
+
+  socket.on('all locations', function() {
+    socket.emit('all locations', games[socket.inGame].getAllLocations());
   })
 
   socket.on('request game data', function() {

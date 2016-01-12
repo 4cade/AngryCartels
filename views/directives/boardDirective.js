@@ -8,8 +8,8 @@ angryCartels.directive('board', function($window) {
             var ctx = canvas.getContext('2d');
             var startX = 0;
             var startY = 0;
-            var imgWidth = 1000;
-            var imgHeight = 1000;
+            var imgWidth = 850;
+            var imgHeight = 850;
             // Create an image from scratch
             var img = new Image();
             // Ensure the image has loaded before calling drawImage()

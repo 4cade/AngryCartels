@@ -1,37 +1,45 @@
 <div ng-controller="gameController">
 	<div class="row">
 		Username: {{username}}
-		<div class="col-sm-8">
+		<div class="col-sm-10">
 			<board></board>
 		</div>
-		<div class="col-sm-4">
-			<button ng-if="gameData['turnOrder'].length === 0" ng-click="assignOrder()">Give turns</button>
+		<div class="col-sm-2">
+			<button type="button" class="btn btn-default" ng-if="gameData['turnOrder'].length === 0" ng-click="assignOrder()">Give turns</button>
 			<p>Turns: {{gameData['turnOrder']}}</p>
 			<p ng-if="currentTurn"> {{currentTurn}}'s turn</p>
 			<div ng-show="actions.length > 0">
 				<div ng-if="actions[0] === 'buy'">
-
+					<button type="button" class="btn btn-default" ng-click="buyProperty(property)">Buy {{recentLocation}}</button>
+					<button type="button" class="btn btn-default" ng-click="upForAuction(property)">Put {{recentLocation}} up for Auction</button>
 				</div>
 				<div ng-if="actions[0] === 'mrmonopoly'">
-
+					<button type="button" class="btn btn-default" ng-click="startMrMonopoly()">Start Mr. Monopoly</button>
 				</div>
 				<div ng-if="actions[0] === 'rent'">
 
 				</div>
 				<div ng-if="actions[0] === 'subway'">
-
+					Choose a property to take the subway to:
+					<ul>
+						<li ng-repeat="index in locationList" ng-click="selectLocation(locationList[index])">{{locationList[index]}}</li>
+					</ul>
 				</div>
 				<div ng-if="actions[0] === 'chance'">
-
+					<button type="button" class="btn btn-default" ng-click="drawChance()">Draw Chance</button>
 				</div>
 				<div ng-if="actions[0] === 'community chest'">
-
+					<button type="button" class="btn btn-default" ng-click="drawCommunityChance()">Draw Community Chest</button>
 				</div>
 				<div ng-if="actions[0] === 'bus'">
-
+					<button type="button" class="btn btn-default" ng-click="drawBusPass()">Draw Bus Pass</button>
 				</div>
 				<div ng-if="actions[0] === 'auction choice'">
-
+					Choose a property to auction off:
+					<ul>
+						<li ng-repeat="index in locationList" ng-click="selectLocation(locationList[index])">{{locationList[index]}}</li>
+						<button type="button" class="btn btn-default" ng-click="drawBusPass()">Auction</button>
+					</ul>
 				</div>
 				<div ng-if="actions[0] === 'auction'">
 
@@ -45,8 +53,9 @@
 			</div>
 			<div ng-show="currentTurn === username">
 				<div ng-hide="actions.length > 0">
-					<button ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
-					<button ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
+					<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
+					<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="startTrade()">Trade</button>
+					<button type="button" class="btn btn-default" ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
 				</div>
 			</div>
 			Players:
@@ -54,6 +63,7 @@
 				<div>Name: {{player.name}} </div>
 				<div>Location: {{player.location}} </div>
 				<div>Money: {{player.money}} </div>
+				<br></br>
 			</div>
 		</div>	
 	</div>
