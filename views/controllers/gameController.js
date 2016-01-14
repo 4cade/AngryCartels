@@ -17,6 +17,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		// TODO update locations of players
 		$scope.gameData = gameData;
 		$scope.setup();
+		$scope.message = "The dice that " + $scope.currentTurn + " rolled were " + gameData["rolled"];
 		console.log("got move data");
 		$scope.$apply();
 	});

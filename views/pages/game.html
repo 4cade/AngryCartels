@@ -1,10 +1,12 @@
 <div ng-controller="gameController">
 	<div class="row">
-		Username: {{username}}
 		<div class="col-sm-10">
 			<board></board>
 		</div>
 		<div class="col-sm-2">
+			<h3>Username: {{username}}</h3>
+			<p>{{message}}</p>
+
 			<button type="button" class="btn btn-default" ng-if="gameData['turnOrder'].length === 0" ng-click="assignOrder()">Give turns</button>
 			<p>Turns: {{gameData['turnOrder']}}</p>
 			<p ng-if="currentTurn"> {{currentTurn}}'s turn</p>
@@ -57,7 +59,7 @@
 					<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
 					<button type="button" class="btn btn-default" ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
 				</div>
-				<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="startTrade()">Trade</button>
+				<button type="button" class="btn btn-default" ng-click="startTrade()">Trade</button>
 			</div>
 			Players:
 			<div ng-repeat="player in players">
