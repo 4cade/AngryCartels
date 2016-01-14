@@ -403,7 +403,7 @@ var Game = function(gamePresets) {
         var locationType = board[location]["type"];
         if (locationType === 'property' || locationType === 'utility' || locationType === 'transportation') {
             // check if owned => buy, else rent
-            if (!this.isOwned(property)) {
+            if (!this.isOwned(location)) {
                 return "buy";
             } else {
                 return "rent";
@@ -426,7 +426,7 @@ var Game = function(gamePresets) {
             // check if any unowned left, if not then go to one with highest rent
             var someLeft = false;
             for (var property in this.gameData["owned"]) {
-                if (!this.gameData["owned"][property]) {
+                if (!this.gameData["owned"][location]) {
                     someLeft = true;
                 }
             }

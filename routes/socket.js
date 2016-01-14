@@ -174,7 +174,7 @@ module.exports = function(socket){
         games[socket.inGame].setMessage(message);
     }
     else {
-        games[socket.inGame].buyPropertyAuction(info.property, info.player);
+        games[socket.inGame].buyProperty(info.property, info.player);
         var message = info.player + " bought " + info.property;
         games[socket.inGame].setMessage(message);
     }

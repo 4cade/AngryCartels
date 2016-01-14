@@ -873,8 +873,8 @@ module.exports = {
 		"quality": "utility",
 		"multiplier": [10, 20, 40, 80, 100, 120, 150],
 		"mortgage": 75,
-		"forward": ["westheimer rd"],
-		"backward": ["kirby dr"],
+		"forward": ["kirby dr"],
+		"backward": ["westheimer rd"],
 		"side": "left",
 		"track": ["outer"],
 		"above": ["electric company"]

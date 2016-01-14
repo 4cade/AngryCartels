@@ -28,6 +28,17 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		// TODO carry out the actions and do associated requests
 	});
 
+	socket.on('property bought', function(gameData) {
+		$scope.gameData = gameData;
+		$scope.setup();
+		$scope.message = gameData.message;
+		$scope.finishAction();
+		$scope.$apply();
+		console.log($scope.currentTurn);
+		console.log($scope.username);
+		console.log($scope.currentTurn === $scope.username);
+	});
+
 	socket.on('send client name', function(name) {
 		$scope.username = name;
 		$scope.$apply();
@@ -44,7 +55,8 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	});
 
 	socket.on('highest rent', function(info) {
-		// TODO
+		$scope.propertyInfo = info;
+		$scope.$apply();
 	});
 
 	socket.on('all locations', function(locations) {
@@ -102,7 +114,12 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	}
 
 	$scope.buyProperty = function(property) {
-		// TODO
+		var info = {};
+		console.log(property);
+		info.property = property;
+		info.player = $scope.username;
+		info.auction = false;
+		socket.emit('buy property', info);
 	}
 
 	$scope.selectLocation = function(location) {
@@ -117,8 +134,13 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		// TODO
 	}
 
-	$scope.winAuction = function(property) {
-		// TODO
+	$scope.winAuction = function(property, price) {
+		var info = {};
+		info.property = property;
+		info.player = $scope.username;
+		info.auction = true;
+		info.price = price;
+		socket.emit('buy property', info);
 	}
 
 	$scope.startMrMonopoly = function() {
@@ -174,13 +196,20 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	// removes the first element of actions
 	$scope.finishAction = function() {
-		delete $scope.actions[0];
-		$scope.actions.filter(function(el) {return el !== undefined});
+		$scope.actions = $scope.actions.splice(1);
 		$scope.canAct = true;
 	}
 
 	$scope.startTrade = function() {
 		// TODO set it up to give options by selecting player first and stuffsssss
+	}
+
+	$scope.hasProperty = function(player) {
+		return Object.keys(player.property).length > 0;
+	}
+
+	$scope.playerProperties = function(player) {
+		return Object.keys(player.property);
 	}
 
 	$scope.$watch('actions', function() {

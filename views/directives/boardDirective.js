@@ -18,7 +18,7 @@ angryCartels.directive('board', function($window) {
                 canvas.height = imgHeight;
                 ctx.drawImage(img, startX, startY, imgWidth, imgHeight);
                 console.log("The image was drawn!");
-            };
+            }; // hi Alex
             // Set source path
             img.src = 'img/game_board.jpg';
             // Draw 8 player icons on the starting location

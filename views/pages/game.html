@@ -10,8 +10,8 @@
 			<p ng-if="currentTurn"> {{currentTurn}}'s turn</p>
 			<div ng-show="actions.length > 0">
 				<div ng-if="actions[0] === 'buy'">
-					<button type="button" class="btn btn-default" ng-click="buyProperty(property)">Buy {{recentLocation}}</button>
-					<button type="button" class="btn btn-default" ng-click="upForAuction(property)">Put {{recentLocation}} up for Auction</button>
+					<button type="button" class="btn btn-default" ng-click="buyProperty(recentLocation)">Buy {{recentLocation}}</button>
+					<button type="button" class="btn btn-default" ng-click="upForAuction(recentLocation)">Put {{recentLocation}} up for Auction</button>
 				</div>
 				<div ng-if="actions[0] === 'mrmonopoly'">
 					<button type="button" class="btn btn-default" ng-click="startMrMonopoly()">Start Mr. Monopoly</button>
@@ -50,19 +50,24 @@
 				<div ng-if="actions[0] === 'nothing'">
 
 				</div>
+				<button type="button" class="btn btn-default" ng-click="endTurn()">End Turn</button>
 			</div>
 			<div ng-show="currentTurn === username">
 				<div ng-hide="actions.length > 0">
 					<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
-					<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="startTrade()">Trade</button>
 					<button type="button" class="btn btn-default" ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
 				</div>
+				<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="startTrade()">Trade</button>
 			</div>
 			Players:
 			<div ng-repeat="player in players">
 				<div>Name: {{player.name}} </div>
 				<div>Location: {{player.location}} </div>
 				<div>Money: {{player.money}} </div>
+				<ul ng-if="hasProperty(player)">
+					Properties:<br></br>
+					<li ng-repeat="property in playerProperties(player)">{{property}}</li>
+				</ul>
 				<br></br>
 			</div>
 		</div>	
