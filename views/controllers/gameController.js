@@ -68,7 +68,13 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	socket.on('auction choices', function(locations) {
 		$scope.locationList = locations;
 		$scope.$apply();
-	})
+	});
+
+	socket.on('new auction', function(info) {
+(f)		$scope.propertyInfo = info;
+		$scope.actions.unshift('auction');
+		$scope.$apply();
+	});
 
 	// load players names
 	$scope.players = $scope.gameData["players"];
@@ -127,8 +133,9 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		$scope.selectedLocation = location;
 	}
 
-	$scope.upForAuction = function() {
+	$scope.upForAuction = function(property) {
 		// TODO make this the auctioned property for everyone (use scope.selectedLocation)
+		socket.emit('up auction', property);
 	}
 
 	$scope.setAuctionPrice = function(property) {

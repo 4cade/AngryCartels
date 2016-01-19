@@ -6,6 +6,7 @@ angryCartels.controller('gameRoomController', function($scope, $interval) {
 	  // load initial games
 	  socket.emit('get games', {});
     socket.emit('get client name', {});
+
     // check for new games every 5 seconds
     //$interval(function() { socket.emit('get games', {}); }, 5000);
 

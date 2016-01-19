@@ -40,7 +40,7 @@
 					Choose a property to auction off:
 					<ul>
 						<li ng-repeat="index in locationList" ng-click="selectLocation(locationList[index])">{{locationList[index]}}</li>
-						<button type="button" class="btn btn-default" ng-click="drawBusPass()">Auction</button>
+						<button type="button" class="btn btn-default" ng-click="setAuctionProperty()">Auction</button>
 					</ul>
 				</div>
 				<div ng-if="actions[0] === 'auction'">

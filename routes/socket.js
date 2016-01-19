@@ -202,6 +202,11 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'mortgage', games[socket.inGame].getData());
   });
 
+  socket.on('up auction', function(property) {
+    games[socket.inGame].newAuction();
+    emitInGame(socket.inGame, 'new auction', games[socket.inGame].getPropertyInfo(property));
+  });
+
   socket.on('end turn', function() {
     games[socket.inGame].nextTurn();
     console.log(games[socket.inGame].currentPlayer());
