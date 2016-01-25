@@ -5,7 +5,7 @@ var angryCartels = angular.module('angryCartels', ['ngRoute']);
 var socket = io.connect();
 
 // configure our routes
-angryCartels.config(function($routeProvider) {
+angryCartels.config(function($routeProvider, $locationProvider) {
 	$routeProvider
 
 		// route for the home page
@@ -31,4 +31,7 @@ angryCartels.config(function($routeProvider) {
 			templateUrl : 'pages/game.html',
 			controller  : 'gameController'
 		});
+
+		// use the HTML5 History API to get the pretty urls without a weird /#/ between relevant info
+        $locationProvider.html5Mode(true);
 });
