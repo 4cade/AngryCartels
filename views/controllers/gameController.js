@@ -1,6 +1,7 @@
 angryCartels.controller('gameController', function($scope, $interval) {
 	$scope.gameData = {};
 	$scope.actions = [];
+	$scope.auctionPrice = 0;
 	socket.emit('get client name', {});
 	socket.emit('request game data', {});
 
@@ -14,7 +15,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	});
 
 	socket.on('movement', function(gameData) {
-		// TODO update locations of players
+		// TODO update locations of players on board
 		$scope.gameData = gameData;
 		$scope.setup();
 		$scope.message = "The dice that " + $scope.currentTurn + " rolled were " + gameData["rolled"];
@@ -71,10 +72,25 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	});
 
 	socket.on('new auction', function(info) {
-(f)		$scope.propertyInfo = info;
+		$scope.propertyInfo = info;
+		$scope.auction = {};
 		$scope.actions.unshift('auction');
+		$scope.notSentAuctionPrice = true;
 		$scope.$apply();
 	});
+
+	socket.on('new auction price', function(info) {
+		$scope.auction[info.player] = info.price;
+		$scope.$apply();
+	});
+
+	socket.on('auction winner', function(winner) {
+		$scope.auction = {};
+		if(winner.player === $scope.username) {
+			$scope.winAuction($scope.recentLocation, winner.price);
+		}
+		$scope.$apply();
+	})
 
 	// load players names
 	$scope.players = $scope.gameData["players"];
@@ -138,8 +154,10 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		socket.emit('up auction', property);
 	}
 
-	$scope.setAuctionPrice = function(property) {
-		// TODO
+	$scope.setAuctionPrice = function(price) {
+		socket.emit('set auction price', price);
+		$scope.notSentAuctionPrice = false;
+		$scope.$apply();
 	}
 
 	$scope.winAuction = function(property, price) {
@@ -218,6 +236,11 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	$scope.playerProperties = function(player) {
 		return Object.keys(player.property);
+	}
+
+	// ugh idk why this needs to be a thing....
+	$scope.auctionKeys = function() {
+		return Object.keys($scope.auction);
 	}
 
 	$scope.$watch('actions', function() {

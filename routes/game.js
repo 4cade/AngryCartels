@@ -22,9 +22,6 @@ var Game = function(gamePresets) {
         newPlayer.location = "go"; // all players start on go
         newPlayer.track = "middle";
 
-        // set player spot in auction
-        this.auctionPrices[newPlayer.name] = null;
-
         this.gameData["players"][index] = newPlayer;
     }
 
@@ -33,12 +30,12 @@ var Game = function(gamePresets) {
     this.gameData["color"] = {};
 
     for (var spot in board) {
-        if (board[spot]["type"] === "property" || board[spot]["type"] === "transportation" || 
+        if (board[spot]["type"] === "property" || board[spot]["type"] === "transportation" ||
             board[spot]["type"] === "utility") {
             // set spot name in the data to false to represent unowned
             this.gameData["owned"][spot] = false;
 
-            
+
             var spotData = board[spot];
 
             // houses should always be [0,4], hotel should only be true if houses == 4,
@@ -55,7 +52,7 @@ var Game = function(gamePresets) {
                 this.gameData["color"][spotData["quality"]] = {};
                 // can get length by using Object.keys(this.gameData["color"][color]).length
             }
-            
+
             this.gameData["color"][spotData["quality"]][spot] = colorData;
         }
     }
@@ -130,7 +127,7 @@ var Game = function(gamePresets) {
     }
 
     /**
-     * Handles the entire turn of when the user chooses to roll the dice by moving the current 
+     * Handles the entire turn of when the user chooses to roll the dice by moving the current
      *     player to wherever the dice puts him/her and indicates the next action.
      *     Updated player information and gameData.recentLocation has the new location
      *     of the player and gameData.message will have "mrmonopoly" if the player should go through a mrmonopoly
@@ -142,7 +139,7 @@ var Game = function(gamePresets) {
 
         var diceTotal = die1 + die2;
         var special = "";
-        
+
         // set the values of the dice roll
         this.gameData["rolled"] = [die1, die2];
 
@@ -164,7 +161,7 @@ var Game = function(gamePresets) {
             if (this.gameData["doubleCount"] === 3) {
                 this.jumpLocation("jail");
                 this.gameData["doubleCount"] = 0;
-                return this.gameData;    
+                return this.gameData;
             }
         } else {
             this.gameData["doubleCount"] = 0;
@@ -183,7 +180,7 @@ var Game = function(gamePresets) {
         // use moveInfo to update player
         this.gameData.movedTo = moveInfo.movedTo;
         this.gameData.recentLocation = moveInfo.currentLocation;
-        
+
         player.location = moveInfo.currentLocation;
         player.money += moveInfo.moneyGained;
         player.forward = moveInfo.reverse;
@@ -236,7 +233,7 @@ var Game = function(gamePresets) {
      *
      * @return a JSON specifying the new location of the player, any money gained along the journey,
      *     a boolean specifying if the user is on the upper or lower track of a railroad, and an array
-     *     of all of the locations visited in order in case an animation would like to have that 
+     *     of all of the locations visited in order in case an animation would like to have that
      */
     this.mrMonopolyLocation = function(currentLocation, odd, forward, userTrack) {
         var moneyGained = 0;
@@ -284,7 +281,7 @@ var Game = function(gamePresets) {
             json.currentLocation = currentLocation;
             json.movedTo = [];
         }
-        
+
         return json;
     }
 
@@ -299,7 +296,7 @@ var Game = function(gamePresets) {
      * @param userTrack the track that the player is on
      *
      * @return a JSON specifying the new location of the player, any money gained along the journey,
-     *     and an array of all of the locations visited in order in case an animation would like to have that 
+     *     and an array of all of the locations visited in order in case an animation would like to have that
      */
     this.moveLocation = function(currentLocation, moves, odd, forward, userTrack) {
         var moneyGained = 0;
@@ -407,20 +404,20 @@ var Game = function(gamePresets) {
             } else {
                 return "rent";
             }
-        } 
+        }
         else if (locationType === 'subway') {
             // allow teleport anywhere
             return "subway";
-        } 
+        }
         else if (locationType === 'chance') {
             return "chance";
-        } 
+        }
         else if (locationType === 'community chest') {
             return "community chest";
-        } 
+        }
         else if (locationType === 'bus') {
             return "bus";
-        } 
+        }
         else if (locationType === 'auction') {
             // check if any unowned left, if not then go to one with highest rent
             var someLeft = false;
@@ -431,11 +428,11 @@ var Game = function(gamePresets) {
             }
             if(someLeft) {
                 return "auction choice";
-            } 
+            }
             else {
                 return "highest rent";
             }
-        } 
+        }
         else {
             // do nothing
             return "nothing";
@@ -449,7 +446,7 @@ var Game = function(gamePresets) {
      *
      * @return a JSON specifying the new location of the player, any money gained along the journey,
      *   a boolean specifying if the user is on the upper or lower track of a railroad, and an array
-     *   of all of the locations visited in order in case an animation would like to have that 
+     *   of all of the locations visited in order in case an animation would like to have that
      */
     this.jumpLocation = function(newLocation) {
         // pretend to be moving onto that location from one step behind to not have to rewrite code
@@ -573,7 +570,6 @@ var Game = function(gamePresets) {
 
             var key = Object.keys(colorData)[index];
 
-            // TODO condense these if statements together
             if (colorData[key]["owner"] === player) {
                 if (colorData[key]["houses"] == maxHouse-1) {
                     // this means that there is an imbalance with the properties and it should be accounted for
@@ -583,7 +579,7 @@ var Game = function(gamePresets) {
                         nextAdditions = [];
                     } else {
                         nextAdditions.push(colorData[key]["property"]);
-                    }               
+                    }
                 } else if (colorData[key]["houses"] == maxHouse && sameMax) {
                     nextAdditions.push(colorData[key]["property"]);
                 } else if (colorData[i]["hotel"] && maxHouse == 5 && sameMax) {
@@ -596,7 +592,7 @@ var Game = function(gamePresets) {
                         nextAdditions = [];
                     } else {
                         nextAdditions.push(colorData[key]["property"]);
-                    }   
+                    }
                 }
                 // cannot make more additions if it is already at the skyscraper level
             }
@@ -688,9 +684,9 @@ var Game = function(gamePresets) {
      */
     this.buyPropertyAuction = function(property, player, price) {
         var playerIndex = this.getPlayerIndexFromPlayer(player);
-        
+
         this.gameData["owned"][property] = player;
-        
+
         this.gameData["players"][playerIndex]["property"][property] = true; // not mortgaged
 
         var colorData = this.gameData["color"][board[property]["quality"]];
@@ -780,7 +776,7 @@ var Game = function(gamePresets) {
     this.sellHouse = function(property, player) {
         var color = board[property]["quality"];
         var colorData = this.gameData["color"][color];
-        
+
         var cantSell = this.nextToAdd(color, property, player);
 
         var sellable = true;
@@ -813,7 +809,7 @@ var Game = function(gamePresets) {
             }
             // can't put soldHouse variable here in case tried to sell houses on something that had 0
         }
-        
+
         // need to refund player for house
         if (soldHouse) {
             var housePrice = board[property]["house"];
@@ -959,7 +955,7 @@ var Game = function(gamePresets) {
 
             var housesPerProperty = Math.floor(totalHouses/ownedProperties.length);
 
-            // can only put hotels/skyscapers if all are owned 
+            // can only put hotels/skyscapers if all are owned
             if (housesPerProperty > 4) {
                 housesPerProperty = 4;
             }
@@ -986,7 +982,7 @@ var Game = function(gamePresets) {
                     var housePrice = board[key]["house"];
 
                     this.setHouseNumberForProperty(color, key, 0);
-                    
+
                     this.gameData["players"][playerIndex]["money"] += houseCount*housePrice/2;
                 }
             }
@@ -1033,7 +1029,7 @@ var Game = function(gamePresets) {
             return 5;
         } else {
             return propertyData["houses"];
-        }   
+        }
     }
 
     /**
@@ -1076,13 +1072,13 @@ var Game = function(gamePresets) {
     }
 
     /**
-     * Moves the specified player to the location 
+     * Moves the specified player to the location
      *
      * @param player name of the player to find the index of
      * @param property the name of the property to move to
      *
      * @return a JSON specifying the new location of the player, any money gained along the journey,
-     *     and an array of all of the locations visited in order in case an animation would like to have that 
+     *     and an array of all of the locations visited in order in case an animation would like to have that
      */
     this.advanceToProperty = function(player, property) {
         var moneyGained = 0;
@@ -1154,6 +1150,108 @@ var Game = function(gamePresets) {
      */
     this.chanceCard = function(player) {
         // TODO
+        // first draw a card
+        var card = chance.draw();
+
+        // handle if the card will just be kept
+        if(card.play === "keep") {
+          // TODO stuff
+
+          // then finish up because nothing else needs to happen
+          return card;
+        }
+
+        // now crazy barrage of if statements :(
+        if(card.short === "advance pay corner") {
+          // separate cases depending on the track of the current player
+          if(player.track === "outer") {
+            this.jumpLocation("pay day");
+          }
+          else if(player.track === "middle") {
+            this.jumpLocation("go");
+          }
+          else {
+            this.jumpLocation("bonus");
+          }
+          // TODO check if actually gets paid?
+        }
+        else if(card.short === "advance utility") {
+
+        }
+        else if(card.short === "go jail") {
+
+        }
+        else if(card.short === "general repairs") {
+
+        }
+        else if(card.short.includes("advance")) {
+          // TODO parse out the location to advance to
+          // case tax refund = collect all of the pool
+          // see if contains special?
+        }
+        else if(card.short.includes("pay pool")) {
+          // TODO parse out the number that the player needs to pay
+        }
+        else if(card.short === "back 3") {
+
+        }
+        else if(card.short === "stock crash") {
+
+        }
+        else if(card.short === "dividends up 2") {
+
+        }
+        else if(card.short.includes("collect dividends")) {
+          // TODO parse out the stocks that you are collecting dividends from
+        }
+        else if(card.short === "inside trade") {
+
+        }
+        else if(card.short.includes("collect")) {
+          // TODO parse out dollar amount that the player is collecting
+        }
+        else if(card.short.includes("buy ")) {
+          // TODO see the property that needs to be bought
+        }
+        else if(card.short === "take bus") {
+
+        }
+        else if(card.short.includes("forward")) {
+
+        }
+        else if (card.short === "remove house color") {
+
+        }
+        else if(card.short.includes("pay players")) {
+          // TODO check if need to generalize
+        }
+        else if(card.short === "seize assets") {
+
+        }
+        else if(card.short === "victory lap") {
+
+        }
+        else if(card.short === "all canal st") {
+
+        }
+        else if(card.short === "taxi wars") {
+
+        }
+        else if(card.short === "gps") {
+
+        }
+        else if(card.short === "1 free house") {
+
+        }
+        else if(card.short === "one below") {
+
+        }
+        else if(card.short === "one above") {
+
+        }
+
+        return card; // let's the user know what card they drew
+
     }
 
     /**
@@ -1172,7 +1270,7 @@ var Game = function(gamePresets) {
      * @return String name of the property with the highest rent, null if no property owned
      */
     this.highestRent = function() {
-        
+
         var colorData = this.gameData["color"];
         var highestProperty = {
             "name": null,
@@ -1197,10 +1295,8 @@ var Game = function(gamePresets) {
     /*
     * Sets all of the prices in the auction to null
     */
-    this.newAuction = function() {
-        for(var player in Object.keys(this.auctionPrices)) {
-            this.auctionPrices[player] = null;
-        }
+    this.newAuction = function(callback) {
+        this.auctionPrices = {};
     }
 
     /*
@@ -1209,7 +1305,10 @@ var Game = function(gamePresets) {
     this.addBid = function(player, price) {
         this.auctionPrices[player] = price;
         if(this.biddingOver()) {
-            return this.auctionWinner();
+          return true;
+        }
+        else {
+          return false;
         }
     }
 
@@ -1218,8 +1317,8 @@ var Game = function(gamePresets) {
     * @return true if everyone has placed a bid
     */
     this.biddingOver = function() {
-        for(var player in Object.keys(this.auctionPrices)) {
-            if(!this.auctionPrices[player]) {
+        for(var player in this.gameData["players"]) {
+            if(!this.auctionPrices[this.gameData["players"][player]["name"]]) {
                 return false;
             }
         }
@@ -1232,11 +1331,11 @@ var Game = function(gamePresets) {
     * @return the name of the winner of the auction if bidding is over, otherwise false
     */
     this.auctionWinner = function() {
-        if(!biddingOver()) {
+        if(!this.biddingOver()) {
             return false;
         }
 
-        var top = Object.keys(this.auctionPrices)[0];
+        var top = this.gameData["players"][0]["name"];
 
         for(var player in Object.keys(this.auctionPrices)) {
             if(this.auctionPrices[player] > this.auctionPrices[top]) {
@@ -1244,7 +1343,13 @@ var Game = function(gamePresets) {
             }
         }
 
-        return true;
+        for(var player in this.gameData["players"]) {
+            if(this.auctionPrices[this.gameData["players"][player]["name"]] > this.auctionPrices[top]) {
+                top = this.gameData["players"][player]["name"];
+            }
+        }
+
+        return {"player": top, "price": this.auctionPrices[top]};
     }
 
     /**

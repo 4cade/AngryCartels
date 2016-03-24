@@ -9,7 +9,7 @@ function getUsers () {
    var userNames = [];
    for(var name in users) {
      if(users[name]) {
-       userNames.push(name);  
+       userNames.push(name);
      }
    }
    return userNames;
@@ -30,7 +30,7 @@ function emitInGame(host, call, data) {
             var playerName = games[host].getData()["players"][index]["name"];
             users[playerName].emit(call, data);
         }
-      
+
     }
     // game has not been started
     else {
@@ -169,7 +169,8 @@ module.exports = function(socket){
   socket.on('buy property', function(info) {
     // different actions if it was auctioned
     if(info.auction) {
-        games[socket.inGame].buyPropertyAuction(info.property, info.player, info.price);
+        // weird thing where it was deducting twice the price from the player instead of the normal amount...
+        games[socket.inGame].buyPropertyAuction(info.property, info.player, info.price/2);
         var message = info.player + " bought " + info.property + " for " + info.price;
         games[socket.inGame].setMessage(message);
     }
@@ -207,6 +208,14 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'new auction', games[socket.inGame].getPropertyInfo(property));
   });
 
+  socket.on('set auction price', function(price) {
+    winner = games[socket.inGame].addBid(socket.username, price);
+    emitInGame(socket.inGame, 'new auction price', {"player": socket.username, "price": price});
+    if(winner) {
+        emitInGame(socket.inGame, 'auction winner', games[socket.inGame].auctionWinner());
+    }
+  });
+
   socket.on('end turn', function() {
     games[socket.inGame].nextTurn();
     console.log(games[socket.inGame].currentPlayer());
@@ -235,11 +244,3 @@ module.exports = function(socket){
     socket.emit('game data', games[socket.inGame].getData());
   });
 }
-
-
-
-
-
-
-
-
