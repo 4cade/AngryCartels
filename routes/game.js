@@ -168,7 +168,12 @@ var Game = function(gamePresets) {
             this.gameData["canRoll"] = false;
         }
 
-        // TODO got a triple
+        // got a triple
+        if(diceTotal === 3){
+          this.gameData.message = "subway";
+          // return since nothing else can happen
+          return
+        }
 
         var odd = diceTotal % 2 !== 0;
         this.gameData.lastOdd = odd;
@@ -1213,7 +1218,7 @@ var Game = function(gamePresets) {
         else if(card.short.includes("buy ")) {
           // TODO see the property that needs to be bought
         }
-        else if(card.short === "take bus") {
+        else if(card.includes === "take") {
 
         }
         else if(card.short.includes("forward")) {
@@ -1386,6 +1391,19 @@ var Game = function(gamePresets) {
         }
 
         return all;
+    }
+
+    /**
+    * @return a list of the all of the locations not yet bought on the board
+    */
+    this.getAllUnownedLocations = function() {
+      var unowned = [];
+      for(var spot in this.gameData["owned"]) {
+          if(this.gameData["owned"][spot]) {
+            unowned.push(spot);
+          }
+      }
+      return unowned;
     }
 
     /**

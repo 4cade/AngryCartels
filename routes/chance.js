@@ -228,6 +228,12 @@ var cards = [
 		"short": "take 250 from one player"
 	},
 	{
+		"title": "Sharing is Caring!",
+		"description": "Take a handful of fries from all players . Take $25 from all players.",
+		"play": "keep",
+		"short": "take 25 from all players"
+	},
+	{
 		"title": "Foreclosed Property Sale!",
 		"description": "Foreclose on any opponent's mortgaged property. Pay the mortgage value to the bank to claim the property.",
 		"play": "keep",

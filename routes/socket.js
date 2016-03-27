@@ -237,7 +237,11 @@ module.exports = function(socket){
 
   socket.on('all locations', function() {
     socket.emit('all locations', games[socket.inGame].getAllLocations());
-  })
+  });
+
+  socket.on('all unowned', function() {
+    socket.emit('all unowned', games[socket.inGame].getAllUnownedLocations());
+  });
 
   socket.on('request game data', function() {
     console.log("someone wants to get game data");

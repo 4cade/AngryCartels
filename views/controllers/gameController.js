@@ -66,7 +66,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		$scope.$apply();
 	});
 
-	socket.on('auction choices', function(locations) {
+	socket.on('all unowned', function(locations) {
 		$scope.locationList = locations;
 		$scope.$apply();
 	});
@@ -118,6 +118,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	$scope.drawChance = function() {
 		// TODO
+		socket.emit('draw chance', {});
 	}
 
 	$scope.drawCommunityChest = function() {
@@ -217,7 +218,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 	}
 
 	$scope.setUnownedChoices = function() {
-		// TODO set properties in owned to only include
+		socket.emit('all unowned', {});
 	}
 
 	// removes the first element of actions
