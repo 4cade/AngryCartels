@@ -123,6 +123,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 
 	$scope.drawCommunityChest = function() {
 		// TODO
+		socket.emit('draw community chest', {});
 	}
 
 	$scope.askBuyHouse = function() {
@@ -180,7 +181,7 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		if(action === 'buy' || action === 'auction') {
 			socket.emit('property info', $scope.recentLocation);
 		}
-		else if(action === 'mrmonopoly') {
+		else if(action === 'mrmonopoly' || action === 'community chest' || action === 'chance') {
 			// don't need to do anything because acts upon button press
 		}
 		else if(action === 'rent') {
@@ -188,12 +189,6 @@ angryCartels.controller('gameController', function($scope, $interval) {
 		}
 		else if(action === 'subway') {
 			socket.emit('all locations', {});
-		}
-		else if(action === 'chance') {
-			// TODO
-		}
-		else if(action === 'community chest') {
-			// TODO
 		}
 		else if(action === 'bus') {
 			// TODO load bus passes

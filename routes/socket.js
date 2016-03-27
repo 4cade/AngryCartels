@@ -216,6 +216,16 @@ module.exports = function(socket){
     }
   });
 
+  socket.on('draw chance', function() {
+    games[socket.inGame].drawChance();
+    // TODO
+  });
+
+  socket.on('draw community chest', function() {
+    games[socket.inGame].drawCommunityChest();
+    // TODO
+  });
+
   socket.on('end turn', function() {
     games[socket.inGame].nextTurn();
     console.log(games[socket.inGame].currentPlayer());

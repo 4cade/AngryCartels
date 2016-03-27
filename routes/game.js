@@ -169,7 +169,7 @@ var Game = function(gamePresets) {
         }
 
         // got a triple
-        if(diceTotal === 3){
+        if(die1 === die2 && die1 === specialDie){
           this.gameData.message = "subway";
           // return since nothing else can happen
           return
@@ -1170,13 +1170,25 @@ var Game = function(gamePresets) {
         if(card.short === "advance pay corner") {
           // separate cases depending on the track of the current player
           if(player.track === "outer") {
-            this.jumpLocation("pay day");
+            var moveInfo = this.jumpLocation("pay day");
+            this.gameData.recentLocation = moveInfo.currentLocation;
+
+            player.location = moveInfo.currentLocation;
+            player.money += moveInfo.moneyGained;
           }
           else if(player.track === "middle") {
-            this.jumpLocation("go");
+            var moveInfo = this.jumpLocation("go");
+            this.gameData.recentLocation = moveInfo.currentLocation;
+
+            player.location = moveInfo.currentLocation;
+            player.money += moveInfo.moneyGained;
           }
           else {
-            this.jumpLocation("bonus");
+            var moveInfo = this.jumpLocation("bonus");
+            this.gameData.recentLocation = moveInfo.currentLocation;
+
+            player.location = moveInfo.currentLocation;
+            player.money += moveInfo.moneyGained;
           }
           // TODO check if actually gets paid?
         }
@@ -1255,7 +1267,7 @@ var Game = function(gamePresets) {
 
         }
 
-        return card; // let's the user know what card they drew
+        // TODO let's the user know what card they drew
 
     }
 
@@ -1297,8 +1309,15 @@ var Game = function(gamePresets) {
         return highestProperty["name"];
     }
 
+    /**
+    * Moves the current player to the property of the highest rent.
+    */
+    this.moveHighestRent = function() {
+      this.jumpLocation(this.highestRent());
+    }
+
     /*
-    * Sets all of the prices in the auction to null
+    * Resets all of the prices in the auction.
     */
     this.newAuction = function(callback) {
         this.auctionPrices = {};
