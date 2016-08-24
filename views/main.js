@@ -2,7 +2,7 @@
 var angryCartels = angular.module('angryCartels', ['ngRoute']);
 
 // connect the socket so we can do cool stuff, will probably link this with logging in though
-var socket = io.connect();
+// var socket = io.connect();
 
 // configure our routes
 angryCartels.config(function($routeProvider, $locationProvider) {

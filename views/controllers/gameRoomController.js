@@ -1,4 +1,4 @@
-angryCartels.controller('gameRoomController', function($scope, $interval) {
+angryCartels.controller('gameRoomController', function($scope, $interval, socket) {
     $scope.hostingGame = false;
     $scope.gameGoing = false;
     $scope.inGame = null;

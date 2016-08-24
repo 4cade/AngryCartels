@@ -1,4 +1,4 @@
-angryCartels.controller('chatController', function($scope) {
+angryCartels.controller('chatController', function($scope, socket) {
 
 	// create a message to display in our view
 	$scope.messages = [];

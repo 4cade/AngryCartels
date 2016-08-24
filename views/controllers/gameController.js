@@ -1,4 +1,4 @@
-angryCartels.controller('gameController', function($scope, $interval) {
+angryCartels.controller('gameController', function($scope, $interval, socket) {
 	$scope.gameData = {};
 	$scope.actions = [];
 	$scope.auctionPrice = 0;

@@ -78,6 +78,7 @@ module.exports = function(socket){
    */
   socket.on('disconnect', function(){
     console.log('user disconnected');
+    // TODO logic to quit game and pass it on to next host if he was host
     delete users[socket.username];
   });
 
@@ -89,6 +90,7 @@ module.exports = function(socket){
    */
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
+    console.log(socket.inGame)
     emitInGame(socket.inGame, 'chat message', socket.username + ": " + msg);
  });
 
