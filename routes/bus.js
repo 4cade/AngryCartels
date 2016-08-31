@@ -161,21 +161,4 @@ var getRailroad = function(properties) {
 	return null;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = bus;

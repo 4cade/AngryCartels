@@ -5,7 +5,7 @@ var users = {};
 var userGenNum = 1;
 var games = {};
 
-/* 
+/**
  * @return the usernames of all of the players in the current game
  */
 function getUsers () {
@@ -18,7 +18,8 @@ function getUsers () {
    return userNames;
 }
 
-/* Emits the call to all of the client sockets currently connected to the server
+/**
+ * Emits the call to all of the client sockets currently connected to the server
  * @param call the name of the call for the socket
  * @param data the JSON to be sent for the call to the client
  */
@@ -30,7 +31,8 @@ function emitAll(call, data) {
     }
 }
 
-/* Emits the call to all of the client sockets currently connected to the server
+/**
+ * Emits the call to all of the client sockets currently connected to the server
  *     that are in the game being hosted by host
  * @param host the name of the user hosting this game
  * @param call the name of the call for the socket
@@ -67,14 +69,16 @@ module.exports = function(socket){
     users[username] = socket;
   });
 
-  /* Gets the name of the username of the client of this socket
+  /**
+   * Gets the name of the username of the client of this socket
    * @return the username of the client to the client
    */
   socket.on('get client name', function() {
     socket.emit('send client name', socket.username);
   })
 
-  /* Disconnects the user from the server
+  /**
+   * Disconnects the user from the server
    */
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -84,7 +88,8 @@ module.exports = function(socket){
 
   // INSTANT MESSAGING
 
-  /* Accepts a message from a client and dispatches the message to all clients
+  /**
+   * Accepts a message from a client and dispatches the message to all clients
    *     in the game under the same host
    * @return the message from the sender to people in the game
    */
@@ -96,7 +101,8 @@ module.exports = function(socket){
 
   // HANDLE GAME ACTIONS
 
-  /* Makes the requesting client the host of a new game
+  /**
+   * Makes the requesting client the host of a new game
    * @return updated list of games to everyone
    */
   socket.on('create game', function() {
@@ -110,7 +116,8 @@ module.exports = function(socket){
     emitAll('updated games', games);
   });
 
-  /* Deletes the game being hosted by the sending client and kicks out any people
+  /**
+   * Deletes the game being hosted by the sending client and kicks out any people
    *     in the game.
    * @return updating listing of games to everyone
    */
@@ -122,7 +129,8 @@ module.exports = function(socket){
     socket.inGame = null;
   });
 
-  /* Joins the game of the host
+  /**
+   * Joins the game of the host
    * @return updating listing of games to everyone
    */
   socket.on('join game', function(host) {
@@ -132,7 +140,8 @@ module.exports = function(socket){
     emitAll('updated games', games);
   });
 
-  /* Leaves the game of the client is in.
+  /**
+   * Leaves the game of the client is in.
    * @return updating listing of games to everyone
    */
   socket.on('leave game', function() {
@@ -143,14 +152,16 @@ module.exports = function(socket){
     socket.inGame = null;
   });
 
-  /* Sends the listing of games to the client
+  /**
+   * Sends the listing of games to the client
    * @return updating listing of games to client
    */
   socket.on('get games', function() {
     socket.emit('updated games', games);
   });
 
-  /* Starts the game and generates the game board
+  /**
+   * Starts the game and generates the game board
    * @return first start game message to all players in the game, then the actual game data
    *     to all of the players in the game
    */
@@ -163,7 +174,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
   });
 
-  /* Sets the order for the turns for all of the players in the game
+  /**
+   * Sets the order for the turns for all of the players in the game
    * @return game data with the turn order for all of the players in the game
    */
   socket.on('set order', function() {
@@ -172,7 +184,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
   });
 
-  /* Rolls the dice for the client
+  /**
+   * Rolls the dice for the client
    * @return movement of the piece to all in game, possible actions for the client
    *     to take to the client
    */
@@ -197,7 +210,8 @@ module.exports = function(socket){
     socket.emit('actions', actions);
   });
 
-  /* Makes the client do a Mr. Monopoly action to go to the nearest unowned
+  /**
+   * Makes the client do a Mr. Monopoly action to go to the nearest unowned
    *     property that is unowned.
    * @return movement of the piece to all in game, possible actions for the client
    *     to take to the client
@@ -215,7 +229,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'actions', actions);
   });
 
-  /* Charges rent to the client based on the information in info
+  /**
+   * Charges rent to the client based on the information in info
    * @param info JSON object with 2 fields: property (name of the property to charge)
    *     and player (name of the player to pay)
    * @return updated game data with rent charged to client sent to all in game
@@ -227,7 +242,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'rent', games[socket.inGame].getData());
   });
 
-  /* Charges rent to the client based on the information in info
+  /**
+   * Charges rent to the client based on the information in info
    * @param info JSON object with 6 fields: player1 (name of first player in trade),
    *     player2 (name of second player in trade), properties1  (list of properties
    *     that the first player is trading), properties2 (list of properties that the
@@ -242,7 +258,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'trade', games[socket.inGame].getData());
   });
 
-  /* Buys the property for the client
+  /**
+   * Buys the property for the client
    * @param info JSON object with 4 possible fields: property (name of the property to buy)
    *     player (name of the player buying the property), *optional* auction (true if the
    *     property was auctioned off), *optional* price (price paid for the auctioned property)
@@ -265,7 +282,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'property bought', games[socket.inGame].getData());
   });
 
-  /* Buys a house for the property for the client
+  /**
+   * Buys a house for the property for the client
    * @param info JSON object with 2 fields: property (name of the property to add house to)
    *     player (name of the player buying the house)
    * @return updated game data with house bought by client sent to all in game
@@ -277,7 +295,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'update houses', games[socket.inGame].getData());
   });
 
-  /* Sells a house for the property for the client
+  /**
+   * Sells a house for the property for the client
    * @param info JSON object with 2 fields: property (name of the property to take house from)
    *     player (name of the player selling the house)
    * @return updated game data with house sold by client sent to all in game
@@ -289,7 +308,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'update houses', games[socket.inGame].getData());
   });
 
-  /* Mortgages the property for the client
+  /**
+   * Mortgages the property for the client
    * @param info JSON object with 2 fields: property (name of the property to mortgage)
    *     player (name of the player mortgaging)
    * @return updated game data with property morgaged sent to all in game
@@ -301,7 +321,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'mortgage', games[socket.inGame].getData());
   });
 
-  /* Starts an auction in the game for the property
+  /**
+   * Starts an auction in the game for the property
    * @param property string of property to be put up for auction
    * @return new auction event sent to all in game
    */
@@ -310,7 +331,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'new auction', games[socket.inGame].getPropertyInfo(property));
   });
 
-  /* Sets the auction price in the current auction for the client
+  /**
+   * Sets the auction price in the current auction for the client
    * @param price the price for the bid for the client
    * @return updated auction listing of prices if game not over to all in game, otherwise
    *     the winner of the auction to all in game
@@ -323,7 +345,8 @@ module.exports = function(socket){
     }
   });
 
-  /* Draws a chance card for the client
+  /**
+   * Draws a chance card for the client
    * @return updated game data with chance activated for client sent to all in game
    */
   socket.on('draw chance', function() {
@@ -331,7 +354,8 @@ module.exports = function(socket){
     // TODO
   });
 
-  /* Draws a community chest card for the client
+  /**
+   * Draws a community chest card for the client
    * @return updated game data with community chest activated for client sent to all in game
    */
   socket.on('draw community chest', function() {
@@ -339,7 +363,8 @@ module.exports = function(socket){
     // TODO
   });
 
-  /* Ends the turn for the client
+  /**
+   * Ends the turn for the client
    * @return updated game data with next player's turn sent to all in game
    */
   socket.on('end turn', function() {
@@ -348,7 +373,8 @@ module.exports = function(socket){
     emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
   });
 
-  /* Gives information about the property
+  /**
+   * Gives information about the property
    * @param property the name of the property
    * @return JSON object with information about the property to the client
    */
@@ -356,7 +382,8 @@ module.exports = function(socket){
     socket.emit('property info', games[socket.inGame].getPropertyInfo(property));
   });
 
-  /* Gives rent information about the property
+  /**
+   * Gives rent information about the property
    * @param property the name of the property
    * @return JSON object with rent information about the property to the client
    */
@@ -364,7 +391,8 @@ module.exports = function(socket){
     socket.emit('rent info', games[socket.inGame].rentOfProperty(property));
   });
 
-  /* Says which property currently charges the highest rent
+  /**
+   * Says which property currently charges the highest rent
    * @return JSON object with information about the property with highest rent to the client
    */
   socket.on('highest rent', function() {
@@ -372,21 +400,24 @@ module.exports = function(socket){
     socket.emit('highest rent', games[socket.inGame].getPropertyInfo(highest));
   });
 
-  /* Gives information about all of the locations on the board
+  /**
+   * Gives information about all of the locations on the board
    * @return list of all locations on the board to the client
    */
   socket.on('all locations', function() {
     socket.emit('all locations', games[socket.inGame].getAllLocations());
   });
 
-  /* Gives information about all unowned location on the board
+  /**
+   * Gives information about all unowned location on the board
    * @return list of all unowned locations on the board to the client
    */
   socket.on('all unowned', function() {
     socket.emit('all unowned', games[socket.inGame].getAllUnownedLocations());
   });
 
-  /* Sends the game data to the client
+  /**
+   * Sends the game data to the client
    * @return JSON object with all of the data of the game to the client
    */
   socket.on('request game data', function() {
