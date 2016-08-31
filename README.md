@@ -8,8 +8,7 @@ Let's have fun with our version of Ultimate Monopoly.
 - Alex Luh
   - Main Roles: Data models, Backend support
 
-# TODOs
-
+## TODOs
 - Frontend
 	- Functions for full functionality to connect with backend
 	- Make gameboard with animations
@@ -23,3 +22,4 @@ Let's have fun with our version of Ultimate Monopoly.
 	- Taxi ride
 	- Persist user if disconnects without quitting (let rejoin game)
 	- User account/login
+	- Unit tests
