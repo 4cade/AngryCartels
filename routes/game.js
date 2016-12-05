@@ -395,6 +395,24 @@ var Game = function(gamePresets) {
     }
 
     /**
+     * Returns the information to get to the desired location moving incrementally
+     *
+     * @param desiredLocation the location to move to
+     * @param currentLocation the current location of the player
+     * @param forward true if the player is moving in the forward direction
+     *
+     * @return JSON with the next location that the user is going to go to, and the track of the user
+     */
+    this.moveToSpecificLocation = function(desiredLocation, originalLocation, forward) {
+        // TODO move 
+        // json to return
+        var json = {};
+
+
+        return json;
+    }
+
+    /**
      * Specifies what kind of action should occur on the current location that was landed on.
      *
      * @return String indicating what kind of action should occur
@@ -1196,7 +1214,11 @@ var Game = function(gamePresets) {
 
         }
         else if(card.short === "go jail") {
+            var moveInfo = this.jumpLocation("jail");
+            this.gameData.recentLocation = moveInfo.currentLocation;
 
+            player.location = moveInfo.currentLocation;
+            // collect no money
         }
         else if(card.short === "general repairs") {
 
@@ -1268,6 +1290,7 @@ var Game = function(gamePresets) {
         }
 
         // TODO let's the user know what card they drew
+        return card
 
     }
 
@@ -1313,7 +1336,7 @@ var Game = function(gamePresets) {
     * Moves the current player to the property of the highest rent.
     */
     this.moveHighestRent = function() {
-      this.jumpLocation(this.highestRent());
+      return this.jumpLocation(this.highestRent());
     }
 
     /*
