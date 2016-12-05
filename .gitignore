@@ -28,3 +28,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# node
+node_modules/
+
+# MAC OS X
+.DS_Store
