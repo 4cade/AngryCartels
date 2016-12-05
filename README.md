@@ -5,6 +5,8 @@ Let's have fun with our version of Ultimate Monopoly.
 ### Contributors:
 - Zachery Miranda (Lead)
   - Main Roles: Backend, Application architecture, Frontend support
+- Keith Matsushita (Head Business Manager)
+  - Main Roles: Business Development, Marketing, and Frontend models.
 - Alex Luh
   - Main Roles: Data models, Backend support
 
