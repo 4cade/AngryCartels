@@ -7,6 +7,8 @@ Let's have fun with our version of Ultimate Monopoly.
   - Main Roles: Backend, Application architecture, Frontend support
 - Keith Matsushita (Head Business Manager)
   - Main Roles: Business Development, Marketing, and Frontend models.
+- Leif Myer
+  - Main Roles: Frontend support, UI, Backend integration
 - Alex Luh
   - Main Roles: Data models, Backend support
 
