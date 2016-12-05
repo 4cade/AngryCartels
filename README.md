@@ -3,22 +3,18 @@
 Let's have fun with our version of Ultimate Monopoly.
 
 ### Contributors:
-- Zachery Miranda (Lead)
-  - Main Roles: Backend, Application architecture, Frontend support
+- Zachery Miranda (Backend Lead)
+  - Main Roles: Backend, Application architecture
 - Keith Matsushita (Head Business Manager)
   - Main Roles: Business Development, Marketing, and Frontend models.
-- Leif Myer
+- Leif Myer (Frontend/UI Lead)
   - Main Roles: Frontend support, UI, Backend integration
-- Alex Luh
+- Alex Luh (Backend Support)
   - Main Roles: Data models, Backend support
 
 ## TODOs
 - Frontend
-	- Functions for full functionality to connect with backend
-	- Make gameboard with animations
-	- Homepage
-	- User Profile Page
-	- Improve CSS and overall design
+	- TODO figure out TODOs
 
 - Backend
 	- Chance functions
