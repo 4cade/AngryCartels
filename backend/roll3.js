@@ -23,7 +23,7 @@ roll3.draw = function() {
 	nums.push(drawn);
 
 	// get the third number from the remaining numbers
-	index = Math.floor(Math.random()*5);
+	index = Math.floor(Math.random()*4);
 	drawn = Object.keys(rollSet)[index];
 
 	rollSet.remove(drawn);

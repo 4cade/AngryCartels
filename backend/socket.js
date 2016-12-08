@@ -1,4 +1,4 @@
-var board = require('./board.js');
+var board = require('./large_board.js');
 var Game = require('./game.js');
 
 var users = {};

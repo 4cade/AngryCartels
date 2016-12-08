@@ -1,4 +1,4 @@
-var board = require('./board.js');
+var board = require('./large_board.js');
 var bus = require('./bus.js');
 var roll3 = require('./roll3.js');
 var chance = require('./chance.js');

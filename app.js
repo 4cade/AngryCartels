@@ -3,11 +3,13 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-var socket = require('./routes/socket.js');
+var socket = require('./backend/socket.js');
 var mongoose = require('mongoose');
 
 // application -------------------------------------------------------------
 app.use(express.static('views'))
+
+// TODO account stuff, and client only connect to socket if logged in
     
 app.all('/*', function ( req, res ) {
         res.sendFile(__dirname + '/views/index.html');
