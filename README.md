@@ -9,5 +9,5 @@ Let's have fun with our version of Ultimate Monopoly.
   - Main Roles: Business Development, Marketing, and Frontend models.
 - Leif Myer (Frontend Lead)
   - Main Roles: Frontend support, UI, Backend integration
-- Alex Luh (Backend Support)
-  - Main Roles: Data models, Backend support
+- Alex Luh (Consultant Bro)
+  - Main Roles: Panda
