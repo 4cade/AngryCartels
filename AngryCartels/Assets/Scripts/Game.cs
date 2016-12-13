@@ -19,6 +19,8 @@ public class Game : MonoBehaviour {
         {
             GameObject.Find("RoundPanel").GetComponent<RoundCounter>().setMaxRoundsText(maxRounds);
         }
+
+        GameObject.Find("PlayerPanel").GetComponent<PlayerCardCreator>().createPlayerCards(numPlayers);
 	}
 	
 	// Update is called once per frame

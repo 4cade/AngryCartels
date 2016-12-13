@@ -29,7 +29,11 @@ public class RoundCounter : MonoBehaviour {
         }
 	}
 
-    // Sets the maximum number of rounds to be displayed for this game
+    /// <summary>
+    /// Sets the maximum number of rounds to be displayed for this game.
+    /// This method should only be called once at the start of the game scene.
+    /// </summary>
+    /// <param name="maxRounds"></param>
     public void setMaxRoundsText(int maxRounds)
     {
         this.maxRounds = maxRounds;
