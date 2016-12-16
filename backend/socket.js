@@ -243,7 +243,7 @@ module.exports = function(socket){
   });
 
   /**
-   * Charges rent to the client based on the information in info
+   * Executes a trade with the player specified in info under info's conditions.
    * @param info JSON object with 6 fields: player1 (name of first player in trade),
    *     player2 (name of second player in trade), properties1  (list of properties
    *     that the first player is trading), properties2 (list of properties that the
