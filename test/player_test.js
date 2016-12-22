@@ -6,14 +6,18 @@ describe('Player', function() {
 
 	const player1 = new Player('Bob', 'go', 1);
 
-	describe("#correctInit", function() {
+	describe("#initialize", function() {
 		it("should have all correct parts correctly initialized", function() {
 			assert.equal(player1.name, 'Bob');
 			assert.equal(player1.money, 3200);
 		})
 	});
 
-	describe('#deltaMoney', function() {
+	describe("#propertyTests", function() {
+		// TODO
+	});
+
+	describe('#moneyTests', function() {
 		it("should have added money", function() {
 			const hasMoney = player1.deltaMoney(200);
 			assert.equal(3400, player1.money);
@@ -51,6 +55,18 @@ describe('Player', function() {
 			assert.equal(1, player1.money);
 			assert.equal(true, hasMoney3);
 		});
+	});
+
+	describe("#busPassTests", function() {
+		// TODO
+	});
+
+	describe("#specialCardTests", function() {
+		// TODO
+	});
+
+	describe("#locationTests", function() {
+		// TODO
 	});
 
 	// TODO more tests

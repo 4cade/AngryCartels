@@ -27,10 +27,25 @@ class Player {
         // TODO
     }
 
+    /* Calculates the net worth of the player
+     * 
+     * @return int net worth of the player
+     */
+    getNetWorth() {
+        // TODO
+    }
+
     /* The player acquires the specified property.
      * @param property Object of the property
      */
     gainProperty(property) {
+        // TODO
+    }
+
+    /* The player loses the specified property.
+     * @param property Object of the property
+     */
+    loseProperty(property) {
         // TODO
     }
 
@@ -72,7 +87,7 @@ class Player {
         // TODO
     }
 
-    /* The player moves to a new Location with any side effects that occur.
+    /* The player moves to a new Location possibly gains money.
      * @param moveInfo JSON object with params moneyGained (num amount),
      *      currentLocation (String location name), and movedTo (list of Strings
      *      specifying the spots landed on to get to the current location)
@@ -81,7 +96,7 @@ class Player {
         // TODO
     }
 
-    /* The player jumps to a new Location with any side effects that occur.
+    /* The player jumps to a new Location possibly gains money.
      * @param moveInfo JSON object with params moneyGained (num amount),
      *      currentLocation (String location name), and movedTo (list of Strings
      *      specifying the spots landed on to get to the current location, should be size 0)
@@ -91,8 +106,5 @@ class Player {
     }
 
 }
-
-
-
 
 module.exports = Player;
