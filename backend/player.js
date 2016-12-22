@@ -1,55 +1,74 @@
+// trying to move to ES6
+
 
 /* Player object stores the state of a player and has functions to update state.
  * @param name String name of the player
  * @param startingSpace String name of the starting location of the player (usually Go)
  * @param startingTrack index of the starting track of the player (usually Go's track)
  */
-var Player = function(name, startingSpace, startingTrack) {
+class Player {
 
     // set up initial state
-    this.name = this.gameData["players"][index];
-    this.money = 3200;
-    this.property = {}; // key of property name which maps to a boolean of true if not mortgaged
-    this.busTickets = {}; // key of bus ticket type to quantity
-    this.getOutOfJails = 0;
-    this.forward = true;
-    this.location = startingSpace; // all players start on go
-    this.track = startingTrack;
-    this.specialCards = [] // list of special cards acquired via chance/community chest
+    constructor(name, startingSpace, startingTrack) {
+        this.name = name;
+        this.money = 3200;
+        this.property = {}; // key of property name which maps to a boolean of true if not mortgaged
+        this.busTickets = {}; // key of bus ticket type to quantity
+        this.getOutOfJails = 0;
+        this.forward = true;
+        this.location = startingSpace; // all players start on go
+        this.track = startingTrack;
+        this.specialCards = [] // list of special cards acquired via chance/community chest
+    }
 
     /* @return JSON representation without functions
      */
-    this.toJSON = function() {
+    toJSON() {
         // TODO
     }
 
     /* The player acquires the specified property.
      * @param property Object of the property
      */
-    this.gainProperty = function(property) {
+    gainProperty(property) {
         // TODO
     }
 
     /* The player's money changes by a certain amount.
      * @param amt number amount of money to change by (can be pos/neg)
      *
-     * @return true if player still has money left, false if negative
+     * @return true if player still has money left, false if negative (bankrupt)
      */
-    this.deltaMoney = function(amt) {
-        // TODO
+    deltaMoney(amt) {
+        this.money += amt
+        return this.money >= 0
     }
 
     /* The player acquires the specified bus pass.
      * @param pass String name of the bus pass
      */
-    this.gainBusPass = function(pass) {
+    gainBusPass(pass) {
         // TODO
     }
 
     /* The player uses the specified bus pass and loses it.
      * @param pass String name of the bus pass
      */
-    this.useBusPass = function(pass) {
+    useBusPass(pass) {
+        // TODO
+    }
+
+    /* The player acquires the specified chance/community chest card.
+     * @param card Object name of the card
+     */
+    gainSpecialCard(card) {
+        // TODO
+    }
+
+    /* The player uses the specified chance/community chest card and loses it.
+     * @param card Object name of the card
+     */
+    useSpecialCard(card) {
         // TODO
     }
 
@@ -58,7 +77,7 @@ var Player = function(name, startingSpace, startingTrack) {
      *      currentLocation (String location name), and movedTo (list of Strings
      *      specifying the spots landed on to get to the current location)
      */
-    this.moveToLocation = function(moveInfo) {
+    moveToLocation(moveInfo) {
         // TODO
     }
 
@@ -67,8 +86,13 @@ var Player = function(name, startingSpace, startingTrack) {
      *      currentLocation (String location name), and movedTo (list of Strings
      *      specifying the spots landed on to get to the current location, should be size 0)
      */
-    this.jumpToLocation = function(moveInfo) {
+    jumpToLocation(moveInfo) {
         // TODO
     }
 
 }
+
+
+
+
+module.exports = Player;
