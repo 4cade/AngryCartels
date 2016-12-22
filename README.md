@@ -11,3 +11,5 @@ Let's have fun with our version of Ultimate Monopoly.
   - Main Roles: Frontend support, UI, Backend integration
 - Alex Luh (Support)
   - Main Roles: Sporadic General Support
+- Anastasia Vela (Backend Support)
+  - Main Roles: Backend
