@@ -1,6 +1,5 @@
 // trying to move to ES6
 
-
 /* Player object stores the state of a player and has functions to update state.
  * @param name String name of the player
  * @param startingSpace String name of the starting location of the player (usually Go)
@@ -12,12 +11,10 @@ class Player {
     constructor(name, startingSpace, startingTrack) {
         this.name = name;
         this.money = 3200;
-        this.property = {}; // key of property name which maps to a boolean of true if not mortgaged
+        this.properties = []; // list of Property Objects
         this.busTickets = {}; // key of bus ticket type to quantity
-        this.getOutOfJails = 0;
         this.forward = true;
         this.location = startingSpace; // all players start on go
-        this.track = startingTrack;
         this.specialCards = [] // list of special cards acquired via chance/community chest
     }
 
@@ -32,21 +29,39 @@ class Player {
      * @return int net worth of the player
      */
     getNetWorth() {
-        // TODO
+        let worth = this.money
+
+        for (let property in this.properties){
+            worth += property.getValue()
+        }
+
+        return worth
+    }
+
+    /* Determines whether the player can afford the amount, but doesn't change amount of money
+     * @param amt - numerical amount of money to check affordability
+     * @return true if player can afford, false otherwise
+     */
+    canAfford(amt){
+        if this.money - amt >0:
+            return true
+        else:
+            return false
     }
 
     /* The player acquires the specified property.
      * @param property Object of the property
      */
     gainProperty(property) {
-        // TODO
+        this.properties.push(property)
     }
 
     /* The player loses the specified property.
      * @param property Object of the property
      */
     loseProperty(property) {
-        // TODO
+        let index = properties.indexof(property)
+        this.properties.splice(index, 1)
     }
 
     /* The player's money changes by a certain amount.
@@ -93,15 +108,6 @@ class Player {
      *      specifying the spots landed on to get to the current location)
      */
     moveToLocation(moveInfo) {
-        // TODO
-    }
-
-    /* The player jumps to a new Location possibly gains money.
-     * @param moveInfo JSON object with params moneyGained (num amount),
-     *      currentLocation (String location name), and movedTo (list of Strings
-     *      specifying the spots landed on to get to the current location, should be size 0)
-     */
-    jumpToLocation(moveInfo) {
         // TODO
     }
 
