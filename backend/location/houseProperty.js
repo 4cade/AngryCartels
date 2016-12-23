@@ -18,13 +18,13 @@ class HouseProperty extends Property {
     /* Adds a house to the total number of houses on the property.
      */
     addHouse() {
-        // TODO
+        this.houses += 1
     }
 
     /* Removes a house from the total number of houses on the property.
      */
     removeHouse() {
-        // TODO
+        this.houses -= 1
     }
 
     /* Determines the total worth of this property (including houses)
@@ -32,7 +32,16 @@ class HouseProperty extends Property {
      * @return int value
      */
     getValue() {
-        // TODO
+        let worth = 0
+
+        if this.isMortgages
+            worth += this.cost
+        else
+            worth += this.mortgage
+        worth += this.houses * this.housePrice
+
+        return worth
+
     }
 
     /* Sees how much rent costs if this is landed on.
@@ -41,7 +50,10 @@ class HouseProperty extends Property {
      * @return int value
      */
     getRent(monopoly) {
-        // TODO
+        if monopoly
+            return 2*this.rent
+        else
+            return this.rent
     }
 }
 
