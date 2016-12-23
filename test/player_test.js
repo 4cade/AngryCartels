@@ -130,6 +130,7 @@ describe('Player', function() {
 
 			moveInfo["moneyGained"] = 0
 			moveInfo["currentLocation"] = "dude";
+			player1.moveToLocation(moveInfo);
 			assert.equal("dude", player1.location);
 			assert.equal(300, player1.money);
 		});
