@@ -38,15 +38,12 @@ class Player {
         return worth
     }
 
-    /* Determines whether the player can afford the amount, but doesn't change amount of money
-     * @param amt - numerical amount of money to check affordability
+    /* Determines if the player can afford to buy item of amt, but doesn't change amount of money
+     * @param amt - numerical amount of money to check affordability with
      * @return true if player can afford, false otherwise
      */
     canAfford(amt){
-        if this.money - amt >0:
-            return true
-        else:
-            return false
+        return this.money - amt >= 0
     }
 
     /* The player acquires the specified property.
@@ -60,7 +57,7 @@ class Player {
      * @param property Object of the property
      */
     loseProperty(property) {
-        let index = properties.indexof(property)
+        let index = this.properties.indexof(property)
         this.properties.splice(index, 1)
     }
 
@@ -78,28 +75,32 @@ class Player {
      * @param pass String name of the bus pass
      */
     gainBusPass(pass) {
-        // TODO
+        this.busTickets.push(pass)
     }
 
     /* The player uses the specified bus pass and loses it.
      * @param pass String name of the bus pass
      */
     useBusPass(pass) {
-        // TODO
+        // TODO: implement the ticket usage
+        let index = this.busTickets.indexof(pass)
+        this.busTickets.splice(index, 1)
     }
 
     /* The player acquires the specified chance/community chest card.
      * @param card Object name of the card
      */
     gainSpecialCard(card) {
-        // TODO
+        this.specialCards.push(card)
     }
 
     /* The player uses the specified chance/community chest card and loses it.
      * @param card Object name of the card
      */
     useSpecialCard(card) {
-        // TODO
+        // TODO: implement the card usage
+        let index = this.specialCards.indexof(card)
+        this.properties.splice(index, 1)
     }
 
     /* The player moves to a new Location possibly gains money.
