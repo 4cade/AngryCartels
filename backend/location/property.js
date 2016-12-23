@@ -23,19 +23,19 @@ class Property extends Place {
      * @param owner the new owner of the property
      */
     setOwner(owner) {
-        // TODO
+        this.owner = owner
     }
 
     /* Mortgages the property.
      */
     mortgage() {
-        // TODO
+        this.isMortgaged = true
     }
 
     /* Unmortgages the property.
      */
     unmortgage() {
-        // TODO
+        this.isMortgaged = false
     }
 
     /* Determines the total worth of the property, often overridden by child classes.
@@ -43,7 +43,7 @@ class Property extends Place {
      * @return int value
      */
     getValue() {
-        // TODO
+        return this.cost
     }
 
 }
