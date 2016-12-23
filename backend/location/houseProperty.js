@@ -35,7 +35,7 @@ class HouseProperty extends Property {
         let worth = 0
 
         if this.isMortgages
-            worth += this.cost
+            worth += this.mortgage*2
         else
             worth += this.mortgage
         worth += this.houses * this.housePrice
