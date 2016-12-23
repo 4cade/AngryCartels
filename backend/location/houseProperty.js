@@ -35,13 +35,12 @@ class HouseProperty extends Property {
         let worth = 0
 
         if this.isMortgages
-            worth += this.mortgage*2
-        else
             worth += this.mortgage
+        else
+            worth += this.mortgage*2
         worth += this.houses * this.housePrice
 
         return worth
-
     }
 
     /* Sees how much rent costs if this is landed on.
@@ -50,10 +49,10 @@ class HouseProperty extends Property {
      * @return int value
      */
     getRent(monopoly) {
-        if monopoly
-            return 2*this.rent
+        if (monopoly || this.houses === 0)
+            return 2*this.rent[this.houses]
         else
-            return this.rent
+            return this.rent[this.houses]
     }
 }
 
