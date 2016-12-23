@@ -7,4 +7,4 @@ const Railroad = require('../backend/location/railroad');
 // tests the Location objects
 describe('Location', function() {
 
-}
+});
