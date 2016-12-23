@@ -76,7 +76,7 @@ var Game = function(gamePresets) {
     this.gameData["rolled"] = []; // holds the data of the dice that were rolled
 
     /**
-     * Chooses the order of the players for the game.
+     * Chooses the order of the players for the game. (DEPRECATED)
      */
     this.setOrder = function() {
         var players = this.gameData["players"];
@@ -100,7 +100,7 @@ var Game = function(gamePresets) {
     }
 
     /**
-     * Makes it so the gameData has the next player in the order to go.
+     * Makes it so the gameData has the next player in the order to go. (DEPRECATED)
      */
     this.nextTurn = function() {
         this.gameData["turnIndex"]++;
@@ -112,7 +112,7 @@ var Game = function(gamePresets) {
     }
 
     /**
-     * Informs whose turn it is.
+     * Informs whose turn it is. (DEPRECATED)
      *
      * @return object of the player whose turn it is
      */

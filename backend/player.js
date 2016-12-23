@@ -21,7 +21,21 @@ class Player {
     /* @return JSON representation without functions
      */
     toJSON() {
-        // TODO
+        let propertyJSONs = []
+
+        this.properties.forEach(p => {
+            propertyJSONs.push(p.toJSON());
+        });
+
+        return {
+            "name": this.name,
+            "money": this.money,
+            "properties": propertyJSONs,
+            "busTickets": this.busTickets,
+            "forward": this.forward,
+            "location": this.location,
+            "specialCards": this.specialCards
+        }
     }
 
     /* Calculates the net worth of the player
@@ -82,7 +96,7 @@ class Player {
      * @param pass String name of the bus pass
      */
     useBusPass(pass) {
-        // TODO: implement the ticket usage
+        // actual ticket usage handled by some other class
         let index = this.busTickets.indexof(pass)
         this.busTickets.splice(index, 1)
     }
@@ -98,18 +112,19 @@ class Player {
      * @param card Object name of the card
      */
     useSpecialCard(card) {
-        // TODO: implement the card usage
+        // Actual card usage handled by some other class
         let index = this.specialCards.indexof(card)
         this.properties.splice(index, 1)
     }
 
     /* The player moves to a new Location possibly gains money.
      * @param moveInfo JSON object with params moneyGained (num amount),
-     *      currentLocation (String location name), and movedTo (list of Strings
+     *      currentLocation (Place object), and movedTo (list of Strings
      *      specifying the spots landed on to get to the current location)
      */
     moveToLocation(moveInfo) {
-        // TODO
+        this.location = moveInfo.currentLocation;
+        this.deltaMoney(moveInfo.moneyGained);
     }
 
 }
