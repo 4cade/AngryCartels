@@ -286,13 +286,13 @@ describe('Location', function() {
         it("should initialize a CabCompany correctly", function() {
             assert.equal(cc.name, name);
             assert.equal(cc.kind, spot.type);
-            assert.equal(cc.mortgage, spot.mortgage);
-            assert.equal(cc.mortgage, spot.forward);
+            assert.equal(cc.mortgageValue, spot.mortgage);
+            assert.equal(cc.forward, spot.forward);
             assert.equal(cc.below, spot.below);
             assert.equal(cc.rent, spot.rent);
             assert.equal(cc.color, spot.quality);
             assert.equal(cc.cost, 2*spot.mortgage);
-            assert.equal(cc.getValue(), rr.cost);
+            assert.equal(cc.getValue(), 2*spot.mortgage);
             assert(!cc.hasCabStand);
             assert.equal(cc.cabStandPrice, 150);
         });
@@ -319,7 +319,7 @@ describe('Location', function() {
             cc.addCabStand();
             assert.equal(cc.getRent(1), 2*spot.rent[0]);
             assert.equal(cc.getRent(4), 2*spot.rent[3]);
-            assert.equal(cc.getValue(), 2*spot.mortgage+rr.trainDepotPrice);
+            assert.equal(cc.getValue(), 2*spot.mortgage+cc.cabStandPrice);
 
             cc.removeCabStand();
             assert.equal(cc.getRent(3), spot.rent[2]);

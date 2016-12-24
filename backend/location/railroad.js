@@ -18,7 +18,8 @@ class Railroad extends Property {
     /* Adds a train depot to the railroad.
      */
     addTrainDepot() {
-        this.hasTrainDepot = true
+        if (!this.isMortgaged)
+            this.hasTrainDepot = true
     }
 
     /* Removes a train depot from the railroad.
@@ -32,12 +33,10 @@ class Railroad extends Property {
      * @return int value
      */
     getValue() {
-        let worth = 0
+        if (this.isMortgaged)
+            return this.mortgageValue
 
-        if (this.isMortgages)
-            worth += this.mortgage*2
-        else
-            worth += this.cost
+        let worth = this.cost
 
         if (this.hasTrainDepot)
             worth += this.trainDepotPrice
@@ -55,12 +54,15 @@ class Railroad extends Property {
             return 0
         if (numOwned < 1)
             numOwned = 1
-        let rent = this.rent[numOwned-1]
+        if (numOwned > 5)
+            numOwned = 4
+
+        let amount = this.rent[numOwned-1]
         
         if (this.hasTrainDepot)
-            rent += this.trainDepotPrice
+            amount *= 2
 
-        return rent
+        return amount
     }
 }
 

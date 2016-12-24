@@ -18,7 +18,8 @@ class CabCompany extends Property {
     /* Adds a cab stand to the cab company.
      */
     addCabStand() {
-        this.hasCabStand = true
+        if (!this.isMortgaged)
+            this.hasCabStand = true
     }
 
     /* Removes a cab stand from the cab company.
@@ -32,13 +33,13 @@ class CabCompany extends Property {
      * @return int value
      */
     getValue() {
-        let worth = 0
+        if (this.isMortgaged)
+            return this.mortgageValue
 
-        if (this.isMortgages)
-            worth += this.mortgage*2
-        else
-            worth += this.mortgage
-        worth += this.houses * this.trainDepotPrice
+        let worth = this.cost
+
+        if (this.hasCabStand)
+            worth += this.cabStandPrice
 
         return worth
     }
@@ -49,7 +50,19 @@ class CabCompany extends Property {
      * @return int value
      */
     getRent(numOwned) {
-        return numOwned * 25
+        if (this.isMortgaged)
+            return 0
+        if (numOwned < 1)
+            numOwned = 1
+        if (numOwned > 5)
+            numOwned = 4
+
+        let amount = this.rent[numOwned-1]
+        
+        if (this.hasCabStand)
+            amount *= 2
+
+        return amount
     }
 }
 
