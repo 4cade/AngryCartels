@@ -19,7 +19,7 @@ class Utility extends Property {
     getRent(numOwned, dice) {
         if (this.isMortgaged)
             return 0
-        if(numOwned < 1)
+        if (numOwned < 1)
             numOwned = 1
         if (numOwned > 8)
             numOwned = 8
