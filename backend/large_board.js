@@ -790,7 +790,7 @@ module.exports = {
         "below": ["ventura blvd"]
     },
     "checker cab co": {
-        "type": "transportation",
+        "type": "cab",
         "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
@@ -801,7 +801,7 @@ module.exports = {
         "above": ["income tax"]
     },
     "black & white cab co": {
-        "type": "transportation",
+        "type": "cab",
         "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
@@ -812,7 +812,7 @@ module.exports = {
         "above": ["st james pl"]
     },
     "yellow cab co": {
-        "type": "transportation",
+        "type": "cab",
         "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
@@ -823,7 +823,7 @@ module.exports = {
         "above": ["illinois ave"]
     },
     "ute cab co": {
-        "type": "transportation",
+        "type": "cab",
         "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
@@ -924,7 +924,7 @@ module.exports = {
         "above": ["short line"]
     },
     "reading railroad": {
-        "type": "transportation",
+        "type": "railroad",
         "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
@@ -935,7 +935,7 @@ module.exports = {
         "above": ["telephone company"]
     },
     "pennsylvania railroad": {
-        "type": "transportation",
+        "type": "railroad",
         "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
@@ -946,7 +946,7 @@ module.exports = {
         "below": ["chance outer west"]
     },
     "b&o railroad": {
-        "type": "transportation",
+        "type": "railroad",
         "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
@@ -957,7 +957,7 @@ module.exports = {
         "above": ["gas company"]
     },
     "short line": {
-        "type": "transportation",
+        "type": "railroad",
         "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
@@ -1150,7 +1150,7 @@ module.exports = {
         "below": ["market st"]
     },
     "stock exchange": {
-        "type": "spot",
+        "type": "place",
         "forward": ["wall st"],
         "backward": ["madison ave"],
         "side": [1, 2],
@@ -1158,7 +1158,7 @@ module.exports = {
         "below": ["free parking", "chance", "kentucky ave", "new york ave", "tennessee ave"]
     },
     "tax refund": {
-        "type": "spot",
+        "type": "place",
         "forward": ["gas company"],
         "backward": ["wall st"],
         "side": [2],
@@ -1198,7 +1198,7 @@ module.exports = {
         "above": ["jail"]
     },
     "go to jail": {
-        "type": "spot",
+        "type": "place",
         "forward": ["south st"],
         "backward": ["temple square"],
         "side": [2, 3],
@@ -1206,7 +1206,7 @@ module.exports = {
         "above": ["roll3"]
     },
     "jail": {
-        "type": "spot",
+        "type": "place",
         "forward": ["st charles pl"],
         "backward": ["connecticut ave"],
         "side": [0, 1],
@@ -1215,7 +1215,7 @@ module.exports = {
         "below": ["holland tunnel sw", "katy freeway", "auction", "bourbon st", "magazine st"]
     },
     "birthday gift": {
-        "type": "spot",
+        "type": "place",
         "forward": ["mulholland dr"],
         "backward": ["ute cab co"],
         "side": [3],
@@ -1223,7 +1223,7 @@ module.exports = {
         "above": ["park pl"],
     },
     "income tax": {
-        "type": "spot",
+        "type": "place",
         "forward": ["reading railroad"],
         "backward": ["baltic ave"],
         "side": [0],
@@ -1241,7 +1241,7 @@ module.exports = {
         "below": ["subway", "chance outer se", "rodeo dr", "lake st", "community chest outer se"]
     },
     "free parking": {
-        "type": "spot",
+        "type": "place",
         "forward": ["kentucky ave"],
         "backward": ["new york ave"],
         "side": [1, 2],
@@ -1250,7 +1250,7 @@ module.exports = {
         "below": ["pay day", "chance outer nw", "randolph st", "peachtree st", "decatur st"]
     },
     "roll3": {
-        "type": "spot",
+        "type": "place",
         "forward": ["pacific ave"],
         "backward": ["marvin gardens"],
         "side": [2, 3],
@@ -1259,7 +1259,7 @@ module.exports = {
         "below": ["go to jail", "north temple", "temple square", "south st", "broad st"]
     },
     "luxury tax": {
-        "type": "spot",
+        "type": "place",
         "forward": ["boardwalk"],
         "backward": ["park pl"],
         "side": [3],
