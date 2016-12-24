@@ -192,16 +192,16 @@ describe('Location', function() {
         });
 
         it("should charge the correct amount of rent", function() {
-            assert.equal(property.getRent(0), prop.rent[0]);
-            assert.equal(property.getRent(3), prop.rent[3]);
-            assert.equal(property.getRent(7), prop.rent[7]);
-            assert.equal(property.getRent(9), prop.rent[8]); // should just assume that 8 is max
+            assert.equal(property.getRent(0, 4), prop.rent[0]*4);
+            assert.equal(property.getRent(3, 4), prop.rent[2]*4);
+            assert.equal(property.getRent(7, 4), prop.rent[6]*4);
+            assert.equal(property.getRent(9, 4), prop.rent[7]*4); // should just assume that 8 is max
 
             // handle mortgage cases
             property.mortgage();
-            assert.equal(property.getRent(4), 0);
+            assert.equal(property.getRent(4, 4), 0);
             property.unmortgage();
-            assert.equal(property.getRent(5), prop.rent[5]);
+            assert.equal(property.getRent(5, 4), prop.rent[4]*4);
         });
     });
 
@@ -224,8 +224,8 @@ describe('Location', function() {
         it("should initialize a Railroad correctly", function() {
             assert.equal(rr.name, name);
             assert.equal(rr.kind, spot.type);
-            assert.equal(rr.mortgage, spot.mortgage);
-            assert.equal(rr.mortgage, spot.forward);
+            assert.equal(rr.mortgageValue, spot.mortgage);
+            assert.equal(rr.forward, spot.forward);
             assert.equal(rr.below, spot.below);
             assert.equal(rr.rent, spot.rent);
             assert.equal(rr.color, spot.quality);
