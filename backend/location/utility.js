@@ -9,9 +9,6 @@ class Utility extends Property {
     // set up initial state
     constructor(name, boardPreset) {
         super(name, boardPreset);
-
-        // TODO decide if needs other features
-
     }
 
     /* Sees how much rent costs if this is landed on.

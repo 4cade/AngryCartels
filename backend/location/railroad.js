@@ -13,7 +13,6 @@ class Railroad extends Property {
 
         this.hasTrainDepot = false;
         this.trainDepotPrice = 100;
-
     }
 
     /* Adds a train depot to the railroad.

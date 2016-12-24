@@ -12,7 +12,6 @@ class HouseProperty extends Property {
 
         this.houses = 0; // max is 6 (4 + 1 hotel + 1 skyscraper)
         this.housePrice = boardPreset['house'];
-
     }
 
     /* Adds a house to the total number of houses on the property.
@@ -33,7 +32,7 @@ class HouseProperty extends Property {
      */
     getValue() {
         let worth = 0
-
+        return 0
         if (this.isMortgages)
             worth += this.mortgage
         else

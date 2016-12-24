@@ -1,4 +1,5 @@
-/* Handles the state of each turn and manages the players.
+/**
+ * Handles the state of each turn and manages the players.
  * @param players list of Player objects in the game
  */
 class PlayerManager {

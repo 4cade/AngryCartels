@@ -12,7 +12,7 @@ class Property extends Place {
 
         this.color = boardPreset['quality'];
         this.rent = boardPreset['rent'];
-        this.mortgage = boardPreset['mortgage'];
+        this.mortgageValue = boardPreset['mortgage'];
 
         this.owner = null;
         this.isMortgaged = false;

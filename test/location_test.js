@@ -46,8 +46,8 @@ describe('Location', function() {
 
         it("should initialize a Property correctly", function() {
             assert.equal(property.kind, prop.type);
-            assert.equal(property.mortgage, prop.mortgage);
-            assert.equal(property.mortgage, prop.forward);
+            assert.equal(property.mortgageValue, prop.mortgage);
+            assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
             assert.equal(property.color, prop.quality);
@@ -96,8 +96,8 @@ describe('Location', function() {
 
         it("should initialize a HouseProperty correctly", function() {
             assert.equal(property.kind, prop.type);
-            assert.equal(property.mortgage, prop.mortgage);
-            assert.equal(property.mortgage, prop.forward);
+            assert.equal(property.mortgageValue, prop.mortgage);
+            assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
             assert.equal(property.color, prop.quality);
@@ -180,10 +180,10 @@ describe('Location', function() {
         const property = new Property(name, prop);
 
         it("should initialize a Utility correctly", function() {
-            assert.equal(property.name, prop.name);
+            assert.equal(property.name, name);
             assert.equal(property.kind, prop.type);
-            assert.equal(property.mortgage, prop.mortgage);
-            assert.equal(property.mortgage, prop.forward);
+            assert.equal(property.mortgageValue, prop.mortgage);
+            assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
             assert.equal(property.color, prop.quality);
@@ -222,7 +222,7 @@ describe('Location', function() {
         const rr = new Railroad(name, spot);
 
         it("should initialize a Railroad correctly", function() {
-            assert.equal(rr.name, spot.name);
+            assert.equal(rr.name, name);
             assert.equal(rr.kind, spot.type);
             assert.equal(rr.mortgage, spot.mortgage);
             assert.equal(rr.mortgage, spot.forward);

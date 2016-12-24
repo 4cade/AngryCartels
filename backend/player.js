@@ -45,9 +45,9 @@ class Player {
     getNetWorth() {
         let worth = this.money
 
-        for (let property in this.properties){
+        this.properties.forEach(property => {
             worth += property.getValue()
-        }
+        });
 
         return worth
     }
