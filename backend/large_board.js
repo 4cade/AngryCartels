@@ -1,7 +1,7 @@
 module.exports = {
     "biscayne ave": {
         "type": "property",
-        "quality": "fake red",
+        "quality": 0,
         "rent": [11, 55, 160, 475, 650, 800, 1300],
         "mortgage": 75,
         "house": 50,
@@ -13,7 +13,7 @@ module.exports = {
     },
     "miami ave": {
         "type": "property",
-        "quality": "fake red",
+        "quality": 0,
         "rent": [9, 45, 120, 350, 500, 700, 1200],
         "mortgage": 65,
         "house": 50,
@@ -25,7 +25,7 @@ module.exports = {
     },
     "florida ave": {
         "type": "property",
-        "quality": "fake red",
+        "quality": 0,
         "rent": [9, 45, 120, 350, 500, 700, 1200],
         "mortgage": 65,
         "house": 50,
@@ -37,7 +37,7 @@ module.exports = {
     },
     "lombard st": {
         "type": "property",
-        "quality": "white",
+        "quality": 1,
         "rent": [17, 85, 240, 475, 670, 1025, 1525],
         "mortgage": 105,
         "house": 100,
@@ -49,7 +49,7 @@ module.exports = {
     },
     "the embarcadero": {
         "type": "property",
-        "quality": "white",
+        "quality": 1,
         "rent": [17, 85, 240, 475, 670, 1025, 1525],
         "mortgage": 105,
         "house": 100,
@@ -61,7 +61,7 @@ module.exports = {
     },
     "fisherman's wharf": {
         "type": "property",
-        "quality": "white",
+        "quality": 1,
         "rent": [21, 105, 320, 780, 950, 1125, 1625],
         "mortgage": 125,
         "house": 100,
@@ -73,7 +73,7 @@ module.exports = {
     },
     "beacon st": {
         "type": "property",
-        "quality": "black",
+        "quality": 2,
         "rent": [30, 160, 470, 1050, 1250, 1500, 2500],
         "mortgage": 165,
         "house": 200,
@@ -85,7 +85,7 @@ module.exports = {
     },
     "boylston st": {
         "type": "property",
-        "quality": "black",
+        "quality": 2,
         "rent": [30, 160, 470, 1050, 1250, 1500, 2500],
         "mortgage": 165,
         "house": 200,
@@ -97,7 +97,7 @@ module.exports = {
     },
     "newbury st": {
         "type": "property",
-        "quality": "black",
+        "quality": 2,
         "rent": [40, 185, 550, 1200, 1500, 1700, 2700],
         "mortgage": 190,
         "house": 200,
@@ -109,7 +109,7 @@ module.exports = {
     },
     "fifth ave": {
         "type": "property",
-        "quality": "gray",
+        "quality": 3,
         "rent": [60, 220, 650, 1500, 1800, 2100, 3600],
         "mortgage": 215,
         "house": 300,
@@ -121,7 +121,7 @@ module.exports = {
     },
     "madison ave": {
         "type": "property",
-        "quality": "gray",
+        "quality": 3,
         "rent": [60, 220, 650, 1500, 1800, 2100, 3600],
         "mortgage": 215,
         "house": 300,
@@ -133,7 +133,7 @@ module.exports = {
     },
     "wall st": {
         "type": "property",
-        "quality": "gray",
+        "quality": 3,
         "rent": [80, 300, 800, 1800, 2200, 2700, 4200],
         "mortgage": 250,
         "house": 300,
@@ -145,7 +145,7 @@ module.exports = {
     },
     "lake st": {
         "type": "property",
-        "quality": "light pink",
+        "quality": 4,
         "rent": [1, 5, 15, 45, 80, 125, 625],
         "mortgage": 15,
         "house": 50,
@@ -157,7 +157,7 @@ module.exports = {
     },
     "nicollet ave": {
         "type": "property",
-        "quality": "light pink",
+        "quality": 4,
         "rent": [1, 5, 15, 45, 80, 125, 625],
         "mortgage": 15,
         "house": 50,
@@ -169,7 +169,7 @@ module.exports = {
     },
     "hennepin ave": {
         "type": "property",
-        "quality": "light pink",
+        "quality": 4,
         "rent": [3, 15, 45, 130, 240, 350, 850],
         "mortgage": 30,
         "house": 50,
@@ -181,7 +181,7 @@ module.exports = {
     },
     "esplanade ave": {
         "type": "property",
-        "quality": "light green",
+        "quality": 5,
         "rent": [5, 25, 80, 225, 360, 600, 1000],
         "mortgage": 50,
         "house": 50,
@@ -193,7 +193,7 @@ module.exports = {
     },
     "katy freeway": {
         "type": "property",
-        "quality": "light yellow",
+        "quality": 6,
         "rent": [11, 55, 160, 475, 650, 800, 1300],
         "mortgage": 70,
         "house": 100,
@@ -205,7 +205,7 @@ module.exports = {
     },
     "westheimer rd": {
         "type": "property",
-        "quality": "light yellow",
+        "quality": 6,
         "rent": [11, 55, 160, 475, 650, 800, 1300],
         "mortgage": 70,
         "house": 100,
@@ -217,7 +217,7 @@ module.exports = {
     },
     "kirby dr": {
         "type": "property",
-        "quality": "light yellow",
+        "quality": 6,
         "rent": [14, 70, 200, 550, 750, 950, 1450],
         "mortgage": 80,
         "house": 100,
@@ -229,7 +229,7 @@ module.exports = {
     },
     "cullen blvd": {
         "type": "property",
-        "quality": "light yellow",
+        "quality": 6,
         "rent": [14, 70, 200, 550, 750, 950, 1450],
         "mortgage": 80,
         "house": 100,
@@ -241,7 +241,7 @@ module.exports = {
     },
     "canal st": {
         "type": "property",
-        "quality": "light green",
+        "quality": 5,
         "rent": [5, 25, 80, 225, 360, 600, 1000],
         "mortgage": 50,
         "house": 50,
@@ -253,7 +253,7 @@ module.exports = {
     },
     "magazine st": {
         "type": "property",
-        "quality": "light green",
+        "quality": 5,
         "rent": [8, 40, 100, 300, 450, 600, 1100],
         "mortgage": 60,
         "house": 50,
@@ -265,7 +265,7 @@ module.exports = {
     },
     "bourbon st": {
         "type": "property",
-        "quality": "light green",
+        "quality": 5,
         "rent": [8, 40, 100, 300, 450, 600, 1100],
         "mortgage": 60,
         "house": 50,
@@ -277,7 +277,7 @@ module.exports = {
     },
     "dekalb ave": {
         "type": "property",
-        "quality": "sea green",
+        "quality": 7,
         "rent": [17, 85, 240, 670, 840, 1025, 1525],
         "mortgage": 90,
         "house": 100,
@@ -289,7 +289,7 @@ module.exports = {
     },
     "young int'l blvd": {
         "type": "property",
-        "quality": "sea green",
+        "quality": 7,
         "rent": [17, 85, 240, 670, 840, 1025, 1525],
         "mortgage": 90,
         "house": 100,
@@ -301,7 +301,7 @@ module.exports = {
     },
     "decatur st": {
         "type": "property",
-        "quality": "sea green",
+        "quality": 7,
         "rent": [20, 100, 300, 750, 925, 1100, 1600],
         "mortgage": 100,
         "house": 100,
@@ -313,7 +313,7 @@ module.exports = {
     },
     "peachtree st": {
         "type": "property",
-        "quality": "sea green",
+        "quality": 7,
         "rent": [20, 100, 300, 750, 925, 1100, 1600],
         "mortgage": 100,
         "house": 100,
@@ -325,7 +325,7 @@ module.exports = {
     },
     "randolph st": {
         "type": "property",
-        "quality": "dark maroon",
+        "quality": 8,
         "rent": [23, 115, 345, 825, 1010, 1180, 2180],
         "mortgage": 110,
         "house": 150,
@@ -337,7 +337,7 @@ module.exports = {
     },
     "lake shore dr": {
         "type": "property",
-        "quality": "dark maroon",
+        "quality": 8,
         "rent": [23, 115, 345, 825, 1010, 1180, 2180],
         "mortgage": 110,
         "house": 150,
@@ -349,7 +349,7 @@ module.exports = {
     },
     "wacker dr": {
         "type": "property",
-        "quality": "dark maroon",
+        "quality": 8,
         "rent": [26, 130, 390, 900, 1100, 1275, 2275],
         "mortgage": 120,
         "house": 150,
@@ -361,7 +361,7 @@ module.exports = {
     },
     "michigan ave": {
         "type": "property",
-        "quality": "dark maroon",
+        "quality": 8,
         "rent": [26, 130, 390, 900, 1100, 1275, 2275],
         "mortgage": 120,
         "house": 150,
@@ -373,7 +373,7 @@ module.exports = {
     },
     "south temple": {
         "type": "property",
-        "quality": "gold",
+        "quality": 9,
         "rent": [32, 160, 470, 1050, 1250, 1500, 2500],
         "mortgage": 130,
         "house": 200,
@@ -385,7 +385,7 @@ module.exports = {
     },
     "west temple": {
         "type": "property",
-        "quality": "gold",
+        "quality": 9,
         "rent": [32, 160, 470, 1050, 1250, 1500, 2500],
         "mortgage": 130,
         "house": 200,
@@ -397,7 +397,7 @@ module.exports = {
     },
     "north temple": {
         "type": "property",
-        "quality": "gold",
+        "quality": 9,
         "rent": [38, 170, 520, 1125, 1275, 1425, 1650],
         "mortgage": 140,
         "house": 200,
@@ -409,7 +409,7 @@ module.exports = {
     },
     "temple square": {
         "type": "property",
-        "quality": "gold",
+        "quality": 9,
         "rent": [38, 170, 520, 1125, 1275, 1425, 1650],
         "mortgage": 140,
         "house": 200,
@@ -421,7 +421,7 @@ module.exports = {
     },
     "south st": {
         "type": "property",
-        "quality": "light orange",
+        "quality": 10,
         "rent": [45, 210, 575, 1300, 1600, 1800, 3300],
         "mortgage": 150,
         "house": 250,
@@ -433,7 +433,7 @@ module.exports = {
     },
     "broad st": {
         "type": "property",
-        "quality": "light orange",
+        "quality": 10,
         "rent": [45, 210, 575, 1300, 1600, 1800, 3300],
         "mortgage": 150,
         "house": 250,
@@ -445,7 +445,7 @@ module.exports = {
     },
     "walnut st": {
         "type": "property",
-        "quality": "light orange",
+        "quality": 10,
         "rent": [55, 225, 630, 1450, 1750, 2050, 3350],
         "mortgage": 160,
         "house": 250,
@@ -457,7 +457,7 @@ module.exports = {
     },
     "market st": {
         "type": "property",
-        "quality": "light orange",
+        "quality": 10,
         "rent": [55, 225, 630, 1450, 1750, 2050, 3350],
         "mortgage": 160,
         "house": 250,
@@ -469,7 +469,7 @@ module.exports = {
     },
     "mulholland dr": {
         "type": "property",
-        "quality": "maroon",
+        "quality": 11,
         "rent": [70, 350, 750, 1600, 1850, 2100, 3600],
         "mortgage": 175,
         "house": 300,
@@ -481,7 +481,7 @@ module.exports = {
     },
     "ventura blvd": {
         "type": "property",
-        "quality": "maroon",
+        "quality": 11,
         "rent": [80, 400, 825, 1800, 2175, 2550, 4050],
         "mortgage": 200,
         "house": 300,
@@ -493,7 +493,7 @@ module.exports = {
     },
     "rodeo dr": {
         "type": "property",
-        "quality": "maroon",
+        "quality": 11,
         "rent": [90, 450, 900, 2000, 2500, 3000, 4500],
         "mortgage": 250,
         "house": 300,
@@ -505,7 +505,7 @@ module.exports = {
     },
     "mediterranean ave": {
         "type": "property",
-        "quality": "brown",
+        "quality": 12,
         "rent": [2, 10, 30, 90, 160, 250, 400],
         "mortgage": 30,
         "house": 50,
@@ -518,7 +518,7 @@ module.exports = {
     },
     "baltic ave": {
         "type": "property",
-        "quality": "brown",
+        "quality": 12,
         "rent": [4, 20, 60, 180, 320, 450, 750],
         "mortgage": 30,
         "house": 50,
@@ -531,7 +531,7 @@ module.exports = {
     },
     "oriental ave": {
         "type": "property",
-        "quality": "light blue",
+        "quality": 13,
         "rent": [6, 30, 90, 270, 400, 550, 900],
         "mortgage": 50,
         "house": 50,
@@ -544,7 +544,7 @@ module.exports = {
     },
     "vermont ave": {
         "type": "property",
-        "quality": "light blue",
+        "quality": 13,
         "rent": [6, 30, 90, 270, 400, 550, 900],
         "mortgage": 50,
         "house": 50,
@@ -557,7 +557,7 @@ module.exports = {
     },
     "connecticut ave": {
         "type": "property",
-        "quality": "light blue",
+        "quality": 13,
         "rent": [8, 40, 100, 300, 450, 600, 1000],
         "mortgage": 60,
         "house": 50,
@@ -570,7 +570,7 @@ module.exports = {
     },
     "st charles pl": {
         "type": "property",
-        "quality": "pink",
+        "quality": 14,
         "rent": [10, 50, 150, 450, 625, 750, 1200],
         "mortgage": 70,
         "house": 100,
@@ -583,7 +583,7 @@ module.exports = {
     },
     "states ave": {
         "type": "property",
-        "quality": "pink",
+        "quality": 14,
         "rent": [10, 50, 150, 450, 625, 750, 1200],
         "mortgage": 70,
         "house": 100,
@@ -596,7 +596,7 @@ module.exports = {
     },
     "virginia ave": {
         "type": "property",
-        "quality": "pink",
+        "quality": 14,
         "rent": [12, 60, 180, 500, 700, 900, 1450],
         "mortgage": 80,
         "house": 100,
@@ -609,7 +609,7 @@ module.exports = {
     },
     "st james pl": {
         "type": "property",
-        "quality": "orange",
+        "quality": 15,
         "rent": [14, 70, 200, 550, 750, 950, 1500],
         "mortgage": 90,
         "house": 100,
@@ -622,7 +622,7 @@ module.exports = {
     },
     "tennessee ave": {
         "type": "property",
-        "quality": "orange",
+        "quality": 15,
         "rent": [14, 70, 200, 550, 750, 950, 1500],
         "mortgage": 90,
         "house": 100,
@@ -635,7 +635,7 @@ module.exports = {
     },
     "new york ave": {
         "type": "property",
-        "quality": "orange",
+        "quality": 15,
         "rent": [16, 80, 220, 600, 800, 1000, 1600],
         "mortgage": 100,
         "house": 100,
@@ -648,7 +648,7 @@ module.exports = {
     },
     "kentucky ave": {
         "type": "property",
-        "quality": "red",
+        "quality": 16,
         "rent": [18, 90, 250, 700, 875, 1050, 1700],
         "mortgage": 110,
         "house": 150,
@@ -661,7 +661,7 @@ module.exports = {
     },
     "indiana ave": {
         "type": "property",
-        "quality": "red",
+        "quality": 16,
         "rent": [18, 90, 250, 700, 875, 1050, 1700],
         "mortgage": 110,
         "house": 150,
@@ -674,7 +674,7 @@ module.exports = {
     },
     "illinois ave": {
         "type": "property",
-        "quality": "red",
+        "quality": 16,
         "rent": [20, 100, 300, 750, 925, 1100, 1750],
         "mortgage": 120,
         "house": 150,
@@ -687,7 +687,7 @@ module.exports = {
     },
     "atlantic ave": {
         "type": "property",
-        "quality": "yellow",
+        "quality": 17,
         "rent": [22, 110, 330, 800, 975, 1150, 1850],
         "mortgage": 130,
         "house": 150,
@@ -700,7 +700,7 @@ module.exports = {
     },
     "ventnor ave": {
         "type": "property",
-        "quality": "yellow",
+        "quality": 17,
         "rent": [22, 110, 330, 800, 975, 1150, 1850],
         "mortgage": 130,
         "house": 150,
@@ -713,7 +713,7 @@ module.exports = {
     },
     "marvin gardens": {
         "type": "property",
-        "quality": "yellow",
+        "quality": 17,
         "rent": [24, 120, 360, 850, 1025, 1200, 1900],
         "mortgage": 140,
         "house": 150,
@@ -726,7 +726,7 @@ module.exports = {
     },
     "pacific ave": {
         "type": "property",
-        "quality": "green",
+        "quality": 18,
         "rent": [26, 120, 390, 900, 1100, 1275, 2050],
         "mortgage": 150,
         "house": 200,
@@ -739,7 +739,7 @@ module.exports = {
     },
     "north carolina ave": {
         "type": "property",
-        "quality": "green",
+        "quality": 18,
         "rent": [26, 120, 390, 900, 1100, 1275, 2050],
         "mortgage": 150,
         "house": 200,
@@ -752,7 +752,7 @@ module.exports = {
     },
     "pennsylvania ave": {
         "type": "property",
-        "quality": "green",
+        "quality": 18,
         "rent": [28, 150, 450, 1000, 1200, 1400, 2200],
         "mortgage": 160,
         "house": 200,
@@ -765,7 +765,7 @@ module.exports = {
     },
     "park pl": {
         "type": "property",
-        "quality": "blue",
+        "quality": 19,
         "rent": [35, 175, 500, 1100, 1300, 1500, 2400],
         "mortgage": 175,
         "house": 200,
@@ -778,7 +778,7 @@ module.exports = {
     },
     "boardwalk": {
         "type": "property",
-        "quality": "blue",
+        "quality": 19,
         "rent": [50, 200, 600, 1400, 1700, 2000, 3200],
         "mortgage": 200,
         "house": 200,
@@ -791,7 +791,7 @@ module.exports = {
     },
     "checker cab co": {
         "type": "transportation",
-        "quality": "cab",
+        "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
         "forward": ["reading railroad"],
@@ -802,7 +802,7 @@ module.exports = {
     },
     "black & white cab co": {
         "type": "transportation",
-        "quality": "cab",
+        "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
         "forward": ["dekalb ave"],
@@ -813,7 +813,7 @@ module.exports = {
     },
     "yellow cab co": {
         "type": "transportation",
-        "quality": "cab",
+        "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
         "forward": ["b&o railroad"],
@@ -824,7 +824,7 @@ module.exports = {
     },
     "ute cab co": {
         "type": "transportation",
-        "quality": "cab",
+        "quality": 20,
         "rent": [30, 60, 120, 240],
         "mortgage": 150,
         "forward": ["birthday gift"],
@@ -835,7 +835,7 @@ module.exports = {
     },
     "water works": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["marvin gardens"],
@@ -847,7 +847,7 @@ module.exports = {
     },
     "cable company": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["magazine st"],
@@ -858,7 +858,7 @@ module.exports = {
     },
     "electric company": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["states ave"],
@@ -870,7 +870,7 @@ module.exports = {
     },
     "internet service provider": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["kirby dr"],
@@ -881,7 +881,7 @@ module.exports = {
     },
     "gas company": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["chance inner ne"],
@@ -892,7 +892,7 @@ module.exports = {
     },
     "telephone company": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["community chest inner sw"],
@@ -903,7 +903,7 @@ module.exports = {
     },
     "trash collector": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["north temple"],
@@ -914,7 +914,7 @@ module.exports = {
     },
     "sewage system": {
         "type": "utility",
-        "quality": "utility",
+        "quality": 21,
         "rent": [10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["ute cab co"],
@@ -925,7 +925,7 @@ module.exports = {
     },
     "reading railroad": {
         "type": "transportation",
-        "quality": "railroad",
+        "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
         "forward": ["oriental ave", "esplanade ave"],
@@ -936,7 +936,7 @@ module.exports = {
     },
     "pennsylvania railroad": {
         "type": "transportation",
-        "quality": "railroad",
+        "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
         "forward": ["st james pl", "fifth ave"],
@@ -947,7 +947,7 @@ module.exports = {
     },
     "b&o railroad": {
         "type": "transportation",
-        "quality": "railroad",
+        "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
         "forward": ["atlantic ave", "community chest outer north"],
@@ -958,7 +958,7 @@ module.exports = {
     },
     "short line": {
         "type": "transportation",
-        "quality": "railroad",
+        "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
         "forward": ["chance middle east", "reverse"],
