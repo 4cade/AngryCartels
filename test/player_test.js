@@ -98,31 +98,27 @@ describe('Player', function() {
             assert.deepEqual(player1.busTickets, expected);
             player1.gainBusPass('something else expire');
             const expected2 = {"something else expire": 1}
-            assert.deepEqual(player1.busTickets, expected);
+            assert.deepEqual(player1.busTickets, expected2);
         });
     });
 
     describe("#specialCardTests", function() {
         it("should add all of the special cards", function() {
+            const expected = {"just say no": 2, "get out of jail free": 1, "steal": 1}
             player1.gainSpecialCard('just say no');
             player1.gainSpecialCard('get out of jail free');
             player1.gainSpecialCard('steal');
             player1.gainSpecialCard('just say no');
-            assert(player1.specialCards.indexOf('just say no') > -1);
-            assert(player1.specialCards.indexOf('steal') > -1);
-            assert(player1.specialCards.indexOf('get out of jail free') > -1);
-            assert.equal(player1.specialCards.length, 4);
+            assert.deepEqual(player1.specialCards, expected);
         });
 
         it("should remove all of the special cards", function() {
+            const expected = {}
             player1.useSpecialCard('just say no');
             player1.useSpecialCard('get out of jail free');
             player1.useSpecialCard('steal');
             player1.useSpecialCard('just say no');
-            assert.equal(player1.specialCards.indexOf('just say no'), -1);
-            assert.equal(player1.specialCards.indexOf('steal'), -1);
-            assert.equal(player1.specialCards.indexOf('get out of jail free'), -1);
-            assert.equal(player1.specialCards.length, 0);
+            assert.deepEqual(player1.specialCards, expected);
         });
     });
 

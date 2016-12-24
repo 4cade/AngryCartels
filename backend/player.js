@@ -15,7 +15,7 @@ class Player {
         this.busTickets = {}; // key of bus ticket type to quantity
         this.forward = true;
         this.location = startingSpace; // all players start on go
-        this.specialCards = [] // list of special cards acquired via chance/community chest
+        this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
     }
 
     /* @return JSON representation without functions
@@ -89,13 +89,16 @@ class Player {
      * @param pass String name of the bus pass
      */
     gainBusPass(pass) {
-        this.busTickets = JSON.parse(JSON.stringify(this.busTickets))
-
-        if (this.busTickets.hasOwnProperty(pass))
+        if (pass.includes('expire')){
+            this.busTickets = {}
+            this.busTickets[pass] = 1
+        }
+        else if (this.busTickets.hasOwnProperty(pass))
             this.busTickets[pass] += 1
         else
             this.busTickets[pass] = 1
-            
+
+        
     }
 
     /* The player uses the specified bus pass and loses it.
@@ -103,15 +106,20 @@ class Player {
      */
     useBusPass(pass) {
         // actual ticket usage handled by some other class
-        let index = this.busTickets.indexOf(pass)
-        this.busTickets.splice(index, 1)
+        this.busTickets[pass] -= 1
+        if (this.busTickets[pass] === 0)
+            delete this.busTickets[pass]
+
     }
 
     /* The player acquires the specified chance/community chest card.
      * @param card Object name of the card
      */
     gainSpecialCard(card) {
-        this.specialCards.push(card)
+        if (this.specialCards.hasOwnProperty(card))
+            this.specialCards[card] += 1
+        else
+            this.specialCards[card] = 1
     }
 
     /* The player uses the specified chance/community chest card and loses it.
@@ -119,8 +127,9 @@ class Player {
      */
     useSpecialCard(card) {
         // Actual card usage handled by some other class
-        let index = this.specialCards.indexOf(card)
-        this.properties.splice(index, 1)
+        this.specialCards[card] -= 1
+        if (this.specialCards[card] === 0)
+            delete this.specialCards[card]
     }
 
     /* The player moves to a new Location possibly gains money.
