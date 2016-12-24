@@ -17,13 +17,15 @@ class HouseProperty extends Property {
     /* Adds a house to the total number of houses on the property.
      */
     addHouse() {
-        this.houses += 1
+        if (!this.isMortgaged && this.houses < 6)
+            this.houses += 1
     }
 
     /* Removes a house from the total number of houses on the property.
      */
     removeHouse() {
-        this.houses -= 1
+        if (this.houses > 0)
+            this.houses -= 1
     }
 
     /* Determines the total worth of this property (including houses)
@@ -32,12 +34,13 @@ class HouseProperty extends Property {
      */
     getValue() {
         let worth = 0
-        return 0
-        if (this.isMortgages)
+
+        if (this.isMortgaged)
             worth += this.mortgage
         else
-            worth += this.mortgage*2
-        worth += this.houses * this.housePrice
+            worth += this.cost
+
+        worth += (this.houses * this.housePrice)
 
         return worth
     }
@@ -48,7 +51,9 @@ class HouseProperty extends Property {
      * @return int value
      */
     getRent(monopoly) {
-        if (monopoly || this.houses === 0)
+        if (this.isMortgaged)
+            return 0
+        else if(monopoly && this.houses === 0)
             return 2*this.rent[this.houses]
         else
             return this.rent[this.houses]

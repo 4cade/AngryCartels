@@ -37,8 +37,10 @@ class Railroad extends Property {
         if (this.isMortgages)
             worth += this.mortgage*2
         else
-            worth += this.mortgage
-        worth += this.houses * this.trainDepotPrice
+            worth += this.cost
+
+        if (this.hasTrainDepot)
+            worth += this.trainDepotPrice
 
         return worth
     }
@@ -49,7 +51,16 @@ class Railroad extends Property {
      * @return int value
      */
     getRent(numOwned) {
-        return numOwned * 25
+        if (this.isMortgaged)
+            return 0
+        if (numOwned < 1)
+            numowned = 1
+        let rent = this.rent[numOwned-1]
+        
+        if (this.hasTrainDepot)
+            rent += this.trainDepotPrice
+
+        return rent
     }
 }
 

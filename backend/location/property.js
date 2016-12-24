@@ -13,7 +13,7 @@ class Property extends Place {
         this.color = boardPreset['quality'];
         this.rent = boardPreset['rent'];
         this.mortgageValue = boardPreset['mortgage'];
-
+        this.cost = 2*this.mortgageValue
         this.owner = null;
         this.isMortgaged = false;
     }
@@ -42,7 +42,10 @@ class Property extends Place {
      * @return int value
      */
     getValue() {
-        return this.mortgage*2
+        if (this.isMortgaged)
+            return this.mortgageValue
+        else
+            return this.cost
     }
 
 }
