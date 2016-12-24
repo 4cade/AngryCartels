@@ -4,6 +4,7 @@ const Property = require('../backend/location/property');
 const HouseProperty = require('../backend/location/houseProperty');
 const Utility = require('../backend/location/utility');
 const Railroad = require('../backend/location/railroad');
+const CabCompany = require('../backend/location/cabCompany');
 
 // tests the Location objects
 describe('Location', function() {
@@ -266,7 +267,63 @@ describe('Location', function() {
 
     });
 
-    describe("#taxiTests", function() {
-        // TODO
+    describe("#cabCompanyTests", function() {
+        const name = "ute cab co";
+        const spot = {
+                        "type": "transportation",
+                        "quality": "cab",
+                        "rent": [30, 60, 120, 240],
+                        "mortgage": 150,
+                        "forward": ["birthday gift"],
+                        "backward": ["sewage system"],
+                        "side": [3],
+                        "track": [1],
+                        "above": ["chance middle east"]
+                     };
+
+        const cc = new CabCompany(name, spot);
+
+        it("should initialize a CabCompany correctly", function() {
+            assert.equal(cc.name, name);
+            assert.equal(cc.kind, spot.type);
+            assert.equal(cc.mortgage, spot.mortgage);
+            assert.equal(cc.mortgage, spot.forward);
+            assert.equal(cc.below, spot.below);
+            assert.equal(cc.rent, spot.rent);
+            assert.equal(cc.color, spot.quality);
+            assert.equal(cc.cost, 2*spot.mortgage);
+            assert.equal(cc.getValue(), rr.cost);
+            assert(!cc.hasCabStand);
+            assert.equal(cc.cabStandPrice, 150);
+        });
+
+        it("should charge rent correctly", function() {
+            assert.equal(cc.getRent(0), spot.rent[0]); // just in case a typo comes from above
+            assert.equal(cc.getRent(1), spot.rent[0]);
+            assert.equal(cc.getRent(2), spot.rent[1]);
+            assert.equal(cc.getRent(4), spot.rent[3]);
+        });
+
+        it("should handle mortgages correctly", function() {
+            cc.mortgage();
+            assert.equal(cc.getRent(3), 0);
+            assert.equal(cc.getValue(), spot.mortgage);
+            cc.addCabStand();
+            assert.equal(cc.getRent(2), 0);
+            assert.equal(cc.getValue(), spot.mortgage);
+            cc.unmortgage();
+            assert.equal(cc.getValue(), 2*spot.mortgage);
+        })
+
+        it("should handle cab stands correctly", function() {
+            cc.addCabStand();
+            assert.equal(cc.getRent(1), 2*spot.rent[0]);
+            assert.equal(cc.getRent(4), 2*spot.rent[3]);
+            assert.equal(cc.getValue(), 2*spot.mortgage+rr.trainDepotPrice);
+
+            cc.removeCabStand();
+            assert.equal(cc.getRent(3), spot.rent[2]);
+            assert.equal(cc.getValue(), 2*spot.mortgage);
+        });
     });
 });
