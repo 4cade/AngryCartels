@@ -1,6 +1,7 @@
 const Property = require('./property');
 
-/* Utility object stores the information about a utility location.
+/**
+ * Utility object stores the information about a utility location.
  * @param name String name of the location
  * @param boardPreset JSON with data loaded from the stored board
  */
@@ -11,7 +12,8 @@ class Utility extends Property {
         super(name, boardPreset);
     }
 
-    /* Sees how much rent costs if this is landed on.
+    /**
+     * Sees how much rent costs if this is landed on.
      * @param numOwned int of number of other utilities owned
      * 
      * @return int value

@@ -1,4 +1,5 @@
-/* Place object stores the information about a location.
+/**
+ * Place object stores the information about a location.
  * @param name String name of the player
  * @param startingSpace String name of the starting location of the player (usually Go)
  * @param startingTrack index of the starting track of the player (usually Go's track)

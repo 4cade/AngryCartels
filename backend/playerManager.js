@@ -8,6 +8,7 @@ class PlayerManager {
 
         this.turnIndex = 0;
         this.currentPlayer = playerNames[0];
+        this.canRoll = true; // says if the current player can roll
 
         this.doubleCount = 0;
     }

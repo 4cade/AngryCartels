@@ -1,6 +1,7 @@
 const Property = require('./property');
 
-/* HouseProperty object stores the information about a property that can have houses.
+/**
+ * HouseProperty object stores the information about a property that can have houses.
  * @param name String name of the location
  * @param boardPreset JSON with data loaded from the stored board
  */
@@ -14,21 +15,24 @@ class HouseProperty extends Property {
         this.housePrice = boardPreset['house'];
     }
 
-    /* Adds a house to the total number of houses on the property.
+    /**
+     * Adds a house to the total number of houses on the property.
      */
     addHouse() {
         if (!this.isMortgaged && this.houses < 6)
             this.houses += 1
     }
 
-    /* Removes a house from the total number of houses on the property.
+    /**
+     * Removes a house from the total number of houses on the property.
      */
     removeHouse() {
         if (this.houses > 0)
             this.houses -= 1
     }
 
-    /* Determines the total worth of this property (including houses)
+    /**
+     * Determines the total worth of this property (including houses)
      * 
      * @return int value
      */
@@ -45,7 +49,8 @@ class HouseProperty extends Property {
         return worth
     }
 
-    /* Sees how much rent costs if this is landed on.
+    /**
+     * Sees how much rent costs if this is landed on.
      * @param monopoly boolean indicating if this is part of a monopoly
      * 
      * @return int value

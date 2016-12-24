@@ -230,7 +230,7 @@ var Game = function(gamePresets) {
     /**
      * Moves the user to the next unowned property in the forward direction, or
      *     not at all if there are no unowned properties in the forward path
-     *
+     * (DEPRECATED)
      * @param currentLocation the location the player is on
      * @param odd true if if the sum of dice is odd
      * @param forward true if the player is moving forward
@@ -293,7 +293,7 @@ var Game = function(gamePresets) {
     /**
      * Moves the current player the number of spaces specified in moves and returns relevant
      *     data about what occurred during the movement
-     *
+     * (DEPRECATED)
      * @param currentLocation the current location that the moving player is at
      * @param moves the number of times the player can move
      * @param odd true if the dice roll was odd
@@ -355,7 +355,7 @@ var Game = function(gamePresets) {
 
     /**
      * Returns the next location in whatever the forward direction is
-     *
+     * (DEPRECATED)
      * @param currentLocation the current location of the player
      * @param odd true if the dice roll was odd or even
      * @param forward true if the player is moving in the forward direction
@@ -395,26 +395,8 @@ var Game = function(gamePresets) {
     }
 
     /**
-     * Returns the information to get to the desired location moving incrementally
-     *
-     * @param desiredLocation the location to move to
-     * @param currentLocation the current location of the player
-     * @param forward true if the player is moving in the forward direction
-     *
-     * @return JSON with the next location that the user is going to go to, and the track of the user
-     */
-    this.moveToSpecificLocation = function(desiredLocation, originalLocation, forward) {
-        // TODO move 
-        // json to return
-        var json = {};
-
-
-        return json;
-    }
-
-    /**
      * Specifies what kind of action should occur on the current location that was landed on.
-     *
+     * (DEPRECATED)
      * @return String indicating what kind of action should occur
      */
     this.executeLocation = function() {
@@ -464,7 +446,7 @@ var Game = function(gamePresets) {
 
     /**
      * Performs the task of teleporting to some location on the board.
-     *
+     * (DEPRECATED)
      * @param newLocation the location that the player wants to move to
      *
      * @return a JSON specifying the new location of the player, any money gained along the journey,
@@ -480,7 +462,7 @@ var Game = function(gamePresets) {
 
     /**
      * Mutates the gameData's color field to correctly calculate house balance.
-     *
+     * (DEPRECATED)
      * @param color the color of the property
      * @param property the property you're changing the houses for
      * @param houseNumber the number of houses you want (5 for hotels, 6 for skyscapers)
@@ -510,7 +492,7 @@ var Game = function(gamePresets) {
 
     /**
      * Checks if the specified player owns the majority of the color
-     *
+     * (DEPRECATED)
      * @param color the color of the majority to check
      * @param player the player to check if he owns the majority of the color
      *
@@ -532,7 +514,7 @@ var Game = function(gamePresets) {
 
     /**
      * Checks if the specified player owns all of the color
-     *
+     * (DEPRECATED)
      * @param color the color to check
      * @param player the player to check if he owns all of the color
      *
@@ -557,7 +539,7 @@ var Game = function(gamePresets) {
      *     in order to fill up the set evenly.
      * Precondition: does not determine if the player has a majority or all, assumes that that
      *     is taken care of elsewhere.
-     *
+     * (DEPRECATED depending on implementation...)
      * @param color a String color that is the set we're checking
      * @param player the player that wants to add a property
      *
@@ -671,7 +653,7 @@ var Game = function(gamePresets) {
 
     /**
      * Mutates gameData to give the player the property, with any side implications.
-     *
+     * (DEPRECATED)
      * @param property the property to buy
      * @param player the player that is making the purchase
      */
@@ -700,7 +682,7 @@ var Game = function(gamePresets) {
 
     /**
      * Mutates gameData to give the player the property, with any side implications.
-     *
+     * (DEPRECATED)
      * @param property the property to buy
      * @param player name of the player that is making the purchase
      * @param price the monetary amount that the player paid for the property
@@ -731,7 +713,7 @@ var Game = function(gamePresets) {
     /**
      * Causes the property to be mortgaged so rent cannot be charged.
      * Precondition: house balance is already maintained
-     *
+     * (DEPRECATED)
      * @param property the property to mortgage
      * @param the player that wants to mortgage such property
      */
@@ -746,7 +728,7 @@ var Game = function(gamePresets) {
 
     /**
      * Simulates the player buying a house on a property (also works for hotels/skyscrapers)
-     *
+     * (DEPRECATED)
      * @param property the property to buy a house on
      * @param the player that wants to buy the house
      */
@@ -792,7 +774,7 @@ var Game = function(gamePresets) {
 
     /**
      * Simulates the player selling a house from a property (also works for hotels/skyscrapers)
-     *
+     * (DEPRECATED)
      * @param property the property to sell a house from
      * @param the player that wants to sell the house
      */
@@ -842,7 +824,7 @@ var Game = function(gamePresets) {
 
     /**
      * Pays the rent to the player that should get it from the player landing on that location.
-     *
+     * (TODO still handle on Game level probably)
      * @param property the location landed on that needs rent charged
      * @param player the player that is going to pay rent
      */
@@ -861,7 +843,7 @@ var Game = function(gamePresets) {
 
     /**
      * Tells what the cost of the rent of the property is.
-     *
+     * (TODO probably still handle on Game level probably)
      * @param property the location that information is requested about
      * @return the cost of rent for the property
      */
@@ -892,7 +874,7 @@ var Game = function(gamePresets) {
 
     /**
      * Trades data from player1 to player2.
-     *
+     * (main function call definitely still on Game level, but specifics TODO)
      * @param player1 the first player in the trade
      * @param player2 the second player in the trade
      * @param properties1 the properties player1 is giving up
@@ -937,7 +919,7 @@ var Game = function(gamePresets) {
 
     /**
      * Maintains the balance of houses when an external transaction can disrupt the balance
-     *
+     * (DEPRECATED)
      * @param color the color that we need to balance
      * @param player the player whose properties need to be balanced
      */
@@ -1014,7 +996,7 @@ var Game = function(gamePresets) {
 
     /**
      * Informs of how many houses are on properties in a certain color set
-     *
+     * (DEPRECATED)
      * @param color the color that we are counting
      *
      * @return the total number of houses on properties in this color
@@ -1038,7 +1020,7 @@ var Game = function(gamePresets) {
 
     /**
      * Informs of how many houses are a specific property
-     *
+     * (DEPRECATED)
      * @param color the color that we are counting
      * @param property the property we want the houses of
      *
@@ -1057,7 +1039,7 @@ var Game = function(gamePresets) {
 
     /**
      * Tells the owner of the property or false if there is none
-     *
+     * (DEPRECATED, but still likely on this level)
      * @param property the name of the property to check
      *
      * @return the owner of the property or false
@@ -1068,7 +1050,7 @@ var Game = function(gamePresets) {
 
     /**
      * States whether or not the current location can be bought
-     *
+     * (DEPRECATED)
      * @param the name of a location
      *
      * @return true if the location can be bought, otherwise false
@@ -1080,7 +1062,7 @@ var Game = function(gamePresets) {
 
     /**
      * Tells us what index in gameData["players"] the player is
-     *
+     * (DEPRECATED, probably won't need anyways)
      * @param player name of the player to find the index of
      *
      * @return an integer of the index of the player specified, returns -1 if cannot be found
@@ -1096,7 +1078,7 @@ var Game = function(gamePresets) {
 
     /**
      * Moves the specified player to the location
-     *
+     * (DEPRECATED)
      * @param player name of the player to find the index of
      * @param property the name of the property to move to
      *
@@ -1157,7 +1139,7 @@ var Game = function(gamePresets) {
 
     /**
      * Changes the amonut of money the specifed player has by the delta amount
-     *
+     * (DEPRECATED)
      * @param player the String of the player whose money is going to change
      * @param delta the amount the player's money is changing
      */
@@ -1168,7 +1150,7 @@ var Game = function(gamePresets) {
 
     /**
      * Simulates drawing a chance card and intitiates the action needed to take
-     *
+     * TODO TODO
      * @param player the player drawing the card
      */
     this.chanceCard = function(player) {
@@ -1296,7 +1278,7 @@ var Game = function(gamePresets) {
 
     /**
      * Simulates drawing a community chest card and intitiates the action needed to take
-     *
+     * TODO TODO
      * @param player the player drawing the card
      */
     this.communityChestCard = function(player) {
@@ -1306,7 +1288,7 @@ var Game = function(gamePresets) {
 
     /**
      * Returns the name of the property with the highest rent
-     *
+     * (TODO redo it)
      * @return String name of the property with the highest rent, null if no property owned
      */
     this.highestRent = function() {
@@ -1408,6 +1390,7 @@ var Game = function(gamePresets) {
     }
 
     /**
+    * TODO update how to create game data, will definitely need for saving the game for later
     * @return the gameData stored in this object
     */
     this.getData = function() {
@@ -1423,6 +1406,7 @@ var Game = function(gamePresets) {
     }
 
     /**
+    * (TODO DEPRECATED)
     * @return a list of the all of the locations on the board
     */
     this.getAllLocations = function() {
@@ -1436,6 +1420,7 @@ var Game = function(gamePresets) {
     }
 
     /**
+    * (TODO DEPRECATED)
     * @return a list of the all of the locations not yet bought on the board
     */
     this.getAllUnownedLocations = function() {
@@ -1450,6 +1435,7 @@ var Game = function(gamePresets) {
 
     /**
     * Gives relevant information about the requested property
+    * (DEPRECATED TODO create in property class/subclasses)
     * @param property name of the property info is requested for
     * @return json with relevant information about the property
     */

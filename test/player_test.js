@@ -189,6 +189,11 @@ describe('Player', function() {
             assert.equal(player1.getNetWorth(), player1.money);
 
             assert.equal(player1.properties.length, 0);
+
+            // should be able to handle "losing" properties that it doesn't have
+            player1.loseProperty(p2);
+            player1.loseProperty(p1);
+            player1.loseProperty(p3);
         });
     });
 })

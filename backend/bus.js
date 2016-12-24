@@ -63,6 +63,7 @@ bus.getBusPass = function() {
 
 /**
 * Gets all of the properties forward on this side of the board.
+* (DEPRECATED)
 * @param property the name of the property that is the current location
 * @param forward boolean that is true if the player is moving forward
 * @return list of the properties in the forward direction
@@ -120,6 +121,7 @@ bus.getForward = function(property, forward) {
 
 /**
 * Gets the name of the transit station for the player
+* (DEPRECATED)
 * @param property the name of the property that is the current location
 * @param forward boolean that is true if the player is moving forward
 * @return String of the name of the transit station, if returns null something really went wrong

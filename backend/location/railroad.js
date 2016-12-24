@@ -1,6 +1,7 @@
 const Property = require('./property');
 
-/* Railroad object stores the information about a railroad location.
+/**
+ * Railroad object stores the information about a railroad location.
  * @param name String name of the player
  * @param name String name of the location
  * @param boardPreset JSON with data loaded from the stored board
@@ -15,20 +16,23 @@ class Railroad extends Property {
         this.trainDepotPrice = 100;
     }
 
-    /* Adds a train depot to the railroad.
+    /**
+     * Adds a train depot to the railroad.
      */
     addTrainDepot() {
         if (!this.isMortgaged)
             this.hasTrainDepot = true
     }
 
-    /* Removes a train depot from the railroad.
+    /**
+     * Removes a train depot from the railroad.
      */
     removeTrainDepot() {
         this.hasTrainDepot = false
     }
 
-    /* Determines the total worth of this property (including train depot)
+    /**
+     * Determines the total worth of this property (including train depot)
      * 
      * @return int value
      */
@@ -44,7 +48,8 @@ class Railroad extends Property {
         return worth
     }
 
-    /* Sees how much rent costs if this is landed on.
+    /**
+     * Sees how much rent costs if this is landed on.
      * @param numOwned int of number of other railroads owned (0 < numOwned < 5)
      * 
      * @return int value

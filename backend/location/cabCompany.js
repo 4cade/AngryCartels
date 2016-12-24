@@ -1,6 +1,7 @@
 const Property = require('./property');
 
-/* Cab object stores the information about a cab location.
+/**
+ * Cab object stores the information about a cab location.
  * @param name String name of the player
  * @param name String name of the location
  * @param boardPreset JSON with data loaded from the stored board
@@ -15,20 +16,23 @@ class CabCompany extends Property {
         this.cabStandPrice = 150;
     }
 
-    /* Adds a cab stand to the cab company.
+    /**
+     * Adds a cab stand to the cab company.
      */
     addCabStand() {
         if (!this.isMortgaged)
             this.hasCabStand = true
     }
 
-    /* Removes a cab stand from the cab company.
+    /**
+     * Removes a cab stand from the cab company.
      */
     removeCabStand() {
         this.hasCabStand = false
     }
 
-    /* Determines the total worth of this property (including cab stand)
+    /**
+     * Determines the total worth of this property (including cab stand)
      * 
      * @return int value
      */
@@ -44,7 +48,8 @@ class CabCompany extends Property {
         return worth
     }
 
-    /* Sees how much rent costs if this is landed on.
+    /**
+     * Sees how much rent costs if this is landed on.
      * @param numOwned int of number of other cab companies owned (0 < numOwned < 5)
      * 
      * @return int value

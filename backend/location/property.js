@@ -1,6 +1,7 @@
 const Place = require('./place');
 
-/* Property object stores the information about a property.
+/**
+ * Property object stores the information about a property.
  * @param name String name of the location
  * @param boardPreset JSON with data loaded from the stored board
  */
@@ -18,26 +19,30 @@ class Property extends Place {
         this.isMortgaged = false;
     }
 
-    /* Sets the owner of the property to the owner.
+    /**
+     * Sets the owner of the property to the owner.
      * @param owner the new owner of the property
      */
     setOwner(owner) {
         this.owner = owner
     }
 
-    /* Mortgages the property.
+    /*
+     * Mortgages the property.
      */
     mortgage() {
         this.isMortgaged = true
     }
 
-    /* Unmortgages the property.
+    /**
+     * Unmortgages the property.
      */
     unmortgage() {
         this.isMortgaged = false
     }
 
-    /* Determines the total worth of the property, often overridden by child classes.
+    /**
+     * Determines the total worth of the property, often overridden by child classes.
      * 
      * @return int value
      */
