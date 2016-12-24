@@ -147,8 +147,8 @@ describe('Player', function() {
         const p2 = new HouseProperty("westheimer rd", {"type": "property", "quality": "light yellow", "rent": [11, 55, 160, 475, 650, 800, 1300], "mortgage": 70, "house": 100, "forward": ["internet service provider"], "backward": ["katy freeway"], "side": [1], "track": [2], "above": ["st charles pl"]})
         const p3 = new HouseProperty("peachtree st", {"type": "property", "quality": "sea green", "rent": [20, 100, 300, 750, 925, 1100, 1600], "mortgage": 100, "house": 100, "forward": ["pay day"], "backward": ["decatur st"], "side": [1], "track": [2], "above": ["free parking"]});
 
-        p2.gainHouse();
-        p2.gainHouse();
+        p2.addHouse();
+        p2.addHouse();
         p3.mortgage();
 
         it("should gain the properties and associated wealth", function() {

@@ -21,23 +21,23 @@ class Utility extends Property {
      */
     getRent(numOwned) {
         // let dice = amount shown on dice
-        if numOwned === 1
+        if (numOwned === 1)
             return 4*dice
-        else if numOwned === 2
+        else if (numOwned === 2)
             return 10*dice
-        else if numOwned === 3
+        else if (numOwned === 3)
             return 20*dice
-        else if numOwned === 4
+        else if (numOwned === 4)
             return 40*dice
-        else if numOwned === 5
+        else if (numOwned === 5)
             return 80*dice
-        else if numOwned === 6
+        else if (numOwned === 6)
             return 100*dice
-        else if numOwned === 7
+        else if (numOwned === 7)
             return 120*dice
         else
             return 150*dice
     }
-
+}
 
 module.exports = Utility;

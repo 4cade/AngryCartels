@@ -71,7 +71,7 @@ class Player {
      * @param property Object of the property
      */
     loseProperty(property) {
-        let index = this.properties.indexof(property)
+        let index = this.properties.indexOf(property)
         this.properties.splice(index, 1)
     }
 
@@ -89,7 +89,13 @@ class Player {
      * @param pass String name of the bus pass
      */
     gainBusPass(pass) {
-        this.busTickets.push(pass)
+        this.busTickets = JSON.parse(JSON.stringify(this.busTickets))
+
+        if (this.busTickets.hasOwnProperty(pass))
+            this.busTickets[pass] += 1
+        else
+            this.busTickets[pass] = 1
+            
     }
 
     /* The player uses the specified bus pass and loses it.
@@ -97,7 +103,7 @@ class Player {
      */
     useBusPass(pass) {
         // actual ticket usage handled by some other class
-        let index = this.busTickets.indexof(pass)
+        let index = this.busTickets.indexOf(pass)
         this.busTickets.splice(index, 1)
     }
 
@@ -113,7 +119,7 @@ class Player {
      */
     useSpecialCard(card) {
         // Actual card usage handled by some other class
-        let index = this.specialCards.indexof(card)
+        let index = this.specialCards.indexOf(card)
         this.properties.splice(index, 1)
     }
 

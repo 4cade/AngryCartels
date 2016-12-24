@@ -92,7 +92,7 @@ describe('Location', function() {
                         "below": ["virginia ave"]
                      };
 
-        const property = HouseProperty(name, prop);
+        const property = new HouseProperty(name, prop);
 
         it("should initialize a HouseProperty correctly", function() {
             assert.equal(property.kind, prop.type);
