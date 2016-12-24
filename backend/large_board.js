@@ -835,13 +835,8 @@ module.exports = {
     },
     "water works": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["marvin gardens"],
         "backward": ["ventnor ave"],
@@ -852,13 +847,8 @@ module.exports = {
     },
     "cable company": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["magazine st"],
         "backward": ["chance outer south"],
@@ -868,13 +858,8 @@ module.exports = {
     },
     "electric company": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["states ave"],
         "backward": ["st charles pl"],
@@ -885,13 +870,8 @@ module.exports = {
     },
     "internet service provider": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["kirby dr"],
         "backward": ["westheimer rd"],
@@ -901,13 +881,8 @@ module.exports = {
     },
     "gas company": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["chance inner ne"],
         "backward": ["tax refund"],
@@ -917,13 +892,8 @@ module.exports = {
     },
     "telephone company": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["community chest inner sw"],
         "backward": ["fisherman's wharf"],
@@ -933,13 +903,8 @@ module.exports = {
     },
     "trash collector": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["north temple"],
         "backward": ["west temple"],
@@ -949,13 +914,8 @@ module.exports = {
     },
     "sewage system": {
         "type": "utility",
-<<<<<<< HEAD
-        "quality": "utility",
-        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
-=======
         "quality": 21,
-        "rent": [10, 20, 40, 80, 100, 120, 150],
->>>>>>> abb944a668a84e11100a08667dfef4d4c0aa92f0
+        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
         "mortgage": 75,
         "forward": ["ute cab co"],
         "backward": ["bus ticket east"],

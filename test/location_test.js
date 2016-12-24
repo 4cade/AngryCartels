@@ -34,7 +34,7 @@ describe('Location', function() {
         const prop = {
                         "type": "utility",
                         "quality": "utility",
-                        "rent": [10, 20, 40, 80, 100, 120, 150],
+                        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
                         "mortgage": 75,
                         "forward": ["states ave"],
                         "backward": ["st charles pl"],
@@ -169,7 +169,7 @@ describe('Location', function() {
         const prop = {
                         "type": "utility",
                         "quality": "utility",
-                        "rent": [10, 20, 40, 80, 100, 120, 150],
+                        "rent": [4, 10, 20, 40, 80, 100, 120, 150],
                         "mortgage": 75,
                         "forward": ["states ave"],
                         "backward": ["st charles pl"],
@@ -178,7 +178,7 @@ describe('Location', function() {
                         "above": ["bonus"],
                         "below": ["internet service provider"]
                      };
-        const property = new Property(name, prop);
+        const property = new Utility(name, prop);
 
         it("should initialize a Utility correctly", function() {
             assert.equal(property.name, name);

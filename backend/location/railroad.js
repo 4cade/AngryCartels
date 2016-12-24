@@ -54,7 +54,7 @@ class Railroad extends Property {
         if (this.isMortgaged)
             return 0
         if (numOwned < 1)
-            numowned = 1
+            numOwned = 1
         let rent = this.rent[numOwned-1]
         
         if (this.hasTrainDepot)
