@@ -51,7 +51,7 @@ describe('Location', function() {
             assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
-            assert.equal(property.color, prop.quality);
+            assert.equal(property.group, prop.quality);
             assert.equal(property.cost, 2*prop.mortgage);
         });
 
@@ -61,18 +61,18 @@ describe('Location', function() {
 
         it("should get an owner", function() {
             assert.equal(property.owner, null);
-            property.setOwner("Bob");
+            assert(property.setOwner("Bob"));
             assert.equal(property.owner, "Bob");
         });
 
         it("should be mortgaged", function() {
-            property.mortgage();
+            assert(property.mortgage());
             assert(property.isMortgaged);
             assert.equal(property.getValue(), prop.mortgage);
         });
 
         it("should be unmortgaged", function() {
-            property.unmortgage()
+            assert(property.unmortgage());
             assert(!property.isMortgaged);
             assert.equal(property.getValue(), 2*prop.mortgage);
         });
@@ -101,7 +101,7 @@ describe('Location', function() {
             assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
-            assert.equal(property.color, prop.quality);
+            assert.equal(property.group, prop.quality);
             assert.equal(property.cost, 2*prop.mortgage);
             assert.equal(property.housePrice, prop.house);
             assert.equal(property.houses, 0);
@@ -111,55 +111,55 @@ describe('Location', function() {
         });
 
         it("should add houses and increase rent/value", function() {
-            property.addHouse();
+            assert(property.addHouse());
             assert.equal(property.getRent(false), prop.rent[1]);
             assert.equal(property.getRent(true), prop.rent[1]);
-            property.addHouse();
+            assert(property.addHouse());
             assert.equal(property.getRent(false), prop.rent[2]);
-            property.addHouse();
-            property.addHouse();
+            assert(property.addHouse());
+            assert(property.addHouse());
             assert.equal(property.getValue(), 4*prop.house+2*prop.mortgage);
             assert.equal(property.getRent(false), prop.rent[4]);
-            property.addHouse();
-            property.addHouse();
+            assert(property.addHouse());
+            assert(property.addHouse());
             assert.equal(property.getRent(false), prop.rent[6]);
             assert.equal(property.houses, 6)
-            property.addHouse(); // can't go above 6 houses (aka skyscraper)
+            assert(!property.addHouse()); // can't go above 6 houses (aka skyscraper)
             assert.equal(property.houses, 6);
             assert.equal(property.getRent(true), prop.rent[6]);
             assert.equal(property.getValue(), 6*prop.house+2*prop.mortgage);
         });
 
         it("should remove houses and decrease rent/value", function() {
-            property.removeHouse();
+            assert(property.removeHouse());
             assert.equal(property.getRent(false), prop.rent[5]);
             assert.equal(property.getValue(), 5*prop.house+2*prop.mortgage);
-            property.removeHouse();
+            assert(property.removeHouse());
             assert.equal(property.getRent(false), prop.rent[4]);
-            property.removeHouse();
-            property.removeHouse();
+            assert(property.removeHouse());
+            assert(property.removeHouse());
             assert.equal(property.getRent(false), prop.rent[2]);
             assert.equal(property.getValue(), 2*prop.house+2*prop.mortgage);
-            property.removeHouse();
-            property.removeHouse();
+            assert(property.removeHouse());
+            assert(property.removeHouse());
             assert.equal(property.getRent(false), prop.rent[0]);
             assert.equal(property.houses, 0)
-            property.removeHouse(); // can't go below 0 houses
+            assert(!property.removeHouse()); // can't go below 0 houses
             assert.equal(property.houses, 0);
             assert.equal(property.getValue(), 0*prop.house+2*prop.mortgage);
         });
 
         it("should not charge any rent or let you add houses if mortgaged", function() {
-            property.mortgage();
+            assert(property.mortgage());
             assert(property.isMortgaged);
             assert.equal(property.getRent(false), 0);
-            property.addHouse();
+            assert(!property.addHouse());
             assert.equal(property.houses, 0);
 
             // now unmortgage and see if still works
-            property.unmortgage();
+            assert(property.unmortgage());
             assert(!property.isMortgaged)
-            property.addHouse();
+            assert(property.addHouse());
             assert.equal(property.getRent(true), prop.rent[1]);
         });
     });
@@ -187,7 +187,7 @@ describe('Location', function() {
             assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
-            assert.equal(property.color, prop.quality);
+            assert.equal(property.group, prop.quality);
             assert.equal(property.cost, 2*prop.mortgage);
             assert.equal(property.getValue(), property.cost);
         });
@@ -199,9 +199,9 @@ describe('Location', function() {
             assert.equal(property.getRent(9, 4), prop.rent[7]*4); // should just assume that 8 is max
 
             // handle mortgage cases
-            property.mortgage();
+            assert(property.mortgage());
             assert.equal(property.getRent(4, 4), 0);
-            property.unmortgage();
+            assert(property.unmortgage());
             assert.equal(property.getRent(5, 4), prop.rent[4]*4);
         });
     });
@@ -229,7 +229,7 @@ describe('Location', function() {
             assert.equal(rr.forward, spot.forward);
             assert.equal(rr.below, spot.below);
             assert.equal(rr.rent, spot.rent);
-            assert.equal(rr.color, spot.quality);
+            assert.equal(rr.group, spot.quality);
             assert.equal(rr.cost, 2*spot.mortgage);
             assert.equal(rr.getValue(), rr.cost);
             assert(!rr.hasTrainDepot);
@@ -244,23 +244,23 @@ describe('Location', function() {
         });
 
         it("should handle mortgages correctly", function() {
-            rr.mortgage();
+            assert(rr.mortgage());
             assert.equal(rr.getRent(3), 0);
             assert.equal(rr.getValue(), spot.mortgage);
-            rr.addTrainDepot();
+            assert(!rr.addTrainDepot());
             assert.equal(rr.getRent(2), 0);
             assert.equal(rr.getValue(), spot.mortgage);
-            rr.unmortgage();
+            assert(rr.unmortgage());
             assert.equal(rr.getValue(), 2*spot.mortgage);
         })
 
         it("should handle train depots correctly", function() {
-            rr.addTrainDepot();
+            assert(rr.addTrainDepot());
             assert.equal(rr.getRent(1), 2*spot.rent[0]);
             assert.equal(rr.getRent(4), 2*spot.rent[3]);
             assert.equal(rr.getValue(), 2*spot.mortgage+rr.trainDepotPrice);
 
-            rr.removeTrainDepot();
+            assert(rr.removeTrainDepot());
             assert.equal(rr.getRent(3), spot.rent[2]);
             assert.equal(rr.getValue(), 2*spot.mortgage);
         });
@@ -290,7 +290,7 @@ describe('Location', function() {
             assert.equal(cc.forward, spot.forward);
             assert.equal(cc.below, spot.below);
             assert.equal(cc.rent, spot.rent);
-            assert.equal(cc.color, spot.quality);
+            assert.equal(cc.group, spot.quality);
             assert.equal(cc.cost, 2*spot.mortgage);
             assert.equal(cc.getValue(), 2*spot.mortgage);
             assert(!cc.hasCabStand);
@@ -305,25 +305,29 @@ describe('Location', function() {
         });
 
         it("should handle mortgages correctly", function() {
-            cc.mortgage();
+            assert(cc.mortgage());
             assert.equal(cc.getRent(3), 0);
             assert.equal(cc.getValue(), spot.mortgage);
-            cc.addCabStand();
+            assert(!cc.addCabStand());
             assert.equal(cc.getRent(2), 0);
             assert.equal(cc.getValue(), spot.mortgage);
-            cc.unmortgage();
+            assert(cc.unmortgage());
             assert.equal(cc.getValue(), 2*spot.mortgage);
         })
 
         it("should handle cab stands correctly", function() {
-            cc.addCabStand();
+            assert(cc.addCabStand());
             assert.equal(cc.getRent(1), 2*spot.rent[0]);
             assert.equal(cc.getRent(4), 2*spot.rent[3]);
             assert.equal(cc.getValue(), 2*spot.mortgage+cc.cabStandPrice);
 
-            cc.removeCabStand();
+            assert(cc.removeCabStand());
             assert.equal(cc.getRent(3), spot.rent[2]);
             assert.equal(cc.getValue(), 2*spot.mortgage);
         });
+    });
+
+    describe("#propertySetTests", function() {
+        // TODO
     });
 });

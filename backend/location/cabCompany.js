@@ -36,9 +36,10 @@ class CabCompany extends Property {
      * @return boolean true if hasCabStand becomes false
      */
     removeCabStand() {
-        if (this.hasCabStand)
+        if (this.hasCabStand) {
             this.hasCabStand = false
             return true
+        }
         else
             return false
     }
