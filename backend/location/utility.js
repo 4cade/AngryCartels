@@ -15,7 +15,7 @@ class Utility extends Property {
     /**
      * Sees how much rent costs if this is landed on.
      * @param numOwned int of number of other utilities owned
-     * 
+     * @param dice int number of pips on the dice rolled
      * @return int value
      */
     getRent(numOwned, dice) {

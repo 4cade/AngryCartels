@@ -17,18 +17,30 @@ class HouseProperty extends Property {
 
     /**
      * Adds a house to the total number of houses on the property.
+     *
+     * @return boolean true is house increases by 1, false if house isMortgaged or if house has max amount of houses
      */
     addHouse() {
-        if (!this.isMortgaged && this.houses < 6)
+        if (!this.isMortgaged && this.houses < 6){
             this.houses += 1
+            return true
+        }
+        else
+            return false
     }
 
     /**
      * Removes a house from the total number of houses on the property.
+     * 
+     * @return boolean true if house decreases by 1, false if house can not removeHouse
      */
     removeHouse() {
-        if (this.houses > 0)
+        if (this.houses > 0){
             this.houses -= 1
+            return true
+        }
+        else
+            return false
     }
 
     /**

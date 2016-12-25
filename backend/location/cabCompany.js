@@ -18,17 +18,29 @@ class CabCompany extends Property {
 
     /**
      * Adds a cab stand to the cab company.
+     *
+     * @return boolean true if hasCabStand becomes true, true if hasCabStand does not change
      */
     addCabStand() {
-        if (!this.isMortgaged)
+        if (!this.isMortgaged){
             this.hasCabStand = true
+            return true
+        }
+        else
+            return false
     }
 
     /**
      * Removes a cab stand from the cab company.
+     *
+     * @return boolean true if hasCabStand becomes false
      */
     removeCabStand() {
-        this.hasCabStand = false
+        if (this.hasCabStand)
+            this.hasCabStand = false
+            return true
+        else
+            return false
     }
 
     /**

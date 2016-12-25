@@ -11,7 +11,7 @@ class Property extends Place {
     constructor(name, boardPreset) {
         super(name, boardPreset)
 
-        this.color = boardPreset['quality'];
+        this.group = boardPreset['quality'];
         this.rent = boardPreset['rent'];
         this.mortgageValue = boardPreset['mortgage'];
         this.cost = 2*this.mortgageValue
@@ -22,23 +22,44 @@ class Property extends Place {
     /**
      * Sets the owner of the property to the owner.
      * @param owner the new owner of the property
+     * @return boolean true if new owner is set, false if owner is already the owner
      */
     setOwner(owner) {
-        this.owner = owner
+        if (this.owner !== owner){
+            this.owner = owner
+            return true
+        }
+        else
+            return false
+
     }
 
     /*
      * Mortgages the property.
+     *
+     * @return boolean true if property becomes isMortgaged, false if property already isMortgaged
      */
     mortgage() {
-        this.isMortgaged = true
+        if (!this.isMortgaged){
+            this.isMortgaged = true
+            return true
+        }
+        else
+            return false
     }
 
     /**
      * Unmortgages the property.
+     * 
+     * @return boolean true if property becomes not isMortgages, false if property already not isMortgaged
      */
     unmortgage() {
-        this.isMortgaged = false
+        if (this.isMortgaged){
+            this.isMortgaged = false
+            return true
+        }
+        else
+            return false
     }
 
     /**

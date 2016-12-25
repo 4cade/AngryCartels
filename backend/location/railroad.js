@@ -18,17 +18,30 @@ class Railroad extends Property {
 
     /**
      * Adds a train depot to the railroad.
+     *
+     * @return boolean true if property addTrainDepot, false if property can not addTrainDepot because it isMortgaged
      */
     addTrainDepot() {
-        if (!this.isMortgaged)
+        if (!this.isMortgaged){
             this.hasTrainDepot = true
+            return true
+        }
+        else
+            return false
     }
 
     /**
      * Removes a train depot from the railroad.
+     *
+     * @return boolean true if property removeTrainDepot, false if property does not hasTrainDepot to remove
      */
     removeTrainDepot() {
-        this.hasTrainDepot = false
+        if (this.hasTrainDepot){
+            this.hasTrainDepot = false
+            return true
+        }
+        else
+            return false
     }
 
     /**
@@ -51,7 +64,6 @@ class Railroad extends Property {
     /**
      * Sees how much rent costs if this is landed on.
      * @param numOwned int of number of other railroads owned (0 < numOwned < 5)
-     * 
      * @return int value
      */
     getRent(numOwned) {

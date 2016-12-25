@@ -17,7 +17,9 @@ class PlayerManager {
      * Chooses the order of the players for the game.
      */
     scrambleTurnOrder() {
-        // TODO
+        for (let i = this.turnOrder.length; i; i--) {
+            let j = Math.floor(Math.random() * i);
+            [this.turnOrder[i - 1], this.turnOrder[j]] = [this.turnOrder[j], this.turnOrder[i - 1]];
     }
 
     /**
