@@ -39,13 +39,15 @@ public class PlayerCardCreator : MonoBehaviour {
 
             // always create the first row
             GameObject row1 = Instantiate(playerCardRowPrefab);
-            row1.transform.SetParent(transform);
+            row1.transform.SetParent(transform, false);
 
             // Check how many players should be on the top row
-            int numPlayersTopRow = MAX_PLAYERS_PER_ROW;
+            int numPlayersTopRow = Math.Min(MAX_PLAYERS_PER_ROW, numPlayers);
+
+            // Create a cool jagged effect if there is 5
             if (numPlayers == 5)
             {
-                --numPlayersTopRow;
+                numPlayersTopRow = MAX_PLAYERS_PER_ROW - 1;
             }
 
             // Create the top row of player cards
@@ -53,13 +55,15 @@ public class PlayerCardCreator : MonoBehaviour {
             {
                 GameObject instance = Instantiate(playerCardPrefab);
                 instance.transform.SetParent(row1.transform);
+                //instance.transform.parent = row1.transform;
+                //instance.GetComponent<RectTransform>().SetParent(row1.transform);
             }
 
             // check if we need a second row
             if (numPlayers > MAX_PLAYERS_PER_ROW)
             {
                 GameObject row2 = Instantiate(playerCardRowPrefab);
-                row2.transform.SetParent(transform);
+                row2.transform.SetParent(transform, false);
 
                 // Create the bottom row of player cards
                 for (int i = 0, k = numPlayers - numPlayersTopRow; i < k; ++i)
@@ -68,8 +72,6 @@ public class PlayerCardCreator : MonoBehaviour {
                     instance.transform.SetParent(row2.transform);
                 }
             }
-
-
         }
     }
 }
