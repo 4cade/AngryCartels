@@ -15,6 +15,18 @@ class HouseProperty extends Property {
         this.housePrice = boardPreset['house'];
     }
 
+    /*
+     * Mortgages the property.
+     *
+     * @return boolean true if property becomes isMortgaged, false if property already isMortgaged
+     */
+    mortgage(){
+        if (this.houses === 0)
+            return super.mortgage()
+        else
+            return false
+    }
+
     /**
      * Adds a house to the total number of houses on the property.
      *

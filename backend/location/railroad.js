@@ -16,13 +16,25 @@ class Railroad extends Property {
         this.trainDepotPrice = 100;
     }
 
+    /*
+     * Mortgages the property.
+     *
+     * @return boolean true if property becomes isMortgaged, false if property already isMortgaged
+     */
+    mortgage(){
+        if (!this.hasTrainDepot)
+            return super.mortgage()
+        else
+            return false
+    }
+
     /**
      * Adds a train depot to the railroad.
      *
      * @return boolean true if property addTrainDepot, false if property can not addTrainDepot because it isMortgaged
      */
     addTrainDepot() {
-        if (!this.isMortgaged){
+        if (!this.isMortgaged && !this.hasTrainDepot){
             this.hasTrainDepot = true
             return true
         }

@@ -16,13 +16,25 @@ class CabCompany extends Property {
         this.cabStandPrice = 150;
     }
 
+    /*
+     * Mortgages the property.
+     *
+     * @return boolean true if property becomes isMortgaged, false if property already isMortgaged
+     */
+    mortgage(){
+        if (!this.hasCabStand)
+            return super.mortgage()
+        else
+            return false
+    }
+
     /**
      * Adds a cab stand to the cab company.
      *
      * @return boolean true if hasCabStand becomes true, true if hasCabStand does not change
      */
     addCabStand() {
-        if (!this.isMortgaged){
+        if (!this.isMortgaged && !this.hasCabStand){
             this.hasCabStand = true
             return true
         }
@@ -33,7 +45,7 @@ class CabCompany extends Property {
     /**
      * Removes a cab stand from the cab company.
      *
-     * @return boolean true if hasCabStand becomes false
+     * @return boolean true if hasCabStand becomes false, false if does not hasCabStand
      */
     removeCabStand() {
         if (this.hasCabStand) {
