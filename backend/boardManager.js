@@ -2,6 +2,8 @@ const Place = require('./location/place.js');
 const HouseProperty = require('./location/houseProperty.js');
 const Utility = require('./location/utility.js');
 const Railroad = require('./location/railroad.js');
+const CabCompany = require('./location/cabCompany.js');
+const PropertyGroup = require('./location/propertyGroup.js');
 
 /**
  * Manages all of the locations on the board and the states associated with them.
@@ -9,35 +11,41 @@ const Railroad = require('./location/railroad.js');
  */
 class BoardManager {
     constructor(rawBoard) {
-        // TODO init stuff
         this.houses = 81;
         this.hotels = 31;
         this.skyscrapers = 16;
 
         this.locations = {}
-        this.propertySets = {}
+        this.propertyGroups = {}
 
         for(let name in rawBoard) {
-            const loc = rawBoard[name];
-            let loc_obj = null; // it will get reassigned in the if statements
+            const loc = rawBoard[name]; // preloaded data from the board
+            let locObj = null; // it will get reassigned in the if statements
 
             if (loc.type === 'property') {
-                // TODO
+                locObj = Property(name, loc);
             }
             else if (loc.type === 'railroad') {
-                // TODO
+                locObj = Railroad(name, loc);
             }
             else if (loc.type === 'cab') {
-                // TODO
+                locObj = CabCompany(name, loc);
             }
             else if (loc.type === 'utility') {
-                // TODO
+                locObj = Utility(name, loc)
             }
             else {
-                // TODO
+                locObj = Place(name, loc);
             }
 
-            // TODO add to locations and make property sets
+            // populate the property groups
+            if(this.locObj.kind !== 'place' && this.propertyGroups.has(locObj.group)) {
+                this.propertyGroups[locObj.group].addProperty(locObj);
+            }
+            else if(this.locObj !== 'place') {
+                this.propertyGroups[locObj.group] = PropertyGroup(locObj.group);
+                this.propertyGroups[locObj.group].addProperty(locObj);
+            }
         }
     }
 
@@ -194,70 +202,5 @@ class BoardManager {
 }
 
 
-/**
- * Handles the state of a set of properties such as balancing houses, majority, and monopoly
- * @param index the index that any property added to this set has
- */
-class PropertySet {
-    constructor(index) {
-        this.index = index;
 
-        this.properties = [];
-    }
-
-    /**
-     * Adds the property to the set if it can be added
-     *
-     * @return true if it was added to the set
-     */
-    addProperty(property) {
-        // TODO
-    }
-
-    /**
-     * Makes a player own a property.
-     *
-     */
-    newOwner(property, player) {
-        // TODO
-    }
-
-    /**
-     * Check if a player has a majority of the properties.
-     * @return true if the player has a majority
-     */
-    hasMajority(player) {
-        // TODO
-    }
-
-    /**
-     * Check if a player has a monopoly of the properties.
-     * @return true if the player has a monopoly
-     */
-    hasMonopoly(player) {
-        // TODO
-    }
-
-    /**
-     * Adds a house to the property. If it is unbalanced then the houses will be balanced.
-     * @return true if the house was added
-     */
-    addHouse(property) {
-        // TODO
-    }
-
-    /**
-     * Makes sure that the balance of houses is maintained. Highest value properties are
-     *      prioritized.
-     */
-    rebalanceHouses() {
-        // TODO decide if should autobalance or force the user to handle that or maybe a preference?
-    }
-}
-
-
-
-
-
-
-this.exports = BoardManager;
+module.exports = BoardManager;
