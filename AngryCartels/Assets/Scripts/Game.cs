@@ -7,6 +7,9 @@ public class Game : MonoBehaviour {
     [Range(2, 8)]
     public int numPlayers;
 
+    //TODO:
+    public GameObject playerPrefab;
+
     // Used to check if numRounds should be used
     public bool doesGameHaveRoundLimit;
 
@@ -21,6 +24,15 @@ public class Game : MonoBehaviour {
         }
 
         GameObject.Find("PlayerPanel").GetComponent<PlayerCardCreator>().createPlayerCards(numPlayers);
+
+
+        // TEMP: add number of players
+        GameObject players = transform.Find("Players").gameObject;
+        for (int i = 0; i < numPlayers; ++i)
+        {
+            GameObject player = Instantiate(playerPrefab);
+            player.transform.parent = players.transform;
+        }
 	}
 	
 	// Update is called once per frame
