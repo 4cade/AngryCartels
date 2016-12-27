@@ -104,33 +104,28 @@ class Player {
     /**
      * The player acquires the specified bus pass.
      * @param pass String name of the bus pass
-     * @return boolean true if pass added, false otherwise
+     * @return boolean true if pass added
      */
     gainBusPass(pass) {
-        if (true){
-            if (pass.includes('expire')){
-                this.busTickets = {}
-                this.busTickets[pass] = 1
-            }
-            else if (this.busTickets.hasOwnProperty(pass))
-                this.busTickets[pass] += 1
-            else
-                this.busTickets[pass] = 1
-            return true
+        if (pass.includes('expire')){
+            this.busTickets = {}
+            this.busTickets[pass] = 1
         }
+        else if (this.busTickets.hasOwnProperty(pass))
+            this.busTickets[pass] += 1
         else
-            return false
-        
+            this.busTickets[pass] = 1
+        return true
     }
 
     /**
      * The player uses the specified bus pass and loses it.
      * @param pass String name of the bus pass
-     * @return boolean true if pass is used, false otherwise
+     * @return boolean true if pass is used, false if do not own pass
      */
     useBusPass(pass) {
         // actual ticket usage handled by some other class
-        if (true){
+        if (this.busTickets.hasOwnProperty(pass)){
             this.busTickets[pass] -= 1
             if (this.busTickets[pass] === 0)
                 delete this.busTickets[pass]
@@ -143,18 +138,14 @@ class Player {
     /**
      * The player acquires the specified chance/community chest card.
      * @param card Object name of the card
-     * @return boolean true if card is added, false otherwise
+     * @return boolean true if card is added
      */
     gainSpecialCard(card) {
-        if (true){
-            if (this.specialCards.hasOwnProperty(card))
-                this.specialCards[card] += 1
-            else
-                this.specialCards[card] = 1
-            return true
-        }
+        if (this.specialCards.hasOwnProperty(card))
+            this.specialCards[card] += 1
         else
-            return true
+            this.specialCards[card] = 1
+        return true
     }
 
     /**
@@ -164,7 +155,7 @@ class Player {
      */
     useSpecialCard(card) {
         // Actual card usage handled by some other class
-        if (true){
+        if (this.specialCards.hasOwnProperty(card)){
             this.specialCards[card] -= 1
             if (this.specialCards[card] === 0)
                 delete this.specialCards[card]
