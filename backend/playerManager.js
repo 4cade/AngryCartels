@@ -47,9 +47,11 @@ class PlayerManager {
      * @return object of the player
      */
     getPlayer(playerName) {
-        for (let i=0; i<this.turnOrder.length; i++)
-            if (this.turnOrder[i].name === playerName)
-                return this.turnOrder[i]
+        for (let player of this.turnOrder){
+            if(player.name === playerName){
+                return player
+            }
+        }
     }
 
     /**
