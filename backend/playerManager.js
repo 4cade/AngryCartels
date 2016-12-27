@@ -7,7 +7,7 @@ class PlayerManager {
         this.turnOrder = players;
 
         this.turnIndex = 0;
-        this.currentPlayer = playerNames[0];
+        this.currentPlayer = players[0];
         this.canRoll = true; // says if the current player can roll
 
         this.doubleCount = 0;
@@ -20,13 +20,17 @@ class PlayerManager {
         for (let i = this.turnOrder.length; i; i--) {
             let j = Math.floor(Math.random() * i);
             [this.turnOrder[i - 1], this.turnOrder[j]] = [this.turnOrder[j], this.turnOrder[i - 1]];
+        }
     }
 
     /**
-     * Makes it so the next player in the order to go.
+     * Makes it so the next player in the order goes.
      */
     nextTurn() {
-        // TODO
+        this.turnIndex += 1
+
+        let currentIndex = this.turnIndex % length(players)
+        this.currentPlayer = players[currentIndex]
     }
 
     /**
@@ -35,7 +39,7 @@ class PlayerManager {
      * @return object of the player whose turn it is
      */
     getCurrentPlayer() {
-        // TODO
+        return this.currentPlayer
     }
 
     /**
@@ -45,7 +49,10 @@ class PlayerManager {
      * @return object of the player
      */
     getPlayer(playerName) {
-        // TODO
+        this.turnOrder.forEach(player => {
+            if (player.name === playerName)
+                return player 
+        });
     }
 
     /**
