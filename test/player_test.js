@@ -197,3 +197,41 @@ describe('Player', function() {
         });
     });
 })
+
+
+
+
+// tests the playerManager objects
+describe('PlayerManager', function() {
+    const player1 = new Player('Bob', 'go', 1);
+    const player2 = new Player('Jill', 'go', 1);
+    const player3 = new Player('Jack', 'go', 1);
+
+    const play1 = new PlayerManager([player1, player2, player3]);
+
+    describe("#initialize", function() {
+        it("have correct initial attributes", function() {
+            assert.equal(play1.turnIndex, 0);
+            assert.equal(play1.currentPlayer, player1);
+        })
+    });
+
+    describe("#nextTurn", function() {
+        it("move to the next turn", function() {
+            play1.nextTurn();
+            assert.equal(play1.currentPlayer, player2)
+            play1.nextTurn();
+            play1.nextTurn();
+            assert.equal(play1.currentPlayer, player1)
+        })
+    });
+
+    describe("#getPlayer", function() {
+        it("get Player Object of parameter", function() {
+            assert.equal(play1.getPlayer('Bob'), player1)
+            assert.equal(play1.getPlayer('Jill'), player2)
+            assert.equal(play1.getPlayer('Jack'), player3)
+        })
+    });
+})
+

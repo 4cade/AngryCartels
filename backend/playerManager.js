@@ -27,10 +27,8 @@ class PlayerManager {
      * Makes it so the next player in the order goes.
      */
     nextTurn() {
-        this.turnIndex += 1
-
-        let currentIndex = this.turnIndex % length(players)
-        this.currentPlayer = players[currentIndex]
+        this.turnIndex = (this.turnIndex+1) % this.turnOrder.length
+        this.currentPlayer = this.turnOrder[this.turnIndex]
     }
 
     /**
@@ -49,10 +47,9 @@ class PlayerManager {
      * @return object of the player
      */
     getPlayer(playerName) {
-        this.turnOrder.forEach(player => {
-            if (player.name === playerName)
-                return player 
-        });
+        for (let i=0; i<this.turnOrder.length; i++)
+            if (this.turnOrder[i].name === playerName)
+                return this.turnOrder[i]
     }
 
     /**
@@ -65,3 +62,5 @@ class PlayerManager {
         return this.turnOrder
     }
 }
+
+module.exports = PlayerManager;
