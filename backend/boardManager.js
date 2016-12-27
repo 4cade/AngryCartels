@@ -175,7 +175,7 @@ class BoardManager {
      * @return true if the location can be bought, otherwise false
      */
     canBuy(location) {
-
+        // TODO
     }
 
     /**
