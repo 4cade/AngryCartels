@@ -10,6 +10,7 @@ const Railroad = require('./railroad.js');
 class PropertyGroup {
     constructor(index) {
         this.index = index;
+        this.prioritySet = false;
 
         this.properties = [];
     }
@@ -22,6 +23,12 @@ class PropertyGroup {
     addProperty(property) {
         if(this.index === property.group) {
             this.properties.push(property);
+
+            if(!this.prioritySet) {
+                // order by highest cost
+                this.properties.sort(function(a,b) {return a.cost < b.cost});
+            }
+
             return true;
         }
         return false;
@@ -29,19 +36,59 @@ class PropertyGroup {
 
     /**
      * Makes a player own a property.
-     * @return true if successfully set new owner
+     * @return -1 if failed, else number of houses lost by switching player
      */
-    newOwner(property, player) {
+    setOwner(property, player) {
         let index = this.properties.indexOf(property);
 
         // not found
         if(index === -1) {
-            return false;
+            return -1;
         }
 
+        // used to know how many houses lost from this property
+        let theseHouses = property.houses;
+
+        if(this.ownsMost() === player) {
+            theseHouses = 0; // this means that these will not be in lost in the calculation
+        }
+
+
         this.properties[index].setOwner(player);
-        player.gainProperty(property);
-        return true;
+        if(player !== null)
+            player.gainProperty(property);
+
+        // if houses are present majority/monopoly could have changed
+        let needRebalance = false;
+        this.properties.forEach(p => {
+            if(p.houses > 0) {
+                needRebalance = true;
+            }
+        });
+
+        if(needRebalance) {
+            return this.rebalanceHouses(theseHouses);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Moves all properties that player1 owns to player2.
+     * @param player1 player object of sender
+     * @param player2 player object of receiver
+     * 
+     * @return number of houses lost in the switch (should be 0)
+     */
+    transferAllOwnership(player1, player2) {
+        this.properties.forEach(p => {
+            if(p.owner === player1) {
+                player1.loseProperty(p);
+                p.setOwner(player2);
+                player2.gainProperty(p);
+            }
+        });
+        return this.rebalanceHouses(0);
     }
 
     /**
@@ -141,17 +188,19 @@ class PropertyGroup {
         else if(this.hasMajority(owner)) {
             maxHouses = ownedProps.length*4
         }
-        
+
         if(houseCount < maxHouses) {
             // check if balanced or this property needs to be balanced
-            if(houseCount % Math.floor(ownedProps.length) === 0  || (houseCount % Math.floor(ownedProps.length) !== 0 && property.houses < Math.floor(houseCount/ownedProps.length))) {
+            if(houseCount % ownedProps.length === 0  || (houseCount % ownedProps.length !== 0 && property.houses <= Math.floor(houseCount/ownedProps.length))) {
                 property.addHouse();
                 return 'true';
             }
             // otherwise some other property needs to be balanced
             else {
+                let added = false; // can't break from a forEach loop, just learned this
                 this.properties.forEach(p => {
-                    if(p.houses < Math.floor(houseCount/ownedProps.length)) {
+                    if(p.houses <= Math.floor(houseCount/ownedProps.length) && !added) {
+                        added = true
                         p.addHouse();
                         return 'other';
                     }
@@ -189,14 +238,16 @@ class PropertyGroup {
         });
         
         // check if balanced or this property can be used to balance
-        if(houseCount % Math.floor(ownedProps.length) === 0  || (houseCount % Math.floor(ownedProps.length) !== 0 && property.houses > Math.floor(houseCount/ownedProps.length))) {
+        if(houseCount % ownedProps.length === 0  || (houseCount % ownedProps.length !== 0 && property.houses > Math.floor(houseCount/ownedProps.length))) {
             property.removeHouse();
             return 'true';
         }
         // otherwise some other property needs to be balanced
         else {
             this.properties.forEach(p => {
-                if(p.houses < Math.floor(houseCount/ownedProps.length)) {
+                let removed = false;
+                if(p.houses > Math.floor(houseCount/ownedProps.length) && !removed) {
+                    removed = true;
                     p.removeHouse();
                     return 'other';
                 }
@@ -251,15 +302,18 @@ class PropertyGroup {
     /**
      * Makes sure that the balance of houses is maintained. Highest value properties are
      *      prioritized, unless it has been overridden.
+     *  @offset number of houses that were lost from the property change
+     *
+     *  @return number of houses that were lost
      */
-    rebalanceHouses() {
+    rebalanceHouses(offset=0) {
         // you can only add houses to HouseProperties
         if(this.properties[0].kind !== 'property') {
-            return 'balanced';
+            return 0;
         }
 
         const owner = this.ownsMost();
-        let houseCount = 0;
+        let houseCount = 0 + offset;
         let ownedProps = [];
 
         // count number of properties owned by owner and number of houses
@@ -278,14 +332,22 @@ class PropertyGroup {
         else if(this.hasMajority(owner)) {
             maxHouses = ownedProps.length*4
         }
+        else {
+            // just count all houses and set to 0, otherwise errors
+            let lost = 0;
 
-        // no majority or monopoly
-        if(maxHouses == 0) {
-            return 'removed ' + houseCount.toString();
+            this.properties.forEach(p => {
+                lost += p.houses;
+                p.houses = 0;
+            });
+
+            return lost;
         }
 
-        let excess = houseCount - maxHouses;
-        let target = Math.floor(maxHouses/ownedProps.length); // this is the target per property
+        let amt = Math.min(maxHouses, houseCount);
+        let target = Math.floor(amt/ownedProps.length); // this is the target per property
+        let excess = amt - target*ownedProps.length;
+        let lost = houseCount - amt;
 
         this.properties.forEach(p => {
             if(p.owner === owner) {
@@ -300,7 +362,7 @@ class PropertyGroup {
             }
         });
 
-        return 'balanced with excess of ' + excess.toString();
+        return lost;
     }
 
 
@@ -323,13 +385,14 @@ class PropertyGroup {
 
         for(let i = 0; i < this_sorted.length; i++) {
             // TODO see if this method works... because I'm lazy... very lazy
-            if(JSON.stringify(p_sorted[i]) !== JSON.stringify(this_sorted[i])) {
+            if(p_sorted[i] !== this_sorted[i]) {
                 return false;
             }
         }
 
         // just reset if hasn't been proven wrong
         this.properties = properties;
+        this.prioritySet = true;
         return true;
     }
 

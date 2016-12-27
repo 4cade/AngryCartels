@@ -5,11 +5,13 @@ const HouseProperty = require('../backend/location/houseProperty');
 const Utility = require('../backend/location/utility');
 const Railroad = require('../backend/location/railroad');
 const CabCompany = require('../backend/location/cabCompany');
+const PropertyGroup = require('../backend/location/propertyGroup');
+const Player = require('../backend/player');
 
 // tests the Location objects
 describe('Location', function() {
     describe("#placeTest", function() {
-        it("should parse a normal location correctly", function() {
+        it("parses a normal location correctly", function() {
             const name = "birthday gift"
             const spot = {
                             "type": "spot",
@@ -45,7 +47,7 @@ describe('Location', function() {
                      };
         const property = new Property(name, prop);
 
-        it("should initialize a Property correctly", function() {
+        it("initializes a Property correctly", function() {
             assert.equal(property.kind, prop.type);
             assert.equal(property.mortgageValue, prop.mortgage);
             assert.equal(property.forward, prop.forward);
@@ -55,23 +57,23 @@ describe('Location', function() {
             assert.equal(property.cost, 2*prop.mortgage);
         });
 
-        it("should have the cost be the value", function() {
+        it("has the cost be the value", function() {
             assert.equal(property.getValue(), property.cost);
         });
 
-        it("should get an owner", function() {
+        it("gets an owner", function() {
             assert.equal(property.owner, null);
             assert(property.setOwner("Bob"));
             assert.equal(property.owner, "Bob");
         });
 
-        it("should be mortgaged", function() {
+        it("gets mortgaged", function() {
             assert(property.mortgage());
             assert(property.isMortgaged);
             assert.equal(property.getValue(), prop.mortgage);
         });
 
-        it("should be unmortgaged", function() {
+        it("gets unmortgaged", function() {
             assert(property.unmortgage());
             assert(!property.isMortgaged);
             assert.equal(property.getValue(), 2*prop.mortgage);
@@ -95,7 +97,7 @@ describe('Location', function() {
 
         const property = new HouseProperty(name, prop);
 
-        it("should initialize a HouseProperty correctly", function() {
+        it("initializes a HouseProperty correctly", function() {
             assert.equal(property.kind, prop.type);
             assert.equal(property.mortgageValue, prop.mortgage);
             assert.equal(property.forward, prop.forward);
@@ -110,7 +112,7 @@ describe('Location', function() {
             assert.equal(property.getRent(true), 2*prop.rent[0]);
         });
 
-        it("should add houses and increase rent/value", function() {
+        it("adds houses and increase rent/value", function() {
             assert(property.addHouse());
             assert.equal(property.getRent(false), prop.rent[1]);
             assert.equal(property.getRent(true), prop.rent[1]);
@@ -130,7 +132,7 @@ describe('Location', function() {
             assert.equal(property.getValue(), 6*prop.house+2*prop.mortgage);
         });
 
-        it("should remove houses and decrease rent/value", function() {
+        it("removes houses and decrease rent/value", function() {
             assert(property.removeHouse());
             assert.equal(property.getRent(false), prop.rent[5]);
             assert.equal(property.getValue(), 5*prop.house+2*prop.mortgage);
@@ -149,7 +151,7 @@ describe('Location', function() {
             assert.equal(property.getValue(), 0*prop.house+2*prop.mortgage);
         });
 
-        it("should not charge any rent or let you add houses if mortgaged", function() {
+        it("does not charge any rent or let you add houses if mortgaged", function() {
             assert(property.mortgage());
             assert(property.isMortgaged);
             assert.equal(property.getRent(false), 0);
@@ -180,7 +182,7 @@ describe('Location', function() {
                      };
         const property = new Utility(name, prop);
 
-        it("should initialize a Utility correctly", function() {
+        it("initializes a Utility correctly", function() {
             assert.equal(property.name, name);
             assert.equal(property.kind, prop.type);
             assert.equal(property.mortgageValue, prop.mortgage);
@@ -192,11 +194,11 @@ describe('Location', function() {
             assert.equal(property.getValue(), property.cost);
         });
 
-        it("should charge the correct amount of rent", function() {
+        it("charges the correct amount of rent", function() {
             assert.equal(property.getRent(0, 4), prop.rent[0]*4);
             assert.equal(property.getRent(3, 4), prop.rent[2]*4);
             assert.equal(property.getRent(7, 4), prop.rent[6]*4);
-            assert.equal(property.getRent(9, 4), prop.rent[7]*4); // should just assume that 8 is max
+            assert.equal(property.getRent(9, 4), prop.rent[7]*4); // just assume that 8 is max
 
             // handle mortgage cases
             assert(property.mortgage());
@@ -222,7 +224,7 @@ describe('Location', function() {
 
         const rr = new Railroad(name, spot);
 
-        it("should initialize a Railroad correctly", function() {
+        it("initializes a Railroad correctly", function() {
             assert.equal(rr.name, name);
             assert.equal(rr.kind, spot.type);
             assert.equal(rr.mortgageValue, spot.mortgage);
@@ -236,14 +238,14 @@ describe('Location', function() {
             assert.equal(rr.trainDepotPrice, 100);
         });
 
-        it("should charge rent correctly", function() {
+        it("charges rent correctly", function() {
             assert.equal(rr.getRent(0), spot.rent[0]); // just in case a typo comes from above
             assert.equal(rr.getRent(1), spot.rent[0]);
             assert.equal(rr.getRent(2), spot.rent[1]);
             assert.equal(rr.getRent(4), spot.rent[3]);
         });
 
-        it("should handle mortgages correctly", function() {
+        it("handles mortgages correctly", function() {
             assert(rr.mortgage());
             assert.equal(rr.getRent(3), 0);
             assert.equal(rr.getValue(), spot.mortgage);
@@ -254,7 +256,7 @@ describe('Location', function() {
             assert.equal(rr.getValue(), 2*spot.mortgage);
         })
 
-        it("should handle train depots correctly", function() {
+        it("handles train depots correctly", function() {
             assert(rr.addTrainDepot());
             assert.equal(rr.getRent(1), 2*spot.rent[0]);
             assert.equal(rr.getRent(4), 2*spot.rent[3]);
@@ -283,7 +285,7 @@ describe('Location', function() {
 
         const cc = new CabCompany(name, spot);
 
-        it("should initialize a CabCompany correctly", function() {
+        it("initializes a CabCompany correctly", function() {
             assert.equal(cc.name, name);
             assert.equal(cc.kind, spot.type);
             assert.equal(cc.mortgageValue, spot.mortgage);
@@ -297,14 +299,14 @@ describe('Location', function() {
             assert.equal(cc.cabStandPrice, 150);
         });
 
-        it("should charge rent correctly", function() {
+        it("charges rent correctly", function() {
             assert.equal(cc.getRent(0), spot.rent[0]); // just in case a typo comes from above
             assert.equal(cc.getRent(1), spot.rent[0]);
             assert.equal(cc.getRent(2), spot.rent[1]);
             assert.equal(cc.getRent(4), spot.rent[3]);
         });
 
-        it("should handle mortgages correctly", function() {
+        it("handles mortgages correctly", function() {
             assert(cc.mortgage());
             assert.equal(cc.getRent(3), 0);
             assert.equal(cc.getValue(), spot.mortgage);
@@ -315,7 +317,7 @@ describe('Location', function() {
             assert.equal(cc.getValue(), 2*spot.mortgage);
         })
 
-        it("should handle cab stands correctly", function() {
+        it("handles cab stands correctly", function() {
             assert(cc.addCabStand());
             assert.equal(cc.getRent(1), 2*spot.rent[0]);
             assert.equal(cc.getRent(4), 2*spot.rent[3]);
@@ -327,7 +329,115 @@ describe('Location', function() {
         });
     });
 
-    describe("#propertySetTests", function() {
-        // TODO
+    describe("#propertyGroupTests", function() {
+        const player1 = new Player('Dude', 'go', 2);
+
+        const pgroup1 = new PropertyGroup(0);
+        const bisc = new HouseProperty("biscayne ave", {"type": "property","quality": 0,"rent": [11, 55, 160, 475, 650, 800, 1300],"mortgage": 75,"house": 50,"forward": ["short line"],"backward": ["miami ave"],"side": [3],"track": [0],"below": ["pennsylvania ave"]});
+        pgroup1.addProperty(bisc);
+        pgroup1.addProperty(new HouseProperty("miami ave", {"type": "property","quality": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["biscayne ave"],"backward": ["holland tunnel ne"],"side": [3],"track": [0],"below": ["community chest middle east"]}));
+        pgroup1.addProperty(new HouseProperty("florida ave", {"type": "property","quality": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["holland tunnel ne"],"backward": ["chance inner ne"],"side": [2],"track": [0],"below": ["ventnor ave"]}));
+
+        const rrgroup = new PropertyGroup(22);
+        rrgroup.addProperty(new Railroad("reading railroad", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["oriental ave", "esplanade ave"],"backward": ["income tax", "checker cab co"],"side": [0],"track": [1, 2],"above": ["telephone company"]}));
+        rrgroup.addProperty(new Railroad("pennsylvania railroad", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["st james pl", "fifth ave"],"backward": ["virginia ave", "newbury st"],"side": [1],"track": [1, 0],"below": ["chance outer west"]}));
+        rrgroup.addProperty(new Railroad("b&o railroad", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["atlantic ave", "community chest outer north"],"backward": ["illinois ave", "yellow cab co"],"side": [2],"track": [1, 2],"above": ["gas company"]}));
+        rrgroup.addProperty(new Railroad("short line", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["chance middle east", "reverse"],"backward": ["pennsylvania ave", "biscayne ave"],"side": [3],"track": [1, 0],"below": ["sewage system"]}));
+    
+        it('sets an owner correctly', function() {
+            pgroup1.setOwner(bisc, player1);
+            assert.equal(bisc.owner, player1);
+        })
+
+        it('evenly adds houses in a monopoly', function() {
+            pgroup1.properties.forEach(p => {
+                assert.equal(pgroup1.setOwner(p, player1), 0);
+            });
+            
+            pgroup1.upgrade(bisc);
+            assert.equal(bisc.houses, 1);
+            pgroup1.upgrade(bisc);
+            pgroup1.upgrade(bisc);
+
+            pgroup1.properties.forEach(p => {
+                assert.equal(p.houses, 1);
+            });
+
+            pgroup1.upgrade(bisc);
+            assert.equal(bisc.houses, 2);
+        });
+
+        it('allows you to go up to hotels in a monopoly', function() {
+            for(let i = 0; i < 14; i++) {
+                pgroup1.upgrade(bisc);
+            }
+
+            assert.equal(pgroup1.upgrade(bisc), 'false');
+            assert.equal(bisc.houses, 6)
+            pgroup1.properties.forEach(p => {
+                assert.equal(p.houses, 6);
+            });
+        });
+
+        it('loses houses after losing the monopoly', function() {
+            assert.equal(pgroup1.setOwner(bisc, null), 10); // loses 10 houses
+            pgroup1.properties.forEach(p => {
+                if(p !== bisc) {
+                    assert.equal(p.houses, 4);
+                }
+            });
+            assert.equal(bisc.houses, 0);
+        });
+
+        it('does not add houses to properties not part of monopoly/majority', function() {
+            pgroup1.upgrade(bisc);
+            assert.equal(bisc.houses, 0);
+            pgroup1.properties.forEach(p => {
+                if(p !== bisc) {
+                    assert.equal(p.houses, 4);
+                }
+            });
+        });
+
+        it('redistributes houses after gaining last property', function() {
+            pgroup1.setOwner(bisc, player1);
+            assert.equal(bisc.houses, 3);
+        });
+
+        it('loses all houses after losing majority', function() {
+            assert.equal(pgroup1.setOwner(bisc, new Player('derp', 'go', 2)), 0);
+            pgroup1.properties.forEach(p => {
+                if(p !== bisc) {
+                    assert.equal(p.houses, 4);
+                }
+            });
+            assert.equal(pgroup1.setOwner(pgroup1.properties[1], new Player('hi', 'ad', 1)), 8);
+            pgroup1.properties.forEach(p => {
+                assert.equal(p.houses, 0);
+            });
+        });
+
+        it('sets a different priority for rebalancing', function() {
+            pgroup1.properties.forEach(p => {
+                assert.equal(pgroup1.setOwner(p, player1), 0);
+            });
+            // index 0 should have been bisc
+            let otherOrder = [pgroup1.properties[2], pgroup1.properties[1], bisc];
+            assert(pgroup1.setPriority(otherOrder));
+            bisc.houses = 4;
+            assert.equal(pgroup1.rebalanceHouses(), 0);
+            assert.equal(bisc.houses, 1);
+        });
+
+        it('transfers all ownership with no loss', function() {
+            for(let i = 0; i < 18; i++) {
+                pgroup1.upgrade(bisc);
+            }
+            assert.equal(pgroup1.transferAllOwnership(player1, new Player('baby', 'jail', 3)), 0);
+            pgroup1.properties.forEach(p => {
+                assert.equal(p.houses, 6);
+            });
+        });
+
     });
 });

@@ -8,26 +8,26 @@ describe('Player', function() {
     const player1 = new Player('Bob', 'go', 1);
 
     describe("#initialize", function() {
-        it("should have all correct parts correctly initialized", function() {
+        it("has all correct parts correctly initialized", function() {
             assert.equal(player1.name, 'Bob');
             assert.equal(player1.money, 3200);
         })
     });
 
     describe('#moneyTests', function() {
-        it("should have added money", function() {
+        it("added money", function() {
             const hasMoney = player1.deltaMoney(200);
             assert.equal(player1.money, 3400);
             assert.equal(hasMoney, true);
         });
 
-        it("should have removed money", function() {
+        it("removed money", function() {
             const hasMoney = player1.deltaMoney(-2100);
             assert.equal(player1.money, 1300);
             assert.equal(hasMoney, true);
         });
 
-        it("should handle multiple transactions", function() {
+        it("handles multiple transactions", function() {
             player1.deltaMoney(-1100);
             player1.deltaMoney(500);
             player1.deltaMoney(-600);
@@ -39,7 +39,7 @@ describe('Player', function() {
             assert.equal(hasMoney, true);
         });
 
-        it("should go bankrupt when goes below 0", function() {
+        it("goes bankrupt when goes below 0", function() {
             const hasMoney1 = player1.deltaMoney(-600);
             assert.equal(player1.money, 0);
             assert.equal(hasMoney1, true);
@@ -58,7 +58,7 @@ describe('Player', function() {
     });
 
     describe("#busPassTests", function() {
-        it("should add all of the bus passes", function() {
+        it("adds all of the bus passes", function() {
             const expected = {"forward any": 2, "derp 2": 1, "back 3": 1}
             player1.gainBusPass('forward any');
             player1.gainBusPass('derp 2');
@@ -67,7 +67,7 @@ describe('Player', function() {
             assert.deepEqual(player1.busTickets, expected);
         });
 
-        it("should remove all of the bus passes", function() {
+        it("removes all of the bus passes", function() {
             const expected = {}
             player1.useBusPass('forward any');
             player1.useBusPass('derp 2');
@@ -76,7 +76,7 @@ describe('Player', function() {
             assert.deepEqual(player1.busTickets, expected);
         });
 
-        it("should add and remove the bus passes", function() {
+        it("adds and removes the bus passes", function() {
             const expected = {"forward any": 1, "derp 2": 1}
             player1.gainBusPass('forward any');
             player1.gainBusPass('derp 2');
@@ -87,7 +87,7 @@ describe('Player', function() {
             assert.deepEqual(player1.busTickets, expected);
         });
 
-        it("should have all of the tickets expire", function() {
+        it("has all of the tickets expire", function() {
             const expected = {"forward expire": 1}
             player1.gainBusPass('forward any');
             player1.gainBusPass('derp 2');
@@ -103,7 +103,7 @@ describe('Player', function() {
     });
 
     describe("#specialCardTests", function() {
-        it("should add all of the special cards", function() {
+        it("adds all of the special cards", function() {
             const expected = {"just say no": 2, "get out of jail free": 1, "steal": 1}
             player1.gainSpecialCard('just say no');
             player1.gainSpecialCard('get out of jail free');
@@ -112,7 +112,7 @@ describe('Player', function() {
             assert.deepEqual(player1.specialCards, expected);
         });
 
-        it("should remove all of the special cards", function() {
+        it("removes all of the special cards", function() {
             const expected = {}
             player1.useSpecialCard('just say no');
             player1.useSpecialCard('get out of jail free');
@@ -123,7 +123,7 @@ describe('Player', function() {
     });
 
     describe("#locationTest", function() {
-        it("should move the player to the location with side effects", function() {
+        it("moves the player to the location with side effects", function() {
             let moveInfo = {"moneyGained": 299, "currentLocation": 'bob', "movedTo": []};
             player1.moveToLocation(moveInfo);
             assert.equal(player1.location, "bob");
@@ -147,7 +147,7 @@ describe('Player', function() {
         p2.addHouse();
         p3.mortgage();
 
-        it("should gain the properties and associated wealth", function() {
+        it("gains the properties and associated wealth", function() {
             assert.equal(player1.properties.length, 0);
 
             player1.gainProperty(p1);
@@ -170,7 +170,7 @@ describe('Player', function() {
             assert.equal(player1.properties.length, 3);
         });
         
-        it("should lose the properties and associated wealth", function() {
+        it("loses the properties and associated wealth", function() {
             player1.loseProperty(p1);
             assert.deepEqual(player1.properties, [p2, p3]);
             assert.equal(player1.getNetWorth(), player1.money + p2.getValue() + p3.getValue());
@@ -190,7 +190,7 @@ describe('Player', function() {
 
             assert.equal(player1.properties.length, 0);
 
-            // should be able to handle "losing" properties that it doesn't have
+            // be able to handle "losing" properties that it doesn't have
             player1.loseProperty(p2);
             player1.loseProperty(p1);
             player1.loseProperty(p3);
