@@ -1,6 +1,7 @@
 const assert = require('assert');
 const Player = require('../backend/player');
 const HouseProperty = require('../backend/location/houseProperty');
+const PlayerManager = require('../backend/playerManager');
 
 // tests the Player object
 describe('Player', function() {
