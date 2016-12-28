@@ -151,14 +151,65 @@ describe('BoardManager', function(){
 		const player3 = new Player("Ted", "go", 1);
 
 		it("moves to the correct location after rolling", function() {
+			// move to reading rr
 			const action1 = board1.moveLocation(player3, 5)[0];
-
 			assert.equal(action1, 'buy');
 			assert.equal(player3.location, 'reading railroad');
 			assert.equal(player3.track, 1);
 			assert.equal(player3.money, 3200);
 
-			// TODO more
+			// move to pennsylvania rr
+			const action2 = board1.moveLocation(player3, 10)[0];
+			assert.equal(action1, 'buy');
+			assert.equal(player3.location, 'pennsylvania railroad');
+			assert.equal(player3.track, 0);
+			assert.equal(player3.money, 3200);
+
+			// move to lombard st
+			const action3 = board1.moveLocation(player3, 13)[0];
+			assert.equal(action3, 'buy');
+			assert.equal(player3.location, 'lombard st');
+			assert.equal(player3.track, 0);
+			assert.equal(player3.money, 3200);
+
+			// move to bonus and get paid
+			const action4 = board1.moveLocation(player3, 7);
+			assert.equal(action4.length, 0);
+			assert.equal(player3.location, 'bonus');
+			assert.equal(player3.track, 0);
+			assert.equal(player3.money, 3500);
+
+			// move to stock exchange
+			board1.moveLocation(player3, 3);
+			const action5 = board1.moveLocation(player3, 3)[0];
+			assert.equal(action5, 'stock');
+			assert.equal(player3.location, 'stock exchange');
+			assert.equal(player3.track, 0);
+			assert.equal(player3.money, 3500);
+
+			// go through a tunnel
+			board1.moveLocation(player3, 6);
+			assert.equal(player3.location, 'holland tunnel sw');
+			assert.equal(player3.track, 0);
+			assert.equal(player3.money, 3500);
+
+			// auction space
+			const action6 = board1.moveLocation(player3, 1)[0];
+			assert.equal(action5, 'auction'); // TODO test when all properties are owned
+
+			// chance space
+			const action7 = board1.moveLocation(player3, 6)[0];
+			assert.equal(action5, 'chance outer west'); // TODO test when all properties are owned
+
+			// pass pay day even
+			board1.moveLocation(player3, 8);
+			assert.equal(player3.money, 3900);
+
+			// move backwards & test pay day odd & community chest
+			player3.switchDirection();
+			const action8 = board1.moveLocation(player3, 5)[0];
+			assert.equal(action5, 'community chest');
+			assert.equal(player3.money, 4200);
 		});
 	});
 })

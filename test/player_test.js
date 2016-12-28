@@ -123,7 +123,7 @@ describe('Player', function() {
         });
     });
 
-    describe("#locationTest", function() {
+    describe("#movementTests", function() {
         it("moves the player to the location with side effects", function() {
             let moveInfo = {"moneyGained": 299, "currentLocation": 'bob', "movedTo": []};
             player1.moveToLocation(moveInfo);
@@ -137,6 +137,14 @@ describe('Player', function() {
             assert.equal(player1.money, 300);
             assert.equal(player1.getNetWorth(), 300);
         });
+
+        it('switches direction correctly', function() {
+            assert(player1.forward);
+            player1.switchDirection();
+            assert(!player1.forward);
+            player1.switchDirection();
+            assert(player1.forward);
+        })
     });
 
     describe("#propertyTests", function() {

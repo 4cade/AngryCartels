@@ -176,6 +176,13 @@ class Player {
         this.deltaMoney(moveInfo.moneyGained);
     }
 
+    /**
+     * The player's forward direction changes.
+     */
+    switchDirection() {
+        this.forward = !this.forward
+    }
+
 }
 
 module.exports = Player;
