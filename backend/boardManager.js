@@ -107,7 +107,7 @@ class BoardManager {
             location = this.teleportGroup[location]
             visited.push(location)
         }
-        return {"next": location, "gain": gain, "upper": false, "visit": visited}
+        return {"next": location, "gain": gain, "track": track, "visit": visited}
     }
 
     /**
@@ -160,13 +160,15 @@ class BoardManager {
      */
     jumpToLocation(location) {
         let gain = 0
+        let loc = this.locations[location]
         if (this.collectGroup.hasOwnProperty(location)){
             gain += this.collectGroup[location][0]                                                                //fix b.c assuming rolled odd
         }
         else if (this.teleportGroup.hasOwnProperty(location)){
             location = this.teleportGroup[location]
         }
-        return {"next": location, "gain": gain, "upper": false, "visit": [location]}
+        // TODO roll to choose the track to be on.
+        return {"next": location, "gain": gain, "track": loc.track, "visit": [location]}
     }
 
     /**
@@ -209,7 +211,7 @@ class BoardManager {
             visited.push(location)
         }
 
-        return {"next": location, "gain": gain, "upper": false, "visit": visited}
+        return {"next": location, "gain": gain, "track": track, "visit": visited}
     }
 
     /**
@@ -247,7 +249,7 @@ class BoardManager {
             }
         }
 
-        return {"next": location, "gain": gain, "upper": false, "visit": visited}
+        return {"next": location, "gain": gain, "track": track, "visit": visited}
     }
 
     /**
@@ -300,7 +302,7 @@ class BoardManager {
      * @return the owner of the property or null if no owner
      */
     isOwned(property) {
-        return property.owner
+        return this.locations[property].owner
     }
 
     /**
@@ -310,7 +312,7 @@ class BoardManager {
      * @return true if the location can be bought, otherwise false
      */
     canBuy(location) {
-        return this.locations[location].owner
+        return !this.locations[location].owner
     }
 
     /**
