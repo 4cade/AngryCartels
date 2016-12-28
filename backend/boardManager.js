@@ -5,6 +5,7 @@ const Property = require('./location/property.js')
 const Railroad = require('./location/railroad.js');
 const CabCompany = require('./location/cabCompany.js');
 const PropertyGroup = require('./location/propertyGroup.js');
+const Collect = require('.location/collect.js');
 
 /**
  * Manages all of the locations on the board and the states associated with them.
@@ -16,14 +17,11 @@ class BoardManager {
         this.hotels = 31;
         this.skyscrapers = 16;
 
-        this.locations = {} //key location name to location objects
+        this.locations = {} //key location name to location object
         this.propertyGroups = {}
 
-        this.collectGroup = {
-                                "go": [200],
-                                "bonus": [250 ,300],    // [on, pass]
-                                "pay day": [300, 400]   // [odd, even]
-                            }
+        this.collects = {} // key location name to collect object
+
         this.teleportGroup = {
                                 "go to jail": "jail", 
                                 "holland tunnel ne": "holland tunnel sw", 
@@ -46,23 +44,32 @@ class BoardManager {
                 locObj = new CabCompany(name, loc);
             }
             else if (loc.type === 'utility') {
-                locObj = new Utility(name, loc)
+                locObj = new Utility(name, loc);
+            }
+            else if (loc.type === 'collect') {;
+                locObj = new Collect(name, loc)
             }
             else {
                 locObj = new Place(name, loc);
             }
 
             // populate the property groups
-            if(locObj.kind !== 'place' && this.propertyGroups.hasOwnProperty(locObj.group)) {
+            if(locObj.kind !== 'place' && locObj.kind !== 'collect' && this.propertyGroups.hasOwnProperty(locObj.group)) {
                 this.propertyGroups[locObj.group].addProperty(locObj);
             }
-            else if(this.locObj !== 'place') {
+            else if(this.locObj !== 'place' && this.locObj !== 'collect') {
                 this.propertyGroups[locObj.group] = new PropertyGroup(locObj.group);
                 this.propertyGroups[locObj.group].addProperty(locObj);
             }
 
             // populate the locations
-            this.locations[name] = locObj
+            this.locations[name] = locObj;
+
+            //populate collects
+            if (locObj.kind === 'collect')
+                this.collects[name] = locObj;
+
+            //populate 
         }
     }
 
@@ -94,11 +101,8 @@ class BoardManager {
             diceTotal -= 1
 
             let land = diceTotal===0
-            if (this.collectGroup.hasOwnProperty(location)){
-                if ((location === "pay day" && odd) || (location === "bonus" && land) || (location === "go"))
-                    gain += this.collectGroup[location][0]
-                else if ((location === "pay day" && !odd) || (location === "bonus" && !land))
-                    gain += this.collectGroup[location][1]
+            if (this.collects.hasOwnProperty(location)){
+                gain += this.collects[location].getGain(odd, land)
             }
         }
         if (this.teleportGroup.hasOwnProperty(location)){
@@ -158,9 +162,10 @@ class BoardManager {
      */
     jumpToLocation(location) {
         let gain = 0
+        let odd = true  ///temporary until get roll
         let loc = this.locations[location]
-        if (this.collectGroup.hasOwnProperty(location)){
-            gain += this.collectGroup[location][0]                                                                //fix b.c assuming rolled odd
+        if (this.collects.hasOwnProperty(location)){
+            gain += this.collects[location].getGain(odd, true)                                                              //fix b.c assuming rolled odd
         }
         else if (this.teleportGroup.hasOwnProperty(location)){
             location = this.teleportGroup[location]
@@ -196,11 +201,8 @@ class BoardManager {
             visited.push(location)
 
             let land = location===desiredLocation
-            if (this.collectGroup.hasOwnProperty(location)){
-                if ((location === "pay day" && odd) || (location === "bonus" && land) || (location === "go"))
-                    gain += this.collectGroup[location][0]
-                else if ((location === "pay day" && !odd) || (location === "bonus" && !land))
-                    gain += this.collectGroup[location][1]
+            if (this.collects.hasOwnProperty(location)){
+                gain += this.collects[location].getGain(odd, land)
             }
         }
 
@@ -239,11 +241,8 @@ class BoardManager {
             visited.push(location)
 
             let land = location===desiredLocation
-            if (this.collectGroup.hasOwnProperty(location)){
-                if ((location === "pay day" && odd) || (location === "go"))
-                    gain += this.collectGroup[location][0]
-                else if ((location === "pay day" && !odd) || (location === "bonus" && !land))
-                    gain += this.collectGroup[location][1]
+            if (this.collects.hasOwnProperty(location)){
+                gain += this.collects[location].getGain(lastOdd, land)
             }
         }
 

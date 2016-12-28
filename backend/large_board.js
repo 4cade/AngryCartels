@@ -1067,17 +1067,21 @@ module.exports = {
         "below": ["chance middle east"]
     },
     "bonus": {
-        "type": "pay",
+        "type": "collect",
         "forward": ["boylston st"],
         "backward": ["beacon st"],
+        "amount": [250, 300],
+        "gain": "land/pass",
         "side": [0, 1],
         "track": [0],
         "below": ["jail", "electric company", "st charles pl", "connecticut ave", "vermont ave"]
     },
     "pay day": {
-        "type": "pay",
+        "type": "collect",
         "forward": ["randolph st"],
         "backward": ["peachtree st"],
+        "amount": [300, 400],
+        "gain": "odd/even",
         "side": [1, 2],
         "track": [2],
         "above": ["free parking"]
@@ -1232,9 +1236,11 @@ module.exports = {
         "below": ["checker cab co"]
     },
     "go": {
-        "type": "pay",
+        "type": "collect",
         "forward": ["mediterranean ave"],
         "backward": ["boardwalk"],
+        "go": [200, 200],
+        "gain": "land/pass",
         "side": [0, 3],
         "track": [1],
         "above": ["squeeze play"],
