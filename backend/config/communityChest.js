@@ -1,4 +1,4 @@
-var cards = [
+module.exports = [
     {
         "title": "Insurance Premiums Due",
         "description": "Pay $50 to the Pool.",
@@ -432,22 +432,3 @@ var cards = [
         "short": "pay pool 150"
     },
 ];
-
-var communityChest = {};
-
-// Returns a random integer between min (included) and max (excluded)
-// Gives a uniform distribution!
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
-/**
-  * Draw a community chest card
-  * @return community chest card object
-  */
-communityChest.drawCard = function() {
-    var index = getRandomInt(0, cards.length);
-    return cards[index];
-}
-
-module.exports = communityChest;
