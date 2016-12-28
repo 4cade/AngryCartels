@@ -939,10 +939,10 @@ module.exports = {
         "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
-        "forward": ["st james pl", "fifth ave"],
-        "backward": ["virginia ave", "newbury st"],
+        "forward": ["fifth ave", "st james pl"],
+        "backward": ["newbury st", "virginia ave"],
         "side": [1],
-        "track": [1, 0],
+        "track": [0, 1],
         "below": ["chance outer west"]
     },
     "b&o railroad": {
@@ -961,10 +961,10 @@ module.exports = {
         "quality": 22,
         "rent": [25, 50, 100, 200],
         "mortgage": 100,
-        "forward": ["chance middle east", "reverse"],
-        "backward": ["pennsylvania ave", "biscayne ave"],
+        "forward": ["reverse", "chance middle east"],
+        "backward": ["biscayne ave", "pennsylvania ave"],
         "side": [3],
-        "track": [1, 0],
+        "track": [0, 1],
         "below": ["sewage system"]
     },
     "holland tunnel ne": {

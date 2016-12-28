@@ -1,6 +1,7 @@
 const Place = require('./location/place.js');
 const HouseProperty = require('./location/houseProperty.js');
 const Utility = require('./location/utility.js');
+const Property = require('./location/property.js')
 const Railroad = require('./location/railroad.js');
 const CabCompany = require('./location/cabCompany.js');
 const PropertyGroup = require('./location/propertyGroup.js');
@@ -15,37 +16,53 @@ class BoardManager {
         this.hotels = 31;
         this.skyscrapers = 16;
 
-        this.locations = {}
+        this.locations = {} //key location name to location objects
         this.propertyGroups = {}
+
+        this.collectGroup = {
+                                "go": [200],
+                                "bonus": [250 ,300],    // [on, pass]
+                                "pay day": [300, 400]   // [odd, even]
+                            }
+        this.teleportGroup = {
+                                "go to jail": "jail", 
+                                "holland tunnel ne": "holland tunnel sw", 
+                                "holland tunnel sw": "holland tunnel ne", 
+                                "subway": "here"
+                            }
+        this.cardGroup = {}
 
         for(let name in rawBoard) {
             const loc = rawBoard[name]; // preloaded data from the board
             let locObj = null; // it will get reassigned in the if statements
 
             if (loc.type === 'property') {
-                locObj = Property(name, loc);
+                locObj = new Property(name, loc);
             }
             else if (loc.type === 'railroad') {
-                locObj = Railroad(name, loc);
+                locObj = new Railroad(name, loc);
             }
             else if (loc.type === 'cab') {
-                locObj = CabCompany(name, loc);
+                locObj = new CabCompany(name, loc);
             }
             else if (loc.type === 'utility') {
-                locObj = Utility(name, loc)
+                locObj = new Utility(name, loc)
             }
             else {
-                locObj = Place(name, loc);
+                locObj = new Place(name, loc);
             }
 
             // populate the property groups
-            if(this.locObj.kind !== 'place' && this.propertyGroups.has(locObj.group)) {
+            if(locObj.kind !== 'place' && this.propertyGroups.hasOwnProperty(locObj.group)) {
                 this.propertyGroups[locObj.group].addProperty(locObj);
             }
             else if(this.locObj !== 'place') {
-                this.propertyGroups[locObj.group] = PropertyGroup(locObj.group);
+                this.propertyGroups[locObj.group] = new PropertyGroup(locObj.group);
                 this.propertyGroups[locObj.group].addProperty(locObj);
             }
+
+            // populate the locations
+            this.locations[name] = locObj
         }
     }
 
@@ -59,13 +76,44 @@ class BoardManager {
      *     of all of the locations visited in order in case an animation would like to have that
      */
     moveLocation(player, diceTotal) {
-        // TODO
+        let location = player.location
+        let track = this.locations[player.location].track
+        let nextInfo = {"next": location, "track": track}
+        const odd = (diceTotal%2)===1
+        let visited = []
+        let gain = 0
+        //let upperTrack = 
+
+        while (diceTotal > 0){
+            nextInfo = this.nextLocation(location, odd, player.forward, track)
+
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+
+            player.location = location
+            visited.push(location)
+
+            diceTotal -= 1
+
+            let land = diceTotal===0
+            if (this.collectGroup.hasOwnProperty(location)){
+                if ((location === "pay day" && odd) || (location === "bonus" && land) || (location === "go"))
+                    gain += this.collectGroup[location][0]
+                else if ((location === "pay day" && !odd) || (location === "bonus" && !land))
+                    gain += this.collectGroup[location][1]
+            }
+        }
+        if (this.teleportGroup.hasOwnProperty(location)){
+            location = this.teleportGroup[location]
+            visited.push(location)
+        }
+        return {"next": location, "gain": gain, "upper": false, "visit": visited}
     }
 
     /**
      * Returns the next location in whatever the forward direction is
      *
-     * @param currentLocation the current location of the player
+     * @param currentLocation string the current location of the player
      * @param odd true if the dice roll was odd or even
      * @param forward true if the player is moving in the forward direction
      * @param track the track that the user is on
@@ -73,7 +121,33 @@ class BoardManager {
      * @return JSON with the next location that the user is going to go to, and the track of the user
      */
     nextLocation(currentLocation, odd, forward, track) {
-        // TODO
+        let next = null
+        let current = this.locations[currentLocation]
+        let lane = track
+        
+        let isRail = current.kind==="railroad"
+        let upper = (current.track[0]===track && isRail)
+
+        if (!isRail || (upper && odd) || (!upper && !odd)){
+            if (forward)
+                next = current.forward[0]
+            else
+                next = current.backward[0]
+        }
+        else if ((!upper && odd) || (upper && !odd)){
+            if (forward)
+                next = current.forward[1]
+            else
+                next = current.backward[1]
+        }
+
+        if (!upper && !odd && isRail)
+            lane = current.track[0]
+        else if (upper && !odd && isRail)
+            lane = current.track[1]
+        
+
+        return {"next": next, "track": lane}
     }
 
     /**
@@ -85,7 +159,14 @@ class BoardManager {
      *     of all of the locations visited in order in case an animation would like to have that
      */
     jumpToLocation(location) {
-        // TODO
+        let gain = 0
+        if (this.collectGroup.hasOwnProperty(location)){
+            gain += this.collectGroup[location][0]                                                                //fix b.c assuming rolled odd
+        }
+        else if (this.teleportGroup.hasOwnProperty(location)){
+            location = this.teleportGroup[location]
+        }
+        return {"next": location, "gain": gain, "upper": false, "visit": [location]}
     }
 
     /**
@@ -98,8 +179,38 @@ class BoardManager {
      *     of all of the locations visited in order in case an animation would like to have that
      */
      advanceToLocation(player, desiredLocation) {
-        // TODO
-     }
+        let location = player.location
+        let track = this.locations[player.location].track
+        let nextInfo = {"next": location, "track": track}
+        let visited = []
+        let gain = 0
+
+        while (location !== desiredLocation){
+            let odd = player.track===this.locations[location].track[0]                                           //fix b.c dont understand
+            nextInfo = this.nextLocation(location, odd, player.forward, track)
+
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+
+            player.location = location
+            visited.push(location)
+
+            let land = location===desiredLocation
+            if (this.collectGroup.hasOwnProperty(location)){
+                if ((location === "pay day" && odd) || (location === "bonus" && land) || (location === "go"))
+                    gain += this.collectGroup[location][0]
+                else if ((location === "pay day" && !odd) || (location === "bonus" && !land))
+                    gain += this.collectGroup[location][1]
+            }
+        }
+
+        if (this.teleportGroup.hasOwnProperty(location)){
+            location = this.teleportGroup[location]
+            visited.push(location)
+        }
+
+        return {"next": location, "gain": gain, "upper": false, "visit": visited}
+    }
 
     /**
      * Finds the next unowned property in the player's forward direction, or
@@ -112,7 +223,31 @@ class BoardManager {
      *     of all of the locations visited in order in case an animation would like to have that
      */
     nextMrMonopolyLocation(player, lastOdd) {
-        // TODO
+        let location = player.location
+        let track = this.locations[player.location].track
+        let nextInfo = {"next": location, "track": track}
+        let visited = []
+        let gain = 0
+
+        while (!this.canBuy(location)){
+            nextInfo = this.nextLocation(location, lastOdd, player.forward, track)
+            
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+
+            player.location = location
+            visited.push(location)
+
+            let land = location===desiredLocation
+            if (this.collectGroup.hasOwnProperty(location)){
+                if ((location === "pay day" && odd) || (location === "go"))
+                    gain += this.collectGroup[location][0]
+                else if ((location === "pay day" && !odd) || (location === "bonus" && !land))
+                    gain += this.collectGroup[location][1]
+            }
+        }
+
+        return {"next": location, "gain": gain, "upper": false, "visit": visited}
     }
 
     /**
@@ -165,7 +300,7 @@ class BoardManager {
      * @return the owner of the property or null if no owner
      */
     isOwned(property) {
-        // TODO
+        return property.owner
     }
 
     /**
@@ -175,7 +310,7 @@ class BoardManager {
      * @return true if the location can be bought, otherwise false
      */
     canBuy(location) {
-        // TODO
+        return this.locations[location].owner
     }
 
     /**
