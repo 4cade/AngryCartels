@@ -151,19 +151,14 @@ describe('BoardManager', function(){
 		const player3 = new Player("Ted", "go", 1);
 
 		it("moves to the correct location after rolling", function() {
-			
+			const action1 = board1.moveLocation(player3, 5)[0];
 
+			assert.equal(action1, 'buy');
+			assert.equal(player3.location, 'reading railroad');
+			assert.equal(player3.track, 1);
+			assert.equal(player3.money, 3200);
 
-
-
-
-
-
-
-
-
-
-
+			// TODO more
 		});
 	});
 })

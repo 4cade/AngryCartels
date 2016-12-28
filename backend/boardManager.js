@@ -67,13 +67,11 @@ class BoardManager {
     }
 
     /**
-     * Finds the next location that is diceTotal steps away.
+     * Moves the player to the next location that is diceTotal steps away.
      * @param player the player object that rolled the dice
      * @param diceTotal total number rolled on the dice
      *
-     * @return a JSON specifying the new location of the player, any money gained along the journey,
-     *     a boolean specifying if the user is on the upper or lower track of a railroad, and an array
-     *     of all of the locations visited in order in case an animation would like to have that
+     * @return a list of possible actions (strings) (maybe put the last visited list as a part of player?)
      */
     moveLocation(player, diceTotal) {
         let location = player.location
