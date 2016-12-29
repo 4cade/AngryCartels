@@ -13,7 +13,7 @@ class Collect extends Place{
 		super(name, boardPreset)
 
 		this.amount = boardPreset["amount"];
-		this.gain = boardPreset["gain";]
+		this.gain = boardPreset["gain"];
 	}
 
 	/**

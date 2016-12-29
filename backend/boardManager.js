@@ -5,7 +5,7 @@ const Property = require('./location/property.js')
 const Railroad = require('./location/railroad.js');
 const CabCompany = require('./location/cabCompany.js');
 const PropertyGroup = require('./location/propertyGroup.js');
-const Collect = require('.location/collect.js');
+const Collect = require('./location/collect.js');
 
 /**
  * Manages all of the locations on the board and the states associated with them.

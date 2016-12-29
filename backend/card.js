@@ -26,7 +26,7 @@ class Card {
         const tickets = [
             "forward transit",
             "forward any", "forward any", "forward any", "forward any",
-            "forward expire",
+            "forward any expire",
             "backward 1",
             "backward 2",
             "backward 3",
