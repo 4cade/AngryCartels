@@ -1,13 +1,22 @@
+const Player = require('./player');
+
 /**
  * Handles the state of each turn and manages the players.
- * @param players list of Player objects in the game
+ * @param players list of names of players
+ * @param startLocation name of starting location
+ * @param startTrack index of starting track
  */
 class PlayerManager {
-    constructor(players) {
-        this.turnOrder = players;
+    constructor(players, startLocation, startTrack) {
+        this.turnOrder = [];
+
+        players.forEach(p =>{
+            let player = new Player(p, startLocation, startTrack);
+            this.turnOrder.push(player)
+        })
 
         this.turnIndex = 0;
-        this.currentPlayer = players[0];
+        this.currentPlayer = this.turnOrder[0];
         this.canRoll = true; // says if the current player can roll
 
         this.doubleCount = 0;

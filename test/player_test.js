@@ -212,34 +212,31 @@ describe('Player', function() {
 
 // tests the playerManager objects
 describe('PlayerManager', function() {
-    const player1 = new Player('Bob', 'go', 1);
-    const player2 = new Player('Jill', 'go', 1);
-    const player3 = new Player('Jack', 'go', 1);
-
-    const play1 = new PlayerManager([player1, player2, player3]);
+    const play1 = new PlayerManager(['Bob', 'Jill', 'Jack'], 'go', 1);
 
     describe("#initialize", function() {
-        it("have correct initial attributes", function() {
+        it("has correct initial attributes", function() {
             assert.equal(play1.turnIndex, 0);
-            assert.equal(play1.currentPlayer, player1);
+            assert.equal(play1.currentPlayer, play1.turnOrder[0]);
         })
     });
 
     describe("#nextTurn", function() {
-        it("move to the next turn", function() {
+        it("moves to the next turn", function() {
             play1.nextTurn();
-            assert.equal(play1.currentPlayer, player2)
+            assert.equal(play1.currentPlayer, play1.turnOrder[1])
             play1.nextTurn();
             play1.nextTurn();
-            assert.equal(play1.currentPlayer, player1)
+            assert.equal(play1.currentPlayer, play1.turnOrder[0])
         })
     });
 
     describe("#getPlayer", function() {
-        it("get Player Object of parameter", function() {
-            assert.equal(play1.getPlayer('Bob'), player1)
-            assert.equal(play1.getPlayer('Jill'), player2)
-            assert.equal(play1.getPlayer('Jack'), player3)
+        it("gets Player Object from name", function() {
+            // test works because it doesn't scramble order until that is called
+            assert.equal(play1.getPlayer('Bob'), play1.turnOrder[0])
+            assert.equal(play1.getPlayer('Jill'), play1.turnOrder[1])
+            assert.equal(play1.getPlayer('Jack'), play1.turnOrder[2])
         })
     });
 })
