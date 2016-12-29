@@ -1,4 +1,4 @@
-var cards = [
+module.exports = [
 	{
 		"title": "Advance to the Pay Corner",
 		"description": "Collect your income for landing there from the Bank.\nOn the Outer Track - \"Payday\" - $400\n\nOn the Center Track - \"Go\" - $200\n\nOn the Inner Track - \"Bonus\" - $300",
@@ -426,22 +426,3 @@ var cards = [
 		"short": "one above"
 	}
 ];
-
-var chance = {};
-
-// Returns a random integer between min (included) and max (excluded)
-// Gives a uniform distribution!
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
-/**
-  * Draw a chance card
-  * @return chance card object
-  */
-chance.draw = function() {
-    var index = getRandomInt(0, cards.length);
-    return cards[index];
-}
-
-module.exports = chance;

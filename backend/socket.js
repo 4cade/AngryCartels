@@ -1,5 +1,5 @@
-var board = require('./large_board.js');
-var Game = require('./game.js');
+// var board = require('./config/large_board.js');
+// var Game = require('./game.js');
 
 var users = {};
 var userGenNum = 1;
@@ -168,10 +168,11 @@ module.exports = function(socket){
   socket.on('start game', function() {
     // tell everyone that the game started, do first for minimal lag since next step is intensive
     emitInGame(socket.inGame, 'start game', {});
+    console.log(games[socket.inGame]);
     // actually populate the game with stuff and make everyone go into the game
-    games[socket.inGame] = new Game(games[socket.inGame]);
-    console.log("started game");
-    emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
+    // games[socket.inGame] = new Game(games[socket.inGame]);
+    console.log("TODO implement start game");
+    // emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
   });
 
   /**
