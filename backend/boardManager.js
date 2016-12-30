@@ -6,6 +6,7 @@ const Railroad = require('./location/railroad.js');
 const CabCompany = require('./location/cabCompany.js');
 const PropertyGroup = require('./location/propertyGroup.js');
 const Collect = require('./location/collect.js');
+const Teleport = require('./location/teleport.js');
 
 /**
  * Manages all of the locations on the board and the states associated with them.
@@ -18,16 +19,9 @@ class BoardManager {
         this.skyscrapers = 16;
 
         this.locations = {} //key location name to location object
-        this.propertyGroups = {}
-
+        this.propertyGroups = {} // key group name to property/railroad/cab/utility object
         this.collects = {} // key location name to collect object
-
-        this.teleportGroup = {
-                                "go to jail": "jail", 
-                                "holland tunnel ne": "holland tunnel sw", 
-                                "holland tunnel sw": "holland tunnel ne", 
-                                "subway": "here"
-                            }
+        this.teleports = {} // key location name to teleport object
         this.cardGroup = {}
 
         for(let name in rawBoard) {
@@ -46,18 +40,22 @@ class BoardManager {
             else if (loc.type === 'utility') {
                 locObj = new Utility(name, loc);
             }
-            else if (loc.type === 'collect') {;
-                locObj = new Collect(name, loc)
+            else if (loc.type === 'collect') {
+                locObj = new Collect(name, loc);
+            }
+            else if (loc.type === 'teleport'){
+                locObj = new Teleport(name, loc);
             }
             else {
                 locObj = new Place(name, loc);
             }
 
+            let isProperty = (loc.type==='property' || loc.type==='railroad' || loc.type==='cab' || loc.type==="utility")
             // populate the property groups
-            if(locObj.kind !== 'place' && locObj.kind !== 'collect' && this.propertyGroups.hasOwnProperty(locObj.group)) {
+            if(isProperty && this.propertyGroups.hasOwnProperty(locObj.group)) {
                 this.propertyGroups[locObj.group].addProperty(locObj);
             }
-            else if(this.locObj !== 'place' && this.locObj !== 'collect') {
+            else if(isProperty) {
                 this.propertyGroups[locObj.group] = new PropertyGroup(locObj.group);
                 this.propertyGroups[locObj.group].addProperty(locObj);
             }
@@ -65,11 +63,13 @@ class BoardManager {
             // populate the locations
             this.locations[name] = locObj;
 
-            //populate collects
+            // populate collects
             if (locObj.kind === 'collect')
                 this.collects[name] = locObj;
 
-            //populate 
+            // populate teleports
+            if (locObj.kind === 'teleport')
+                this.teleports[name] = locObj;
         }
     }
 
@@ -81,40 +81,32 @@ class BoardManager {
      * @return a list of possible actions (strings) (maybe put the last visited list as a part of player?)
      */
     moveLocation(player, diceTotal) {
-        let location = player.location
-        let track = this.locations[player.location].track
-        let nextInfo = {"next": location, "track": track}
-        const odd = (diceTotal%2)===1
-        let visited = []
-        let gain = 0
-        //let upperTrack = 
+        let nextInfo = {"next": player.location, "track": player.track}
+        let odd = (diceTotal%2)===1
+        let land = false
 
         while (diceTotal > 0){
-            nextInfo = this.nextLocation(location, odd, player.forward, track)
+            nextInfo = this.nextLocation(player.location, odd, player.forward, player.track)
 
-            location = nextInfo["next"]
-            track = nextInfo["track"]
-
-            player.location = location
-            visited.push(location)
+            player.track = nextInfo["track"]
+            player.location = nextInfo["next"]
 
             diceTotal -= 1
 
-            let land = diceTotal===0
-            if (this.collects.hasOwnProperty(location)){
-                gain += this.collects[location].getGain(odd, land)
+            land = diceTotal===0
+            if (this.collects.hasOwnProperty(player.location)){
+                player.money += this.collects[player.location].getGain(odd, land)
             }
         }
-        if (this.teleportGroup.hasOwnProperty(location)){
-            location = this.teleportGroup[location]
-            visited.push(location)
+        if (this.teleports.hasOwnProperty(player.location)){
+            player.track = this.teleports[player.location].getTrack(land)
+            player.location = this.teleports[player.location].getLocation(land)
         }
-        return {"next": location, "gain": gain, "track": track, "visit": visited}
+        return this.locationAction(player.location)
     }
 
     /**
      * Returns the next location in whatever the forward direction is
-     *
      * @param currentLocation string the current location of the player
      * @param odd true if the dice roll was odd or even
      * @param forward true if the player is moving in the forward direction
@@ -163,15 +155,16 @@ class BoardManager {
     jumpToLocation(location) {
         let gain = 0
         let odd = true  ///temporary until get roll
-        let loc = this.locations[location]
+        let track = this.locations[location].track
         if (this.collects.hasOwnProperty(location)){
-            gain += this.collects[location].getGain(odd, true)                                                              //fix b.c assuming rolled odd
+            gain += this.collects[location].getGain(odd, true)
         }
-        else if (this.teleportGroup.hasOwnProperty(location)){
-            location = this.teleportGroup[location]
+        else if (this.teleports.hasOwnProperty(location)){
+            track = this.teleports[location].getTrack(true)
+            location = this.teleports[location].getLocation(true)
         }
         // TODO roll to choose the track to be on.
-        return {"next": location, "gain": gain, "track": loc.track, "visit": [location]}
+        return {"next": location, "gain": gain, "track": track[0], "visit": [location]}
     }
 
     /**
@@ -184,96 +177,147 @@ class BoardManager {
      *     of all of the locations visited in order in case an animation would like to have that
      */
      advanceToLocation(player, desiredLocation) {
-        let location = player.location
-        let track = this.locations[player.location].track
-        let nextInfo = {"next": location, "track": track}
+        let nextInfo = {"next": player.location, "track": player.track}
         let visited = []
-        let gain = 0
+        let land = false
 
-        while (location !== desiredLocation){
-            let odd = player.track===this.locations[location].track[0]                                           //fix b.c dont understand
-            nextInfo = this.nextLocation(location, odd, player.forward, track)
+        while (player.location !== desiredLocation){
+            let odd = track===this.locations[player.location].track[0]
+            nextInfo = this.nextLocation(player.location, odd, player.forward, player.track)
 
-            location = nextInfo["next"]
-            track = nextInfo["track"]
+            player.track = nextInfo["track"]
+            player.location = nextInfo["next"]
+            visited.push(player.location)
 
-            player.location = location
-            visited.push(location)
-
-            let land = location===desiredLocation
-            if (this.collects.hasOwnProperty(location)){
-                gain += this.collects[location].getGain(odd, land)
+            land = player.location===desiredLocation
+            if (this.collects.hasOwnProperty(player.location)){
+                player.money += this.collects[player.location].getGain(odd, land)
             }
         }
-
-        if (this.teleportGroup.hasOwnProperty(location)){
-            location = this.teleportGroup[location]
-            visited.push(location)
+        if (this.teleports.hasOwnProperty(location)){
+            player.track = this.teleports[player.location].getTrack(land)
+            player.location = this.teleports[player.location].getLocation(land)
+            visited.push(player.location)
         }
-
-        return {"next": location, "gain": gain, "track": track, "visit": visited}
+        return {"next": player.location, "gain": player.money, "track": player.track, "visit": visited}
     }
 
     /**
      * Finds the next unowned property in the player's forward direction, or
      *     null if there are no unowned properties in the forward path
      * @param player the player object about to do the Mr. Monopoly
-     * @param lastOdd true if the last roll was an odd
      *
      * @return a JSON specifying the new location of the player, any money gained along the journey,
      *     a boolean specifying if the user is on the upper or lower track of a railroad, and an array
      *     of all of the locations visited in order in case an animation would like to have that
      */
-    nextMrMonopolyLocation(player, lastOdd) {
-        let location = player.location
-        let track = this.locations[player.location].track
-        let nextInfo = {"next": location, "track": track}
+    nextMrMonopolyLocation(player) {
+        let nextInfo = {"next": player.location, "track": player.track}
         let visited = []
-        let gain = 0
+        let odd = player.lastRolled%2===1
 
         while (!this.canBuy(location)){
-            nextInfo = this.nextLocation(location, lastOdd, player.forward, track)
+            nextInfo = this.nextLocation(player.location, odd, player.forward, player.track)
             
-            location = nextInfo["next"]
-            track = nextInfo["track"]
+            player.location = nextInfo["next"]
+            player.track = nextInfo["track"]
+            visited.push(player.location)
 
-            player.location = location
-            visited.push(location)
-
-            let land = location===desiredLocation
-            if (this.collects.hasOwnProperty(location)){
-                gain += this.collects[location].getGain(lastOdd, land)
+            let land = player.location===desiredLocation
+            if (this.collects.hasOwnProperty(player.location)){
+                player.money += this.collects[player.location].getGain(lastOdd, land)
             }
         }
 
-        return {"next": location, "gain": gain, "track": track, "visit": visited}
+        return {"next": player.location, "gain": player.money, "track": player.track, "visit": visited}
     }
 
     /**
      * Specifies what kind of action should occur on the current location that was landed on.
-     *
+     * @param location string location of where to find action of
      * @return String indicating what kind of action should occur
      */
     locationAction(location) {
-        // TODO see if should change
+        let actions = []
+        let land = this.locations[location]
+        if (land.kind === 'property' || land.kind === 'utility' || land.kind === 'railroad' || land.kind === "cab"){
+            if (this.isOwned(location))
+                actions.push("rent")
+            else
+                actions.push("buy")
+        }
+        if (land.kind === 'railroad'){
+            actions.push("bus")
+        }
+        if (land.kind === 'chance'){
+            actions.push("chance")
+        }
+        if (land.kind === 'community chest'){
+            actions.push("community chest")
+        }
+        if (land.kind === 'subway'){
+            actions.push("subway")
+        }
+        if (land.kind === 'bus'){
+            actions.push("bus")
+        }
+        if (land.kind === 'stock'){
+            actions.push("stock")
+        }
+        if (land.kind === 'auction'){
+            let someLeft = false
+            for (let property in this.locations){
+                if (!this.isOwned(property))
+                    someLeft = true
+            }
+            if (someLeft){
+                actions.push("auction")
+            }
+            else{
+                actions.push("highest rent")
+            }
+        }
+        // place, collect, reverse, teleport, squeeze play
+        return actions
     }
 
-    setHouseNumbersForPropertySet() {
-        // TODO decide on spec for this, ie. automatically do it or let user set preference of order
-        //      or make user manually add houses. many possible options TODO TODO TODO
-        // depending on this can decide if we need buy/sell house functions too
+    /**
+    * When at least a majority is obtained in a property group, sets the number of houses to be placed on each property.
+    * @param propertySet propertyGroup Object to set house order for
+    * @param order JSON key property to preferred number of houses
+    *
+    * @return boolean true if properties were set, false otherwise
+    **/
+    setHousesForPropertySet(player, order) {
+        /**
+        if (propertySet.hasMajority(player)){
+            for (let property of propertySet.properties){
+                if (property ===){
+
+                }
+            }
+            return true
+        }
+        return false
+        **/
     }
 
     /**
      * Gives the player the property
-     * @param property the property to buy
      * @param player the player that is making the purchase
+     * @param property String the property to buy
      * @param auctionPrice numerical value to pay in an auction, if -1 (default) there is no auction
      * 
      * @return true if the player can buy the property
      */
     buyProperty(player, property, auctionPrice=-1) {
-        // TODO
+        if (auctionPrice>0){
+            player.properties.push(property)
+            this.locations[property].owner = player.name
+            player.money -= auctionPrice
+            return true
+        }
+        return false
     }
 
     /**
@@ -285,7 +329,11 @@ class BoardManager {
      * @return true if the player successfully mortgaged the property
      */
     mortgageProperty(player, property) {
-        // TODO
+        if (player.properties.includes(property)){
+            this.locations[property].mortgage()
+            return true
+        }
+        return false
     }
 
     transferProperty(player1, player2, property) {
@@ -303,13 +351,41 @@ class BoardManager {
     }
 
     /**
+    * Gets the amount of rent for a specific location
+    * @param location String location to find rent of
+    * 
+    * @return int amount of money or false if none available
+    **/
+    getRent(player, location) {
+        let land = this.locations[location]
+        let numOwned = this.PropertyGroup[land.type].getNumberOwned(player)
+        let monopoly = this.PropertyGroup[land.type].hasMonopoly()
+
+        if (land.kind === 'property'){
+            return land.getRent(monopoly)
+        }
+        else if (land.kind === 'utility'){
+            return land.getRent(numOwned, player.lastRolled)
+        }
+        else if (land.kind === 'railroad'){
+            return land.getRent(numOwned)
+        }
+        else if (land.kind === 'cab'){
+            return land.getRent(numOwned)
+        }
+        return false
+    }
+
+    /**
      * States whether or not the location can be bought
      * @param the name of a location
      *
      * @return true if the location can be bought, otherwise false
      */
     canBuy(location) {
-        return !this.locations[location].owner
+        let land = this.locations[location]
+        let isProperty = (land.kind === 'property' || land.kind === 'utility' || land.kind === 'railroad' || land.kind === 'cab')
+        return (isProperty && isOwned(location))
     }
 
     /**
@@ -331,7 +407,15 @@ class BoardManager {
      * @return next railroad in the forward direction
      */
     nextTransit(location, forward) {
-        // TODO
+        let land = this.locations[location]
+        let nextInfo = {"next": location, "track": land.track}
+
+        while (land.type !== "railroad"){
+            nextInfo = (location, true, forward, land.track)
+            location = nextInfo["next"]
+            land = this.locations[location]
+        }
+        return location
     }
 }
 

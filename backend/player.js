@@ -14,7 +14,9 @@ class Player {
         this.busTickets = {}; // key of bus ticket type to quantity
         this.forward = true;
         this.location = startingSpace; // all players start on go
+        this.track = startingTrack; // all players start on track 1
         this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
+        this.lastRolled = 0 // int last value of dice roll
     }
 
     /**
@@ -34,6 +36,7 @@ class Player {
             "busTickets": this.busTickets,
             "forward": this.forward,
             "location": this.location,
+            "track": this.track,
             "specialCards": this.specialCards
         }
     }
@@ -52,6 +55,21 @@ class Player {
 
         return worth
     }
+
+    /**
+    * Sets the number last rolled by the player
+    * @param num int number last rolled
+    *
+    * @return boolean true if properly set, false otherwise
+    **/
+    setLastRoll(num){
+        if (num < 15){
+            this.lastRolled = num
+            return true
+        }
+        return false
+    }
+
 
     /**
      * Determines if the player can afford to buy item of amt, but doesn't change amount of money
