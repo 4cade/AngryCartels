@@ -20,6 +20,7 @@ class Collect extends Place{
 	* Gets the amount of money collected.
 	* @param odd boolean true if player rolled an odd, false if even
 	* @param land boolean true if player has no more steps, false if can continue
+	* @return int amount of money collected
 	**/
 	getGain(odd, land){
 

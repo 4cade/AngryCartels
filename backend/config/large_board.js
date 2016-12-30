@@ -968,17 +968,19 @@ module.exports = {
         "below": ["sewage system"]
     },
     "holland tunnel ne": {
-        "type": "tunnel",
+        "type": "teleport",
         "forward": ["miami ave"],
         "backward": ["florida ave"],
+        "teleport": ["holland tunnel sw", [2]],
         "side": [2, 3],
         "track": [0],
         "below": ["roll3", "water works", "marvin gardens", "pacific ave", "north carolina ave"]
     },
     "holland tunnel sw": {
-        "type": "tunnel",
+        "type": "teleport",
         "forward": ["auction"],
         "backward": ["bourbon st"],
+        "teleport": ["holland tunnel ne", [0]],
         "side": [0, 1],
         "track": [2],
         "above": ["jail"]
@@ -1070,7 +1072,7 @@ module.exports = {
         "type": "collect",
         "forward": ["boylston st"],
         "backward": ["beacon st"],
-        "amount": [250, 300],
+        "amount": [300, 250],
         "gain": "land/pass",
         "side": [0, 1],
         "track": [0],
@@ -1154,7 +1156,7 @@ module.exports = {
         "below": ["market st"]
     },
     "stock exchange": {
-        "type": "place",
+        "type": "stock",
         "forward": ["wall st"],
         "backward": ["madison ave"],
         "side": [1, 2],
@@ -1202,9 +1204,10 @@ module.exports = {
         "above": ["jail"]
     },
     "go to jail": {
-        "type": "place",
+        "type": "teleport",
         "forward": ["south st"],
         "backward": ["temple square"],
+        "teleport": ["jail", [1]],
         "side": [2, 3],
         "track": [2],
         "above": ["roll3"]
@@ -1239,7 +1242,7 @@ module.exports = {
         "type": "collect",
         "forward": ["mediterranean ave"],
         "backward": ["boardwalk"],
-        "go": [200, 200],
+        "amount": [200, 200],
         "gain": "land/pass",
         "side": [0, 3],
         "track": [1],
