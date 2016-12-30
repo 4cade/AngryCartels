@@ -253,13 +253,20 @@ describe('Card', function() {
             let rollSet = new Set();
 
             roll3.forEach(r => {
-                assert(r <= 6 && r > 0);
+                assert(1 <= r <= 6);
                 rollSet.add(r);
             });
 
             // each value is distinct
             assert(Array.from(rollSet).length, 3);
         }
+    });
+
+    it('gets 3 dice rolls', function() {
+        let die1, die2, die3 = (Card.rollDie(), Card.rollDie(), Card.rollDie());
+        assert(1 <= die1 <= 6);
+        assert(1 <= die2 <= 6);
+        assert(1 <= die3 <= 6);
     });
 
 });

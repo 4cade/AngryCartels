@@ -157,6 +157,24 @@ class PropertyGroup {
     }
 
     /**
+     * Gets the number of properties that the player owns in this property group.
+     * @param player the name of the player
+     * 
+     * @return number of properties owned by player
+     */
+    getNumberOwned(player) {
+        let num = 0;
+
+        this.properties.forEach(p => {
+            if(p.owner.name === player) {
+                num += 1;
+            }
+        });
+
+        return num;
+    }
+
+    /**
      * Adds a house to the property. If it is unbalanced then the houses will be balanced.
      *      Prioritizes adding a house to this property if it can.
      * @return 'false' if not added, 'true' if added to this property, 'other' if
@@ -255,6 +273,66 @@ class PropertyGroup {
         }
 
         return 'false'
+    }
+
+    /**
+     * Sets the houses of the properties owned by player to the values in houseMap, if possible.
+     * @param player the name of the player
+     * @param houseMap a JSON mapping property names to number of houses
+     *
+     * @return JSON mapping property names to the numerical change in number of houses that actually happened
+     */
+    setHouses(player, houseMap) {
+        // get only properties that work
+        let toChange = [];
+        let oldVals = {};
+        for(p1 in houseMap) {
+            let valid = false;
+
+            for(p2 of this.properties) {
+                if(p2.owner === player && p2.name === p1) {
+                    valid = true;
+                }
+
+                oldVals[p2.name] = p2.houses;
+            }
+
+            if(valid) {
+                deltas.push([p1, houseMap[p1]]);
+            }
+        }
+
+        // ghetto solution, change in future if need performance improvement
+        toChange.sort(function(a,b) { return a[1] < b[1]});
+
+        for(lst of toChange) {
+            let name, val = lst;
+            let p = this.properties[this.indexOfProperty(name)]
+            while(val - p.houses !== 0) {
+                if(val - p.houses > 0) {
+                    this.upgrade(p);
+                }
+                else {
+                    this.downgrade(p);
+                }
+            }
+        }
+
+        let deltas = {};
+
+        // check differences
+        for(p of this.properties) {
+            deltas[p.name] = p.houses - oldVals[p.name];
+        }
+
+        // add unchanged
+        for(p1 in houseMap) {
+            if(!deltas.hasOwnProperty(p1)) {
+                deltas[p1] = 0;
+            }
+        }
+
+        return deltas;
     }
 
     /**

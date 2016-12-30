@@ -56,7 +56,49 @@ class Game {
     *       of actions that the player should perform), and message (string saying what happened)
     */
     rollDice() {
-        // TODO
+        // need to simulate 3 dice just like the real game
+        let player = this.playerManager.getCurrentPlayer();
+        let die1, die2, die3 = Card.rollDie(), Card.rollDie(), Card.rollDie();
+        let totalRoll = 0;
+        let actions = [];
+        let message = ""; // TODO maybe consider making a list called messages?
+
+        if(die3 === 4 || die3 === 5) {
+            die3 = 'mrmonopoly';
+            totalRoll = die1 + die2;
+        }
+        else if(die3 === 6) {
+            die3 = 'gain bus pass'
+            totalRoll = die1 + die2;
+        }
+        else {
+            totalRoll = die1 + die2 + die3
+        }
+
+        player.setLastRoll(totalRoll);
+
+        // get stuff about the turn
+        if(die1 === die2 === die3) {
+            // do the teleport action
+            actions.push('teleport');
+        }
+        else {
+            // TODO update based on whatever happens with boardManager's API
+            const action = this.boardManager.moveLocation(player, totalRoll);
+            actions.push(action);
+        }
+
+        // push other actions after based on priority
+        if(isNan(die3)) {
+            actions.push(action);
+        }
+
+        // see if the player's turn is over
+        if(actions.length === 0) {
+            actions.push('end turn');
+        }
+
+        return {'rolled': [die1, die2, die3], 'actions': actions, 'message': message};
     }
 
     /**
@@ -107,6 +149,16 @@ class Game {
     }
 
     /**
+    * Takes a taxi ride to the specified location.
+    * @param location to get transported to
+    *
+    * @return JSON with field message (string saying what happened)
+    */
+    taxiRide(location) {
+        // TODO
+    }
+
+    /**
     * The current player buys the property that they are located on for market price.
     * @return JSON with field message (string saying what happened)
     */
@@ -122,12 +174,14 @@ class Game {
         // TODO decide if pass in clump of stuff
     }
 
-    buyHouse() {
-        // TODO decide how to handle multiple
-    }
-
-    sellHouse() {
-        // TODO decide how to handle multiple
+    /**
+     * Sets the houses for all of the properties in the houseMap.
+     * @param houseMap
+     *
+     */
+    setHouses(houseMap) {
+        this.boardManager.setHousesForPropertySet(houseMap);
+        // TODO message
     }
 
     /**
@@ -232,6 +286,10 @@ class Game {
      */
     getRent(property) {
         // gets the rent
+    }
+
+    getTaxiLocations() {
+        // TODO get the taxi locations
     }
 
     /**

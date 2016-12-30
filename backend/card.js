@@ -73,6 +73,14 @@ class Card {
     static drawCommunityChest() {
         return this.chooseRandom(communityChestCards)
     }
+
+    /**
+     * Simulates rolling a 6-sided die
+     * @return random number between 1 and 6.
+     */
+    static rollDie() {
+        return Math.floor(Math.random()*6)+1;
+    }
 }
 
 module.exports = Card;
