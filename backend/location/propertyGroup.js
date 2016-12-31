@@ -286,10 +286,15 @@ class PropertyGroup {
         // get only properties that work
         let toChange = [];
         let oldVals = {};
-        for(p1 in houseMap) {
+
+        // only run these methods once
+        let majority = this.hasMajority(player);
+        let monopoly = this.hasMonopoly(player);
+
+        for(let p1 in houseMap) {
             let valid = false;
 
-            for(p2 of this.properties) {
+            for(let p2 of this.properties) {
                 if(p2.owner === player && p2.name === p1) {
                     valid = true;
                 }
@@ -298,17 +303,31 @@ class PropertyGroup {
             }
 
             if(valid) {
-                deltas.push([p1, houseMap[p1]]);
+                toChange.push([p1, houseMap[p1]]);
             }
         }
 
         // ghetto solution, change in future if need performance improvement
         toChange.sort(function(a,b) { return a[1] < b[1]});
+        
+        for(let i = 0; i < toChange.length; i++) {
+            let val = toChange[i][1];
 
-        for(lst of toChange) {
-            let name, val = lst;
-            let p = this.properties[this.indexOfProperty(name)]
+            if(val > 4 && !monopoly) {
+                val = 4;
+            }
+            else if(val > 0 && !majority) {
+                val = 0;
+            }
+            toChange[i][1] = val;
+        };
+
+        for(let lst of toChange) {
+            let [name, val] = lst;
+            let p = this.getProperty(name);
+
             while(val - p.houses !== 0) {
+                // console.log(p.houses)
                 if(val - p.houses > 0) {
                     this.upgrade(p);
                 }
@@ -321,15 +340,8 @@ class PropertyGroup {
         let deltas = {};
 
         // check differences
-        for(p of this.properties) {
+        for(let p of this.properties) {
             deltas[p.name] = p.houses - oldVals[p.name];
-        }
-
-        // add unchanged
-        for(p1 in houseMap) {
-            if(!deltas.hasOwnProperty(p1)) {
-                deltas[p1] = 0;
-            }
         }
 
         return deltas;
@@ -481,12 +493,27 @@ class PropertyGroup {
      * @return index of the property or -1 if not found
      */
     indexOfProperty(propertyName) {
-        for(i in this.properties) {
-            if(this.properties[i] === propertyName) {
+        for(let i in this.properties) {
+            if(this.properties[i].name === propertyName) {
                 return i;
             }
         }
         return -1;
+    }
+
+    /**
+     * Gets the property object with name propertyName.
+     * @param propertyName the name of the property to find
+     * 
+     * @return property object
+     */
+    getProperty(propertyName) {
+        const i = this.indexOfProperty(propertyName);
+
+        if(i === -1)
+            return null;
+
+        return this.properties[i];
     }
 }
 
