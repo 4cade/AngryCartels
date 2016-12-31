@@ -78,7 +78,8 @@ class BoardManager {
      * @param player the player object that rolled the dice
      * @param diceTotal total number rolled on the dice
      *
-     * @return a list of possible actions (strings) (maybe put the last visited list as a part of player?)
+     * @return JSON with fields movedTo (list of locations visited), actions (list
+     *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
     moveLocation(player, diceTotal) {
         let nextInfo = {"next": player.location, "track": player.track}
@@ -145,12 +146,11 @@ class BoardManager {
     }
 
     /**
-     * Gets any side effects of landing only on that one location
+     * Moves the player to the specified location.
      * @param location the name of the location that is desired to move to
      *
-     * @return a JSON specifying the new location of the player, any money gained along the journey,
-     *     a boolean specifying if the user is on the upper or lower track of a railroad, and an array
-     *     of all of the locations visited in order in case an animation would like to have that
+     * @return JSON with fields movedTo (list of locations visited), actions (list
+     *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
     jumpToLocation(location) {
         let gain = 0
@@ -172,9 +172,8 @@ class BoardManager {
      * @param player the player object that is going to move there
      * @param desiredLocation the location to move to
      *
-     * @return a JSON specifying the new location of the player, any money gained along the journey,
-     *     a boolean specifying if the user is on the upper or lower track of a railroad, and an array
-     *     of all of the locations visited in order in case an animation would like to have that
+     * @return JSON with fields movedTo (list of locations visited), actions (list
+     *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
      advanceToLocation(player, desiredLocation) {
         let nextInfo = {"next": player.location, "track": player.track}
@@ -203,13 +202,12 @@ class BoardManager {
     }
 
     /**
-     * Finds the next unowned property in the player's forward direction, or
-     *     null if there are no unowned properties in the forward path
+     * Finds the next unowned property in the player's forward direction and moves the player there
+     *      if it exists
      * @param player the player object about to do the Mr. Monopoly
      *
-     * @return a JSON specifying the new location of the player, any money gained along the journey,
-     *     a boolean specifying if the user is on the upper or lower track of a railroad, and an array
-     *     of all of the locations visited in order in case an animation would like to have that
+     * @return JSON with fields movedTo (list of locations visited), actions (list
+     *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
     nextMrMonopolyLocation(player) {
         let nextInfo = {"next": player.location, "track": player.track}
@@ -240,6 +238,7 @@ class BoardManager {
     locationAction(location) {
         let actions = []
         let land = this.locations[location]
+        // TODO for this situation you can insert a property in Place called isProperty (boolean) and override it in Property
         if (land.kind === 'property' || land.kind === 'utility' || land.kind === 'railroad' || land.kind === "cab"){
             if (this.isOwned(location))
                 actions.push("rent")
@@ -283,12 +282,13 @@ class BoardManager {
 
     /**
     * When at least a majority is obtained in a property group, sets the number of houses to be placed on each property.
-    * @param propertySet propertyGroup Object to set house order for
-    * @param order JSON key property to preferred number of houses
+    * @param player the player object trying to set houses
+    * @param houseMap JSON key property to preferred number of houses
     *
-    * @return boolean true if properties were set, false otherwise
+    * @return JSON with fields properties (map names to houses on them), player (name: name, money: money),
+    *       delta (map names to change in houses)
     **/
-    setHousesForPropertySet(player, order) {
+    setHousesForPropertySet(player, houseMap) {
         /**
         if (propertySet.hasMajority(player)){
             for (let property of propertySet.properties){
@@ -308,15 +308,18 @@ class BoardManager {
      * @param property String the property to buy
      * @param auctionPrice numerical value to pay in an auction, if -1 (default) there is no auction
      * 
-     * @return true if the player can buy the property
+     * @return JSON with fields player (name: name, money: money), location (name of locations),
+     *      price (price paid for the property). Empty JSON if failed
      */
     buyProperty(player, property, auctionPrice=-1) {
         if (auctionPrice>0){
             player.properties.push(property)
+            // what if it's already owned? TODO
             this.locations[property].owner = player.name
             player.money -= auctionPrice
             return true
         }
+        // TODO doesn't handle the normal case
         return false
     }
 
@@ -326,10 +329,11 @@ class BoardManager {
      * @param the player that wants to mortgage the property
      * @param property the property to mortgage
      *
-     * @return true if the player successfully mortgaged the property
+     * @return JSON with fields player (name: name, money: money), location (name of locations),
+     *      gain (money gained through mortgage). Empty if failed
      */
     mortgageProperty(player, property) {
-        if (player.properties.includes(property)){
+        if (player.properties.includes(property)){ // TODO consider using location.owner.name and comparing names (faster)
             this.locations[property].mortgage()
             return true
         }
@@ -404,7 +408,7 @@ class BoardManager {
      * @param location the name of the current locatoin
      * @param forward true if forward, false if backward
      *
-     * @return next railroad in the forward direction
+     * @return name of next railroad in the forward direction
      */
     nextTransit(location, forward) {
         let land = this.locations[location]
