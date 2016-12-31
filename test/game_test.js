@@ -153,6 +153,7 @@ describe('BoardManager', function(){
         const player3 = new Player("Ted", "go", 1);
 
         it("moves to the correct location after rolling", function() {
+            // TODO update tests for new spec
             // move to reading rr
             const action1 = board1.moveLocation(player3, 5)[0];
             assert.equal(action1, 'buy');
@@ -215,6 +216,54 @@ describe('BoardManager', function(){
             const action8 = board1.moveLocation(player3, 5)[0];
             assert.equal(action8, 'community chest');
             assert.equal(player3.money, 4200);
+        });
+
+        it('jumps the player to the specified location', function() {
+            // TODO tests
+        });
+
+        it('advances to the specified location', function() {
+            // TODO
+        });
+
+        it('buys properties normally', function() {
+            // TODO
+        });
+
+        it('buys properties with special auction prices', function() {
+            // TODO
+        });
+
+        it('finds the next location for Mr. Monopoly', function() {
+            // TODO put after several properties bought
+        });
+
+        it('sets houses on properties', function() {
+            // TODO after properties bought
+        });
+
+        it('handles mortgaging/unmortgaging', function() {
+            // TODO
+        });
+
+        it('handles property transfer', function() {
+            // TODO
+        });
+
+        it('gets the cost of rent', function() {
+            // TODO
+        });
+
+        it('lets you know if you can buy properties', function() {
+            // TODO
+        });
+
+        it('gets all properties in the forward direction', function() {
+            // TODO
+        });
+
+        it('gets the next transit in the forward direction', function() {
+            // TODO
         });
     });
 });

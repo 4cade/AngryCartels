@@ -400,6 +400,7 @@ class BoardManager {
      * @return list of all locations in the forward direction
      */
     locationsInForwardDirection(location, forward) {
+        // TODO probably use player instead of forward
         // TODO, also figure out what exactly we want to define as the forward direction
     }
 
@@ -411,6 +412,7 @@ class BoardManager {
      * @return name of next railroad in the forward direction
      */
     nextTransit(location, forward) {
+        // TODO probably use player instead of forward
         let land = this.locations[location]
         let nextInfo = {"next": location, "track": land.track}
 
