@@ -155,7 +155,7 @@ describe('BoardManager', function(){
         it("moves to the correct location after rolling", function() {
             // TODO update tests for new spec
             // move to reading rr
-            const action1 = board1.moveLocation(player3, 5)[0];
+            const action1 = board1.moveLocation(player3, 5)['actions'][0];
             assert.equal(action1, 'buy');
             assert.equal(player3.location, 'reading railroad');
             assert.equal(player3.track, 1);
@@ -163,7 +163,7 @@ describe('BoardManager', function(){
 
             // move to pennsylvania rr
             board1.moveLocation(player3, 1);
-            const action2 = board1.moveLocation(player3, 9)[0];
+            const action2 = board1.moveLocation(player3, 9)['actions'][0];
             assert.equal(action1, 'buy');
             assert.equal(player3.location, 'pennsylvania railroad');
             assert.equal(player3.track, 1);
@@ -172,14 +172,14 @@ describe('BoardManager', function(){
             // move to lombard st
             board1.moveLocation(player3, 2);
             board1.moveLocation(player3, 11)
-            const action3 = board1.moveLocation(player3, 1)[0];
+            const action3 = board1.moveLocation(player3, 1)['actions'][0];
             assert.equal(action3, 'buy');
             assert.equal(player3.location, 'lombard st');
             assert.equal(player3.track, 0);
             assert.equal(player3.money, 3200);
 
             // move to bonus and get paid
-            const action4 = board1.moveLocation(player3, 7)[0];
+            const action4 = board1.moveLocation(player3, 7)['actions'][0];
             assert.equal(action4, null);
             assert.equal(player3.location, 'bonus');
             assert.equal(player3.track, 0);
@@ -187,43 +187,58 @@ describe('BoardManager', function(){
 
             // move to stock exchange
             board1.moveLocation(player3, 3);
-            const action5 = board1.moveLocation(player3, 3)[0];
+            const action5 = board1.moveLocation(player3, 3)['actions'][0];
             assert.equal(action5, 'stock');
             assert.equal(player3.location, 'stock exchange');
             assert.equal(player3.track, 0);
             assert.equal(player3.money, 3500);
 
             // go through a tunnel
-            board1.moveLocation(player3, 6);
+            const movedTo = board1.moveLocation(player3, 6)['movedTo'];
+            const expectedMovedTo = ['wall st', 'tax refund', 'gas company', 'chance inner ne', 'florida ave', 'holland tunnel ne', 'holland tunnel sw'];
             assert.equal(player3.location, 'holland tunnel sw');
             assert.equal(player3.track, 2);
             assert.equal(player3.money, 3500);
+            assert.deepEqual(movedTo, expectedMovedTo);
 
             // auction space
-            const action6 = board1.moveLocation(player3, 1)[0];
-            assert.equal(action6, 'auction'); // TODO test when all properties are owned
+            const action6 = board1.moveLocation(player3, 1)['actions'][0];
+            assert.equal(action6, 'auction'); // TODO test highest rent when all properties are owned
 
             // chance space
-            const action7 = board1.moveLocation(player3, 6)[0];
-            assert.equal(action7, 'chance'); // TODO test when all properties are owned
+            const action7 = board1.moveLocation(player3, 6)['actions'][0];
+            assert.equal(action7, 'chance');
 
             // pass pay day even
-            board1.moveLocation(player3, 8);
-            assert.equal(player3.money, 3900);
+            const playerCheck = board1.moveLocation(player3, 8)['player'];
+            const expectedPlayerCheck = {'name': 'Ted', 'money': 3900};
+            assert.deepEqual(playerCheck, expectedPlayerCheck);
 
             // move backwards & test pay day odd & community chest
             player3.switchDirection();
-            const action8 = board1.moveLocation(player3, 5)[0];
+            const action8 = board1.moveLocation(player3, 5)['actions'][0];
             assert.equal(action8, 'community chest');
             assert.equal(player3.money, 4200);
         });
 
         it('jumps the player to the specified location', function() {
-            // TODO tests
+            const json = board1.jumpToLocation(player3, 'bonus');
+            assert.deepEqual(json.movedTo, ['bonus']);
+            assert.equal(json.actions.length, 0);
+            const expectedPlayer = {'name': 'Ted', 'money': 4500};
+            assert.deepEqual(json.player, expectedPlayer);
+            assert.equal(player3.location, 'bonus');
+
         });
 
         it('advances to the specified location', function() {
-            // TODO
+            // handles switching tracks too
+            const json = board1.advanceToLocation(player3, 'tennessee ave');
+            assert.deepEqual(json.movedTo, ['boyleston ave', 'newbury st', 'pennsylvania railroad', 'st james pl', 'community chest middle east', 'tennessee ave']);
+            assert.equal(json.actions[0], 'buy');
+            const expectedPlayer = {'name': 'Ted', 'money': 4500};
+            assert.deepEqual(json.player, expectedPlayer);
+            assert.equal(player3.location, 'tennessee ave');
         });
 
         it('buys properties normally', function() {

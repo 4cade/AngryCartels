@@ -147,12 +147,13 @@ class BoardManager {
 
     /**
      * Moves the player to the specified location.
+     * @param player the player to move
      * @param location the name of the location that is desired to move to
      *
      * @return JSON with fields movedTo (list of locations visited), actions (list
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
-    jumpToLocation(location) {
+    jumpToLocation(player, location) {
         let gain = 0
         let odd = true  ///temporary until get roll
         let track = this.locations[location].track
