@@ -31,8 +31,11 @@ public class PlayerCardCreator : MonoBehaviour {
     /// This method should only be called once at the start of the game scene.
     /// </summary>
     /// <param name="numPlayers"></param>
-    internal void createPlayerCards(int numPlayers)
+    internal void createPlayerCards(int numPlayers, GameObject playersContainer)
     {
+        PlayerScript[] players = playersContainer.GetComponentsInChildren<PlayerScript>();
+        int playerCount = 0;
+
         if (enabled) // for debugging
         {
             this.numPlayers = numPlayers;
@@ -55,6 +58,7 @@ public class PlayerCardCreator : MonoBehaviour {
             {
                 GameObject instance = Instantiate(playerCardPrefab);
                 instance.transform.SetParent(row1.transform);
+                instance.GetComponent<PlayerCardSelected>().player = players[playerCount++].gameObject;
                 //instance.transform.parent = row1.transform;
                 //instance.GetComponent<RectTransform>().SetParent(row1.transform);
             }
@@ -70,6 +74,7 @@ public class PlayerCardCreator : MonoBehaviour {
                 {
                     GameObject instance = Instantiate(playerCardPrefab);
                     instance.transform.SetParent(row2.transform);
+                    instance.GetComponent<PlayerCardSelected>().player = players[playerCount++].gameObject;
                 }
             }
         }

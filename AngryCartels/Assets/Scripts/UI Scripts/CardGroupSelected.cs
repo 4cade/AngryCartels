@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
+
 
 public class CardGroupSelected : MonoBehaviour {
 
     private GameObject cardPanel;
+
+    public List<string> cards;
 
     void Start()
     {
@@ -21,6 +25,8 @@ public class CardGroupSelected : MonoBehaviour {
 
         // set the card panel to active
         cardPanel.SetActive(true);
+
+        cardPanel.GetComponent<CardDisplay>().DisplayCards(cards);
 
         // set the parent panel to non-active
         transform.parent.gameObject.SetActive(false);

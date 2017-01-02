@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PlayerScript : MonoBehaviour {
 
-    Dictionary<int, List<string>> cards;
+    public Dictionary<int, List<string>> cards;
 
 	// Use this for initialization
 	void Start () {
@@ -16,6 +16,11 @@ public class PlayerScript : MonoBehaviour {
         {
             int size2 = Random.Range(0, 3);
             cards.Add(i, new List<string>(size2));
+            for (int k = 0; k < size2; ++k)
+            {
+                cards[i].Add("asdf");
+            }
+            
         }
 	}
 	

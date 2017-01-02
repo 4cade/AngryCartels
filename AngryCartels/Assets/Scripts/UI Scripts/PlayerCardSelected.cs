@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerCardSelected : MonoBehaviour {
 
+    public GameObject player;
+
     GameObject cardGroupPanel;
 
 	// Use this for initialization
@@ -14,7 +16,8 @@ public class PlayerCardSelected : MonoBehaviour {
 	
 	public void CardSelected()
     {
-        Debug.Log("TODO: card selected~");
+        //Debug.Log("TODO: card selected~");
         cardGroupPanel.SetActive(true);
+        cardGroupPanel.GetComponent<CardGroupDisplay>().DisplayCardGroup(player);
     }
 }
