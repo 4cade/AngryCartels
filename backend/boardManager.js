@@ -266,6 +266,7 @@ class BoardManager {
         }
         if (land.kind === 'auction'){
             let someLeft = false
+            // TODO possible performance improvement: keep counter of unowned properties and dcerement/increment so doesn't have O(n) operation here
             for (let property in this.locations){
                 if (!this.isOwned(property))
                     someLeft = true
@@ -289,7 +290,7 @@ class BoardManager {
     * @return JSON with fields properties (map names to houses on them), player (name: name, money: money),
     *       delta (map names to change in houses)
     **/
-    setHousesForPropertySet(player, houseMap) {
+    setHousesForProperties(player, houseMap) {
         /**
         if (propertySet.hasMajority(player)){
             for (let property of propertySet.properties){
@@ -309,7 +310,7 @@ class BoardManager {
      * @param property String the property to buy
      * @param auctionPrice numerical value to pay in an auction, if -1 (default) there is no auction
      * 
-     * @return JSON with fields player (name: name, money: money), location (name of locations),
+     * @return JSON with fields player (name: name, money: money), location (name of location),
      *      price (price paid for the property). Empty JSON if failed
      */
     buyProperty(player, property, auctionPrice=-1) {
@@ -334,6 +335,7 @@ class BoardManager {
      *      gain (money gained through mortgage). Empty if failed
      */
     mortgageProperty(player, property) {
+        // TODO remove precondition & just check if it has houses
         if (player.properties.includes(property)){ // TODO consider using location.owner.name and comparing names (faster)
             this.locations[property].mortgage()
             return true
@@ -341,8 +343,29 @@ class BoardManager {
         return false
     }
 
-    transferProperty(player1, player2, property) {
-        // TODO decide how exactly to handle this and to check house balancing and stuff like that
+    /**
+     * Causes the property to be unmortgaged so rent cannot be charged.
+     *
+     * @param the player that wants to unmortgage the property
+     * @param property the property to unmortgage
+     *
+     * @return JSON with fields player (name: name, money: money), location (name of locations),
+     *      lose (money lost through unmortgage). Empty if failed
+     */
+    unmortgageProperty(player, property) {
+        // TODO
+    }
+
+    /**
+     * Transfers the properties from player1 to player2 if possible. Tries to keep as many houses as possible.
+     * @param player1 player losing the properties
+     * @param player2 player losing the properties
+     * @param properties list of string names of properties to transfer
+     *
+     * @return JSON with fields player1 (money gained from lost houses), player2 (JSON of property: # of houses)
+     */
+    transferProperties(player1, player2, properties) {
+        // TODO, give full value of houses if they are lost
     }
 
     /**
@@ -389,31 +412,29 @@ class BoardManager {
      */
     canBuy(location) {
         let land = this.locations[location]
+        // TODO create isProperty field of properties and others and just set true for properties
         let isProperty = (land.kind === 'property' || land.kind === 'utility' || land.kind === 'railroad' || land.kind === 'cab')
         return (isProperty && isOwned(location))
     }
 
     /**
      * Gets a list of all of the locations in the forward direction
-     * @param location the name of the current locatoin
-     * @param forward true if forward, false if backward
+     * @param player the player that wants to move somewhere in the forward direction
      *
      * @return list of all locations in the forward direction
      */
-    locationsInForwardDirection(location, forward) {
-        // TODO probably use player instead of forward
-        // TODO, also figure out what exactly we want to define as the forward direction
+    locationsInForwardDirection(player) {
+        // TODO use properties of player
     }
 
     /**
      * Gets the next railroad in the forward direction
-     * @param location the name of the current locatoin
-     * @param forward true if forward, false if backward
+     * @param player the player that wants to take the next transit
      *
      * @return name of next railroad in the forward direction
      */
-    nextTransit(location, forward) {
-        // TODO probably use player instead of forward
+    nextTransit(player) {
+        // TODO probably use player instead of forward, stay on same track?
         let land = this.locations[location]
         let nextInfo = {"next": location, "track": land.track}
 

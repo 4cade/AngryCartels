@@ -439,7 +439,7 @@ describe('Location', function() {
             });
         });
 
-        it('should add houses according to a legal house map', function() {
+        it('adds houses according to a legal house map', function() {
             pgroup1.transferAllOwnership(pgroup1.getProperty('biscayne ave').owner, player1);
             let mapper = {'biscayne ave': 3, 'miami ave': 2, 'florida ave': 3}
             let delta = pgroup1.setHouses(player1, mapper);
@@ -461,7 +461,7 @@ describe('Location', function() {
             pgroup1.setOwner(pgroup1.getProperty('biscayne ave'), new Player('cat', 'dude', 7));
             mapper = {'biscayne ave': 5, 'miami ave': 6, 'florida ave': 6, 'yo dude': -1, "that thing": 2};
             delta = pgroup1.setHouses(player1, mapper);
-            expected = {'biscayne ave': 0, 'miami ave': 0, 'florida ave': 0}
+            expected = {'miami ave': 0, 'florida ave': 0, 'biscayne ave': 0}
             assert.deepEqual(delta, expected);
 
             // only actually can change florida to 3
