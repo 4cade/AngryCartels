@@ -30,6 +30,8 @@ class Game {
 
             // scrambles player order for more fun
             this.playerManager.scrambleTurnOrder();
+
+            // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
         }
         else {
             // TODO in the future to load a game from saved state
@@ -162,7 +164,7 @@ class Game {
     * The current player buys the property that they are located on for market price.
     * @return JSON with field message (string saying what happened)
     */
-    buyProperty() {
+    buyProperty(player) {
         // TODO
     }
 
@@ -229,7 +231,8 @@ class Game {
     /**
      * The winning player of the auction buys.
      * 
-     * @return JSON with field message (string saying what happened)
+     * @return JSON with fields player (name: name, money: money), location (name of location),
+     *      price (price paid for the property), message (saying what happened). null if failed
      */
     finishAuction() {
         if(this.auctionGoing) {
@@ -244,18 +247,41 @@ class Game {
 
             if(this.over) {
                 let top = -1
-                let name = null;
+                let names = [];
+
+                let second = -1;
 
                 for(p in this.auction) {
                     if(this.auction[p] > top) {
-                        top = this.auction[p]
-                        name = p
+                        second = top;
+                        top = this.auction[p];
+                        names = [p];
+                    }
+                    else if (this.auction[p] === top) {
+                        names.push(p);
                     }
                 }
 
+                let player;
+                let price;
+                // goes 20 over the next highest bidder
+                if(names.length === 1) {
+                    player = this.playerManager.getPlayer(names[0]);
+                    price = Math.min(top, second + 20);
+                }
+                // if multiple people chose the same amount, then randomly choose one to win
+                else {
+                    player = this.playerManager.getPlayer(Card.chooseRandom(names));
+                    price = top;
+                }
+
+                let json = this.boardManager.buyProperty(player, this.auctionedProperty, price);
+
+                this.auction = null;
                 this.auctionGoing = false;
-                // TODO decide if should just buy the property now
-                return {"player": name, "price": top}; 
+                this.auctionedProperty = null;
+                // TODO add message
+                return json; 
             }
         }
 
@@ -284,7 +310,7 @@ class Game {
      *
      * @return JSON of {name: property, price: rent price (null if unowned)}
      */
-    getRent(property) {
+    getRent(player, property) {
         // gets the rent
     }
 
