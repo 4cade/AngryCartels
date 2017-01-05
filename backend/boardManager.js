@@ -382,7 +382,7 @@ class BoardManager {
     * Gets the amount of rent for a specific location
     * @param location String location to find rent of
     * 
-    * @return int amount of money or false if none available
+    * @return int amount of money or null if none available
     **/
     getRent(player, location) {
         let land = this.locations[location]
@@ -401,7 +401,7 @@ class BoardManager {
         else if (land.kind === 'cab'){
             return land.getRent(numOwned)
         }
-        return false
+        return null
     }
 
     /**

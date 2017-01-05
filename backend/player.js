@@ -70,6 +70,20 @@ class Player {
         return false
     }
 
+    /**
+     * @return the player's name
+     */
+    getName() {
+        return this.name;
+    }
+
+    /**
+     * Gets the amount of money owned by this player/player's team
+     * @return amount of money owned
+     */
+    getMoney() {
+        return this.money
+    }
 
     /**
      * Determines if the player can afford to buy item of amt, but doesn't change amount of money

@@ -162,18 +162,67 @@ class Game {
 
     /**
     * The current player buys the property that they are located on for market price.
-    * @return JSON with field message (string saying what happened)
+    *
+    * @return JSON with fields player (name: name, money: money), location (name of location),
+    *      price (price paid for the property), message (saying what happened). null if failed
     */
-    buyProperty(player) {
-        // TODO
+    buyProperty() {
+        const player = this.playerManager.getCurrentPlayer();
+        let json = this.boardManager.buyProperty(player, player.location);
+        // TODO add message
+        return json;
     }
 
-    mortgage() {
-        // TODO decide if pass in clump of stuff
+    /**
+    * The current player mortgages the properties in the list.
+    * @param properties list of strings of property names to mortgage
+    *
+    * @return JSON with fields player (name: name, money: money), locations (list of successfully
+    *      mortgaged locations), gain (money gained from mortgaging), message (saying
+    *      what happened).
+    */
+    mortgage(properties) {
+        const player = this.playerManager.getCurrentPlayer();
+        let success = [];
+        let gain = 0;
+
+        for(let property of properties) {
+            let result = this.boardManager.mortgageProperty(player, property);
+
+            if(result.hasOwnProperty('location')) {
+                success.push(property);
+                gain += result.gain;
+            }
+        }
+        // TODO message
+        return {"player": {"name": player.getName(), "money": player.getMoney()}, 
+                "locations": success, "gain": gain}
     }
 
-    unmortgage() {
-        // TODO decide if pass in clump of stuff
+    /**
+    * The current player unmortgages the properties in the list.
+    * @param properties list of strings of property names to unmortgage
+    *
+    * @return JSON with fields player (name: name, money: money), locations (list of successfully
+    *      unmortgaged locations), lose (money lost from unmortgaging), message (saying
+    *      what happened).
+    */
+    unmortgage(properties) {
+        const player = this.playerManager.getCurrentPlayer();
+        let success = [];
+        let lose = 0;
+
+        for(let property of properties) {
+            let result = this.boardManager.unmortgageProperty(player, property);
+
+            if(result.hasOwnProperty('location')) {
+                success.push(property);
+                lose += result.lose;
+            }
+        }
+        // TODO message
+        return {"player": {"name": player.getName(), "money": player.getMoney()}, 
+                "locations": success, "lose": lose}
     }
 
     /**
@@ -191,7 +240,19 @@ class Game {
     * @return JSON with field message (string saying what happened)
     */
     payRent() {
-        // TODO
+        const player = this.playerManager.getCurrentPlayer();
+        const rent = this.boardManager.getRent(player, player.location);
+        const owner = this.boardManager.isOwned(player.location);
+
+        if(!rent) {
+            return {"message": player.location + " is unowned."};
+        }
+        
+        player.deltaMoney(-rent);
+        owner.deltaMoney(rent);
+
+        let message = player.name + " paid " + rent + " rent to " + owner;
+        return {"message": message};
     }
 
     trade() {
@@ -311,7 +372,8 @@ class Game {
      * @return JSON of {name: property, price: rent price (null if unowned)}
      */
     getRent(player, property) {
-        // gets the rent
+        let rent = this.boardManager.getRent(player, player.location);
+        return {"name": property, "price": rent}
     }
 
     getTaxiLocations() {
