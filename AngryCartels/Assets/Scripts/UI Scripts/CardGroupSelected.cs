@@ -8,6 +8,8 @@ public class CardGroupSelected : MonoBehaviour {
 
     private GameObject cardPanel;
 
+    public GameObject backButton;
+
     public List<string> cards;
 
     void Start()
@@ -17,6 +19,9 @@ public class CardGroupSelected : MonoBehaviour {
 
         Button button = GetComponent<Button>();
         button.onClick.AddListener(GroupSelected);
+
+        // Get the backbutton because we bad at planning shit
+        backButton = transform.parent.parent.Find("BackToGroupButton").gameObject;
     }
 
     void GroupSelected()
@@ -25,6 +30,9 @@ public class CardGroupSelected : MonoBehaviour {
 
         // set the card panel to active
         cardPanel.SetActive(true);
+
+        // set the back button to active
+        backButton.SetActive(true);
 
         cardPanel.GetComponent<CardDisplay>().DisplayCards(cards);
 

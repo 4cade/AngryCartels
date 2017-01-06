@@ -17,7 +17,7 @@ public class PlayerCardSelected : MonoBehaviour {
 	public void CardSelected()
     {
         //Debug.Log("TODO: card selected~");
-        cardGroupPanel.SetActive(true);
+        cardGroupPanel.GetComponent<CardGroupDisplay>().Reset();
         cardGroupPanel.GetComponent<CardGroupDisplay>().DisplayCardGroup(player);
     }
 }

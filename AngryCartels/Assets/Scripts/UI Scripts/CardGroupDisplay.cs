@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using System;
 
 public class CardGroupDisplay : MonoBehaviour {
 
     public GameObject groupPanel;
     public GameObject cardPanel;
+    public Button backButton;
 
     public GameObject cardGroupPrefab;
 
@@ -15,10 +18,12 @@ public class CardGroupDisplay : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //players = playerContainerGameObject.GetComponentsInChildren<PlayerScript>();
+        //backButton = transform.GetComponentInChildren<Button>();
+        backButton.onClick.AddListener(Reset);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 
@@ -44,5 +49,13 @@ public class CardGroupDisplay : MonoBehaviour {
             List<string> test = cards[key];
             instance.GetComponent<CardGroupSelected>().cards = cards[key];
         }
+    }
+
+    public void Reset()
+    {
+        gameObject.SetActive(true);
+        groupPanel.SetActive(true);
+        cardPanel.SetActive(false);
+        backButton.gameObject.SetActive(false);
     }
 }
