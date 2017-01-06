@@ -4,10 +4,36 @@ using System.Collections.Generic;
 
 public class PlayerScript : MonoBehaviour {
 
+    // TEMP: player counter
+    static int counter = 0;
+
+    // player's in game name
+    private string playerName;
+    public string PlayerName
+    {
+        get { return playerName; }
+        //set { playerName = value; }
+    }
+
+    // players money
+    private float playerMoney;
+    public float PlayerMoney
+    {
+        get { return playerMoney; }
+        //set { playerMoney = value; }
+    }
+
+
+    // Dictionary of properties held by the player
     public Dictionary<int, List<string>> cards;
 
 	// Use this for initialization
 	void Start () {
+
+        playerName = "PoorSoul_" + counter++;
+        playerMoney = Random.Range(0, 100);
+
+
         Debug.Log("Hardcoding 14 for card groups");
         cards = new Dictionary<int, List<string>>();
 

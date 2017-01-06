@@ -1026,6 +1026,62 @@ Transform:
   - {fileID: 152645591}
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!1 &1157548643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1157548644}
+  m_Layer: 0
+  m_Name: 'TODO: mapping between locations and server commands'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1157548644
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1157548643}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 560.364, y: 325.55853, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+--- !u!1 &1237896845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1237896846}
+  m_Layer: 0
+  m_Name: 'TODO: link players in game manager with player cards'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1237896846
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1237896845}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 560.364, y: 325.55853, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
 --- !u!1 &1302324546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,7 +1120,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0.000015258789, y: 0}
-  m_SizeDelta: {x: 280, y: 29.989868}
+  m_SizeDelta: {x: 280, y: 30.314232}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1302324548
 MonoBehaviour:
@@ -1473,17 +1529,17 @@ Prefab:
     - target: {fileID: 224000014137445746, guid: b18a76cf2ca7ab24f8308ce5e0945b79,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -14.994934
+      value: -15.157117
       objectReference: {fileID: 0}
     - target: {fileID: 224000014137445746, guid: b18a76cf2ca7ab24f8308ce5e0945b79,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 134.54913
+      value: 134.56563
       objectReference: {fileID: 0}
     - target: {fileID: 224000014137445746, guid: b18a76cf2ca7ab24f8308ce5e0945b79,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 29.989868
+      value: 30.314234
       objectReference: {fileID: 0}
     - target: {fileID: 224000014137445746, guid: b18a76cf2ca7ab24f8308ce5e0945b79,
         type: 2}
