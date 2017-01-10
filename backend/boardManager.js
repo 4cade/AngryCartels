@@ -445,6 +445,37 @@ class BoardManager {
         }
         return location
     }
+
+    /**
+     * Gets a list of all of the transit locations.
+     *
+     * @return list of all bus/train locations
+     */
+    getTransitLocations() {
+        // TODO
+    }
+
+    /**
+     * Pays the pool from the player.
+     * @param player the player object that is paying the pool
+     * @param money amount being paid
+     *
+     * @return JSON with fields player (money player has left) and pool (money in pool)
+     */
+    payPool(player, money) {
+        // TODO
+    }
+
+    /**
+     * Pays the pool from the player.
+     * @param player the player object that is paying the pool
+     * @param mult multiplier (0 <= amt <= 1) for amount collected from pool
+     *
+     * @return JSON with fields player (money player has left) and pool (money in pool)
+     */
+    collectFromPool(player, mult=0.5) {
+        // TODO
+    }
 }
 
 

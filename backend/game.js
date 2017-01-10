@@ -154,10 +154,37 @@ class Game {
     * Takes a taxi ride to the specified location.
     * @param location to get transported to
     *
-    * @return JSON with field message (string saying what happened)
+    * @return JSON with fields action (list of actions that the player should perform)
+    *       and message (string saying what happened)
     */
     taxiRide(location) {
-        // TODO
+        // TODO check if location in list of locations
+        const player = this.playerManager.getCurrentPlayer();
+        const owner = this.boardManager.isOwned();
+        let json = {};
+
+        // pay pool or owner
+        if(owner.name === player.name) {
+            let tempjson = this.boardManager.payPool(player, 20);
+            json['player1'] = {"name": player.name, 'money': player.money}
+            json['pool'] = tempjson['pool'];
+        }
+        else {
+            player.deltaMoney(-50);
+            owner.deltaMoney(50);
+            json['player1'] = {"name": player.name, 'money': player.money}
+            json['player2'] = {"name": owner.name, 'money': owner.money}
+        }
+
+        let actions = this.boardManager.jumpToLocation(player, location);
+        // TODO only handle a subset of actions
+        if(actions.includes('buy'))
+            actions = ['buy'];
+        else
+            actions = [];
+        // TODO message
+        const message = ""
+        return {'action': actions, 'message': message};
     }
 
     /**
