@@ -346,7 +346,7 @@ describe('Location', function() {
     
         it('sets an owner correctly', function() {
             pgroup1.setOwner(bisc, player1);
-            assert.equal(bisc.owner, player1);
+            assert.equal(bisc.owner, player1.name);
         })
 
         it('evenly adds houses in a monopoly', function() {
@@ -442,7 +442,7 @@ describe('Location', function() {
         it('adds houses according to a legal house map', function() {
             pgroup1.transferAllOwnership(pgroup1.getProperty('biscayne ave').owner, player1);
             let mapper = {'biscayne ave': 3, 'miami ave': 2, 'florida ave': 3}
-            let delta = pgroup1.setHouses(player1, mapper);
+            let delta = pgroup1.setHouses(player1.name, mapper);
             let expected = {'biscayne ave': -3, 'miami ave': -4, 'florida ave': -3}
             assert.deepEqual(delta, expected);
 

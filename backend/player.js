@@ -199,13 +199,14 @@ class Player {
 
     /**
      * The player moves to a new Location possibly gains money.
-     * @param moveInfo JSON object with params moneyGained (num amount),
-     *      currentLocation (Place object), and movedTo (list of Strings
-     *      specifying the spots landed on to get to the current location)
+     * @param property String location to move to
+     * @param track Int track of location to move to
+     * @param money Int amount gained by moving
      */
-    moveToLocation(moveInfo) {
-        this.location = moveInfo.currentLocation;
-        this.deltaMoney(moveInfo.moneyGained);
+    moveToLocation(property, track, money) {
+        this.location = property;
+        this.track = track;
+        this.deltaMoney(money);
     }
 
     /**

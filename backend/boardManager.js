@@ -17,8 +17,9 @@ class BoardManager {
         this.houses = 81;
         this.hotels = 31;
         this.skyscrapers = 16;
-
+        this.pool = 0;
         this.unownedProperties = 0;
+
         this.locations = {}; //key location name to location object
         this.propertyGroups = {}; // key group name to property/railroad/cab/utility object
         this.collects = {}; // key location name to collect object
@@ -84,30 +85,35 @@ class BoardManager {
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
     moveLocation(player, diceTotal) {
-        let nextInfo = {"next": player.location, "track": player.track}
-        let odd = (diceTotal%2)===1
+        let odd = diceTotal%2===1
         let land = false
         let visited = []
+        let location = player.location
+        let track = player.track
+        let money = 0
+        let nextInfo = {"next": location, "track": track}
 
         while (diceTotal > 0){
-            nextInfo = this.nextLocation(player.location, odd, player.forward, player.track)
+            nextInfo = this.nextLocation(location, odd, player.forward, track)
 
-            player.track = nextInfo["track"]
-            player.location = nextInfo["next"]
-            visited.push(player.location)
+            track = nextInfo["track"]
+            location = nextInfo["next"]
+            visited.push(location)
 
             diceTotal -= 1
 
             land = diceTotal===0
-            if (this.collects.hasOwnProperty(player.location)){
-                player.money += this.collects[player.location].getGain(odd, land)
+            if (this.collects.hasOwnProperty(location)){
+                money += this.collects[location].getGain(odd, land)
             }
         }
-        if (this.teleports.hasOwnProperty(player.location)){
-            player.track = this.teleports[player.location].getTrack(land)
-            player.location = this.teleports[player.location].getLocation(land)
-            visited.push(player.location)
+        if (this.teleports.hasOwnProperty(location)){
+            track = this.teleports[location].getTrack(land)
+            location = this.teleports[location].getLocation(land)
+            visited.push(location)
         }
+        player.moveToLocation(location, track, money)
+
         return {
                 'player': {
                             'name': player.name, 
@@ -152,7 +158,6 @@ class BoardManager {
             lane = current.track[0]
         else if (upper && !odd && isRail)
             lane = current.track[1]
-        
 
         return {"next": next, "track": lane}
     }
@@ -166,18 +171,21 @@ class BoardManager {
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
     jumpToLocation(player, location) {
-        let odd = true  ///temporary until get roll\
+        let odd = player.lastRolled%2===1
         let visited = [location]
-        player.location = location
+        let track = this.locations[location].track
+        let money = 0
+
         if (this.collects.hasOwnProperty(location)){
-            player.money += this.collects[location].getGain(odd, true)
+            money += this.collects[location].getGain(odd, true)
         }
         else if (this.teleports.hasOwnProperty(location)){
-            player.track = this.teleports[location].getTrack(true)
-            player.location = this.teleports[location].getLocation(true)
+            track = this.teleports[location].getTrack(true)
+            location = this.teleports[location].getLocation(true)
             visited.push(player.location)
         }
-        // TODO roll to choose the track to be on.
+        player.moveToLocation(location, track, money)
+
         return {
                 'player': {
                             'name': player.name, 
@@ -198,10 +206,10 @@ class BoardManager {
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
      advanceToLocation(player, desiredLocation) {
+        let odd = player.lastRolled%2===1
         let visited = []
         let landed = false
-        let odd = player.lastRolled%2===1
-   
+
         // finds the path with shortest distance
         let visitedLoc = []
         let paths = [this.locations[player.location].forward]
@@ -209,17 +217,17 @@ class BoardManager {
 
         while (paths.length > 0){
             for (let path of paths){
-                let location = path[path.length-1]
-                if (location === desiredLocation){
+                let place = path[path.length-1]
+                if (place === desiredLocation){
                     visited = path
                     paths = [] 
                 }
                 else {
                     if(player.forward){
-                        connected = this.locations[location].forward
+                        connected = this.locations[place].forward
                     }
                     else{
-                        connected = this.locations[location].backward
+                        connected = this.locations[place].backward
                     }
                     if (connected.length === 2 && visitedLoc.indexOf(connected[1]) === -1){
                         let copy = path.concat()
@@ -235,19 +243,22 @@ class BoardManager {
             }
         }
 
-        player.location = this.locations[desiredLocation].name
-        player.track = this.locations[desiredLocation].track
+        //moves player to desiredLocation
+        let location = desiredLocation
+        let track = this.locations[desiredLocation].track
+        let money = 0
+
         for(let place of visited){
             landed = place===desiredLocation
             if (this.collects.hasOwnProperty(place)){
-                player.money += this.collects[player.location].getGain(odd, landed)
+                money += this.collects[place].getGain(odd, landed)
             }
             if (this.teleports.hasOwnProperty(place)){
-                player.track = this.teleports[player.location].getTrack(landed)
-                player.location = this.teleports[player.location].getLocation(landed)
-                visited.push(player.location)
+                track = this.teleports[place].getTrack(landed)
+                location = this.teleports[place].getLocation(landed)
             }
         }
+        player.moveToLocation(location, track, money)
 
         return {
                 'player': {
@@ -268,21 +279,25 @@ class BoardManager {
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
     nextMrMonopolyLocation(player) {
-        let nextInfo = {"next": player.location, "track": player.track}
-        let visited = []
         let odd = player.lastRolled%2===1
+        let visited = []
+        let location = player.location
+        let track = player.track
+        let money = 0
+        let nextInfo = {"next": location, "track": track}
 
-        while (!this.canBuy(player.location)){
-            nextInfo = this.nextLocation(player.location, odd, player.forward, player.track)
+        while (!this.canBuy(location)){
+            nextInfo = this.nextLocation(location, odd, player.forward, track)
             
-            player.location = nextInfo["next"]
-            player.track = nextInfo["track"]
-            visited.push(player.location)
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+            visited.push(location)
 
-            if (this.collects.hasOwnProperty(player.location)){
-                player.money += this.collects[player.location].getGain(player.lastOdd, false)
+            if (this.collects.hasOwnProperty(location)){
+                money += this.collects[location].getGain(odd, false)
             }
         }
+        player.moveToLocation(location, track, money)
 
         return {
                 'player': {
@@ -355,10 +370,10 @@ class BoardManager {
                 delta[property] = houseMap[property]-this.locations[property].houses
                 this.locations[property].houses += delta[property]
                 if (delta[property] > 0){
-                    player.money -= delta[property]*this.locations[property].housePrice
+                    player.deltaMoney(-delta[property]*this.locations[property].housePrice)
                 }
                 else if (delta[property] < 0){
-                    player.money -= delta[property]*(this.locations[property].housePrice/2)
+                    player.deltaMoney(-delta[property]*(this.locations[property].housePrice/2))
                 }
             }
             else {
@@ -392,15 +407,15 @@ class BoardManager {
 
         if (land.owner === null){
             this.unownedProperties -= 1
-            land.owner = player.name
-            player.properties.push(land)
+            land.setOwner(player.name)
+            player.gainProperty(land)
             if (auctionPrice === undefined){
                 lose = land.cost
             }
             else {
                 lose = auctionPrice
             }
-            player.money -= lose
+            player.deltaMoney(-lose)
             return {
                     'player': {
                                 'name': player.name, 
@@ -428,7 +443,7 @@ class BoardManager {
         let land = this.locations[property]
         if (land.houses === 0 && land.owner === player.name && !land.isMortgaged){
             land.mortgage()
-            player.money += land.mortgageValue
+            player.deltaMoney(land.mortgageValue)
             return {
                     'player': {
                                 'name': player.name, 
@@ -454,9 +469,9 @@ class BoardManager {
      */
     unmortgageProperty(player, property) {
         let land = this.locations[property]
-        if (land.houses === 0 && land.owner === player.name){
+        if (land.houses === 0 && land.owner === player.name && land.isMortgaged){
             land.unmortgage()
-            player.money -= Math.round(land.mortgageValue*1.15)
+            player.deltaMoney(-Math.round(land.mortgageValue*1.15))
             return {
                     'player': {
                                 'name': player.name,
@@ -486,7 +501,7 @@ class BoardManager {
         for (let property of properties){
             let land = this.locations[property]
             if (land.owner === player1.name){
-                land.owner = player2.name
+                land.setOwner(player2.name)
                 player2.gainProperty(land);
                 player1.loseProperty(land);
                 movedProperties.push(property);
@@ -589,6 +604,7 @@ class BoardManager {
         }
         land = this.locations[player.location]
 
+        //finds forward locations of the vertical locations
         for (let property of verticals){
             let next = this.locations[property]
             let location = property
@@ -623,14 +639,16 @@ class BoardManager {
      * @return name of next railroad in the forward direction
      */
     nextTransit(player) {
-        let nextInfo = {"next": player.location, "track": player.track}
+        let location = player.location
+        let track = player.track
+        let nextInfo = {"next": location, "track": track}
 
-        while (this.locations[player.location].kind !== "railroad"){
-            nextInfo = this.nextLocation(player.location, true, player.forward, player.track)
-            player.location = nextInfo["next"]
-            player.track = nextInfo["track"]
+        while (this.locations[location].kind !== "railroad"){
+            nextInfo = this.nextLocation(location, true, player.forward, track)
+            location = nextInfo["next"]
+            track = nextInfo["track"]
         }
-        return player.location
+        return location
     }
 
     /**
@@ -656,7 +674,13 @@ class BoardManager {
     * @return JSON with fields player (money player has left) and pool (money in pool)
     */
     payPool(player, money) {
-       // TODO
+        player.deltaMoney(-money)
+        this.pool += money
+        return {
+                'player': player.money,
+                'pool': this.pool
+                }
+
     }
  
     /**
@@ -667,7 +691,12 @@ class BoardManager {
     * @return JSON with fields player (money player has left) and pool (money in pool)
     */
     collectFromPool(player, mult=0.5) {
-         // TODO
+        player.deltaMoney(mult * this.pool)
+        this.pool -= mult*this.pool
+        return {
+                'player': player.money,
+                'pool': this.pool
+                }
     }
  }
 

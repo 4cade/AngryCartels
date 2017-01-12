@@ -125,15 +125,14 @@ describe('Player', function() {
 
     describe("#movementTests", function() {
         it("moves the player to the location with side effects", function() {
-            let moveInfo = {"moneyGained": 299, "currentLocation": 'bob', "movedTo": []};
-            player1.moveToLocation(moveInfo);
+            player1.moveToLocation("bob", 1, 299);
             assert.equal(player1.location, "bob");
+            assert.equal(player1.track, 1);
             assert.equal(player1.money, 300);
 
-            moveInfo["moneyGained"] = 0
-            moveInfo["currentLocation"] = "dude";
-            player1.moveToLocation(moveInfo);
+            player1.moveToLocation("dude", 0, 0);
             assert.equal(player1.location, "dude");
+            assert.equal(player1.track, 0);
             assert.equal(player1.money, 300);
             assert.equal(player1.getNetWorth(), 300);
         });

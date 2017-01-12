@@ -12,7 +12,7 @@ class PropertyGroup {
         this.index = index;
         this.prioritySet = false;
 
-        this.properties = [];
+        this.properties = [];       //list of object properties
     }
 
     /**
@@ -36,6 +36,8 @@ class PropertyGroup {
 
     /**
      * Makes a player own a property.
+     * @param property Object property
+     * @param player Object player
      * @return -1 if failed, else number of houses lost by switching player
      */
     setOwner(property, player) {
@@ -53,8 +55,11 @@ class PropertyGroup {
             theseHouses = 0; // this means that these will not be in lost in the calculation
         }
 
+        let name = null;
+        if (player !== null)
+            name = player.name;
 
-        this.properties[index].setOwner(player);
+        this.properties[index].setOwner(name);
         if(player !== null)
             player.gainProperty(property);
 
@@ -82,9 +87,9 @@ class PropertyGroup {
      */
     transferAllOwnership(player1, player2) {
         this.properties.forEach(p => {
-            if(p.owner === player1) {
+            if(p.owner === player1.name) {
                 player1.loseProperty(p);
-                p.setOwner(player2);
+                p.setOwner(player2.name);
                 player2.gainProperty(p);
             }
         });
