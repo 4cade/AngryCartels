@@ -480,25 +480,35 @@ class BoardManager {
     transferProperties(player1, player2, properties) {
         let money = 0
         let propertyHouses = {}
-        let groupChanged = []
+        let movedProperties = []
+        let groupChanged = new Set();
 
         for (let property of properties){
             let land = this.locations[property]
             if (land.owner === player1.name){
                 land.owner = player2.name
-                player2.properties.push(land)
-                let i = player1.properties.indexOf(land)
-                player1.properties.splice(i) 
-                if (groupChanged.indexOf(land.group) === -1){
-                    groupChanged.push(land.group)
-                }
+                player2.gainProperty(land);
+                player1.loseProperty(land);
+                movedProperties.push(property);
+                groupChanged.add(land.group);
+            }
+        }
+
+        // rebalance for houses + check money gained for destroying houses
+        for (let group of groupChanged){
+            let houseLost = this.propertyGroups[group].rebalanceHouses();
+            let pricePerHouse = this.propertyGroups[group].properties[0].housePrice;
+            money += houseLost*pricePerHouse;
+        }
+
+        // check new number of houses on properties
+        for (let property of movedProperties){
+            let land = this.locations[property]
+            if (land.owner === player2.name){
                 propertyHouses[property] = land.houses
             }
         }
 
-        for (let group of groupChanged){
-            money += this.propertyGroups[group].rebalanceHouses()
-        }
         return {
                 'player1': money,
                 'player2': propertyHouses
