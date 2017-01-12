@@ -166,7 +166,7 @@ class PropertyGroup {
         let num = 0;
 
         this.properties.forEach(p => {
-            if(p.owner.name === player) {
+            if(p.owner === player) {
                 num += 1;
             }
         });

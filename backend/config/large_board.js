@@ -974,7 +974,7 @@ module.exports = {
         "teleport": ["holland tunnel sw", [2]],
         "side": [2, 3],
         "track": [0],
-        "below": ["roll3", "water works", "marvin gardens", "pacific ave", "north carolina ave"]
+        "below": ["roll3"]
     },
     "holland tunnel sw": {
         "type": "teleport",
@@ -1056,9 +1056,9 @@ module.exports = {
         "type": "squeeze play",
         "forward": ["the embarcadero"],
         "backward": ["lombard st"],
-        "side": [0, 3],
+        "side": [3, 0],
         "track": [0],
-        "below": ["go", "luxury tax", "boardwalk", "mediterranean ave", "community chest middle south"]
+        "below": ["go"]
     },
     "reverse": {
         "type": "reverse",
@@ -1076,7 +1076,7 @@ module.exports = {
         "gain": "land/pass",
         "side": [0, 1],
         "track": [0],
-        "below": ["jail", "electric company", "st charles pl", "connecticut ave", "vermont ave"]
+        "below": ["jail"]
     },
     "pay day": {
         "type": "collect",
@@ -1161,7 +1161,7 @@ module.exports = {
         "backward": ["madison ave"],
         "side": [1, 2],
         "track": [0],
-        "below": ["free parking", "chance", "kentucky ave", "new york ave", "tennessee ave"]
+        "below": ["free parking"]
     },
     "tax refund": {
         "type": "place",
@@ -1175,7 +1175,7 @@ module.exports = {
         "type": "subway",
         "forward": ["lake st"],
         "backward": ["rodeo dr"],
-        "side": [0, 3],
+        "side": [3, 0],
         "track": [2],
         "above": ["go"]
     },
@@ -1219,7 +1219,7 @@ module.exports = {
         "side": [0, 1],
         "track": [1],
         "above": ["bonus"],
-        "below": ["holland tunnel sw", "katy freeway", "auction", "bourbon st", "magazine st"]
+        "below": ["holland tunnel sw"]
     },
     "birthday gift": {
         "type": "place",
@@ -1244,10 +1244,10 @@ module.exports = {
         "backward": ["boardwalk"],
         "amount": [200, 200],
         "gain": "land/pass",
-        "side": [0, 3],
+        "side": [3, 0],
         "track": [1],
         "above": ["squeeze play"],
-        "below": ["subway", "chance outer se", "rodeo dr", "lake st", "community chest outer se"]
+        "below": ["subway"]
     },
     "free parking": {
         "type": "place",
@@ -1256,7 +1256,7 @@ module.exports = {
         "side": [1, 2],
         "track": [1],
         "above": ["stock exchange"],
-        "below": ["pay day", "chance outer nw", "randolph st", "peachtree st", "decatur st"]
+        "below": ["pay day"]
     },
     "roll3": {
         "type": "place",
@@ -1265,7 +1265,7 @@ module.exports = {
         "side": [2, 3],
         "track": [1],
         "above": ["holland tunnel ne"],
-        "below": ["go to jail", "north temple", "temple square", "south st", "broad st"]
+        "below": ["go to jail"]
     },
     "luxury tax": {
         "type": "place",

@@ -24,135 +24,11 @@ describe('BoardManager', function(){
         */
     });
 
-
-    const player = new Player('Bob', 'go', 1);
-
     describe("#movements", function(){
 
         const player2 = new Player("Jerry", "go", 1);
         const player3 = new Player("Ted", "go", 1);
 
-        /*
-        it("find location dice rolls away", function(){
-            const expected1 = { "next": "go", "gain": 0, "track": false, "visit": []}
-            assert.deepEqual(board1.moveLocation(player, 0), expected1) // no movement
-
-            board1.moveLocation(player, 3); // ...baltic
-
-            const expected2 = { "next": "oriental ave", "gain": 0, "track": false, "visit": ["income tax", "reading railroad", "oriental ave"]}
-            assert.deepEqual(board1.moveLocation(player, 3), expected2) // cross odd railroad same tracks
-
-            board1.moveLocation(player, 8); // ...virginia
-
-            const expected3 = { "next": "pennsylvania railroad", "gain": 0, "track": false, "visit": ["pennsylvania railroad", "fifth ave"]}
-            assert.deepEqual(board1.moveLocation(player, 2), expected3) // cross even railroad change tracks
-
-            assert.deepEqual(player, 14); // ...luxury tax
-
-            const expected4 = { "next": "mediterranean", "gain": 1, "track": false, "visit": ["boardwalk", "go", "mediterranean ave"]}
-            assert.deepEqual(board1.moveLocation(player, 3), expected4) // pass collect
-
-            //land on upper track
-
-            //land on lower track
-        });
-    */
-
-    	/*
-        it("find next location if traveling odd and forward", function(){
-            const expected1 = { "next": "mediterranean ave", "track": 1 };
-            assert.deepEqual(board1.nextLocation("go", true, true, 1), expected1);
-
-            const expected2 = { "next": "atlantic ave", "track": 1 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", true, true, 1), expected2);
-
-            const expected3 = { "next": "community chest outer north", "track": 2 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", true, true, 2), expected3);
-        });
-
-        it("find next location if traveling odd and backward", function(){
-            const expected1 = { "next": "boardwalk", "track": 1 };
-            assert.deepEqual(board1.nextLocation("go", true, false, 1), expected1);
-
-            const expected2 = { "next": "illinois ave", "track": 1 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", true, false, 1), expected2);
-
-            const expected3 = { "next": "yellow cab co", "track": 2 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", true, false, 2), expected3);
-        });
-
-        it("find next location if traveling even and forward", function(){
-            const expected1 = { "next": "mediterranean ave", "track": 1 };
-            assert.deepEqual(board1.nextLocation("go", false, true, 1), expected1);
-
-            const expected2 = { "next": "community chest outer north", "track": 2 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", false, true, 1), expected2);
-
-            const expected3 = { "next": "atlantic ave", "track": 1 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", false, true, 2), expected3);
-        });
-
-        it("find next location if traveling even and backward", function(){
-            const expected1 = { "next": "boardwalk", "track": 1 };
-            assert.deepEqual(board1.nextLocation("go", false, false, 1), expected1);
-
-            const expected2 = { "next": "yellow cab co", "track": 2 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", false, false, 1), expected2);
-
-            const expected3 = { "next": "illinois ave", "track": 1 };
-            assert.deepEqual(board1.nextLocation("b&o railroad", false, false, 2), expected3);
-        });
-
-        it("find info about location jumped to", function(){
-            const expected1 = { "next": "boardwalk", "gain": 0, "track": 1, "visit": ["boardwalk"]}
-            assert.deepEqual(board1.jumpToLocation("boardwalk"), expected1) // jump to property
-
-            const expected2 = { "next": "go", "gain": 200, "track": 1, "visit": ["go"]}
-            assert.deepEqual(board1.jumpToLocation("go"), expected2) // jump to collectGroup
-
-            const expected3 = { "next": "holland tunnel sw", "gain": 0, "track": 2, "visit": ["holland tunnel sw"]}
-            assert.deepEqual(board1.jumpToLocation("holland tunnel ne"), expected3) // jump to teleportGroup
-        });
-
-        const player2 = new Player("Bill", "go", 1);
-
-        it("find info about location advancement", function(){
-            const expected1 = { "next": "go", "gain": 0, "track": 1, "visit": []}
-            assert.deepEqual(board1.advanceToLocation(player2, "go"), expected1)
-
-            board1.advanceToLocation(player2, "income tax")
-
-            const expected2 = { "next": "oriental ave", "gain": 0, "track": 1, "visit": ["reading railroad", "oriental ave"]}
-            assert.deepEqual(board1.advanceToLocation(player2, "oriental ave"), expected2) // cross odd railroad same tracks
-
-            board1.advanceToLocation(player2, "virginia ave")
-
-            const expected3 = { "next": "fifth ave", "gain": 0, "track": 0, "visit": ["pennsylvania railroad", "fifth ave"]}
-            assert.deepEqual(board1.advanceToLocation(player2, "fifth ave"), expected3) // cross even railroad change tracks
-
-            board1.advanceToLocation(player2, "biscayne ave")
-            board1.advanceToLocation(player2, "boardwalk")
-
-            const expected4 = { "next": "mediterranean ave", "gain": 200, "track": 1, "visit": ["go", "mediterranean ave"]}
-            assert.deepEqual(board1.advanceToLocation(player2, "mediterranean ave"), expected4) // pass collect
-
-            board1.advanceToLocation(player2, "boardwalk")
-
-            const expected5 = { "next": "go", "gain": 200, "track": 1, "visit": ["go"]}
-            assert.deepEqual(board1.advanceToLocation(player2, "go"), expected5) // advance to collect
-
-            board1.advanceToLocation(player2, "florida ave")
-
-            const expected6 = { "next": "miami ave", "gain": 0, "track": 0, "visit": ["holland tunnel ne", "miami ave"]}
-            assert.deepEqual(board1.advanceToLocation(player2, "miami ave"), expected6) // pass teleport
-
-            board1.advanceToLocation(player2, "florida ave")
-
-            const expected7 = { "next": "holland tunnel sw", "gain": 0, "track": 2, "visit": ["holland tunnel ne", "holland tunnel sw"]}
-            assert.deepEqual(board1.advanceToLocation(player2, "holland tunnel ne"), expected7) // advance to teleport
-
-        });
-        */
 
         it("moves to the correct location after rolling", function() {
             // TODO update tests for new spec
@@ -232,17 +108,18 @@ describe('BoardManager', function(){
             assert.equal(player3.location, 'bonus');
 
         });
-
+        
         it('advances to the specified location', function() {
             // handles switching tracks too
+            player3.switchDirection();
             const json = board1.advanceToLocation(player3, 'tennessee ave');
-            assert.deepEqual(json.movedTo, ['boyleston ave', 'newbury st', 'pennsylvania railroad', 'st james pl', 'community chest middle east', 'tennessee ave']);
+            assert.deepEqual(json.movedTo, ['boylston st', 'newbury st', 'pennsylvania railroad', 'st james pl', 'community chest middle west', 'tennessee ave']);
             assert.equal(json.actions[0], 'buy');
             const expectedPlayer = {'name': 'Ted', 'money': 4500};
             assert.deepEqual(json.player, expectedPlayer);
             assert.equal(player3.location, 'tennessee ave');
         });
-
+        
         it('buys properties normally', function() {
             let bought = board1.buyProperty(player2, 'biscayne ave');
             let expected = {"player": {"name": "Jerry", "money": 3050}, "location": "biscayne ave", "price": 150};
@@ -252,24 +129,24 @@ describe('BoardManager', function(){
             assert.deepEqual(bought, {}); // should be empty since nothing happened
 
             bought = board1.buyProperty(player2, 'miami ave');
-            expected = {"player": {"name": "Jerry", "money": 2900}, "location": "miami ave", "price": 150};
+            expected = {"player": {"name": "Jerry", "money": 2920}, "location": "miami ave", "price": 130};
             assert.deepEqual(bought, expected);
         });
 
         it('buys properties with special auction prices', function() {
             bought = board1.buyProperty(player2, 'boardwalk', 0);
-            expected = {"player": {"name": "Jerry", "money": 2900}, "location": "boardwalk", "price": 0};
+            expected = {"player": {"name": "Jerry", "money": 2920}, "location": "boardwalk", "price": 0};
             assert.deepEqual(bought, expected);
 
             bought = board1.buyProperty(player2, 'park pl', 900);
-            expected = {"player": {"name": "Jerry", "money": 2000}, "location": "park pl", "price": 900};
+            expected = {"player": {"name": "Jerry", "money": 2020}, "location": "park pl", "price": 900};
             assert.deepEqual(bought, expected);
         });
 
         it('finds the next location for Mr. Monopoly', function() {
             board1.jumpToLocation(player2, 'chance middle east');
             let json = board1.nextMrMonopolyLocation(player2);
-            let expected = {"player": {"name": "Jerry", "money": 2200}, 'movedTo': ['park pl', 'luxury tax', 'boardwalk', 'go', 'mediterranean ave'], 'actions': ['buy']};
+            let expected = {"player": {"name": "Jerry", "money": 2220}, 'movedTo': ['park pl', 'luxury tax', 'boardwalk', 'go', 'mediterranean ave'], 'actions': ['buy']};
             assert.deepEqual(json, expected);
 
             json = board1.nextMrMonopolyLocation(player2);
@@ -282,7 +159,7 @@ describe('BoardManager', function(){
             // TODO after properties bought
             let toUpdate = {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5};
             let json = board1.setHousesForProperties(player2, toUpdate);
-            let expected = {'properties': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5}, 'delta': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5}, "player": {"name": "Jerry", "money": 150}};
+            let expected = {'properties': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5}, 'delta': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5}, "player": {"name": "Jerry", "money": 170}};
             assert.deepEqual(json, expected);
 
             // now try with properties doesn't have
@@ -293,15 +170,15 @@ describe('BoardManager', function(){
 
             // now with the actual owner, sell houses
             json = board1.setHousesForProperties(player2, toUpdate);
-            expected = {'properties': {"biscayne ave": 0, 'miami ave': 0, 'park pl': 4, 'boardwalk': 5}, 'delta': {"biscayne ave": -3, 'miami ave': -2, 'park pl': 0, 'boardwalk': 0}, "player": {"name": "Jerry", "money": 275}};
+            expected = {'properties': {"biscayne ave": 0, 'miami ave': 0, 'park pl': 4, 'boardwalk': 5}, 'delta': {"biscayne ave": -3, 'miami ave': -2, 'park pl': 0, 'boardwalk': 0}, "player": {"name": "Jerry", "money": 295}};
             assert.deepEqual(json, expected);
         });
 
         it('handles mortgaging/unmortgaging', function() {
             // owns
-            let expected = {"player": {"name": "Jerry", "money": 350}, 'location': 'biscayne ave', 'gain': 75};
+            let expected = {"player": {"name": "Jerry", "money": 370}, 'location': 'biscayne ave', 'gain': 75};
             assert.deepEqual(board1.mortgageProperty(player2, 'biscayne ave'), expected);
-            expected = {"player": {"name": "Jerry", "money": 415}, 'location': 'biscayne ave', 'gain': 65};
+            expected = {"player": {"name": "Jerry", "money": 435}, 'location': 'miami ave', 'gain': 65};
             assert.deepEqual(board1.mortgageProperty(player2, 'miami ave'), expected);
 
             // already mortgaged should fail
@@ -309,7 +186,7 @@ describe('BoardManager', function(){
             assert.deepEqual(board1.mortgageProperty(player2, 'miami ave'), {});
 
             // unmortgage
-            expected = {"player": {"name": "Jerry", "money": 340}, 'location': 'biscayne ave', 'lose': 75};
+            expected = {"player": {"name": "Jerry", "money": 360}, 'location': 'miami ave', 'lose': 75};
             assert.deepEqual(board1.unmortgageProperty(player2, 'miami ave'), expected);
 
             // doesn't own
@@ -345,16 +222,17 @@ describe('BoardManager', function(){
             board1.buyProperty(player2, 'short line', 0);
 
             // actual tests
-            assert.equal(board1.getRent(player2, 'biscayne ave'), 55);
-            assert.equal(board1.getRent(player2, 'miami ave'), 0);
-            assert.equal(board1.getRent(player2, 'park pl'), 1300);
-            assert.equal(board1.getRent(player2, 'boardwalk'), 2000);
-            assert.equal(board1.getRent(player3, 'boardwalk'), 0);
+            assert.equal(board1.getRent(player3, 'biscayne ave'), 55);
+            assert.equal(board1.getRent(player3, 'miami ave'), 0);
+            assert.equal(board1.getRent(player3, 'park pl'), 1300);
+            assert.equal(board1.getRent(player3, 'boardwalk'), 2000);
+            assert.equal(board1.getRent(player2, 'boardwalk'), null);
 
-            player3.setLastRoll(11);
-            assert.equal(board1.getRent(player2, 'water works'), 0);
-            assert.equal(board1.getRent(player3, 'water works'), 440);
-            assert.equal(board1.getRent(player3, 'short line'), 50);
+            player2.setLastRoll(11);
+            assert.equal(board1.getRent(player3, 'water works'), null);
+            assert.equal(board1.getRent(player2, 'water works'), 440);
+            assert.equal(board1.getRent(player2, 'short line'), 50);
+            
         });
 
         it('lets you know if you can buy properties', function() {
@@ -365,7 +243,7 @@ describe('BoardManager', function(){
 
         it('gets all properties in the forward direction', function() {
             board1.jumpToLocation(player2, 'checker cab co');
-            let expected = ['reading railroad', 'esplanade ave', 'canal st', 'chance', 'chance outer south', 'cable company', 'magazine st', 'bourbon st', 'holland tunnel sw', 'in jail', 'connecticut ave', 'vermont ave', 'chance middle south', 'oriental ave', 'telephone company', 'community chest inner sw', 'beacon st', 'bonus'];
+            let expected = ['reading railroad', 'esplanade ave', 'canal st', 'chance outer south', 'cable company', 'magazine st', 'bourbon st', 'holland tunnel sw', 'jail', 'connecticut ave', 'vermont ave', 'chance middle south', 'oriental ave', 'telephone company', 'community chest inner sw', 'beacon st', 'bonus'];
             let actual = board1.locationsInForwardDirection(player2);
             expected.sort();
             actual.sort();
@@ -374,6 +252,8 @@ describe('BoardManager', function(){
             player2.switchDirection()
             board1.jumpToLocation(player2, 'randolph st');
             assert.deepEqual(board1.locationsInForwardDirection(player2), ['pay day']);
+
+
         });
 
         it('gets the next transit in the forward direction', function() {

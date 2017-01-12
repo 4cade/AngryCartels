@@ -16,6 +16,7 @@ class Place {
         this.track = boardPreset['track'];
         this.above = boardPreset['above'];
         this.below = boardPreset['below'];
+        this.isProperty = false;
     }
 
 

@@ -17,6 +17,7 @@ class Property extends Place {
         this.cost = 2*this.mortgageValue
         this.owner = null;
         this.isMortgaged = false;
+        this.isProperty = true;
     }
 
     /**
