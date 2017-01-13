@@ -170,8 +170,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 148877592}
-  m_LocalRotation: {x: -0.29230845, y: 0.25060856, z: -0.079671964, w: -0.91945827}
-  m_LocalPosition: {x: 7.517133, y: 8.1952, z: -12.817463}
+  m_LocalRotation: {x: -0.5212039, y: 0.32183617, z: -0.22103547, w: -0.7588883}
+  m_LocalPosition: {x: 4.4979987, y: 12.6847725, z: -4.5545597}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -189,7 +189,7 @@ GameObject:
   - 65: {fileID: 152645593}
   - 23: {fileID: 152645592}
   m_Layer: 0
-  m_Name: Cube (3)
+  m_Name: Base_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,7 +221,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 342d796791670a14b83e7c652df39b00, type: 2}
+  - {fileID: 2100000, guid: cfeeef4997c6ccb4db0a292bf275a492, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -385,6 +385,34 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224000014111399878, guid: a243264e00a1eba4482cf5383da74146,
     type: 2}
   m_PrefabInternal: {fileID: 739946457}
+--- !u!1 &581824396
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 581824397}
+  m_Layer: 0
+  m_Name: 'TODO: mapping between player location and player model'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &581824397
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 581824396}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 560.364, y: 325.55853, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
 --- !u!1 &647358757
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,7 +583,7 @@ GameObject:
   - 65: {fileID: 705001489}
   - 23: {fileID: 705001488}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Base_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -932,6 +960,34 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 786805441}
+--- !u!1 &796741470
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 796741471}
+  m_Layer: 0
+  m_Name: 'TODO: player turns and actions'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &796741471
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 796741470}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 560.364, y: 325.55853, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
 --- !u!1 &879813194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,7 +1091,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1157548644}
   m_Layer: 0
-  m_Name: 'TODO: mapping between locations and server commands'
+  m_Name: 'TODO: mapping between locations and server commands (use a graph?)'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1047,34 +1103,6 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1157548643}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 560.364, y: 325.55853, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
---- !u!1 &1237896845
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1237896846}
-  m_Layer: 0
-  m_Name: 'TODO: link players in game manager with player cards'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1237896846
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1237896845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 560.364, y: 325.55853, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -1192,6 +1220,49 @@ MonoBehaviour:
   m_Spacing: 5
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
+--- !u!1 &1316118841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1316118842}
+  - 114: {fileID: 1316118843}
+  m_Layer: 0
+  m_Name: MapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1316118842
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1316118841}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+--- !u!114 &1316118843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1316118841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65c4a45cf73ca6745af5ec732b88a726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier1TileCount: 56
+  tier2TileCount: 40
+  tier3TileCount: 24
 --- !u!1 &1376678736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,7 +1275,7 @@ GameObject:
   - 65: {fileID: 1376678739}
   - 23: {fileID: 1376678738}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Base_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1379,7 +1450,7 @@ GameObject:
   - 65: {fileID: 1541105106}
   - 23: {fileID: 1541105105}
   m_Layer: 0
-  m_Name: Cube (2)
+  m_Name: Base_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1731,6 +1802,7 @@ MonoBehaviour:
     type: 2}
   doesGameHaveRoundLimit: 0
   maxRounds: 10
+  mapManager: {fileID: 1316118841}
 --- !u!4 &1978398467
 Transform:
   m_ObjectHideFlags: 0
@@ -1892,7 +1964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7525835bfab3d4094a190b76d1562f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 2049102879}
+  panelToHide: {fileID: 2049102879}
 --- !u!114 &2049102884
 MonoBehaviour:
   m_ObjectHideFlags: 0

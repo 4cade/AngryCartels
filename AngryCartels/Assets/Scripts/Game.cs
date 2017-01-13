@@ -16,6 +16,9 @@ public class Game : MonoBehaviour {
     // The number of rounds for this particular game
     public int maxRounds;
 
+    // handles location data of the game
+    public GameObject mapManager;
+
 	// Use this for initialization
 	void Start () {
 	    if (doesGameHaveRoundLimit)
