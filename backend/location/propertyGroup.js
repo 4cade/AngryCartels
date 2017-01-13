@@ -287,7 +287,8 @@ class PropertyGroup {
      *
      * @return JSON mapping property names to the numerical change in number of houses that actually happened
      */
-    setHouses(player, houseMap) {
+    setHouses(playerObj, houseMap) {
+        const player = playerObj.name;
         // get only properties that work
         let toChange = [];
         let oldVals = {};

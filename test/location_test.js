@@ -331,6 +331,7 @@ describe('Location', function() {
 
     describe("#propertyGroupTests", function() {
         const player1 = new Player('Dude', 'go', 2);
+        const player2 = new Player('baby', 'jail', 3)
 
         const pgroup1 = new PropertyGroup(0);
         const bisc = new HouseProperty("biscayne ave", {"type": "property","quality": 0,"rent": [11, 55, 160, 475, 650, 800, 1300],"mortgage": 75,"house": 50,"forward": ["short line"],"backward": ["miami ave"],"side": [3],"track": [0],"below": ["pennsylvania ave"]});
@@ -433,16 +434,16 @@ describe('Location', function() {
             for(let i = 0; i < 18; i++) {
                 pgroup1.upgrade(bisc);
             }
-            assert.equal(pgroup1.transferAllOwnership(player1, new Player('baby', 'jail', 3)), 0);
+            assert.equal(pgroup1.transferAllOwnership(player1, player2), 0);
             pgroup1.properties.forEach(p => {
                 assert.equal(p.houses, 6);
             });
         });
 
         it('adds houses according to a legal house map', function() {
-            pgroup1.transferAllOwnership(pgroup1.getProperty('biscayne ave').owner, player1);
+            pgroup1.transferAllOwnership(player2, player1);
             let mapper = {'biscayne ave': 3, 'miami ave': 2, 'florida ave': 3}
-            let delta = pgroup1.setHouses(player1.name, mapper);
+            let delta = pgroup1.setHouses(player1, mapper);
             let expected = {'biscayne ave': -3, 'miami ave': -4, 'florida ave': -3}
             assert.deepEqual(delta, expected);
 
