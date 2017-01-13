@@ -117,7 +117,7 @@ class BoardManager {
         return {
                 'player': {
                             'name': player.name, 
-                            'money': player.money
+                            'money': player.getMoney()
                             }, 
                 'movedTo': visited, 
                 'actions': this.locationAction(player.location)
@@ -189,7 +189,7 @@ class BoardManager {
         return {
                 'player': {
                             'name': player.name, 
-                            'money': player.money
+                            'money': player.getMoney()
                             }, 
                 'movedTo': visited, 
                 'actions': this.locationAction(player.location)
@@ -263,7 +263,7 @@ class BoardManager {
         return {
                 'player': {
                             'name': player.name, 
-                            'money': player.money
+                            'money': player.getMoney()
                             }, 
                 'movedTo': visited, 
                 'actions': this.locationAction(player.location)
@@ -302,7 +302,7 @@ class BoardManager {
         return {
                 'player': {
                             'name': player.name, 
-                            'money': player.money
+                            'money': player.getMoney()
                             }, 
                 'movedTo': visited,
                 'actions': this.locationAction(player.location)
@@ -385,7 +385,7 @@ class BoardManager {
         return {
                 'player': {
                             'name': player.name,
-                            'money': player.money
+                            'money': player.getMoney()
                             },
                 'properties': properties,
                 'delta': delta
@@ -419,7 +419,7 @@ class BoardManager {
             return {
                     'player': {
                                 'name': player.name, 
-                                'money': player.money
+                                'money': player.getMoney()
                                 }, 
                     'location': property, 
                     'price': lose
@@ -447,7 +447,7 @@ class BoardManager {
             return {
                     'player': {
                                 'name': player.name, 
-                                'money': player.money
+                                'money': player.getMoney()
                                 }, 
                     'location': property, 
                     'gain': land.mortgageValue
@@ -475,7 +475,7 @@ class BoardManager {
             return {
                     'player': {
                                 'name': player.name,
-                                'money': player.money
+                                'money': player.getMoney()
                                 },
                     'location': property,
                     'lose': Math.round(land.mortgageValue*1.15)
@@ -677,7 +677,7 @@ class BoardManager {
         player.deltaMoney(-money)
         this.pool += money
         return {
-                'player': player.money,
+                'player': player.getMoney(),
                 'pool': this.pool
                 }
 
@@ -694,7 +694,7 @@ class BoardManager {
         player.deltaMoney(mult * this.pool)
         this.pool -= mult*this.pool
         return {
-                'player': player.money,
+                'player': player.getMoney(),
                 'pool': this.pool
                 }
     }

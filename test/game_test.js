@@ -37,7 +37,7 @@ describe('BoardManager', function(){
             assert.equal(action1, 'buy');
             assert.equal(player3.location, 'reading railroad');
             assert.equal(player3.track, 1);
-            assert.equal(player3.money, 3200);
+            assert.equal(player3.team.money, 3200);
 
             // move to pennsylvania rr
             board1.moveLocation(player3, 1);
@@ -45,7 +45,7 @@ describe('BoardManager', function(){
             assert.equal(action1, 'buy');
             assert.equal(player3.location, 'pennsylvania railroad');
             assert.equal(player3.track, 1);
-            assert.equal(player3.money, 3200);
+            assert.equal(player3.team.money, 3200);
 
             // move to lombard st
             board1.moveLocation(player3, 2);
@@ -54,14 +54,14 @@ describe('BoardManager', function(){
             assert.equal(action3, 'buy');
             assert.equal(player3.location, 'lombard st');
             assert.equal(player3.track, 0);
-            assert.equal(player3.money, 3200);
+            assert.equal(player3.team.money, 3200);
 
             // move to bonus and get paid
             const action4 = board1.moveLocation(player3, 7)['actions'][0];
             assert.equal(action4, null);
             assert.equal(player3.location, 'bonus');
             assert.equal(player3.track, 0);
-            assert.equal(player3.money, 3500);
+            assert.equal(player3.team.money, 3500);
 
             // move to stock exchange
             board1.moveLocation(player3, 3);
@@ -69,14 +69,14 @@ describe('BoardManager', function(){
             assert.equal(action5, 'stock');
             assert.equal(player3.location, 'stock exchange');
             assert.equal(player3.track, 0);
-            assert.equal(player3.money, 3500);
+            assert.equal(player3.team.money, 3500);
 
             // go through a tunnel
             const movedTo = board1.moveLocation(player3, 6)['movedTo'];
             const expectedMovedTo = ['wall st', 'tax refund', 'gas company', 'chance inner ne', 'florida ave', 'holland tunnel ne', 'holland tunnel sw'];
             assert.equal(player3.location, 'holland tunnel sw');
             assert.equal(player3.track, 2);
-            assert.equal(player3.money, 3500);
+            assert.equal(player3.team.money, 3500);
             assert.deepEqual(movedTo, expectedMovedTo);
 
             // auction space
@@ -96,7 +96,7 @@ describe('BoardManager', function(){
             player3.switchDirection();
             const action8 = board1.moveLocation(player3, 5)['actions'][0];
             assert.equal(action8, 'community chest');
-            assert.equal(player3.money, 4200);
+            assert.equal(player3.team.money, 4200);
         });
 
         it('jumps the player to the specified location', function() {

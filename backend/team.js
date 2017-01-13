@@ -1,47 +1,23 @@
-const Team = require('./team');
-
 /**
  * Player object stores the state of a player and has functions to update state.
  * @param name String name of the player
  * @param startingSpace String name of the starting location of the player (usually Go)
  * @param startingTrack index of the starting track of the player (usually Go's track)
  */
-class Player {
+class Team {
 
     // set up initial state
-    constructor(name, startingSpace, startingTrack, team) {
-        if(team)
-            this.team = team;
+    constructor(name) {
+        if(name)
+            this.name = name;
         else
-            this.team = new Team(name);
+            this.name = Math.random().toString(36).substring(7); // random string
+        this.money = 3200;
+        this.properties = []; // list of Property Objects (maybe use set TODO)
+        this.busTickets = {}; // key of bus ticket type to quantity
+        this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
 
-        this.name = name;
-        this.forward = true;
-        this.location = startingSpace; // all players start on go
-        this.track = startingTrack; // all players start on track 1
-        this.lastRolled = 0 // int last value of dice roll
-    }
-
-    /**
-     * @return JSON representation without functions
-     */
-    toJSON() {
-        let propertyJSONs = []
-
-        this.team.properties.forEach(p => {
-            propertyJSONs.push(p.toJSON());
-        });
-
-        return {
-            "name": this.name,
-            "money": this.team.money,
-            "properties": propertyJSONs,
-            "busTickets": this.team.busTickets,
-            "forward": this.forward,
-            "location": this.location,
-            "track": this.track,
-            "specialCards": this.team.specialCards
-        }
+        // TODO keep list of players?
     }
 
     /**
@@ -50,21 +26,13 @@ class Player {
      * @return int net worth of the player
      */
     getNetWorth() {
-        return this.team.getNetWorth();
-    }
+        let worth = this.money
 
-    /**
-    * Sets the number last rolled by the player
-    * @param num int number last rolled
-    *
-    * @return boolean true if properly set, false otherwise
-    **/
-    setLastRoll(num){
-        if (num < 15){
-            this.lastRolled = num
-            return true
-        }
-        return false
+        this.properties.forEach(property => {
+            worth += property.getValue()
+        });
+
+        return worth
     }
 
     /**
@@ -79,7 +47,7 @@ class Player {
      * @return amount of money owned
      */
     getMoney() {
-        return this.team.money;
+        return this.money
     }
 
     /**
@@ -88,7 +56,7 @@ class Player {
      * @return boolean true if player can afford, false otherwise
      */
     canAfford(amt){
-        return this.team.canAfford(amt);
+        return this.money - amt >= 0
     }
 
     /**
@@ -97,7 +65,12 @@ class Player {
      * @return boolean true if property is added, false otherwise
      */
     gainProperty(property) {
-        return this.team.gainProperty(property);
+        if (this.properties.indexOf(property) === -1){
+            this.properties.push(property)
+            return true
+        }
+        else
+            return false
     }
 
     /**
@@ -106,7 +79,13 @@ class Player {
      * @return boolean true if property is removed, false otherwise
      */
     loseProperty(property) {
-        return this.team.loseProperty(property);
+        if (this.properties.indexOf(property) !== -1){
+            let index = this.properties.indexOf(property)
+            this.properties.splice(index, 1)
+            return true
+        }
+        else
+            return false
     }
 
     /**
@@ -115,7 +94,8 @@ class Player {
      * @return boolean true if player still has money left, false if negative (bankrupt)
      */
     deltaMoney(amt) {
-        return this.team.deltaMoney(amt);
+        this.money += amt
+        return this.money >= 0
     }
 
     /**
@@ -124,7 +104,15 @@ class Player {
      * @return boolean true if pass added
      */
     gainBusPass(pass) {
-        return this.team.gainBusPass(pass);
+        if (pass.includes('expire')){
+            this.busTickets = {}
+            this.busTickets[pass] = 1
+        }
+        else if (this.busTickets.hasOwnProperty(pass))
+            this.busTickets[pass] += 1
+        else
+            this.busTickets[pass] = 1
+        return true
     }
 
     /**
@@ -133,7 +121,15 @@ class Player {
      * @return boolean true if pass is used, false if do not own pass
      */
     useBusPass(pass) {
-        return this.team.useBusPass(pass)
+        // actual ticket usage handled by some other class
+        if (this.busTickets.hasOwnProperty(pass)){
+            this.busTickets[pass] -= 1
+            if (this.busTickets[pass] === 0)
+                delete this.busTickets[pass]
+            return true
+        }
+        else
+            return false
     }
 
     /**
@@ -142,7 +138,11 @@ class Player {
      * @return boolean true if card is added
      */
     gainSpecialCard(card) {
-        return this.team.gainSpecialCard(card);
+        if (this.specialCards.hasOwnProperty(card))
+            this.specialCards[card] += 1
+        else
+            this.specialCards[card] = 1
+        return true
     }
 
     /**
@@ -151,28 +151,17 @@ class Player {
      * @return boolean true if card is used, false otherwise
      */
     useSpecialCard(card) {
-        return this.team.useSpecialCard(card);
-    }
-
-    /**
-     * The player moves to a new Location possibly gains money.
-     * @param property String location to move to
-     * @param track Int track of location to move to
-     * @param money Int amount gained by moving
-     */
-    moveToLocation(property, track, money) {
-        this.location = property;
-        this.track = track;
-        this.deltaMoney(money);
-    }
-
-    /**
-     * The player's forward direction changes.
-     */
-    switchDirection() {
-        this.forward = !this.forward
+        // Actual card usage handled by some other class
+        if (this.specialCards.hasOwnProperty(card)){
+            this.specialCards[card] -= 1
+            if (this.specialCards[card] === 0)
+                delete this.specialCards[card]
+            return true
+        }
+        else
+            return false
     }
 
 }
 
-module.exports = Player;
+module.exports = Team;

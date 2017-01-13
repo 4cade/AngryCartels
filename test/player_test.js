@@ -11,20 +11,20 @@ describe('Player', function() {
     describe("#initialize", function() {
         it("has all correct parts correctly initialized", function() {
             assert.equal(player1.name, 'Bob');
-            assert.equal(player1.money, 3200);
+            assert.equal(player1.getMoney(), 3200);
         })
     });
 
     describe('#moneyTests', function() {
         it("added money", function() {
             const hasMoney = player1.deltaMoney(200);
-            assert.equal(player1.money, 3400);
+            assert.equal(player1.getMoney(), 3400);
             assert.equal(hasMoney, true);
         });
 
         it("removed money", function() {
             const hasMoney = player1.deltaMoney(-2100);
-            assert.equal(player1.money, 1300);
+            assert.equal(player1.getMoney(), 1300);
             assert.equal(hasMoney, true);
         });
 
@@ -36,21 +36,21 @@ describe('Player', function() {
             player1.deltaMoney(-50);
             player1.deltaMoney(-250);
             const hasMoney = player1.deltaMoney(-100);
-            assert.equal(player1.money, 600);
+            assert.equal(player1.getMoney(), 600);
             assert.equal(hasMoney, true);
         });
 
         it("goes bankrupt when goes below 0", function() {
             const hasMoney1 = player1.deltaMoney(-600);
-            assert.equal(player1.money, 0);
+            assert.equal(player1.getMoney(), 0);
             assert.equal(hasMoney1, true);
 
             const hasMoney2 = player1.deltaMoney(-1);
-            assert.equal(player1.money, -1);
+            assert.equal(player1.getMoney(), -1);
             assert.equal(hasMoney2, false);
 
             const hasMoney3 = player1.deltaMoney(2);
-            assert.equal(player1.money, 1);
+            assert.equal(player1.getMoney(), 1);
             assert.equal(hasMoney3, true);
 
             assert(player1.canAfford(1));
@@ -65,7 +65,7 @@ describe('Player', function() {
             player1.gainBusPass('derp 2');
             player1.gainBusPass('back 3');
             player1.gainBusPass('forward any');
-            assert.deepEqual(player1.busTickets, expected);
+            assert.deepEqual(player1.team.busTickets, expected);
         });
 
         it("removes all of the bus passes", function() {
@@ -74,7 +74,7 @@ describe('Player', function() {
             player1.useBusPass('derp 2');
             player1.useBusPass('back 3');
             player1.useBusPass('forward any');
-            assert.deepEqual(player1.busTickets, expected);
+            assert.deepEqual(player1.team.busTickets, expected);
         });
 
         it("adds and removes the bus passes", function() {
@@ -85,7 +85,7 @@ describe('Player', function() {
             player1.gainBusPass('forward any');
             player1.useBusPass('back 3');
             player1.useBusPass('forward any');
-            assert.deepEqual(player1.busTickets, expected);
+            assert.deepEqual(player1.team.busTickets, expected);
         });
 
         it("has all of the tickets expire", function() {
@@ -96,10 +96,10 @@ describe('Player', function() {
             player1.gainBusPass('forward any');
             player1.useBusPass('back 3');
             player1.gainBusPass('forward expire');
-            assert.deepEqual(player1.busTickets, expected);
+            assert.deepEqual(player1.team.busTickets, expected);
             player1.gainBusPass('something else expire');
             const expected2 = {"something else expire": 1}
-            assert.deepEqual(player1.busTickets, expected2);
+            assert.deepEqual(player1.team.busTickets, expected2);
         });
     });
 
@@ -110,7 +110,7 @@ describe('Player', function() {
             player1.gainSpecialCard('get out of jail free');
             player1.gainSpecialCard('steal');
             player1.gainSpecialCard('just say no');
-            assert.deepEqual(player1.specialCards, expected);
+            assert.deepEqual(player1.team.specialCards, expected);
         });
 
         it("removes all of the special cards", function() {
@@ -119,7 +119,7 @@ describe('Player', function() {
             player1.useSpecialCard('get out of jail free');
             player1.useSpecialCard('steal');
             player1.useSpecialCard('just say no');
-            assert.deepEqual(player1.specialCards, expected);
+            assert.deepEqual(player1.team.specialCards, expected);
         });
     });
 
@@ -128,12 +128,12 @@ describe('Player', function() {
             player1.moveToLocation("bob", 1, 299);
             assert.equal(player1.location, "bob");
             assert.equal(player1.track, 1);
-            assert.equal(player1.money, 300);
+            assert.equal(player1.getMoney(), 300);
 
             player1.moveToLocation("dude", 0, 0);
             assert.equal(player1.location, "dude");
             assert.equal(player1.track, 0);
-            assert.equal(player1.money, 300);
+            assert.equal(player1.getMoney(), 300);
             assert.equal(player1.getNetWorth(), 300);
         });
 
@@ -156,47 +156,47 @@ describe('Player', function() {
         p3.mortgage();
 
         it("gains the properties and associated wealth", function() {
-            assert.equal(player1.properties.length, 0);
+            assert.equal(player1.team.properties.length, 0);
 
             player1.gainProperty(p1);
-            assert.deepEqual(player1.properties, [p1]);
-            assert.equal(player1.getNetWorth(), player1.money + p1.getValue());
+            assert.deepEqual(player1.team.properties, [p1]);
+            assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue());
 
             player1.gainProperty(p2);
-            assert.deepEqual(player1.properties, [p1, p2]);
-            assert.equal(player1.getNetWorth(), player1.money + p1.getValue() + p2.getValue());
+            assert.deepEqual(player1.team.properties, [p1, p2]);
+            assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue() + p2.getValue());
 
             player1.gainProperty(p3);
-            assert.deepEqual(player1.properties, [p1, p2, p3]);
-            assert.equal(player1.getNetWorth(), player1.money + p1.getValue() + p2.getValue() + p3.getValue());
+            assert.deepEqual(player1.team.properties, [p1, p2, p3]);
+            assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue() + p2.getValue() + p3.getValue());
 
             // changes propogate?
             p3.unmortgage();
-            assert.deepEqual(player1.properties, [p1, p2, p3]);
-            assert.equal(player1.getNetWorth(), player1.money + p1.getValue() + p2.getValue() + p3.getValue());
+            assert.deepEqual(player1.team.properties, [p1, p2, p3]);
+            assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue() + p2.getValue() + p3.getValue());
 
-            assert.equal(player1.properties.length, 3);
+            assert.equal(player1.team.properties.length, 3);
         });
         
         it("loses the properties and associated wealth", function() {
             player1.loseProperty(p1);
-            assert.deepEqual(player1.properties, [p2, p3]);
-            assert.equal(player1.getNetWorth(), player1.money + p2.getValue() + p3.getValue());
+            assert.deepEqual(player1.team.properties, [p2, p3]);
+            assert.equal(player1.getNetWorth(), player1.getMoney() + p2.getValue() + p3.getValue());
 
             player1.loseProperty(p3);
-            assert.deepEqual(player1.properties, [p2]);
-            assert.equal(player1.getNetWorth(), player1.money + p2.getValue());
+            assert.deepEqual(player1.team.properties, [p2]);
+            assert.equal(player1.getNetWorth(), player1.getMoney() + p2.getValue());
 
             // hopefully changes in the object propogate
             p2.removeHouse();
-            assert.deepEqual(player1.properties, [p2]);
-            assert.equal(player1.getNetWorth(), player1.money + p2.getValue());
+            assert.deepEqual(player1.team.properties, [p2]);
+            assert.equal(player1.getNetWorth(), player1.getMoney() + p2.getValue());
 
             player1.loseProperty(p2);
-            assert.deepEqual(player1.properties, []);
-            assert.equal(player1.getNetWorth(), player1.money);
+            assert.deepEqual(player1.team.properties, []);
+            assert.equal(player1.getNetWorth(), player1.getMoney());
 
-            assert.equal(player1.properties.length, 0);
+            assert.equal(player1.team.properties.length, 0);
 
             // be able to handle "losing" properties that it doesn't have
             player1.loseProperty(p2);
