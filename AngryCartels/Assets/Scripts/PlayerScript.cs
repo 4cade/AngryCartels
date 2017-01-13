@@ -23,6 +23,14 @@ public class PlayerScript : MonoBehaviour {
         //set { playerMoney = value; }
     }
 
+    // player place
+    private uint playerPlace;
+    public uint PlayerPlace
+    {
+        get { return playerPlace; }
+        set { playerPlace = value; }
+    }
+
 
     // Dictionary of properties held by the player
     public Dictionary<int, List<string>> cards;
@@ -32,6 +40,7 @@ public class PlayerScript : MonoBehaviour {
 
         playerName = "PoorSoul_" + counter++;
         playerMoney = Random.Range(0, 100);
+        playerPlace = 1;
 
 
         Debug.Log("Hardcoding 14 for card groups");

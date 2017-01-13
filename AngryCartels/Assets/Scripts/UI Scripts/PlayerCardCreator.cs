@@ -58,7 +58,7 @@ public class PlayerCardCreator : MonoBehaviour {
             {
                 GameObject instance = Instantiate(playerCardPrefab);
                 instance.transform.SetParent(row1.transform);
-                instance.GetComponent<PlayerCardSelected>().player = players[playerCount++].gameObject;
+                instance.GetComponent<PlayerCardScript>().player = players[playerCount++];
                 //instance.transform.parent = row1.transform;
                 //instance.GetComponent<RectTransform>().SetParent(row1.transform);
             }
@@ -74,7 +74,7 @@ public class PlayerCardCreator : MonoBehaviour {
                 {
                     GameObject instance = Instantiate(playerCardPrefab);
                     instance.transform.SetParent(row2.transform);
-                    instance.GetComponent<PlayerCardSelected>().player = players[playerCount++].gameObject;
+                    instance.GetComponent<PlayerCardScript>().player = players[playerCount++];
                 }
             }
         }
