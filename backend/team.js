@@ -13,7 +13,7 @@ class Team {
         else
             this.name = Math.random().toString(36).substring(7); // random string
         this.money = 3200;
-        this.properties = []; // list of Property Objects (maybe use set TODO)
+        this.properties = new Set(); // set of Property Objects
         this.busTickets = {}; // key of bus ticket type to quantity
         this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
 
@@ -65,8 +65,8 @@ class Team {
      * @return boolean true if property is added, false otherwise
      */
     gainProperty(property) {
-        if (this.properties.indexOf(property) === -1){
-            this.properties.push(property)
+        if (!this.properties.has(property)){
+            this.properties.add(property)
             return true
         }
         else
@@ -79,9 +79,8 @@ class Team {
      * @return boolean true if property is removed, false otherwise
      */
     loseProperty(property) {
-        if (this.properties.indexOf(property) !== -1){
-            let index = this.properties.indexOf(property)
-            this.properties.splice(index, 1)
+        if (this.properties.has(property)){
+            this.properties.delete(property)
             return true
         }
         else

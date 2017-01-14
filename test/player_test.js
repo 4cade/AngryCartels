@@ -156,47 +156,53 @@ describe('Player', function() {
         p3.mortgage();
 
         it("gains the properties and associated wealth", function() {
-            assert.equal(player1.team.properties.length, 0);
+            assert.equal(player1.team.properties.size, 0);
 
-            player1.gainProperty(p1);
-            assert.deepEqual(player1.team.properties, [p1]);
+            player1.gainProperty(p1)
+            assert.deepEqual(player1.team.properties.has(p1), true);
             assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue());
 
             player1.gainProperty(p2);
-            assert.deepEqual(player1.team.properties, [p1, p2]);
+            assert.deepEqual(player1.team.properties.has(p1), true);
+            assert.deepEqual(player1.team.properties.has(p2), true);
             assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue() + p2.getValue());
 
             player1.gainProperty(p3);
-            assert.deepEqual(player1.team.properties, [p1, p2, p3]);
+            assert.deepEqual(player1.team.properties.has(p1), true);
+            assert.deepEqual(player1.team.properties.has(p2), true);
+            assert.deepEqual(player1.team.properties.has(p3), true);
             assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue() + p2.getValue() + p3.getValue());
 
             // changes propogate?
             p3.unmortgage();
-            assert.deepEqual(player1.team.properties, [p1, p2, p3]);
+            assert.deepEqual(player1.team.properties.has(p1), true);
+            assert.deepEqual(player1.team.properties.has(p2), true);
+            assert.deepEqual(player1.team.properties.has(p3), true);
             assert.equal(player1.getNetWorth(), player1.getMoney() + p1.getValue() + p2.getValue() + p3.getValue());
 
-            assert.equal(player1.team.properties.length, 3);
+            assert.equal(player1.team.properties.size, 3);
         });
         
         it("loses the properties and associated wealth", function() {
             player1.loseProperty(p1);
-            assert.deepEqual(player1.team.properties, [p2, p3]);
+            assert.deepEqual(player1.team.properties.has(p2), true);
+            assert.deepEqual(player1.team.properties.has(p3), true);
             assert.equal(player1.getNetWorth(), player1.getMoney() + p2.getValue() + p3.getValue());
 
             player1.loseProperty(p3);
-            assert.deepEqual(player1.team.properties, [p2]);
+            assert.deepEqual(player1.team.properties.has(p2), true);
             assert.equal(player1.getNetWorth(), player1.getMoney() + p2.getValue());
 
             // hopefully changes in the object propogate
             p2.removeHouse();
-            assert.deepEqual(player1.team.properties, [p2]);
+            assert.deepEqual(player1.team.properties.has(p2), true);
             assert.equal(player1.getNetWorth(), player1.getMoney() + p2.getValue());
 
             player1.loseProperty(p2);
-            assert.deepEqual(player1.team.properties, []);
+            assert.deepEqual(player1.team.properties, new Set());
             assert.equal(player1.getNetWorth(), player1.getMoney());
 
-            assert.equal(player1.team.properties.length, 0);
+            assert.equal(player1.team.properties.size, 0);
 
             // be able to handle "losing" properties that it doesn't have
             player1.loseProperty(p2);
