@@ -1,0 +1,582 @@
+<tiles>
+	<tile>
+		<name>biscayne ave</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>miami ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>florida ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>lombard st</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>the embarcadero</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>fisherman's wharf</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>beacon st</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>boylston st</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>newbury st</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>fifth ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>madison ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>wall st</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>lake st</name>
+		<index>29</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>nicollet ave</name>
+		<index>31</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>hennepin ave</name>
+		<index>32</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>esplanade ave</name>
+		<index>36</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>katy freeway</name>
+		<index>44</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>westheimer rd</name>
+		<index>45</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>kirby dr</name>
+		<index>47</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>cullen blvd</name>
+		<index>48</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>canal st</name>
+		<index>37</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>magazine st</name>
+		<index>40</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>bourbon st</name>
+		<index>41</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>dekalb ave</name>
+		<index>51</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>young int'l blvd</name>
+		<index>53</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>decatur st</name>
+		<index>54</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>peachtree st</name>
+		<index>55</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>randolph st</name>
+		<index>1</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>lake shore dr</name>
+		<index>3</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>wacker dr</name>
+		<index>4</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>michigan ave</name>
+		<index>5</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>south temple</name>
+		<index>9</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>west temple</name>
+		<index>10</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>north temple</name>
+		<index>12</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>temple square</name>
+		<index>13</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>south st</name>
+		<index>15</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>broad st</name>
+		<index>16</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>walnut st</name>
+		<index>17</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>market st</name>
+		<index>19</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>mulholland dr</name>
+		<index>24</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>ventura blvd</name>
+		<index>25</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>rodeo dr</name>
+		<index>27</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>mediterranean ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>baltic ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>oriental ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>vermont ave</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>connecticut ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>st charles pl</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>states ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>virginia ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>st james pl</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>tennessee ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>new york ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>kentucky ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>indiana ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>illinois ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>atlantic ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>ventnor ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>marvin gardens</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>pacific ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>north carolina ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>pennsylvania ave</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>park pl</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>boardwalk</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>checker cab co</name>
+		<index>34</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>black &amp; white cab co</name>
+		<index>50</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>yellow cab co</name>
+		<index>6</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>ute cab co</name>
+		<index>22</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>water works</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>cable company</name>
+		<index>39</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>electric company</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>internet service provider</name>
+		<index>46</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>gas company</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>telephone company</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>trash collector</name>
+		<index>11</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>sewage system</name>
+		<index>21</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>reading railroad</name>
+		<index>35</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>pennsylvania railroad</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>b&amp;o railroad</name>
+		<index>7</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>short line</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>holland tunnel ne</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>holland tunnel sw</name>
+		<index>42</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>chance inner ne</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>chance outer west</name>
+		<index>49</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>chance outer nw</name>
+		<index>2</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>chance outer south</name>
+		<index>38</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>chance outer se</name>
+		<index>26</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>chance middle east</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>chance middle south</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>chance middle north</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>squeeze play</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>reverse</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>bonus</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>pay day</name>
+		<index>0</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>community chest inner sw</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>community chest outer se</name>
+		<index>30</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>community chest outer nw</name>
+		<index>52</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>community chest outer north</name>
+		<index>8</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>community chest outer east</name>
+		<index>18</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>community chest middle south</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>community chest middle west</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>community chest middle east</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>stock exchange</name>
+		<index>28</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>tax refund</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>subway</name>
+		<index>14</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>bus ticket south</name>
+		<index>33</index>
+		<tier>1</tier>
+	</tile> 
+	<tile>
+		<name>bus ticket east</name>
+		<index>20</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>auction</name>
+		<index>43</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>go to jail</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>jail</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>birthday gift</name>
+		<index>23</index>
+		<tier>1</tier>
+	</tile>
+	<tile>
+		<name>income tax</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>go</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>free parking</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+	<tile>
+		<name>roll3</name>
+		<index></index>
+		<tier></tier>
+	</tile> 
+	<tile>
+		<name>luxury tax</name>
+		<index></index>
+		<tier></tier>
+	</tile>
+</tiles>
