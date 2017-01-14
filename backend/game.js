@@ -86,7 +86,7 @@ class Game {
         }
         else {
             // TODO update based on whatever happens with boardManager's API
-            const action = this.boardManager.moveLocation(player, totalRoll);
+            const action = this.boardManager.moveLocation(player, totalRoll)['actions'];
             actions.push(action);
         }
 
@@ -110,8 +110,8 @@ class Game {
     */
     unleashMrMonopoly() {
         const player = this.playerManager.getCurrentPlayer();
-        const action = this.boardManager.nextMrMonopolyLocation(player, this.lastOdd);
-        const message = this.playerManager.getCurrentPlayer().name + "used Mr. Monopoly to get to " + this.playerManager.getCurrentPlayer().location; 
+        const action = this.boardManager.nextMrMonopolyLocation(player, this.lastOdd)['actions'];
+        const message = player.name + " used Mr. Monopoly to get to " + player.location; 
         return {'action': action, 'message': message}
     }
 
@@ -125,7 +125,11 @@ class Game {
     */
     useBusPass(pass, location) {
         const player = this.playerManager.getCurrentPlayer();
-        // TODO check if the player actually has the pass
+
+        //player does not have the pass
+        if (!player.busTickets.has(pass))
+            return -1
+
         let oldDirection = player.forward; // store to reset later
         let action = [];
         let message = ''; // TODO implement the messages for this
@@ -137,11 +141,11 @@ class Game {
         }
 
         if(pass.includes('any') && option) {
-            action = this.boardManager.advanceToLocation(player, location);
+            action = this.boardManager.advanceToLocation(player, location)['actions'];
         }
         else if(!pass.includes('any')) {
             const num = parseInt(pass.replace('forward', '').replace('backward', '').replace('expire', ''));
-            action = this.boardManager.moveLocation(player, num);
+            action = this.boardManager.moveLocation(player, num)['actions'];
         }
 
         // reset player to how they were before
@@ -158,13 +162,16 @@ class Game {
     *       and message (string saying what happened)
     */
     taxiRide(location) {
-        // TODO check if location in list of locations
+        //location is not on board
+        if (!this.boardManager.locations.hasOwnProperty(location))
+            return -1
+
         const player = this.playerManager.getCurrentPlayer();
         const owner = this.boardManager.isOwned();
         let json = {};
 
         // pay pool or owner
-        if(owner.name === player.name) {
+        if(owner === player.name) {
             let tempjson = this.boardManager.payPool(player, 20);
             json['player1'] = {"name": player.name, 'money': player.money}
             json['pool'] = tempjson['pool'];
@@ -176,14 +183,14 @@ class Game {
             json['player2'] = {"name": owner.name, 'money': owner.money}
         }
 
-        let actions = this.boardManager.jumpToLocation(player, location);
+        let actions = this.boardManager.jumpToLocation(player, location)['actions'];
         // TODO only handle a subset of actions
         if(actions.includes('buy'))
             actions = ['buy'];
         else
             actions = [];
-        // TODO message
-        const message = ""
+
+        const message = player.name + " took a taxi to " + player.location; // TODO message
         return {'action': actions, 'message': message};
     }
 
@@ -196,7 +203,7 @@ class Game {
     buyProperty() {
         const player = this.playerManager.getCurrentPlayer();
         let json = this.boardManager.buyProperty(player, player.location);
-        // TODO add message
+        json['message'] = player.name + "bought" + json.location + " for " + json.price; // TODO add message
         return json;
     }
 
@@ -214,16 +221,20 @@ class Game {
         let gain = 0;
 
         for(let property of properties) {
-            let result = this.boardManager.mortgageProperty(player, property);
+            let json = this.boardManager.mortgageProperty(player, property);
 
-            if(result.hasOwnProperty('location')) {
+            if(json.hasOwnProperty('location')) {
                 success.push(property);
-                gain += result.gain;
+                gain += json.gain;
             }
         }
-        // TODO message
+        
+        const message = player.name + " mortgaged " + success + " and gained a total of " + gain; 
+
         return {"player": {"name": player.getName(), "money": player.getMoney()}, 
-                "locations": success, "gain": gain}
+                "locations": success,
+                "gain": gain,
+                "message": message}
     }
 
     /**
@@ -240,16 +251,18 @@ class Game {
         let lose = 0;
 
         for(let property of properties) {
-            let result = this.boardManager.unmortgageProperty(player, property);
+            let json = this.boardManager.unmortgageProperty(player, property);
 
-            if(result.hasOwnProperty('location')) {
+            if(json.hasOwnProperty('location')) {
                 success.push(property);
-                lose += result.lose;
+                lose += json.lose;
             }
         }
-        // TODO message
+        const message = player.name + " unmortgaged " + success + " for a total of " + lose;
         return {"player": {"name": player.getName(), "money": player.getMoney()}, 
-                "locations": success, "lose": lose}
+                "locations": success,
+                "lose": lose,
+                "message": message}
     }
 
     /**
