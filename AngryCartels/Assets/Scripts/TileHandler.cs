@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Xml;
 
 public class TileHandler : MonoBehaviour {
 
@@ -55,4 +57,15 @@ public class TileHandler : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void CreateTileDictionary()
+    {
+        Dictionary<string, int> tileMap = new Dictionary<string, int>();
+
+        TextAsset asset = Resources.Load<TextAsset>("tile_mapping.xml");
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(asset.text);
+
+        // TODO: load mapping here
+    }
 }
