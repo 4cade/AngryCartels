@@ -1,63 +1,63 @@
 <tiles>
 	<tile>
 		<name>biscayne ave</name>
-		<index></index>
-		<tier></tier>
+		<index>104</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>miami ave</name>
-		<index></index>
-		<tier></tier>
+		<index>103</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>florida ave</name>
-		<index></index>
-		<tier></tier>
+		<index>101</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>lombard st</name>
-		<index></index>
-		<tier></tier>
+		<index>107</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>the embarcadero</name>
-		<index></index>
-		<tier></tier>
+		<index>109</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>fisherman's wharf</name>
-		<index></index>
-		<tier></tier>
+		<index>110</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>beacon st</name>
-		<index></index>
-		<tier></tier>
+		<index>113</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>boylston st</name>
-		<index></index>
-		<tier></tier>
+		<index>115</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>newbury st</name>
-		<index></index>
-		<tier></tier>
+		<index>116</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>fifth ave</name>
-		<index></index>
-		<tier></tier>
+		<index>118</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>madison ave</name>
-		<index></index>
-		<tier></tier>
+		<index>119</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>wall st</name>
-		<index></index>
-		<tier></tier>
+		<index>97</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>lake st</name>
@@ -211,113 +211,113 @@
 	</tile>
 	<tile>
 		<name>mediterranean ave</name>
-		<index></index>
-		<tier></tier>
+		<index>77</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>baltic ave</name>
-		<index></index>
-		<tier></tier>
+		<index>79</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>oriental ave</name>
-		<index></index>
-		<tier></tier>
+		<index>82</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>vermont ave</name>
-		<index></index>
-		<tier></tier>
+		<index>84</index>
+		<tier>2</tier>
 	</tile> 
 	<tile>
 		<name>connecticut ave</name>
-		<index></index>
-		<tier></tier>
+		<index>85</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>st charles pl</name>
-		<index></index>
-		<tier></tier>
+		<index>87</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>states ave</name>
-		<index></index>
-		<tier></tier>
+		<index>89</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>virginia ave</name>
-		<index></index>
-		<tier></tier>
+		<index>90</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>st james pl</name>
-		<index></index>
-		<tier></tier>
+		<index>92</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>tennessee ave</name>
-		<index></index>
-		<tier></tier>
+		<index>94</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>new york ave</name>
-		<index></index>
-		<tier></tier>
+		<index>95</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>kentucky ave</name>
-		<index></index>
-		<tier></tier>
+		<index>57</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>indiana ave</name>
-		<index></index>
-		<tier></tier>
+		<index>59</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>illinois ave</name>
-		<index></index>
-		<tier></tier>
+		<index>60</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>atlantic ave</name>
-		<index></index>
-		<tier></tier>
+		<index>62</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>ventnor ave</name>
-		<index></index>
-		<tier></tier>
+		<index>63</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>marvin gardens</name>
-		<index></index>
-		<tier></tier>
+		<index>65</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>pacific ave</name>
-		<index></index>
-		<tier></tier>
+		<index>67</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>north carolina ave</name>
-		<index></index>
-		<tier></tier>
+		<index>68</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>pennsylvania ave</name>
-		<index></index>
-		<tier></tier>
+		<index>70</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>park pl</name>
-		<index></index>
-		<tier></tier>
+		<index>73</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>boardwalk</name>
-		<index></index>
-		<tier></tier>
+		<index>75</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>checker cab co</name>
@@ -341,8 +341,8 @@
 	</tile> 
 	<tile>
 		<name>water works</name>
-		<index></index>
-		<tier></tier>
+		<index>64</index>
+		<tier>2</tier>
 	</tile> 
 	<tile>
 		<name>cable company</name>
@@ -351,8 +351,8 @@
 	</tile> 
 	<tile>
 		<name>electric company</name>
-		<index></index>
-		<tier></tier>
+		<index>88</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>internet service provider</name>
@@ -361,13 +361,13 @@
 	</tile>
 	<tile>
 		<name>gas company</name>
-		<index></index>
-		<tier></tier>
+		<index>99</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>telephone company</name>
-		<index></index>
-		<tier></tier>
+		<index>111</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>trash collector</name>
@@ -381,28 +381,52 @@
 	</tile> 
 	<tile>
 		<name>reading railroad</name>
-		<index>35</index>
-		<tier>1</tier>
+    <top>
+      <index>81</index>
+      <tier>2</tier>
+    </top>
+    <bottom>
+      <index>35</index>
+      <tier>1</tier>
+    </bottom>
 	</tile> 
 	<tile>
 		<name>pennsylvania railroad</name>
-		<index></index>
-		<tier></tier>
+    <top>
+      <index>117</index>
+      <tier>3</tier>
+    </top>
+    <bottom>
+      <index>91</index>
+      <tier>2</tier>
+    </bottom>
 	</tile> 
 	<tile>
 		<name>b&amp;o railroad</name>
-		<index>7</index>
-		<tier>1</tier>
+    <top>
+      <index>61</index>
+      <tier>2</tier>
+    </top>
+    <bottom>
+      <index>7</index>
+      <tier>1</tier>
+    </bottom>
 	</tile>
 	<tile>
 		<name>short line</name>
-		<index></index>
-		<tier></tier>
-	</tile> 
+    <top>
+      <index>105</index>
+      <tier>3</tier>
+    </top>
+    <bottom>
+      <index>71</index>
+      <tier>2</tier>
+    </bottom>
+  </tile> 
 	<tile>
 		<name>holland tunnel ne</name>
-		<index></index>
-		<tier></tier>
+		<index>102</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>holland tunnel sw</name>
@@ -411,8 +435,8 @@
 	</tile>
 	<tile>
 		<name>chance inner ne</name>
-		<index></index>
-		<tier></tier>
+		<index>100</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>chance outer west</name>
@@ -436,33 +460,33 @@
 	</tile> 
 	<tile>
 		<name>chance middle east</name>
-		<index></index>
-		<tier></tier>
+		<index>72</index>
+		<tier>2</tier>
 	</tile> 
 	<tile>
 		<name>chance middle south</name>
-		<index></index>
-		<tier></tier>
+		<index>83</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>chance middle north</name>
-		<index></index>
-		<tier></tier>
+		<index>58</index>
+		<tier>2</tier>
 	</tile> 
 	<tile>
 		<name>squeeze play</name>
-		<index></index>
-		<tier></tier>
+		<index>108</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>reverse</name>
-		<index></index>
-		<tier></tier>
+		<index>106</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>bonus</name>
-		<index></index>
-		<tier></tier>
+		<index>114</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>pay day</name>
@@ -471,8 +495,8 @@
 	</tile> 
 	<tile>
 		<name>community chest inner sw</name>
-		<index></index>
-		<tier></tier>
+		<index>112</index>
+		<tier>3</tier>
 	</tile>
 	<tile>
 		<name>community chest outer se</name>
@@ -496,18 +520,18 @@
 	</tile> 
 	<tile>
 		<name>community chest middle south</name>
-		<index></index>
-		<tier></tier>
+		<index>78</index>
+		<tier>2</tier>
 	</tile> 
 	<tile>
 		<name>community chest middle west</name>
-		<index></index>
-		<tier></tier>
+		<index>93</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>community chest middle east</name>
-		<index></index>
-		<tier></tier>
+		<index>69</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>stock exchange</name>
@@ -516,8 +540,8 @@
 	</tile>
 	<tile>
 		<name>tax refund</name>
-		<index></index>
-		<tier></tier>
+		<index>98</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>subway</name>
@@ -541,13 +565,13 @@
 	</tile>
 	<tile>
 		<name>go to jail</name>
-		<index></index>
-		<tier></tier>
+		<index>66</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>jail</name>
-		<index></index>
-		<tier></tier>
+		<index>86</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>birthday gift</name>
@@ -556,27 +580,27 @@
 	</tile>
 	<tile>
 		<name>income tax</name>
-		<index></index>
-		<tier></tier>
+		<index>80</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>go</name>
-		<index></index>
-		<tier></tier>
+		<index>76</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>free parking</name>
-		<index></index>
-		<tier></tier>
+		<index>56</index>
+		<tier>2</tier>
 	</tile>
 	<tile>
 		<name>roll3</name>
-		<index></index>
-		<tier></tier>
+		<index>96</index>
+		<tier>3</tier>
 	</tile> 
 	<tile>
 		<name>luxury tax</name>
-		<index></index>
-		<tier></tier>
+		<index>74</index>
+		<tier>2</tier>
 	</tile>
 </tiles>
