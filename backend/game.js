@@ -55,7 +55,9 @@ class Game {
     /**
     * Rolls the 3 dice for the player and moves him/her to the next location.
     * @return JSON with fields rolled (list of what was rolled), action (list
-    *       of actions that the player should perform), and message (string saying what happened)
+    *       of actions that the player should perform), movedTo (list of locations
+    *       visited), player (JSON with name: name, money: money), and
+    *       message (string saying what happened)
     */
     rollDice() {
         // need to simulate 3 dice just like the real game
@@ -63,7 +65,8 @@ class Game {
         let die1, die2, die3 = Card.rollDie(), Card.rollDie(), Card.rollDie();
         let totalRoll = 0;
         let actions = [];
-        let message = ""; // TODO maybe consider making a list called messages?
+        let message = "";
+        let json = {};
 
         if(die3 === 4 || die3 === 5) {
             die3 = 'mrmonopoly';
@@ -86,8 +89,8 @@ class Game {
         }
         else {
             // TODO update based on whatever happens with boardManager's API
-            const action = this.boardManager.moveLocation(player, totalRoll)['actions'];
-            actions.push(action);
+            json = Object.extend(json, this.boardManager.moveLocation(player, totalRoll));
+            actions = json['actions'];
         }
 
         // push other actions after based on priority
@@ -97,22 +100,25 @@ class Game {
 
         // see if the player's turn is over
         if(actions.length === 0) {
-            actions.push('end turn');
+            actions.push('end turn'); // TODO decide if
         }
+        json['rolled'] = [die1, die2, die3];
+        json['message'] = message;
 
-        return {'rolled': [die1, die2, die3], 'actions': actions, 'message': message};
+        return json;
     }
 
     /**
     * Performs the Mr. Monopoly search for the next unowned property and moves the player.
-    * @return JSON with fields action (list of actions that the player should perform)
+    * @return JSON with fields movedTo (list of locations visited), actions (list
+    *       of actions that the player should perform), player (JSON with name: name, money: money),
     *       and message (string saying what happened)
     */
     unleashMrMonopoly() {
         const player = this.playerManager.getCurrentPlayer();
-        const action = this.boardManager.nextMrMonopolyLocation(player, this.lastOdd)['actions'];
-        const message = player.name + " used Mr. Monopoly to get to " + player.location; 
-        return {'action': action, 'message': message}
+        let json = this.boardManager.nextMrMonopolyLocation(player, this.lastOdd);
+        json['message'] = player.name + " used Mr. Monopoly to get to " + player.location; 
+        return json;
     }
 
     /**
@@ -120,7 +126,8 @@ class Game {
     * @param pass the name of the bus pass
     * @param location if the pass says "any" then this is the location to advance to
     *
-    * @return JSON with fields action (list of actions that the player should perform)
+    * @return JSON with fields movedTo (list of locations visited), actions (list
+    *       of actions that the player should perform), player (JSON with name: name, money: money),
     *       and message (string saying what happened)
     */
     useBusPass(pass, location) {
@@ -130,9 +137,9 @@ class Game {
         if (!player.busTickets.has(pass))
             return -1
 
+        let json = {};
         let oldDirection = player.forward; // store to reset later
-        let action = [];
-        let message = ''; // TODO implement the messages for this
+        // TODO implement the messages for this
 
         if(pass.includes('forward')) {
             player.forward = true;
@@ -141,25 +148,25 @@ class Game {
         }
 
         if(pass.includes('any') && option) {
-            action = this.boardManager.advanceToLocation(player, location)['actions'];
+            json['actions'] = this.boardManager.advanceToLocation(player, location)['actions'];
         }
         else if(!pass.includes('any')) {
             const num = parseInt(pass.replace('forward', '').replace('backward', '').replace('expire', ''));
-            action = this.boardManager.moveLocation(player, num)['actions'];
+            json = Object.assign(json, this.boardManager.moveLocation(player, num));
         }
 
         // reset player to how they were before
         player.forward = oldDirection;
 
-        return {'action': action, 'message': message};
+        return json;
     }
 
     /**
     * Takes a taxi ride to the specified location.
     * @param location to get transported to
     *
-    * @return JSON with fields action (list of actions that the player should perform)
-    *       and message (string saying what happened)
+    * @return JSON with fields player1/player2? (JSON with name: name, money: money),
+    *       pool (money in pool), and message (string saying what happened)
     */
     taxiRide(location) {
         //location is not on board
@@ -184,14 +191,14 @@ class Game {
         }
 
         let actions = this.boardManager.jumpToLocation(player, location)['actions'];
-        // TODO only handle a subset of actions
+        // only handle a subset of actions
         if(actions.includes('buy'))
-            actions = ['buy'];
+            json["actions"] = ['buy'];
         else
-            actions = [];
+            json["actions"] = [];
 
-        const message = player.name + " took a taxi to " + player.location; // TODO message
-        return {'action': actions, 'message': message};
+        json["message"] = player.name + " took a taxi to " + player.location; // TODO message
+        return json;
     }
 
     /**
@@ -267,31 +274,40 @@ class Game {
 
     /**
      * Sets the houses for all of the properties in the houseMap.
-     * @param houseMap
+     * @param houseMap JSON key property to preferred number of houses
+     *
+     * @return JSON with fields properties (map names to houses on them), player (name: name, money: money),
+     *       delta (map names to change in houses)
      *
      */
     setHouses(houseMap) {
-        this.boardManager.setHousesForPropertySet(houseMap);
+        const player = this.playerManager.getCurrentPlayer();
+        let json = this.boardManager.setHousesForProperties(houseMap);
         // TODO message
+        return json;
     }
 
     /**
     * The current player pays rent for the property that they are located on.
-    * @return JSON with field message (string saying what happened)
+    * @return JSON with field message (string saying what happened) and
+    *       player/owner (name: name, money: money)
     */
     payRent() {
         const player = this.playerManager.getCurrentPlayer();
         const rent = this.boardManager.getRent(player, player.location);
-        const owner = this.boardManager.isOwned(player.location);
+        const owner = this.boardManager.isOwned(player.location); // TODO use playerManager to get owner
+        let json = {};
 
         if(!rent) {
             return {"message": player.location + " is unowned."};
         }
         
         player.deltaMoney(-rent);
+        json['player'] = {'name': player.team, 'money': player.getMoney()};
         owner.deltaMoney(rent);
+        json['owner'] = {'name': owner.name, 'money': owner.getMoney()};
 
-        let message = player.name + " paid " + rent + " rent to " + owner;
+        let message = player.name + " paid " + rent + " rent to " + owner.team;
         return {"message": message};
     }
 
@@ -402,7 +418,7 @@ class Game {
      * @return object of the player whose turn it is
      */
     getCurrentPlayer() {
-        return this.playerManager.getCurrentPlayer(); // TODO decide if just want name
+        return this.playerManager.getCurrentPlayer(); // TODO decide if just want name or json
     }
 
     /**
@@ -416,8 +432,13 @@ class Game {
         return {"name": property, "price": rent}
     }
 
+    /**
+    * Gets a list of all places that you can get by taxi.
+    *
+    * @return string list of all taxi/train locations
+    */
     getTaxiLocations() {
-        // TODO get the taxi locations
+        return this.boardManager.getTransitLocations();
     }
 
     /**

@@ -336,7 +336,7 @@ class BoardManager {
         if (land.kind === 'subway'){
             actions.push("subway")
         }
-        if (land.kind === 'bus'){
+        if (land.kind === 'bus'){ // TODO this confuses bus/cab. bus spaces acquire a bus ticket
             actions.push("bus")
         }
         if (land.kind === 'stock'){
@@ -344,7 +344,7 @@ class BoardManager {
         }
         if (land.kind === 'auction'){
             if (this.unownedProperties > 0){
-                actions.push("auction")
+                actions.push("auction") // TODO this should probably be "choose to auction" maybe?
             }
             else{
                 actions.push("highest rent")
@@ -652,11 +652,11 @@ class BoardManager {
     }
 
     /**
-    * Gets a list of all of the transit locations.
+    * Gets a list of all places that you can get by taxi.
     *
-    * @return list of all bus/train locations
+    * @return string list of all taxi/train locations
     */
-    getTransitLocations() {
+    getTaxiLocations() {
         let places = []
         for (let property of this.locations){
             if (property.kind === "railroad" || property.kind === "bus"){
