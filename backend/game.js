@@ -38,6 +38,14 @@ class Game {
         }
     }
 
+    /**
+     * Turns the Game into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        // TODO this and boardManager (and underlings)
+    }
+
     /****************************************************************************************
      * GAMEPLAY METHODS
      ****************************************************************************************/

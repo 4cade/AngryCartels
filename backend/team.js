@@ -21,6 +21,24 @@ class Team {
     }
 
     /**
+     * @return JSON representation without functions
+     */
+    toJSON() {
+        let properties = [];
+        for(let property of this.properties) {
+            properties.push(property.name);
+        }
+
+        return {
+            "name": this.name,
+            "money": this.money,
+            "properties": properties,
+            "busTickets": this.busTickets,
+            "specialCards": this.specialCards
+        }
+    }  
+
+    /**
      * Calculates the net worth of the player
      * 
      * @return int net worth of the player

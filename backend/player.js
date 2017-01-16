@@ -26,21 +26,12 @@ class Player {
      * @return JSON representation without functions
      */
     toJSON() {
-        let propertyJSONs = []
-
-        this.team.properties.forEach(p => {
-            propertyJSONs.push(p.toJSON());
-        });
-
         return {
             "name": this.name,
-            "money": this.team.money,
-            "properties": propertyJSONs,
-            "busTickets": this.team.busTickets,
             "forward": this.forward,
             "location": this.location,
             "track": this.track,
-            "specialCards": this.team.specialCards
+            "team": this.team.toJSON()
         }
     }
 

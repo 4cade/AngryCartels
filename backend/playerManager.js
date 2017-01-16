@@ -19,7 +19,41 @@ class PlayerManager {
         this.currentPlayer = this.turnOrder[0];
         this.canRoll = true; // says if the current player can roll
 
-        this.doubleCount = 0;
+        this.doubleCount = 0; // TODO actually use this
+    }
+
+    /**
+     * Turns the PlayerManager into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        let players = [];
+
+        for(let player of this.turnOrder) {
+            players.push(player.toJSON()); // should maintain the order
+        }
+
+        let teams = {};
+
+        for(let player of players) {
+            if(!teams.hasOwnProperty(player.team.name)) {
+                teams[player.team.name] = player.team;
+            }
+            delete player['team'];
+        }
+
+        let teamList = [];
+        for(let name in teams) {
+            teamList.push(teams[name]);
+        }
+
+        return {
+            "players": players,
+            "teams": teamList,
+            "turnIndex": this.turnIndex,
+            "canRoll": this.canRoll,
+            "doubleCount": this.doubleCount
+        }
     }
 
     /**
