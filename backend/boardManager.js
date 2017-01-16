@@ -14,9 +14,9 @@ const Teleport = require('./location/teleport.js');
  */
 class BoardManager {
     constructor(rawBoard) {
-        this.houses = 81;
-        this.hotels = 31;
-        this.skyscrapers = 16;
+        this.houses = 81;  // TODO check if this is maintained
+        this.hotels = 31;  // TODO check if this is maintained
+        this.skyscrapers = 16;  // TODO check if this is maintained
         this.pool = 0;
         this.unownedProperties = 0;
 
@@ -24,7 +24,7 @@ class BoardManager {
         this.propertyGroups = {}; // key group name to property/railroad/cab/utility object
         this.collects = {}; // key location name to collect object
         this.teleports = {}; // key location name to teleport object
-        this.cardGroup = {};
+        this.cardGroup = {}; // TODO check use?
 
         for(let name in rawBoard) {
             const loc = rawBoard[name]; // preloaded data from the board
@@ -73,6 +73,29 @@ class BoardManager {
             // populate teleports
             if (locObj.kind === 'teleport')
                 this.teleports[name] = locObj;
+        }
+    }
+
+    /**
+     * Turns the BoardManager into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        // for now ignore property groups since they just store priority and
+        // that might not be an essential feature
+        let locations = {};
+
+        for(let name in this.locations) {
+            locations[name] = this.locations['name'].toJSON();
+        }
+
+        return {
+            "houses": this.houses,
+            "hotels": this.hotels,
+            "skyscrapers": this.skyscrapers,
+            "pool": this.pool,
+            "unownedProperties": this.unownedProperties,
+            "locations": locations
         }
     }
 

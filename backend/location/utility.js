@@ -13,6 +13,14 @@ class Utility extends Property {
     }
 
     /**
+     * Turns the Utility into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        return super.toJSON();
+    }
+
+    /**
      * Sees how much rent costs if this is landed on.
      * @param numOwned int of number of other utilities owned
      * @param dice int number of pips on the dice rolled

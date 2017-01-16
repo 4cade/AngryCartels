@@ -43,7 +43,15 @@ class Game {
      * @return JSON version of this object
      */
     toJSON() {
-        // TODO this and boardManager (and underlings)
+        return {
+            "playerManager": this.playerManager.toJSON(),
+            "boardManager": this.boardManager.toJSON(),
+            "auction": this.auction,
+            "auctionGoing": this.auctionGoing,
+            "auctionedProperty": this.auctionedProperty,
+            "lastOdd": this.lastOdd,
+            "log": this.log
+        }
     }
 
     /****************************************************************************************

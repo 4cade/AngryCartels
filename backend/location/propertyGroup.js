@@ -12,7 +12,7 @@ class PropertyGroup {
         this.index = index;
         this.prioritySet = false;
 
-        this.properties = [];       //list of object properties
+        this.properties = []; //list of object properties
     }
 
     /**

@@ -16,6 +16,16 @@ class CabCompany extends Property {
         this.cabStandPrice = 150;
     }
 
+    /**
+     * Turns the CabCompany into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        let oldJSON = super.toJSON();
+        let newJSON = {"hasCabStand": this.hasCabStand, "cabStandPrice": this.cabStandPrice};
+        return Object.extend(oldJSON, newJSON);
+    }
+
     /*
      * Mortgages the property.
      *

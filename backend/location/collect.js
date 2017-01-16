@@ -17,6 +17,16 @@ class Collect extends Place{
 	}
 
 	/**
+     * Turns the Collect into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        let oldJSON = super.toJSON();
+        let newJSON = {"amount": this.amount, "gain": this.gain};
+        return Object.extend(oldJSON, newJSON);
+    }
+
+	/**
 	* Gets the amount of money collected.
 	* @param odd boolean true if player rolled an odd, false if even
 	* @param land boolean true if player has no more steps, false if can continue

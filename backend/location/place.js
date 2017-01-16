@@ -19,6 +19,23 @@ class Place {
         this.isProperty = false;
     }
 
+    /**
+     * Turns the Place into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        return {
+            "name": this.name,
+            "type": this.kind,
+            "forward": this.forward,
+            "backward": this.backward,
+            "side": this.side,
+            "track": this.track,
+            "above": this.above,
+            "below": this.below
+        }
+        // TODO decide if needs isProperty
+    }
 
 }
 

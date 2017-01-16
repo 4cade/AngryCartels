@@ -21,6 +21,23 @@ class Property extends Place {
     }
 
     /**
+     * Turns the Property into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        let json = super.toJSON();
+        let other ={
+            "group": this.group,
+            "rent": this.rent,
+            "mortgageValue": this.mortgageValue,
+            "cost": this.cost,
+            "owner": this.owner,
+            "isMortgaged": this.isMortgaged
+        }
+        return Object.extend(json, other);
+    }
+
+    /**
      * Sets the owner of the property to the owner.
      * @param owner the new owner of the property
      * @return boolean true if new owner is set, false if owner is already the owner

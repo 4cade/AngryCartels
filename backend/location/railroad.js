@@ -16,6 +16,16 @@ class Railroad extends Property {
         this.trainDepotPrice = 100;
     }
 
+    /**
+     * Turns the Railroad into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        let oldJSON = super.toJSON();
+        let newJSON = {"hasTrainDepot": this.hasTrainDepot, "trainDepotPrice": this.trainDepotPrice};
+        return Object.extend(oldJSON, newJSON);
+    }
+
     /*
      * Mortgages the property.
      *

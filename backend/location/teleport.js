@@ -16,6 +16,16 @@ class Teleport extends Place{
 	}
 
 	/**
+     * Turns the Teleport into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        let oldJSON = super.toJSON();
+        let newJSON = {"teleport": this.teleport};
+        return Object.extend(oldJSON, newJSON);
+    }
+
+	/**
 	* Gets the location teleported to.
 	* @param land boolean true if player has no more steps, false if can continue
 	* @return string location to teleport to

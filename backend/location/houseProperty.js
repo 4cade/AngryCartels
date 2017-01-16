@@ -15,6 +15,16 @@ class HouseProperty extends Property {
         this.housePrice = boardPreset['house'];
     }
 
+    /**
+     * Turns the HouseProperty into a reloadable JSON representation
+     * @return JSON version of this object
+     */
+    toJSON() {
+        let oldJSON = super.toJSON();
+        let newJSON = {"houses": this.houses, "housePrice": this.housePrice};
+        return Object.extend(oldJSON, newJSON);
+    }
+
     /*
      * Mortgages the property.
      *
