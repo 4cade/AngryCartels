@@ -164,6 +164,29 @@ describe('Location', function() {
             assert(property.addHouse());
             assert.equal(property.getRent(true), prop.rent[1]);
         });
+
+        it("reloads from json correctly", function() {
+            let json = { name: 'biscayne ave',
+                      type: 'property',
+                      forward: [ 'short line' ],
+                      backward: [ 'miami ave' ],
+                      side: [ 3 ],
+                      track: [ 0 ],
+                      above: undefined,
+                      below: [ 'pennsylvania ave' ],
+                      snapshot: true,
+                      group: 0,
+                      rent: [ 11, 55, 160, 475, 650, 800, 1300 ],
+                      mortgageValue: 75,
+                      cost: 150,
+                      owner: null,
+                      isMortgaged: false,
+                      houses: 0,
+                      housePrice: 50 };
+
+            let p = new HouseProperty(json.name, json);
+            assert.deepEqual(p.toJSON(), json);
+        })
     });
 
     describe("#utilityTests", function() {

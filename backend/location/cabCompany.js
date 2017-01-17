@@ -29,7 +29,7 @@ class CabCompany extends Property {
     toJSON() {
         let oldJSON = super.toJSON();
         let newJSON = {"hasCabStand": this.hasCabStand, "cabStandPrice": this.cabStandPrice};
-        return Object.extend(oldJSON, newJSON);
+        return Object.assign(oldJSON, newJSON);
     }
 
     /*

@@ -23,7 +23,7 @@ class Collect extends Place{
     toJSON() {
         let oldJSON = super.toJSON();
         let newJSON = {"amount": this.amount, "gain": this.gain};
-        return Object.extend(oldJSON, newJSON);
+        return Object.assign(oldJSON, newJSON);
     }
 
 	/**

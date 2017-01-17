@@ -30,7 +30,7 @@ class Railroad extends Property {
     toJSON() {
         let oldJSON = super.toJSON();
         let newJSON = {"hasTrainDepot": this.hasTrainDepot, "trainDepotPrice": this.trainDepotPrice};
-        return Object.extend(oldJSON, newJSON);
+        return Object.assign(oldJSON, newJSON);
     }
 
     /*

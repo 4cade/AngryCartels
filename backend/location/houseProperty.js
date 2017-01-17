@@ -28,7 +28,7 @@ class HouseProperty extends Property {
     toJSON() {
         let oldJSON = super.toJSON();
         let newJSON = {"houses": this.houses, "housePrice": this.housePrice};
-        return Object.extend(oldJSON, newJSON);
+        return Object.assign(oldJSON, newJSON);
     }
 
     /*

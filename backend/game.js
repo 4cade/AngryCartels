@@ -34,6 +34,7 @@ class Game {
             // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
         }
         else {
+            console.log("I am happeneing!!!!")
             // reload from saved state
             this.boardManager = new BoardManager(gamePresets['boardManager'], false);
             this.playerManager = new PlayerManager(null, null, null, gamePresets['playerManager'], this.boardManager.locations);

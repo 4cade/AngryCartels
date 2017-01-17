@@ -26,8 +26,8 @@ class BoardManager {
         this.teleports = {}; // key location name to teleport object
         this.cardGroup = {}; // TODO check use?
 
-        for(let name in state) {
-            const loc = state[name]; // preloaded data from the board
+        for(let name in state.locations) {
+            const loc = state.locations[name]; // preloaded data from the board
             let locObj = null; // it will get reassigned in the if statements
 
             if (loc.type === 'property') {
@@ -97,7 +97,7 @@ class BoardManager {
         let locations = {};
 
         for(let name in this.locations) {
-            locations[name] = this.locations['name'].toJSON();
+            locations[name] = this.locations[name].toJSON();
         }
 
         return {

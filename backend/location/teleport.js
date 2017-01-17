@@ -22,7 +22,7 @@ class Teleport extends Place{
     toJSON() {
         let oldJSON = super.toJSON();
         let newJSON = {"teleport": this.teleport};
-        return Object.extend(oldJSON, newJSON);
+        return Object.assign(oldJSON, newJSON);
     }
 
 	/**

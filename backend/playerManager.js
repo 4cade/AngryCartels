@@ -32,12 +32,13 @@ class PlayerManager {
             this.doubleCount = savedState['doubleCount'];
 
             // create teams
-            for(let t of savedState['teams']) {
+            for(let name in savedState['teams']) {
+                let data = savedState['teams'][name];
                 let properties = [];
-                for(let p of t['properties']) {
+                for(let p of data['properties']) {
                     properties.push(locationObjs[p]);
                 }
-                teams[t['name']] = new Team(t['name'], t);
+                teams[name] = new Team(name, data);
             }
 
             // create players

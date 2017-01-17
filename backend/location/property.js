@@ -45,7 +45,7 @@ class Property extends Place {
             "owner": this.owner,
             "isMortgaged": this.isMortgaged
         }
-        return Object.extend(json, other);
+        return Object.assign(json, other);
     }
 
     /**

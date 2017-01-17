@@ -6,22 +6,23 @@ const Game = require('../backend/game');
 const board = require('../backend/config/large_board');
 
 // tests the Game object
-// describe('Game', function() {
-//     describe("#initialize", function() {
-//         // TODO actually test initial state
+describe('Game', function() {
+    describe("#initialize", function() {
+        // TODO actually test initial state
 
-//         it('reloads from JSON correctly', function() {
-//             const playerList = ["Bob", "Jerry", "Guy"];
-//             const game1 = new Game(playerList);
-//             const json = game1.toJSON();
-//             const game2 = new Game(json, false);
+        it('reloads from JSON correctly', function() {
+            const playerList = ["Bob", "Jerry", "Guy"];
+            const game1 = new Game({"player": playerList});
+            const json = game1.toJSON();
+            const game2 = new Game(json, false);
 
-//             assert.deepEqual(game2.toJSON(), game1.toJSON());
-//         });
-//     });
+            assert.deepEqual(game2.toJSON(), game1.toJSON());
 
-//     // TODO more tests
-// });
+        });
+    });
+
+    // TODO more tests
+});
 
 // tests the BoardManager object
 describe('BoardManager', function(){
