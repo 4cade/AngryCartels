@@ -7,17 +7,28 @@
 class Team {
 
     // set up initial state
-    constructor(name) {
+    constructor(name, savedState) {
         if(name)
             this.name = name;
         else
             this.name = Math.random().toString(36).substring(7); // random string
-        this.money = 3200;
-        this.properties = new Set(); // set of Property Objects
-        this.busTickets = {}; // key of bus ticket type to quantity
-        this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
 
-        // TODO keep list of players?
+        if(!savedState) {
+            this.money = 3200;
+            this.properties = new Set(); // set of Property Objects
+            this.busTickets = {}; // key of bus ticket type to quantity
+            this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
+
+            // TODO keep list of players?
+        }
+        else {
+            // reload old state
+            this.money = savedState['money'];
+            this.properties = new Set(savedState['properties']); // TODO make sure get properties correctly
+            this.busTickets = savedState['busTickets'];
+            this.specialCards = savedState['specialCards'];
+        }
+        
     }
 
     /**

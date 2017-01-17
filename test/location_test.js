@@ -35,7 +35,7 @@ describe('Location', function() {
         const name = "electric company";
         const prop = {
                         "type": "utility",
-                        "quality": "utility",
+                        "group": "utility",
                         "rent": [4, 10, 20, 40, 80, 100, 120, 150],
                         "mortgage": 75,
                         "forward": ["states ave"],
@@ -53,7 +53,7 @@ describe('Location', function() {
             assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
-            assert.equal(property.group, prop.quality);
+            assert.equal(property.group, prop.group);
             assert.equal(property.cost, 2*prop.mortgage);
         });
 
@@ -84,7 +84,7 @@ describe('Location', function() {
         const name = "newbury st";
         const prop = {
                         "type": "property",
-                        "quality": "black",
+                        "group": "black",
                         "rent": [40, 185, 550, 1200, 1500, 1700, 2700],
                         "mortgage": 190,
                         "house": 200,
@@ -103,7 +103,7 @@ describe('Location', function() {
             assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
-            assert.equal(property.group, prop.quality);
+            assert.equal(property.group, prop.group);
             assert.equal(property.cost, 2*prop.mortgage);
             assert.equal(property.housePrice, prop.house);
             assert.equal(property.houses, 0);
@@ -170,7 +170,7 @@ describe('Location', function() {
         const name = "electric company";
         const prop = {
                         "type": "utility",
-                        "quality": "utility",
+                        "group": "utility",
                         "rent": [4, 10, 20, 40, 80, 100, 120, 150],
                         "mortgage": 75,
                         "forward": ["states ave"],
@@ -189,7 +189,7 @@ describe('Location', function() {
             assert.equal(property.forward, prop.forward);
             assert.equal(property.below, prop.below);
             assert.equal(property.rent, prop.rent);
-            assert.equal(property.group, prop.quality);
+            assert.equal(property.group, prop.group);
             assert.equal(property.cost, 2*prop.mortgage);
             assert.equal(property.getValue(), property.cost);
         });
@@ -212,7 +212,7 @@ describe('Location', function() {
         const name = "short line";
         const spot = {
                         "type": "transportation",
-                        "quality": "railroad",
+                        "group": "railroad",
                         "rent": [25, 50, 100, 200],
                         "mortgage": 100,
                         "forward": ["chance middle east", "reverse"],
@@ -231,7 +231,7 @@ describe('Location', function() {
             assert.equal(rr.forward, spot.forward);
             assert.equal(rr.below, spot.below);
             assert.equal(rr.rent, spot.rent);
-            assert.equal(rr.group, spot.quality);
+            assert.equal(rr.group, spot.group);
             assert.equal(rr.cost, 2*spot.mortgage);
             assert.equal(rr.getValue(), rr.cost);
             assert(!rr.hasTrainDepot);
@@ -273,7 +273,7 @@ describe('Location', function() {
         const name = "ute cab co";
         const spot = {
                         "type": "transportation",
-                        "quality": "cab",
+                        "group": "cab",
                         "rent": [30, 60, 120, 240],
                         "mortgage": 150,
                         "forward": ["birthday gift"],
@@ -292,7 +292,7 @@ describe('Location', function() {
             assert.equal(cc.forward, spot.forward);
             assert.equal(cc.below, spot.below);
             assert.equal(cc.rent, spot.rent);
-            assert.equal(cc.group, spot.quality);
+            assert.equal(cc.group, spot.group);
             assert.equal(cc.cost, 2*spot.mortgage);
             assert.equal(cc.getValue(), 2*spot.mortgage);
             assert(!cc.hasCabStand);
@@ -334,16 +334,16 @@ describe('Location', function() {
         const player2 = new Player('baby', 'jail', 3)
 
         const pgroup1 = new PropertyGroup(0);
-        const bisc = new HouseProperty("biscayne ave", {"type": "property","quality": 0,"rent": [11, 55, 160, 475, 650, 800, 1300],"mortgage": 75,"house": 50,"forward": ["short line"],"backward": ["miami ave"],"side": [3],"track": [0],"below": ["pennsylvania ave"]});
+        const bisc = new HouseProperty("biscayne ave", {"type": "property","group": 0,"rent": [11, 55, 160, 475, 650, 800, 1300],"mortgage": 75,"house": 50,"forward": ["short line"],"backward": ["miami ave"],"side": [3],"track": [0],"below": ["pennsylvania ave"]});
         pgroup1.addProperty(bisc);
-        pgroup1.addProperty(new HouseProperty("miami ave", {"type": "property","quality": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["biscayne ave"],"backward": ["holland tunnel ne"],"side": [3],"track": [0],"below": ["community chest middle east"]}));
-        pgroup1.addProperty(new HouseProperty("florida ave", {"type": "property","quality": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["holland tunnel ne"],"backward": ["chance inner ne"],"side": [2],"track": [0],"below": ["ventnor ave"]}));
+        pgroup1.addProperty(new HouseProperty("miami ave", {"type": "property","group": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["biscayne ave"],"backward": ["holland tunnel ne"],"side": [3],"track": [0],"below": ["community chest middle east"]}));
+        pgroup1.addProperty(new HouseProperty("florida ave", {"type": "property","group": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["holland tunnel ne"],"backward": ["chance inner ne"],"side": [2],"track": [0],"below": ["ventnor ave"]}));
 
         const rrgroup = new PropertyGroup(22);
-        rrgroup.addProperty(new Railroad("reading railroad", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["oriental ave", "esplanade ave"],"backward": ["income tax", "checker cab co"],"side": [0],"track": [1, 2],"above": ["telephone company"]}));
-        rrgroup.addProperty(new Railroad("pennsylvania railroad", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["st james pl", "fifth ave"],"backward": ["virginia ave", "newbury st"],"side": [1],"track": [1, 0],"below": ["chance outer west"]}));
-        rrgroup.addProperty(new Railroad("b&o railroad", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["atlantic ave", "community chest outer north"],"backward": ["illinois ave", "yellow cab co"],"side": [2],"track": [1, 2],"above": ["gas company"]}));
-        rrgroup.addProperty(new Railroad("short line", {"type": "railroad","quality": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["chance middle east", "reverse"],"backward": ["pennsylvania ave", "biscayne ave"],"side": [3],"track": [1, 0],"below": ["sewage system"]}));
+        rrgroup.addProperty(new Railroad("reading railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["oriental ave", "esplanade ave"],"backward": ["income tax", "checker cab co"],"side": [0],"track": [1, 2],"above": ["telephone company"]}));
+        rrgroup.addProperty(new Railroad("pennsylvania railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["st james pl", "fifth ave"],"backward": ["virginia ave", "newbury st"],"side": [1],"track": [1, 0],"below": ["chance outer west"]}));
+        rrgroup.addProperty(new Railroad("b&o railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["atlantic ave", "community chest outer north"],"backward": ["illinois ave", "yellow cab co"],"side": [2],"track": [1, 2],"above": ["gas company"]}));
+        rrgroup.addProperty(new Railroad("short line", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["chance middle east", "reverse"],"backward": ["pennsylvania ave", "biscayne ave"],"side": [3],"track": [1, 0],"below": ["sewage system"]}));
     
         it('sets an owner correctly', function() {
             pgroup1.setOwner(bisc, player1);

@@ -9,7 +9,7 @@ const Team = require('./team');
 class Player {
 
     // set up initial state
-    constructor(name, startingSpace, startingTrack, team) {
+    constructor(name, startingSpace, startingTrack, team, savedState) {
         if(team)
             this.team = team;
         else
@@ -20,6 +20,12 @@ class Player {
         this.location = startingSpace; // all players start on go
         this.track = startingTrack; // all players start on track 1
         this.lastRolled = 0 // int last value of dice roll
+
+        // reload from saved state
+        if(savedState) {
+            this.forward = savedState['forward'];
+            this.lastRolled = savedState['lastRolled'];
+        }
     }
 
     /**
@@ -31,6 +37,7 @@ class Player {
             "forward": this.forward,
             "location": this.location,
             "track": this.track,
+            "lastRolled": this.lastRolled,
             "team": this.team.toJSON()
         }
     }

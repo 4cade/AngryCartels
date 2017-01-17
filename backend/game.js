@@ -34,7 +34,15 @@ class Game {
             // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
         }
         else {
-            // TODO in the future to load a game from saved state
+            // reload from saved state
+            this.boardManager = new BoardManager(gamePresets['boardManager'], false);
+            this.playerManager = new PlayerManager(null, null, null, gamePresets['playerManager'], this.boardManager.locations);
+            
+            this.auction = gamePresets['auction'];
+            this.auctionGoing = gamePresets['auctionGoing'];
+            this.auctionedProperty = gamePresets['auctionedProperty'];
+            this.lastOdd = gamePresets['lastOdd'];
+            this.log = gamePresets['log'];
         }
     }
 
@@ -78,7 +86,7 @@ class Game {
     rollDice() {
         // need to simulate 3 dice just like the real game
         let player = this.playerManager.getCurrentPlayer();
-        let die1, die2, die3 = Card.rollDie(), Card.rollDie(), Card.rollDie();
+        let die1, die2, die3 = (Card.rollDie(), Card.rollDie(), Card.rollDie());
         let totalRoll = 0;
         let actions = [];
         let message = "";

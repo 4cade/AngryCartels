@@ -10,10 +10,10 @@ const Teleport = require('./location/teleport.js');
 
 /**
  * Manages all of the locations on the board and the states associated with them.
- * @param rawBoard JSON that represents a board
+ * @param state JSON that represents a board
  */
 class BoardManager {
-    constructor(rawBoard) {
+    constructor(state, newGame=true) {
         this.houses = 81;  // TODO check if this is maintained
         this.hotels = 31;  // TODO check if this is maintained
         this.skyscrapers = 16;  // TODO check if this is maintained
@@ -26,8 +26,8 @@ class BoardManager {
         this.teleports = {}; // key location name to teleport object
         this.cardGroup = {}; // TODO check use?
 
-        for(let name in rawBoard) {
-            const loc = rawBoard[name]; // preloaded data from the board
+        for(let name in state) {
+            const loc = state[name]; // preloaded data from the board
             let locObj = null; // it will get reassigned in the if statements
 
             if (loc.type === 'property') {
@@ -74,6 +74,17 @@ class BoardManager {
             if (locObj.kind === 'teleport')
                 this.teleports[name] = locObj;
         }
+
+        if(!newGame) {
+            this.houses = state.houses;
+            this.hotels = state.hotels;
+            this.skyscrapers = state.skyscrapers;
+            this.pool = state.pool;
+            this.unownedProperties = state.unownedProperties;
+
+            // sets the rest correct based on "snapshot" field in Place
+        }
+        
     }
 
     /**

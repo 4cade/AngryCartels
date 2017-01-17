@@ -12,8 +12,15 @@ class Railroad extends Property {
     constructor(name, boardPreset) {
         super(name, boardPreset);
 
-        this.hasTrainDepot = false;
-        this.trainDepotPrice = 100;
+        if(boardPreset['snapshot']) {
+            this.hasTrainDepot = boardPreset['hasTrainDepot'];
+            this.trainDepotPrice = boardPreset['trainDepotPrice'];
+        }
+        else {
+            this.hasTrainDepot = false;
+            this.trainDepotPrice = 100;            
+        }
+
     }
 
     /**

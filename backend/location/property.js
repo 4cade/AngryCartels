@@ -11,12 +11,23 @@ class Property extends Place {
     constructor(name, boardPreset) {
         super(name, boardPreset)
 
-        this.group = boardPreset['quality'];
-        this.rent = boardPreset['rent'];
-        this.mortgageValue = boardPreset['mortgage'];
-        this.cost = 2*this.mortgageValue
-        this.owner = null;
-        this.isMortgaged = false;
+        if(boardPreset['snapshot']) {
+            this.group = boardPreset['group'];
+            this.rent = boardPreset['rent'];
+            this.mortgageValue = boardPreset['mortgageValue'];
+            this.cost = boardPreset['cost'];
+            this.owner = boardPreset['owner'];
+            this.isMortgaged = boardPreset['isMortgaged'];
+        }
+        else {
+            this.group = boardPreset['group'];
+            this.rent = boardPreset['rent'];
+            this.mortgageValue = boardPreset['mortgage'];
+            this.cost = 2*this.mortgageValue
+            this.owner = null;
+            this.isMortgaged = false;    
+        }
+        
         this.isProperty = true;
     }
 

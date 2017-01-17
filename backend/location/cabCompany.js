@@ -12,8 +12,14 @@ class CabCompany extends Property {
     constructor(name, boardPreset) {
         super(name, boardPreset);
 
-        this.hasCabStand = false;
-        this.cabStandPrice = 150;
+        if(boardPreset['snapshot']) {
+            this.hasCabStand = boardPreset['hasCabStand'];
+            this.cabStandPrice = boardPreset['cabStandPrice'];
+        }
+        else {
+            this.hasCabStand = false;
+            this.cabStandPrice = 150;
+        }
     }
 
     /**

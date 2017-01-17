@@ -32,7 +32,8 @@ class Place {
             "side": this.side,
             "track": this.track,
             "above": this.above,
-            "below": this.below
+            "below": this.below,
+            "snapshot": true
         }
         // TODO decide if needs isProperty
     }

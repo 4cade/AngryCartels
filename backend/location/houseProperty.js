@@ -11,8 +11,14 @@ class HouseProperty extends Property {
     constructor(name, boardPreset) {
         super(name, boardPreset);
 
-        this.houses = 0; // max is 6 (4 + 1 hotel + 1 skyscraper)
-        this.housePrice = boardPreset['house'];
+        if(boardPreset['snapshot']) {
+            this.houses = boardPreset['houses'];
+            this.housePrice = boardPreset['housePrice'];
+        }
+        else {
+            this.houses = 0; // max is 6 (4 + 1 hotel + 1 skyscraper)
+            this.housePrice = boardPreset['house'];
+        }
     }
 
     /**
