@@ -25,16 +25,12 @@ class Game {
             this.lastOdd = false; // used for some methods
             this.log = []; // log of actions that have occurred in the game
 
-            // needs: free parking, highest rent, chance/community chest
-            //      getAllLocations, getAllUnownedLocations
-
             // scrambles player order for more fun
             this.playerManager.scrambleTurnOrder();
 
             // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
         }
         else {
-            console.log("I am happeneing!!!!")
             // reload from saved state
             this.boardManager = new BoardManager(gamePresets['boardManager'], false);
             this.playerManager = new PlayerManager(null, null, null, gamePresets['playerManager'], this.boardManager.locations);
@@ -69,12 +65,12 @@ class Game {
 
     /**
     * Makes it so it is the next player's turn.
-    * @return JSON with field message (string saying what happened)
+    * @return JSON with field message (string saying what happened) and player (name of current player)
     */
     nextTurn() {
         this.playerManager.nextTurn();
         const message = "It is now " + this.playerManager.getCurrentPlayer().name + "'s turn!";
-        return {'message': message}
+        return {'message': message, "player": this.playerManager.getCurrentPlayer().name}
     }
 
     /**
@@ -230,12 +226,29 @@ class Game {
     * The current player buys the property that they are located on for market price.
     *
     * @return JSON with fields player (name: name, money: money), location (name of location),
-    *      price (price paid for the property), message (saying what happened). null if failed
+    *      price (price paid for the property), message (saying what happened).
     */
     buyProperty() {
         const player = this.playerManager.getCurrentPlayer();
         let json = this.boardManager.buyProperty(player, player.location);
-        json['message'] = player.name + "bought" + json.location + " for " + json.price; // TODO add message
+        json['message'] = player.name + "bought" + json.location + " for " + json.price;
+        this.log.push(json['message']);
+        return json;
+    }
+
+    /**
+     * Buys the property for an auction price.
+     * @param info JSON with fields player (name of player), location (name of location),
+     *      price (price for the property)
+     *
+     * @return JSON with fields player (name: name, money: money), location (name of location),
+     *      price (price paid for the property), message (saying what happened).
+     */
+    buyPropertyAuction(info) {
+        const player = this.playerManager.getPlayer(info.player);
+        let json = this.boardManager.buyProperty(player, info.location, info.price);
+        json['message'] = player.name + "bought" + json.location + " for " + json.price;
+        this.log.push(json['message']);
         return json;
     }
 
@@ -336,8 +349,38 @@ class Game {
         return {"message": message};
     }
 
-    trade() {
-        // TODO figure out what needs to happen
+    drawChance() {
+        // TODO
+    }
+
+    drawCommunityChest() {
+        // TODO
+    }
+
+    useSpecialCard(player, card) {
+        // TODO
+    }
+
+    /**
+     * Executes a trade with the player specified in info under info's conditions.
+     * @param info JSON object with 6 fields: player1 (name of first player in trade),
+     *     player2 (name of second player in trade), properties1  (list of properties
+     *     that the first player is trading), properties2 (list of properties that the
+     *     the second player is trading), wealth1 (money that first player is trading),
+     *     and wealth2 (money that the second player is trading)
+     * @return updated game data with the trade committed sent to all in game
+     */
+    trade(info) {
+        const player1 = this.playerManager.getPlayer(info.player1);
+        const player2 = this.playerManager.getPlayer(info.player2);
+        
+        let t1 = this.boardManager.transferProperties(player1, player2, info.properties1);
+        let t2 = this.boardManager.transferProperties(player2, player1, info.properties2);
+
+        let m1 = player1.deltaMoney(info.wealth2-info.wealth1);
+        let m2 = player2.deltaMoney(info.wealth1-info.wealth2);
+
+        // TODO return stuff
     }
 
     /****************************************************************************************
@@ -364,17 +407,17 @@ class Game {
      * @param player the name of a player
      * @param price the price the player is willing to bid
      */
-    setAuctionPrice(player, price) {
+    addBid(player, price) {
         if(this.auctionGoing) {
             this.auction[player] = price;
         }
     }
 
     /**
-     * The winning player of the auction buys.
+     * Decides the winning player of the auction.
      * 
-     * @return JSON with fields player (name: name, money: money), location (name of location),
-     *      price (price paid for the property), message (saying what happened). null if failed
+     * @return JSON with fields player (name of player), location (name of location),
+     *      price (price for the property), message (saying what happened). null if failed
      */
     finishAuction() {
         if(this.auctionGoing) {
@@ -417,7 +460,7 @@ class Game {
                     price = top;
                 }
 
-                let json = this.boardManager.buyProperty(player, this.auctionedProperty, price);
+                let json = {"player": player.name, "location": this.auctionedProperty, "price": price};
 
                 this.auction = null;
                 this.auctionGoing = false;
@@ -458,23 +501,50 @@ class Game {
     }
 
     /**
-    * Gets a list of all places that you can get by taxi.
-    *
-    * @return string list of all taxi/train locations
-    */
+     * Gets all of the information about a property
+     * @param property string name of property
+     *
+     * @return JSON of relevant property information
+     */
+    getPropertyInfo(property) {
+        return this.boardManager.locations[property].toJSON();
+    }
+
+    /**
+     * Gets a list of all places that you can get by taxi.
+     *
+     * @return string list of all taxi/train locations
+     */
     getTaxiLocations() {
         return this.boardManager.getTransitLocations();
     }
 
     /**
-     * Gets a JSON that can be used to save the game and reloaded from.
+     * Gets a list of all places on the board.
      *
-     * @return JSON with all of the Game's state
+     * @return string list of all locations
      */
-    getGameJSON() {
-        // TODO send the entire game as a json that can be stored/reloaded from
+    getAllLocations() {
+        // TODO get all locs
     }
 
+    /**
+     * Gets a list of all unowned properties on the board.
+     *
+     * @return string list of all unowned properties
+     */
+    getAllUnownedLocations() {
+        // TODO get all unowned locs
+    }
+
+    /**
+     * Gets the name of the location with the highest base rent.
+     *
+     * @return string name of property
+     */
+    getHighestRent() {
+        // TODO ignore utility/other ones based on multipliers
+    }
 }
 
 module.exports = Game;

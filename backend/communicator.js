@@ -1,5 +1,4 @@
-// var board = require('./config/large_board.js');
-// var Game = require('./game.js');
+var Game = require('./game');
 
 var users = {};
 var userGenNum = 1;
@@ -134,7 +133,7 @@ module.exports = function(socket){
    * @return updating listing of games to everyone
    */
   socket.on('join game', function(host) {
-    games[host]["players"].push(socket.username);
+    games[host]["player"].push(socket.username);
     socket.inGame = host;
     console.log(socket.username + " joined " + host + "'s game");
     emitAll('updated games', games);
@@ -145,7 +144,7 @@ module.exports = function(socket){
    * @return updating listing of games to everyone
    */
   socket.on('leave game', function() {
-    games[socket.inGame]["players"] = games[socket.inGame]["players"].filter(
+    games[socket.inGame]["player"] = games[socket.inGame]["player"].filter(
         function(el) { return el !== socket.username });
     console.log(socket.username + " left " + socket.inGame + "'s game");
     emitAll('updated games', games);
@@ -168,79 +167,50 @@ module.exports = function(socket){
   socket.on('start game', function() {
     // tell everyone that the game started, do first for minimal lag since next step is intensive
     emitInGame(socket.inGame, 'start game', {});
-    console.log(games[socket.inGame]);
     // actually populate the game with stuff and make everyone go into the game
-    // games[socket.inGame] = new Game(games[socket.inGame]);
-    console.log("TODO implement start game");
-    // emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
-  });
-
-  /**
-   * Sets the order for the turns for all of the players in the game
-   * @return game data with the turn order for all of the players in the game
-   */
-  socket.on('set order', function() {
-    // assign a turn order
+    games[socket.inGame] = new Game(games[socket.inGame]);
     games[socket.inGame].setOrder();
-    emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
+    emitInGame(socket.inGame, 'game data', games[socket.inGame].toJSON());
   });
 
   /**
    * Rolls the dice for the client
-   * @return movement of the piece to all in game, possible actions for the client
-   *     to take to the client
+   * @return JSON with fields rolled (list of what was rolled), action (list
+   *       of actions that the player should perform), movedTo (list of locations
+   *       visited), player (JSON with name: name, money: money), and
+   *       message (string saying what happened)
    */
   socket.on('roll', function() {
     // TODO check if it is this player's turn
     // simulate actually rolling the dice
-    games[socket.inGame].rollDice();
+    let json = games[socket.inGame].rollDice();
 
     // say something moved
-    emitInGame(socket.inGame, 'movement', games[socket.inGame].getData());
-
-    // check if further actions are needed
-    var actions = [];
-    var action1 = games[socket.inGame].executeLocation();
-    if(action1 !== "nothing") {
-      actions.push(action1);
-    }
-    if(games[socket.inGame]["message"] === "mrmonopoly") {
-      actions.push("mrmonopoly");
-      games[socket.inGame].setMessage("");
-    }
-    socket.emit('actions', actions);
+    emitInGame(socket.inGame, 'movement', json);
   });
 
   /**
    * Makes the client do a Mr. Monopoly action to go to the nearest unowned
    *     property that is unowned.
-   * @return movement of the piece to all in game, possible actions for the client
-   *     to take to the client
+   * @return JSON with fields rolled (list of what was rolled), action (list
+   *       of actions that the player should perform), movedTo (list of locations
+   *       visited), player (JSON with name: name, money: money), and
+   *       message (string saying what happened)
    */
   socket.on('mrmonopoly', function() {
     // TODO check if it's the client's turn
-    games[socket.inGame].unleashMrMonopoly();
+    let json = games[socket.inGame].unleashMrMonopoly();
     // say something moved
-    emitInGame(socket.inGame, 'movement', games[socket.inGame].getData());
-    var actions = [];
-    var action = games[socket.inGame].executeLocation();
-    if(action !== "nothing") {
-      actions.push(action);
-    }
-    emitInGame(socket.inGame, 'actions', actions);
+    emitInGame(socket.inGame, 'movement', json);
   });
 
   /**
    * Charges rent to the client based on the information in info
-   * @param info JSON object with 2 fields: property (name of the property to charge)
-   *     and player (name of the player to pay)
-   * @return updated game data with rent charged to client sent to all in game
+   * @return JSON with field message (string saying what happened) and
+   *       player/owner (name: name, money: money)
    */
-  socket.on('rent', function(info) {
-    games[socket.inGame].payRent(info.property, info.player);
-    var message = info.player + " paid rent to " + info.player2;
-    games[socket.inGame].setMessage(message);
-    emitInGame(socket.inGame, 'rent', games[socket.inGame].getData());
+  socket.on('rent', function() {
+    emitInGame(socket.inGame, 'rent', games[socket.inGame].payRent());
   });
 
   /**
@@ -253,73 +223,60 @@ module.exports = function(socket){
    * @return updated game data with the trade committed sent to all in game
    */
   socket.on('trade', function(tradeInfo) {
-    games[socket.inGame].trade(info.player1, info.player2, info.properties1, info.properties2, info.wealth1, info.wealth2);
-    var message = info.player + " mortgaged " + info.property;
-    games[socket.inGame].setMessage(message);
-    emitInGame(socket.inGame, 'trade', games[socket.inGame].getData());
+    // TODO
+    let json = games[socket.inGame].trade(info);
+    emitInGame(socket.inGame, 'trade', json);
   });
 
   /**
    * Buys the property for the client
-   * @param info JSON object with 4 possible fields: property (name of the property to buy)
-   *     player (name of the player buying the property), *optional* auction (true if the
-   *     property was auctioned off), *optional* price (price paid for the auctioned property)
+   * @param info JSON with fields player (name of player), location (name of location),
+   *      price (price for the property) **only if auction**
    * @return updated game data with property bought by client sent to all in game
    */
   socket.on('buy property', function(info) {
+    let json = {}
     // different actions if it was auctioned
-    if(info.auction) {
-        // TODO check this weird thing
-        // weird thing where it was deducting twice the price from the player instead of the normal amount...
-        games[socket.inGame].buyPropertyAuction(info.property, info.player, info.price/2);
-        var message = info.player + " bought " + info.property + " for " + info.price;
-        games[socket.inGame].setMessage(message);
-    }
-    else {
-        games[socket.inGame].buyProperty(info.property, info.player);
-        var message = info.player + " bought " + info.property;
-        games[socket.inGame].setMessage(message);
-    }
-    emitInGame(socket.inGame, 'property bought', games[socket.inGame].getData());
+    if(info)
+        json = games[socket.inGame].buyPropertyAuction(info);
+    else
+        json = games[socket.inGame].buyProperty();
+    emitInGame(socket.inGame, 'property bought', json);
   });
 
   /**
-   * Buys a house for the property for the client
-   * @param info JSON object with 2 fields: property (name of the property to add house to)
-   *     player (name of the player buying the house)
+   * Sets houses to specific amounts on properties for the client.
+   * @param info JSON key property to preferred number of houses
    * @return updated game data with house bought by client sent to all in game
    */
-  socket.on('buy house', function(info) {
-    games[socket.inGame].buyHouse(info.property, info.player);
-    var message = info.player + " upgraded " + info.property;
-    games[socket.inGame].setMessage(message);
-    emitInGame(socket.inGame, 'update houses', games[socket.inGame].getData());
+  socket.on('set houses', function(info) {
+    let json = games[socket.inGame].buyHouse(info);
+
+    emitInGame(socket.inGame, 'update houses', json);
   });
 
   /**
-   * Sells a house for the property for the client
-   * @param info JSON object with 2 fields: property (name of the property to take house from)
-   *     player (name of the player selling the house)
-   * @return updated game data with house sold by client sent to all in game
-   */
-  socket.on('sell house', function(info) {
-    games[socket.inGame].sellHouse(info.property, info.player);
-    var message = info.player + " downgraded " + info.property;
-    games[socket.inGame].setMessage(message);
-    emitInGame(socket.inGame, 'update houses', games[socket.inGame].getData());
-  });
-
-  /**
-   * Mortgages the property for the client
-   * @param info JSON object with 2 fields: property (name of the property to mortgage)
-   *     player (name of the player mortgaging)
+   * Mortgages the properties for the client
+   * @param info list of strings of property names to mortgage
    * @return updated game data with property morgaged sent to all in game
    */
   socket.on('mortgage', function(info) {
-    games[socket.inGame].mortgageProperty(info.property, info.player);
-    var message = info.player + " mortgaged " + info.property;
-    games[socket.inGame].setMessage(message);
-    emitInGame(socket.inGame, 'mortgage', games[socket.inGame].getData());
+    // TODO check current player
+    let json = games[socket.inGame].mortgageProperty(info);
+
+    emitInGame(socket.inGame, 'mortgage', json);
+  });
+
+  /**
+   * Unmortgages the properties for the client
+   * @param info list of strings of property names to mortgage
+   * @return updated game data with property morgaged sent to all in game
+   */
+  socket.on('unmortgage', function(info) {
+    // TODO check current player
+    let json = games[socket.inGame].unmortgageProperty(info);
+
+    emitInGame(socket.inGame, 'unmortgage', json);
   });
 
   /**
@@ -328,7 +285,7 @@ module.exports = function(socket){
    * @return new auction event sent to all in game
    */
   socket.on('up auction', function(property) {
-    games[socket.inGame].newAuction();
+    games[socket.inGame].startAuction(property);
     emitInGame(socket.inGame, 'new auction', games[socket.inGame].getPropertyInfo(property));
   });
 
@@ -339,10 +296,11 @@ module.exports = function(socket){
    *     the winner of the auction to all in game
    */
   socket.on('set auction price', function(price) {
-    winner = games[socket.inGame].addBid(socket.username, price);
-    emitInGame(socket.inGame, 'new auction price', {"player": socket.username, "price": price});
-    if(winner) {
-        emitInGame(socket.inGame, 'auction winner', games[socket.inGame].auctionWinner());
+    games[socket.inGame].addBid(socket.username, price);
+    
+    let winnerInfo = games[socket.inGame].finishAuction();
+    if(winnerInfo) {
+        emitInGame(socket.inGame, 'auction winner', winnerInfo);
     }
   });
 
@@ -351,8 +309,9 @@ module.exports = function(socket){
    * @return updated game data with chance activated for client sent to all in game
    */
   socket.on('draw chance', function() {
-    games[socket.inGame].drawChance();
+    let card = games[socket.inGame].drawChance();
     // TODO
+    socket.emit('special card', card);
   });
 
   /**
@@ -360,8 +319,19 @@ module.exports = function(socket){
    * @return updated game data with community chest activated for client sent to all in game
    */
   socket.on('draw community chest', function() {
-    games[socket.inGame].drawCommunityChest();
+    let card = games[socket.inGame].drawCommunityChest();
     // TODO
+    socket.emit('special card', card);
+  });
+
+  /**
+   * Uses a chance/community chest card
+   * @return updated game data with community chest activated for client sent to all in game
+   */
+  socket.on('use special card', function(card) {
+    let json = games[socket.inGame].useSpecialCard(socket.username, card);
+    // TODO
+    socket.emit('special card used', json);
   });
 
   /**
@@ -369,9 +339,9 @@ module.exports = function(socket){
    * @return updated game data with next player's turn sent to all in game
    */
   socket.on('end turn', function() {
-    games[socket.inGame].nextTurn();
-    console.log(games[socket.inGame].currentPlayer());
-    emitInGame(socket.inGame, 'game data', games[socket.inGame].getData());
+    let json = games[socket.inGame].nextTurn();
+
+    emitInGame(socket.inGame, 'next turn', json);
   });
 
   /**
@@ -389,7 +359,7 @@ module.exports = function(socket){
    * @return JSON object with rent information about the property to the client
    */
   socket.on('rent info', function(property) {
-    socket.emit('rent info', games[socket.inGame].rentOfProperty(property));
+    socket.emit('rent info', games[socket.inGame].getRent(socket.username, property));
   });
 
   /**
@@ -397,8 +367,8 @@ module.exports = function(socket){
    * @return JSON object with information about the property with highest rent to the client
    */
   socket.on('highest rent', function() {
-    var highest = games[socket.inGame].highestRent();
-    socket.emit('highest rent', games[socket.inGame].getPropertyInfo(highest));
+    let property = games[socket.inGame].getHighestRent()
+    socket.emit('highest rent', games[socket.inGame].getPropertyInfo(property));
   });
 
   /**
@@ -423,6 +393,6 @@ module.exports = function(socket){
    */
   socket.on('request game data', function() {
     console.log("someone wants to get game data");
-    socket.emit('game data', games[socket.inGame].getData());
+    socket.emit('game data', games[socket.inGame].toJSON());
   });
 }

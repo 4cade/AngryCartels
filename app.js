@@ -3,7 +3,7 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-var socket = require('./backend/socket.js');
+var communicator = require('./backend/communicator');
 var mongoose = require('mongoose');
 
 // application -------------------------------------------------------------
@@ -28,7 +28,7 @@ db.once('open', function (callback) {
 });
 
 // socket stuff
-io.on('connection', socket);
+io.on('connection', communicator);
 
 // make the server start and listen
 server.listen(3000, function () {
