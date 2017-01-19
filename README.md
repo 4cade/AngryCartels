@@ -2,12 +2,20 @@
 
 Let's have fun with our version of Ultimate Monopoly.
 
+
 ### Contributors:
-- Zachery Miranda (Backend Lead)
-  - Main Roles: Backend, Application architecture
-- Keith Matsushita (Head Business Manager)
-  - Main Roles: Business Development, Marketing, and Frontend models.
-- Leif Myer (Frontend Lead)
-  - Main Roles: Frontend support, UI, Backend integration
-- Alex Luh (Consultant Bro)
-  - Main Roles: Panda
+
+##### Frontend
+- Leif Myer **(Lead)**
+
+##### Backend
+- Zachery Miranda **(Lead)**
+- Anastasia Vela
+
+##### Business
+- Keith Matsushita **(Head Business Manager)**
+
+##### Miscellaneous
+- Alex Luh
+  
+  
