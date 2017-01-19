@@ -31,21 +31,26 @@ public class PlayerCardCreator : MonoBehaviour {
     /// This method should only be called once at the start of the game scene.
     /// </summary>
     /// <param name="numPlayers"></param>
-    internal void createPlayerCards(int numPlayers)
+    internal void createPlayerCards(int numPlayers, GameObject playersContainer)
     {
+        PlayerScript[] players = playersContainer.GetComponentsInChildren<PlayerScript>();
+        int playerCount = 0;
+
         if (enabled) // for debugging
         {
             this.numPlayers = numPlayers;
 
             // always create the first row
             GameObject row1 = Instantiate(playerCardRowPrefab);
-            row1.transform.SetParent(transform);
+            row1.transform.SetParent(transform, false);
 
             // Check how many players should be on the top row
-            int numPlayersTopRow = MAX_PLAYERS_PER_ROW;
+            int numPlayersTopRow = Math.Min(MAX_PLAYERS_PER_ROW, numPlayers);
+
+            // Create a cool jagged effect if there is 5
             if (numPlayers == 5)
             {
-                --numPlayersTopRow;
+                numPlayersTopRow = MAX_PLAYERS_PER_ROW - 1;
             }
 
             // Create the top row of player cards
@@ -53,23 +58,25 @@ public class PlayerCardCreator : MonoBehaviour {
             {
                 GameObject instance = Instantiate(playerCardPrefab);
                 instance.transform.SetParent(row1.transform);
+                instance.GetComponent<PlayerCardScript>().player = players[playerCount++];
+                //instance.transform.parent = row1.transform;
+                //instance.GetComponent<RectTransform>().SetParent(row1.transform);
             }
 
             // check if we need a second row
             if (numPlayers > MAX_PLAYERS_PER_ROW)
             {
                 GameObject row2 = Instantiate(playerCardRowPrefab);
-                row2.transform.SetParent(transform);
+                row2.transform.SetParent(transform, false);
 
                 // Create the bottom row of player cards
                 for (int i = 0, k = numPlayers - numPlayersTopRow; i < k; ++i)
                 {
                     GameObject instance = Instantiate(playerCardPrefab);
                     instance.transform.SetParent(row2.transform);
+                    instance.GetComponent<PlayerCardScript>().player = players[playerCount++];
                 }
             }
-
-
         }
     }
 }
