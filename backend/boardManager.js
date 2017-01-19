@@ -24,7 +24,6 @@ class BoardManager {
         this.propertyGroups = {}; // key group name to property/railroad/cab/utility object
         this.collects = {}; // key location name to collect object
         this.teleports = {}; // key location name to teleport object
-        this.cardGroup = {}; // TODO check use?
 
         for(let name in state.locations) {
             const loc = state.locations[name]; // preloaded data from the board
@@ -311,15 +310,19 @@ class BoardManager {
      *
      * @return JSON with fields movedTo (list of locations visited), actions (list
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
+     *       or--- return make it move to nextRent space if there are no unowned properties
      */
     nextMrMonopolyLocation(player) {
-        // TODO make it move to nextRent space if there are no unowned properties
         let odd = player.lastRolled%2===1
         let visited = []
         let location = player.location
         let track = player.track
         let money = 0
         let nextInfo = {"next": location, "track": track}
+
+        if (this.unownedProperties === 0){
+            return this.nextRentLocation(player)
+        }
 
         while (!this.canBuy(location)){
             nextInfo = this.nextLocation(location, odd, player.forward, track)
@@ -344,6 +347,39 @@ class BoardManager {
                 }
     }
 
+    nextRentLocation(player){
+        let odd = player.lastRolled%2===1
+        let visited = []
+        let location = player.location
+        let track = player.track
+        let money = 0
+        let nextInfo = {"next": location, "track": track}
+
+        while (!this.canRent(location)){
+            nextInfo = this.nextLocation(location, odd, player.forward, track)
+            
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+            loc = this.locations[location]
+            visited.push(location)
+
+            if (this.collects.hasOwnProperty(location)){
+                money += this.collects[location].getGain(odd, false)
+            }
+        }
+        player.moveToLocation(location, track, money)
+
+        return {
+                'player': {
+                            'name': player.name, 
+                            'money': player.getMoney()
+                            }, 
+                'movedTo': visited,
+                'actions': this.locationAction(player.location)
+                }
+    }
+
+
     /**
      * Specifies what kind of action should occur on the current location that was landed on.
      * @param location string location of where to find action of
@@ -355,34 +391,37 @@ class BoardManager {
 
         if (land.isProperty){
             if (this.isOwned(location))
-                actions.push("rent")
+                actions.push("rent")        // pay rent
             else
-                actions.push("buy")
+                actions.push("buy")         // buy property
         }
         if (land.kind === 'railroad'){
-            actions.push("bus") // TODO I don't think it actually can do this
+            actions.push("bus")             // draw bus pass
         }
         if (land.kind === 'chance'){
-            actions.push("chance")
+            actions.push("chance")          // draw chance card
         }
         if (land.kind === 'community chest'){
-            actions.push("community chest")
+            actions.push("community chest") // draw community chest
         }
         if (land.kind === 'subway'){
-            actions.push("subway")
+            actions.push("subway")          // take subway
         }
-        if (land.kind === 'bus'){ // TODO this confuses bus/cab. bus spaces acquire a bus ticket
-            actions.push("bus") // TODO call it "taxi" for consistency with socket messages (for cab)
+        if (land.kind === 'bus'){ 
+            actions.push("bus")             // draw bus pass
+        }
+        if (land.kind === 'cab'){
+            actions.push("cab")             // choose to take taxi
         }
         if (land.kind === 'stock'){
             actions.push("stock")
         }
         if (land.kind === 'auction'){
             if (this.unownedProperties > 0){
-                actions.push("auction") // TODO this should probably be "choose to auction" maybe?
+                actions.push("choose auction") // choose to auction
             }
             else{
-                actions.push("highest rent")
+                actions.push("highest rent")    // travel to highest rent
             }
         }
         // place, collect, reverse, teleport, squeeze play
@@ -426,6 +465,35 @@ class BoardManager {
                 'properties': properties,
                 'delta': delta
                 }
+    }
+
+    /**
+     * Checks if the number of houses is maintained.
+     * @return boolean true if houses are maintained
+     */
+    checkBuildings(){
+        let numHouses = 0;
+        let numHotels = 0;
+        let numSkyscrapers = 0;
+
+        //counts number of houses, hotels, skyscrapers on the board
+        for (let location in this.locations){
+            let loc = this.locations[location];
+            if (loc.houses < 5) {
+                numHouses += loc.houses;
+            }
+            else if (loc.houses === 5) {
+                numHotels += 1;
+            }
+            else if (loc.houses === 6) {
+                numSkyscrapers += 1;
+            }
+        }
+
+        if (numHouses > this.houses || numHotels > this.hotels || numSkyscrapers > this.skyscrapers){
+            return false
+        }
+        return true;
     }
 
     /**
@@ -564,7 +632,6 @@ class BoardManager {
                 'player1': money,
                 'player2': propertyHouses
                 }
-        // TODO, give full value of houses if they are lost
     }
 
     /**
@@ -614,6 +681,18 @@ class BoardManager {
     canBuy(location) {
         let land = this.locations[location]
         return (land.isProperty && !this.isOwned(location))
+    }
+
+    /**
+     * States whether or not the location is rentable
+     * @param the name of the location
+     * 
+     * @return true if the location is rentable
+    */
+
+    canRent(location) {
+        let land = this.locations[location]
+        return (land.isProperty && this.isOwned(location))
     }
 
     /**

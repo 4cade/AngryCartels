@@ -460,29 +460,35 @@ class Game {
             else if (desc.includes("trip")){
 
             }
-            else if (desc.includes("move")) {
+            else if (desc.includes("move")){
 
             }
         }
         else if (card.play === "keep"){
             //desc = just say no
         }
-         
     }
 
-    roll3() {
+    roll3(){
+        // TODO i have no clue what im doing here, whats it supposed to do
+        let player = this.boardManager.getCurrentPlayer();
+        let card = Card.drawRoll3()
+        let message = "roll the die 3 more times till it matches " + card;
+        return {'card': card, 'message': message};
+    }
+
+
+    squeezePlay(){
         // TODO
     }
 
-    squeezePlay() {
-        // TODO
-    }
 
-    teleport() {
+    teleport(){
         // TODO
     }
 
     // TODO stocks?
+
 
     /**
      * Executes a trade with the player specified in info under info's conditions.

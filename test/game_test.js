@@ -36,19 +36,12 @@ describe('BoardManager', function(){
             assert.equal(board1.hotels, 31);
             assert.equal(board1.skyscrapers, 16);
         });
-        /*
-        it("initializes board", function(){
-            assert.equal(board1.locations, );
-            assert.equal(board1.propertyGroups, );
-        })
-        */
     });
 
     describe("#movements", function(){
 
         const player2 = new Player("Jerry", "go", 1);
         const player3 = new Player("Ted", "go", 1);
-
 
         it("moves to the correct location after rolling", function() {
             // TODO update tests for new spec
@@ -101,7 +94,7 @@ describe('BoardManager', function(){
 
             // auction space
             const action6 = board1.moveLocation(player3, 1)['actions'][0];
-            assert.equal(action6, 'auction'); // TODO test highest rent when all properties are owned
+            assert.equal(action6, 'choose auction'); // TODO test highest rent when all properties are owned
 
             // chance space
             const action7 = board1.moveLocation(player3, 6)['actions'][0];
@@ -126,7 +119,6 @@ describe('BoardManager', function(){
             const expectedPlayer = {'name': 'Ted', 'money': 4500};
             assert.deepEqual(json.player, expectedPlayer);
             assert.equal(player3.location, 'bonus');
-
         });
         
         it('advances to the specified location', function() {
@@ -252,7 +244,6 @@ describe('BoardManager', function(){
             assert.equal(board1.getRent(player3, 'water works'), null);
             assert.equal(board1.getRent(player2, 'water works'), 440);
             assert.equal(board1.getRent(player2, 'short line'), 50);
-            
         });
 
         it('lets you know if you can buy properties', function() {
@@ -272,8 +263,6 @@ describe('BoardManager', function(){
             player2.switchDirection()
             board1.jumpToLocation(player2, 'randolph st');
             assert.deepEqual(board1.locationsInForwardDirection(player2), ['pay day']);
-
-
         });
 
         it('gets the next transit in the forward direction', function() {
