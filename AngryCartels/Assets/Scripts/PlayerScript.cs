@@ -32,7 +32,7 @@ public class PlayerScript : MonoBehaviour {
     }
 
 
-    // Dictionary of properties held by the player
+    // Dictionary of properties held by the player - Temporary, would be stored in the db
     public Dictionary<int, List<string>> cards;
 
 	// Use this for initialization
