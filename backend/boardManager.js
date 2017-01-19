@@ -313,6 +313,7 @@ class BoardManager {
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
     nextMrMonopolyLocation(player) {
+        // TODO make it move to nextRent space if there are no unowned properties
         let odd = player.lastRolled%2===1
         let visited = []
         let location = player.location
@@ -359,7 +360,7 @@ class BoardManager {
                 actions.push("buy")
         }
         if (land.kind === 'railroad'){
-            actions.push("bus")
+            actions.push("bus") // TODO I don't think it actually can do this
         }
         if (land.kind === 'chance'){
             actions.push("chance")

@@ -94,8 +94,10 @@ class PlayerManager {
      * Makes it so the next player in the order goes.
      */
     nextTurn() {
-        this.turnIndex = (this.turnIndex+1) % this.turnOrder.length
-        this.currentPlayer = this.turnOrder[this.turnIndex]
+        this.turnIndex = (this.turnIndex+1) % this.turnOrder.length;
+        this.currentPlayer = this.turnOrder[this.turnIndex];
+        this.doubleCount = 0;
+        this.canRoll = true;
     }
 
     /**
@@ -129,6 +131,21 @@ class PlayerManager {
      */
     getPlayers() {
         return this.turnOrder
+    }
+
+    /**
+     * Increases the number of times that the player has rolled doubles this turn.
+     *
+     * @return true if the player is sent to jail
+     */
+    increaseDoubleCount() {
+        this.doubleCount++;
+
+        if(this.doubleCount >= 3) {
+            this.canRoll = false;
+        }
+
+        return this.canRoll;
     }
 }
 

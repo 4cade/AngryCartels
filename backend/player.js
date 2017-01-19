@@ -20,6 +20,7 @@ class Player {
         this.location = startingSpace; // all players start on go
         this.track = startingTrack; // all players start on track 1
         this.lastRolled = 0 // int last value of dice roll
+        this.jailTurnsLeft = 0;
 
         // reload from saved state
         if(savedState) {
@@ -169,6 +170,40 @@ class Player {
      */
     switchDirection() {
         this.forward = !this.forward
+    }
+
+    /**
+     * Sends the player to jail. DOES NOT SET THE LOCATION TO JAIL.
+     */
+    sendToJail() {
+        this.jailTurnsLeft = 3;
+    }
+
+    /**
+     * Uses a turn with the player in jail.
+     * @return true if the player is in jail
+     */
+    jailTurn() {
+        this.jailTurnsLeft--;
+        return this.inJail();
+    }
+
+    /**
+     * The player leaves jail.
+     * @param pay true if the player pays to leave jail
+     */
+     leaveJail(pay) {
+        if(pay)
+            this.deltaMoney(-50);
+        this.jailTurnsLeft = 0;
+     }
+
+     /**
+     * Says if a player is in jail.
+     * @return true if the player is in jail
+     */
+    inJail() {
+        return this.jailTurnsLeft > 0;
     }
 
 }

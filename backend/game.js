@@ -64,25 +64,34 @@ class Game {
      ****************************************************************************************/
 
     /**
-    * Makes it so it is the next player's turn.
-    * @return JSON with field message (string saying what happened) and player (name of current player)
-    */
+     * Makes it so it is the next player's turn.
+     * @return JSON with field message (string saying what happened), player (name of current player),
+     *       and actions (list of actions that the player can do)
+     */
     nextTurn() {
         this.playerManager.nextTurn();
         const message = "It is now " + this.playerManager.getCurrentPlayer().name + "'s turn!";
-        return {'message': message, "player": this.playerManager.getCurrentPlayer().name}
+        const actions = ['roll'];
+
+        if(player.inJail()) {
+            actions = ['jail'];
+        }
+
+        return {'message': message, "player": this.playerManager.getCurrentPlayer().name, "actions": actions}
     }
 
     /**
-    * Rolls the 3 dice for the player and moves him/her to the next location.
-    * @return JSON with fields rolled (list of what was rolled), action (list
-    *       of actions that the player should perform), movedTo (list of locations
-    *       visited), player (JSON with name: name, money: money), and
-    *       message (string saying what happened)
-    */
+     * Rolls the 3 dice for the player and moves him/her to the next location.
+     * @return JSON with fields rolled (list of what was rolled), action (list
+     *       of actions that the player should perform), movedTo (list of locations
+     *       visited), player (JSON with name: name, money: money), and
+     *       message (string saying what happened)
+     */
     rollDice() {
         // need to simulate 3 dice just like the real game
         let player = this.playerManager.getCurrentPlayer();
+        this.playerManager.canRoll = false;
+
         let die1, die2, die3 = (Card.rollDie(), Card.rollDie(), Card.rollDie());
         let totalRoll = 0;
         let actions = [];
@@ -109,9 +118,27 @@ class Game {
             actions.push('teleport');
         }
         else {
-            // TODO update based on whatever happens with boardManager's API
-            json = Object.extend(json, this.boardManager.moveLocation(player, totalRoll));
-            actions = json['actions'];
+            let doubles = false;
+            let goToJail = false;
+
+            if(die1 == die2) {
+                doubles = true;
+                goToJail = this.playerManager.increaseDoubleCount();
+            }
+
+            if(goToJail) {
+                json = Object.assign(json, this.boardManager.jumpToLocation(player, 'go to jail'));
+            }
+            else {
+                json = Object.assign(json, this.boardManager.moveLocation(player, totalRoll));
+                actions = json['actions'];
+
+                if(doubles) {
+                    this.boardManager.canRoll = true;
+                    actions.push('roll');
+                }
+            }
+            
         }
 
         // push other actions after based on priority
@@ -130,11 +157,49 @@ class Game {
     }
 
     /**
-    * Performs the Mr. Monopoly search for the next unowned property and moves the player.
-    * @return JSON with fields movedTo (list of locations visited), actions (list
-    *       of actions that the player should perform), player (JSON with name: name, money: money),
-    *       and message (string saying what happened)
-    */
+     * Handles a turn with the player in jail.
+     * @param pay true if the player paid to get out
+     *
+     * @return actions (list of actions that the player should perform), 
+     *       player (JSON with name: name, money: money), and
+     *       message (string saying what happened)
+     */
+    handleJail(pay) {
+        let player = this.playerManager.getCurrentPlayer();
+        let message = "";
+        let actions = [];
+
+        if(pay) {
+            player.leaveJail(true);
+            message = player.name + " paid 50 to leave jail.";
+        }
+        else {
+            let die1, die2 = (Card.rollDie(), Card.rollDie());
+
+            if(die1 === die2) {
+                player.leaveJail();
+                message = player.name + " rolled double " + die1 + "s to leave jail!";
+            }
+            else {
+                player.jailTurn();
+                message = player.name + " waited in jail and has " + player.jailTurnsLeft + "turns left";
+            }
+        }
+
+        if(!player.inJail()) {
+            actions.push('roll');
+        }
+
+        return {"player": {"name": player.name, "money": player.getMoney()},
+            "message": message, "actions": actions};
+    }
+
+    /**
+     * Performs the Mr. Monopoly search for the next unowned property and moves the player.
+     * @return JSON with fields movedTo (list of locations visited), actions (list
+     *       of actions that the player should perform), player (JSON with name: name, money: money),
+     *       and message (string saying what happened)
+     */
     unleashMrMonopoly() {
         const player = this.playerManager.getCurrentPlayer();
         let json = this.boardManager.nextMrMonopolyLocation(player, this.lastOdd);
@@ -143,14 +208,14 @@ class Game {
     }
 
     /**
-    * Uses the specified bus pass.
-    * @param pass the name of the bus pass
-    * @param location if the pass says "any" then this is the location to advance to
-    *
-    * @return JSON with fields movedTo (list of locations visited), actions (list
-    *       of actions that the player should perform), player (JSON with name: name, money: money),
-    *       and message (string saying what happened)
-    */
+     * Uses the specified bus pass.
+     * @param pass the name of the bus pass
+     * @param location if the pass says "any" then this is the location to advance to
+     *
+     * @return JSON with fields movedTo (list of locations visited), actions (list
+     *       of actions that the player should perform), player (JSON with name: name, money: money),
+     *       and message (string saying what happened)
+     */
     useBusPass(pass, location) {
         const player = this.playerManager.getCurrentPlayer();
 
@@ -183,12 +248,12 @@ class Game {
     }
 
     /**
-    * Takes a taxi ride to the specified location.
-    * @param location to get transported to
-    *
-    * @return JSON with fields player1/player2? (JSON with name: name, money: money),
-    *       pool (money in pool), and message (string saying what happened)
-    */
+     * Takes a taxi ride to the specified location.
+     * @param location to get transported to
+     *
+     * @return JSON with fields player1/player2? (JSON with name: name, money: money),
+     *       pool (money in pool), and message (string saying what happened)
+     */
     taxiRide(location) {
         //location is not on board
         if (!this.boardManager.locations.hasOwnProperty(location))
@@ -223,11 +288,11 @@ class Game {
     }
 
     /**
-    * The current player buys the property that they are located on for market price.
-    *
-    * @return JSON with fields player (name: name, money: money), location (name of location),
-    *      price (price paid for the property), message (saying what happened).
-    */
+     * The current player buys the property that they are located on for market price.
+     *
+     * @return JSON with fields player (name: name, money: money), location (name of location),
+     *      price (price paid for the property), message (saying what happened).
+     */
     buyProperty() {
         const player = this.playerManager.getCurrentPlayer();
         let json = this.boardManager.buyProperty(player, player.location);
@@ -253,13 +318,13 @@ class Game {
     }
 
     /**
-    * The current player mortgages the properties in the list.
-    * @param properties list of strings of property names to mortgage
-    *
-    * @return JSON with fields player (name: name, money: money), locations (list of successfully
-    *      mortgaged locations), gain (money gained from mortgaging), message (saying
-    *      what happened).
-    */
+     * The current player mortgages the properties in the list.
+     * @param properties list of strings of property names to mortgage
+     *
+     * @return JSON with fields player (name: name, money: money), locations (list of successfully
+     *      mortgaged locations), gain (money gained from mortgaging), message (saying
+     *      what happened).
+     */
     mortgage(properties) {
         const player = this.playerManager.getCurrentPlayer();
         let success = [];
@@ -283,13 +348,13 @@ class Game {
     }
 
     /**
-    * The current player unmortgages the properties in the list.
-    * @param properties list of strings of property names to unmortgage
-    *
-    * @return JSON with fields player (name: name, money: money), locations (list of successfully
-    *      unmortgaged locations), lose (money lost from unmortgaging), message (saying
-    *      what happened).
-    */
+     * The current player unmortgages the properties in the list.
+     * @param properties list of strings of property names to unmortgage
+     *
+     * @return JSON with fields player (name: name, money: money), locations (list of successfully
+     *      unmortgaged locations), lose (money lost from unmortgaging), message (saying
+     *      what happened).
+     */
     unmortgage(properties) {
         const player = this.playerManager.getCurrentPlayer();
         let success = [];
@@ -326,10 +391,10 @@ class Game {
     }
 
     /**
-    * The current player pays rent for the property that they are located on.
-    * @return JSON with field message (string saying what happened) and
-    *       player/owner (name: name, money: money)
-    */
+     * The current player pays rent for the property that they are located on.
+     * @return JSON with field message (string saying what happened) and
+     *       player/owner (name: name, money: money)
+     */
     payRent() {
         const player = this.playerManager.getCurrentPlayer();
         const rent = this.boardManager.getRent(player, player.location);
@@ -486,7 +551,7 @@ class Game {
      * @return object of the player whose turn it is
      */
     getCurrentPlayer() {
-        return this.playerManager.getCurrentPlayer(); // TODO decide if just want name or json
+        return this.playerManager.getCurrentPlayer().toJSON();
     }
 
     /**
