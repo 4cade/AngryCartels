@@ -59,8 +59,16 @@ describe('Player', function() {
     });
 
     describe("#busPassTests", function() {
+        let firstPass = Object.keys(player1.team.busTickets)[0];
+
         it("adds all of the bus passes", function() {
             const expected = {"forward any": 2, "derp 2": 1, "back 3": 1}
+            if(expected.hasOwnProperty(firstPass)) {
+                expected[firstPass]++;
+            }
+            else {
+                expected[firstPass] = 1;
+            }
             player1.gainBusPass('forward any');
             player1.gainBusPass('derp 2');
             player1.gainBusPass('back 3');
@@ -70,10 +78,12 @@ describe('Player', function() {
 
         it("removes all of the bus passes", function() {
             const expected = {}
+
             player1.useBusPass('forward any');
             player1.useBusPass('derp 2');
             player1.useBusPass('back 3');
             player1.useBusPass('forward any');
+            player1.useBusPass(firstPass);
             assert.deepEqual(player1.team.busTickets, expected);
         });
 
