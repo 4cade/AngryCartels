@@ -214,6 +214,28 @@ module.exports = function(socket){
   });
 
   /**
+   * Handles if the player is in jail
+   * @param info JSON with field pay (if the player is paying to get out)
+   * @return JSON with field actions (list of actions that the player should perform), 
+   *       player (JSON with name: name, money: money), and
+   *       message (string saying what happened)
+   */
+  socket.on('jail', function(info) {
+    emitInGame(socket.inGame, 'jail', games[socket.inGame].handleJail(info.pay));
+  });
+
+  /**
+   * Handles if the player is in jail
+   * @param info JSON with field pay (if the player is paying to get out)
+   * @return JSON with field actions (list of actions that the player should perform), 
+   *       player (JSON with name: name, money: money), and
+   *       message (string saying what happened)
+   */
+  socket.on('taxi', function(info) {
+    emitInGame(socket.inGame, 'taxi', games[socket.inGame].handleJail(info.pay));
+  });
+
+  /**
    * Executes a trade with the player specified in info under info's conditions.
    * @param info JSON object with 6 fields: player1 (name of first player in trade),
    *     player2 (name of second player in trade), properties1  (list of properties

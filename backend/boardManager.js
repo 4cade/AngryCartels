@@ -372,7 +372,7 @@ class BoardManager {
             actions.push("subway")
         }
         if (land.kind === 'bus'){ // TODO this confuses bus/cab. bus spaces acquire a bus ticket
-            actions.push("bus")
+            actions.push("bus") // TODO call it "taxi" for consistency with socket messages (for cab)
         }
         if (land.kind === 'stock'){
             actions.push("stock")
@@ -398,6 +398,7 @@ class BoardManager {
     *       delta (map names to change in houses)
     **/
     setHousesForProperties(player, houseMap) {
+        // TODO block if impossible
         let delta = {}
         let properties = {}
         for (let property in houseMap){

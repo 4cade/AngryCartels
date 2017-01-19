@@ -1,3 +1,5 @@
+var Card = require('./card');
+
 /**
  * Player object stores the state of a player and has functions to update state.
  * @param name String name of the player
@@ -18,6 +20,10 @@ class Team {
             this.properties = new Set(); // set of Property Objects
             this.busTickets = {}; // key of bus ticket type to quantity
             this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
+
+            // need to start with one bus ticket
+            const pass = Card.drawBusPass();
+            this.busTickets[pass] = 1;
 
             // TODO keep list of players?
         }

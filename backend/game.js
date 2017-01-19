@@ -128,14 +128,14 @@ class Game {
 
             if(goToJail) {
                 json = Object.assign(json, this.boardManager.jumpToLocation(player, 'go to jail'));
+                // no actions if player is in jail
             }
             else {
                 json = Object.assign(json, this.boardManager.moveLocation(player, totalRoll));
-                actions = json['actions'];
 
                 if(doubles) {
                     this.boardManager.canRoll = true;
-                    actions.push('roll');
+                    json['actions'].push('roll');
                 }
             }
             
@@ -143,13 +143,9 @@ class Game {
 
         // push other actions after based on priority
         if(isNan(die3)) {
-            actions.push(action);
+            json['actions'].push(die3);
         }
 
-        // see if the player's turn is over
-        if(actions.length === 0) {
-            actions.push('end turn'); // TODO decide if
-        }
         json['rolled'] = [die1, die2, die3];
         json['message'] = message;
 
@@ -414,28 +410,42 @@ class Game {
         return {"message": message};
     }
 
+    /**
+     * The current player draws a chance card.
+     * @return JSON with field message (string saying what happened),
+     *       player (name: name), and card (title, description, short, play)
+     */
     drawChance() {
         let player = this.playerManager.getCurrentPlayer();
         let card = Card.drawChance();
-        if (card.play === "immediately"){
-            this.useSpecialCard(player, card)
-        }
-        return card
+        player.gainSpecialCard(card);
+        // TODO message
+        return {"card": card, "player": {"name": player.name}};
     }
 
+    /**
+     * The current player draws a community chest card.
+     * @return JSON with field message (string saying what happened),
+     *       player (name: name), and card (title, description, short, play)
+     */
     drawCommunityChest() {
         let player = this.playerManager.getCurrentPlayer();
-        let card = Card.drawCommunityChest();();
-        if (card.play === "immediately"){
-            this.useSpecialCard(player, card)
-        }
-        return card
+        let card = Card.drawCommunityChest();
+        player.gainSpecialCard(card);
+        // TODO message
+        return {"card": card, "player": {"name": player.name}};
     }
 
-    useSpecialCard(player, card) {
+    /**
+     * The current player uses a chance/community chest card.
+     * @return JSON with field message (string saying what happened),
+     *       player (name: name), and card (title, description, short, play)
+     */
+    useSpecialCard(card) {
+        let player = this.playerManager.getCurrentPlayer();
         //player does not have card
         if (!player.specialCard.hasOwnProperty(card)){
-            return -1
+            return -1 // TODO will actually return a JSON
         }
 
         player.useSpecialCard(card)
@@ -450,12 +460,29 @@ class Game {
             else if (desc.includes("trip")){
 
             }
-            else if (desc.includes("move"))
+            else if (desc.includes("move")) {
+
+            }
         }
         else if (card.play === "keep"){
             //desc = just say no
         }
+         
     }
+
+    roll3() {
+        // TODO
+    }
+
+    squeezePlay() {
+        // TODO
+    }
+
+    teleport() {
+        // TODO
+    }
+
+    // TODO stocks?
 
     /**
      * Executes a trade with the player specified in info under info's conditions.
