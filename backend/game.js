@@ -415,15 +415,46 @@ class Game {
     }
 
     drawChance() {
-        // TODO
+        let player = this.playerManager.getCurrentPlayer();
+        let card = Card.drawChance();
+        if (card.play === "immediately"){
+            this.useSpecialCard(player, card)
+        }
+        return card
     }
 
     drawCommunityChest() {
-        // TODO
+        let player = this.playerManager.getCurrentPlayer();
+        let card = Card.drawCommunityChest();();
+        if (card.play === "immediately"){
+            this.useSpecialCard(player, card)
+        }
+        return card
     }
 
     useSpecialCard(player, card) {
-        // TODO
+        //player does not have card
+        if (!player.specialCard.hasOwnProperty(card)){
+            return -1
+        }
+
+        player.useSpecialCard(card)
+        let desc = card.short;
+        if (card.play === "immediately"){
+            if (desc.includes("pay")){
+
+            }
+            else if (desc.includes("collect")){
+
+            }
+            else if (desc.includes("trip")){
+
+            }
+            else if (desc.includes("move"))
+        }
+        else if (card.play === "keep"){
+            //desc = just say no
+        }
     }
 
     /**

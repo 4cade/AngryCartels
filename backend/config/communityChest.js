@@ -9,7 +9,7 @@ module.exports = [
         "title": "You Inherit $100",
         "description": "Collect $100 from the Bank.",
         "play": "immediately",
-        "short": "collect 100"
+        "short": "collect 100 from bank"
     },
     {
         "title": "Just Say \"NO\"!",
