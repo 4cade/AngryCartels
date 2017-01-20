@@ -434,10 +434,11 @@ class BoardManager {
     * @param houseMap JSON key property to preferred number of houses
     *
     * @return JSON with fields properties (map names to houses on them), player (name: name, money: money),
-    *       delta (map names to change in houses)
+    *       delta (map names to change in houses) or {fail: true} if failed
     **/
     setHousesForProperties(player, houseMap) {
         // TODO block if impossible
+        // NOTE: new return value
         let delta = {}
         let properties = {}
         for (let property in houseMap){
@@ -615,6 +616,7 @@ class BoardManager {
 
         // rebalance for houses + check money gained for destroying houses
         for (let group of groupChanged){
+            // TODO break down houses all the way if can't maintain because of limits
             let houseLost = this.propertyGroups[group].rebalanceHouses();
             let pricePerHouse = this.propertyGroups[group].properties[0].housePrice;
             money += houseLost*pricePerHouse;
@@ -767,10 +769,38 @@ class BoardManager {
     }
 
     /**
-    * Gets a list of all places that you can get by taxi.
-    *
-    * @return string list of all taxi/train locations
-    */
+     * Gets a list of locations.
+     *
+     * @return string list of all locations
+     */
+    getLocationNames() {
+        return Object.keys(this.locations);
+    }
+
+    /**
+     * Gets a list of unowned locations.
+     *
+     * @return string list of all unowned properties
+     */
+    getUnownedLocations() {
+        let names = [];
+
+        for(let name in this.locations) {
+            let p = this.locations[name];
+
+            if(p.isProperty && !p.owner) {
+                names.push(name);
+            }
+        }
+
+        return names;
+    }
+
+    /**
+     * Gets a list of all places that you can get by taxi.
+     *
+     * @return string list of all taxi/train locations
+     */
     getTaxiLocations() {
         let places = []
         for (let property of this.locations){
@@ -782,12 +812,12 @@ class BoardManager {
     }
  
     /**
-    * Pays the pool from the player.
-    * @param player the player object that is paying the pool
-    * @param money amount being paid
-    *
-    * @return JSON with fields player (money player has left) and pool (money in pool)
-    */
+     * Pays the pool from the player.
+     * @param player the player object that is paying the pool
+     * @param money amount being paid
+     *
+     * @return JSON with fields player (money player has left) and pool (money in pool)
+     */
     payPool(player, money) {
         player.deltaMoney(-money)
         this.pool += money
@@ -799,12 +829,12 @@ class BoardManager {
     }
  
     /**
-    * Pays the pool from the player.
-    * @param player the player object that is paying the pool
-    * @param mult multiplier (0 <= amt <= 1) for amount collected from pool
-    *
-    * @return JSON with fields player (money player has left) and pool (money in pool)
-    */
+     * Pays the pool from the player.
+     * @param player the player object that is paying the pool
+     * @param mult multiplier (0 <= amt <= 1) for amount collected from pool
+     *
+     * @return JSON with fields player (money player has left) and pool (money in pool)
+     */
     collectFromPool(player, mult=0.5) {
         player.deltaMoney(mult * this.pool)
         this.pool -= mult*this.pool
@@ -812,6 +842,15 @@ class BoardManager {
                 'player': player.getMoney(),
                 'pool': this.pool
                 }
+    }
+
+    /**
+     * Gets the location with the highest rent.
+     *
+     * @return string name of location with highest rent or null if all unowned
+     */
+    getHighestRent() {
+        // TODO ignore utility/other ones based on multipliers
     }
  }
 

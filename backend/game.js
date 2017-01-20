@@ -204,6 +204,21 @@ class Game {
     }
 
     /**
+     * Moves the player to the location.
+     * @param location name of location to jump to
+     *
+     * @return JSON with fields movedTo (list of locations visited), actions (list
+     *       of actions that the player should perform), player (JSON with name: name, money: money),
+     *       and message (string saying what happened)
+     */
+    teleport(location){
+        const player = this.playerManager.getCurrentPlayer();
+        let json = this.boardManager.jumpToLocation(player, location);
+        json['message'] = player.name + " jumped to " + player.location; 
+        return json;
+    }
+
+    /**
      * Uses the specified bus pass.
      * @param pass the name of the bus pass
      * @param location if the pass says "any" then this is the location to advance to
@@ -469,22 +484,76 @@ class Game {
         }
     }
 
+    /**
+     * The current player goes through a roll3 ritual.
+     * @return JSON with field message (string saying what happened),
+     *       player (name: name, money: amt), card (list of numbers to match),
+     *       and rolled (list of numbers that were rolled)
+     */
     roll3(){
-        // TODO i have no clue what im doing here, whats it supposed to do
         let player = this.boardManager.getCurrentPlayer();
-        let card = Card.drawRoll3()
-        let message = "roll the die 3 more times till it matches " + card;
-        return {'card': card, 'message': message};
+        const card = Card.drawRoll3()
+        let nums = new Set(card);
+        let rolled = []
+        
+        for(let i=0; i<3; i++) {
+            let die = Card.rollDie();
+            rolled.push(die);
+            nums.remove(die);
+        }
+        rolled.sort();
+
+        let matches = 3 - Array.from(nums).length;
+        let gain = 0;
+        const gainAmounts = {1: 50, 2: 200, 3: 1000}
+
+        if(gainAmounts.hasOwnProperty(matches)) {
+            gain = gainAmounts[matches];
+        }
+
+        player.deltaMoney(gain);
+
+        let message = player.name + " matched " + matches + " and won " + gain;
+        return {'card': card, 'message': message, "rolled": rolled, "player": {"name": player.name, "money": player.getMoney()}};
     }
 
-
+    /**
+     * The current player has fun messing with everyone else using a squeeze play.
+     * @return JSON with field message (string saying what happened),
+     *       players (list of {name: name, money: amt}),
+     *       and rolled (list of numbers that were rolled)
+     */
     squeezePlay(){
-        // TODO
-    }
+        let die1, die2 = (Card.rollDie(), Card.rollDie()); // just need for JSON
+        let total = die1 + die2;
+        let collect = 50;
+        let json = {"rolled": [die1, die2]};
 
+        if([5, 6, 7, 8, 9].includes(total)) {
+            collect = 100;
+        }
+        else if([2, 12].includes(total)) {
+            collect = 200;
+        }
 
-    teleport(){
-        // TODO
+        let player = this.playerManager.getCurrentPlayer();
+        let players = this.boardManager.getPlayers();
+
+        // grab from each player
+        for(let p of players) {
+            p.deltaMoney(-collect);
+            player.deltaMoney(collect);
+        }
+
+        // now construct JSON since money amounts are constant
+        json['players'] = [];
+        for(let p of players) {
+            json['players'].push({'name': p.name, 'money': p.getMoney()});
+        }
+
+        // TODO message
+
+        return json
     }
 
     // TODO stocks?
@@ -497,19 +566,28 @@ class Game {
      *     that the first player is trading), properties2 (list of properties that the
      *     the second player is trading), wealth1 (money that first player is trading),
      *     and wealth2 (money that the second player is trading)
-     * @return updated game data with the trade committed sent to all in game
+     * @return JSON with fields player1/player2 (subfields name, money, and properties
+     *      (list of string names of properties that the player now has)) and message
      */
     trade(info) {
         const player1 = this.playerManager.getPlayer(info.player1);
         const player2 = this.playerManager.getPlayer(info.player2);
         
-        let t1 = this.boardManager.transferProperties(player1, player2, info.properties1);
-        let t2 = this.boardManager.transferProperties(player2, player1, info.properties2);
+        this.boardManager.transferProperties(player1, player2, info.properties1);
+        this.boardManager.transferProperties(player2, player1, info.properties2);
+        // TODO break down houses all the way if can't maintain because of limits
 
-        let m1 = player1.deltaMoney(info.wealth2-info.wealth1);
-        let m2 = player2.deltaMoney(info.wealth1-info.wealth2);
+        player1.deltaMoney(info.wealth2-info.wealth1);
+        player2.deltaMoney(info.wealth1-info.wealth2);
 
-        // TODO return stuff
+        // TODO message
+        const message = "";
+
+        return {"player1": {"name": player1.name, "money": player1.getMoney(),
+                            "properties": info.properties2},
+                "player2": {"name": player2.name, "money": player2.getMoney(),
+                            "properties": info.properties1},
+                "message": message};
     }
 
     /****************************************************************************************
@@ -654,7 +732,7 @@ class Game {
      * @return string list of all locations
      */
     getAllLocations() {
-        // TODO get all locs
+        return this.boardManager.getLocationNames();
     }
 
     /**
@@ -663,7 +741,7 @@ class Game {
      * @return string list of all unowned properties
      */
     getAllUnownedLocations() {
-        // TODO get all unowned locs
+        return this.boardManager.getUnownedLocations();
     }
 
     /**
@@ -672,7 +750,7 @@ class Game {
      * @return string name of property
      */
     getHighestRent() {
-        // TODO ignore utility/other ones based on multipliers
+        return this.boardManager.getHighestRent();
     }
 }
 
