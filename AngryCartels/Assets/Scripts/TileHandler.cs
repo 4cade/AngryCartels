@@ -29,7 +29,7 @@ public class TileHandler : MonoBehaviour {
             tiles[i].index = i;
             tiles[i].tier = 1;
             tiles[i].neighbors = new System.Collections.Generic.List<Tile>();
-            tiles[i].location = locTrans[i].position;
+            tiles[i].location = locTrans[i + 1].position; // +1 for parent object
         }
 
         // Destroy tile location container
@@ -77,17 +77,78 @@ public class TileHandler : MonoBehaviour {
         moveTo.gameObject.transform.position = tiles[moveTo.startIndex].location;
 
         // Find the path between the two tiles
-        List<Vector3> path = new List<Vector3>();
-        FindPath(ref path, moveTo.startIndex, moveTo.goalIndex);
+        Stack<Vector3> path = new Stack<Vector3>();
+        path = FindPath(moveTo.startIndex, moveTo.goalIndex, moveTo);
 
         // Prepare to LERP!
         objectToMove = moveTo;
+
+        Vector3 v = path.Pop();
+        while (path.Count > 0)
+        {
+            v = path.Pop();
+        }
+        objectToMove.gameObject.transform.position = v;
     }
 
-    private void FindPath(ref List<Vector3> path, int startIndex, int goalIndex)
+    private int HeuristicCostEstimate(int startIndex, int goalIndex, MoveToTile moveInfo)
     {
-        // TODO: find path between start and end
-        throw new NotImplementedException();
+        int isDirF = moveInfo.isForwardDirection ? -1 : 1;
+        return 100 * Math.Abs(tiles[goalIndex].tier - tiles[startIndex].tier) + 
+                isDirF * Math.Abs(goalIndex - startIndex);
+    }
+
+    private Stack<Vector3> BuildPath(Dictionary<int, int> history, int current)
+    {
+        Stack<Vector3> path = new Stack<Vector3>();
+        path.Push(tiles[current].location);
+        while (history.ContainsKey(current))
+        {
+            current = history[current];
+            path.Push(tiles[current].location);
+        }
+        return path;
+    }
+
+    private Stack<Vector3> FindPath(int startIndex, int goalIndex, MoveToTile moveTo)
+    {
+        // TODO: probably should make this a coroutine
+        // find path between start and end
+        SetList<int> closed = new SetList<int>();
+        SetList<int> open = new SetList<int>();
+        open.Add(startIndex);
+        Dictionary<int, int> history = new Dictionary<int, int>();
+        //DictionaryWithDefault<int, int> gScore = new DictionaryWithDefault<int, int>(int.MaxValue);
+        //gScore[startIndex] = 0;
+        DictionaryWithDefault<int, int> score = new DictionaryWithDefault<int, int>(int.MaxValue);
+        score[startIndex] = HeuristicCostEstimate(startIndex, goalIndex, moveTo);
+
+        while (open.Count > 0)
+        {
+            int current = open[open.Count - 1]; // TODO: should be the lower cost f value
+            if (current == goalIndex)
+            {
+                return BuildPath(history, current);
+            }
+
+            open.RemoveAt(open.Count - 1);
+            closed.Add(current);
+            foreach (Tile tile in tiles[current].neighbors)
+            {
+                if (closed.Contains(tile.index)) continue;
+
+                int gCost = score[current] + HeuristicCostEstimate(current, goalIndex, objectToMove);
+                if (!open.Contains(tile.index))
+                    open.Add(tile.index);
+                else if (gCost <= score[tile.index])
+                    continue;
+
+                history[tile.index] = current;
+                score[tile.index] = gCost;
+            }
+        }
+
+        return null;
     }
 
     // Update is called once per frame
