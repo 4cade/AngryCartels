@@ -376,7 +376,7 @@ class Game {
      * @param houseMap JSON key property to preferred number of houses
      *
      * @return JSON with fields properties (map names to houses on them), player (name: name, money: money),
-     *       delta (map names to change in houses)
+     *       delta (map names to change in houses) or fail: true if failed
      *
      */
     setHouses(houseMap) {

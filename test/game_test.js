@@ -184,6 +184,14 @@ describe('BoardManager', function(){
             json = board1.setHousesForProperties(player2, toUpdate);
             expected = {'properties': {"biscayne ave": 0, 'miami ave': 0, 'park pl': 4, 'boardwalk': 5}, 'delta': {"biscayne ave": -3, 'miami ave': -2, 'park pl': 0, 'boardwalk': 0}, "player": {"name": "Jerry", "money": 295}};
             assert.deepEqual(json, expected);
+
+            // unbalanced amount should be balanced
+            toUpdate = {"boardwalk": 0, "park pl": 0};
+            board1.setHousesForProperties(player2, toUpdate);
+            toUpdate = {"boardwalk": 6, "park pl": 0};
+            json = board1.setHousesForProperties(player2, toUpdate);
+            expectedDelta = {"boardwalk": 3, "park pl": 3}
+            assert.deepEqual(json.delta, expectedDelta);
         });
 
         it('handles mortgaging/unmortgaging', function() {
