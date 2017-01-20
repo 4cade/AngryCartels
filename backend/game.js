@@ -236,12 +236,9 @@ class Game {
 
         let json = {};
         let oldDirection = player.forward; // store to reset later
-        // TODO implement the messages for this
 
-        if(pass.includes('forward')) {
-            player.forward = true;
-        } else {
-            player.forward = false;
+        if(pass.includes('backward')) {
+            player.forward = !player.forward;
         }
 
         if(pass.includes('any') && option) {
@@ -254,6 +251,8 @@ class Game {
 
         // reset player to how they were before
         player.forward = oldDirection;
+
+        json['message'] = player.name + " used " + pass + " to move to " player.location;
 
         return json;
     }
@@ -294,7 +293,7 @@ class Game {
         else
             json["actions"] = [];
 
-        json["message"] = player.name + " took a taxi to " + player.location; // TODO message
+        json["message"] = player.name + " took a taxi to " + player.location;
         return json;
     }
 
@@ -409,7 +408,7 @@ class Game {
     payRent() {
         const player = this.playerManager.getCurrentPlayer();
         const rent = this.boardManager.getRent(player, player.location);
-        const owner = this.boardManager.isOwned(player.location); // TODO use playerManager to get owner
+        const owner = this.playerManager.getTeamMember(this.boardManager.isOwned(player.location));
         let json = {};
 
         if(!rent) {
@@ -434,8 +433,8 @@ class Game {
         let player = this.playerManager.getCurrentPlayer();
         let card = Card.drawChance();
         player.gainSpecialCard(card);
-        // TODO message
-        return {"card": card, "player": {"name": player.name}};
+        const message = player.name + "drew a chance card";
+        return {"card": card, "player": {"name": player.name}, "message": message};
     }
 
     /**
@@ -447,8 +446,8 @@ class Game {
         let player = this.playerManager.getCurrentPlayer();
         let card = Card.drawCommunityChest();
         player.gainSpecialCard(card);
-        // TODO message
-        return {"card": card, "player": {"name": player.name}};
+        const message = player.name + "drew a community chest card";
+        return {"card": card, "player": {"name": player.name}, "message": message};
     }
 
     /**
@@ -551,7 +550,7 @@ class Game {
             json['players'].push({'name': p.name, 'money': p.getMoney()});
         }
 
-        // TODO message
+        json['message'] = player.name + " rolled a total of " + total + " and took " + gain + "from each player";
 
         return json
     }
@@ -580,8 +579,7 @@ class Game {
         player1.deltaMoney(info.wealth2-info.wealth1);
         player2.deltaMoney(info.wealth1-info.wealth2);
 
-        // TODO message
-        const message = "";
+        const message = player1.name + " traded with " + player2.name; // TODO maybe improve?
 
         return {"player1": {"name": player1.name, "money": player1.getMoney(),
                             "properties": info.properties2},
@@ -672,7 +670,7 @@ class Game {
                 this.auction = null;
                 this.auctionGoing = false;
                 this.auctionedProperty = null;
-                // TODO add message
+                json['message'] = player.name + " won the auction for " + json['location'];
                 return json; 
             }
         }

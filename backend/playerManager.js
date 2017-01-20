@@ -147,6 +147,21 @@ class PlayerManager {
 
         return this.canRoll;
     }
+
+    /**
+     * Gets a player object of a member of a team.
+     * @param team string name of team
+     *
+     * @return player object of member of team or null if none exists
+     */
+    getTeamMember(team) {
+        for(let player of this.turnOrder) {
+            if(player.team.name === team) {
+                return player;
+            }
+        }
+        return null;
+    }
 }
 
 module.exports = PlayerManager;
