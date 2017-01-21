@@ -225,14 +225,14 @@ class Game {
      *
      * @return JSON with fields movedTo (list of locations visited), actions (list
      *       of actions that the player should perform), player (JSON with name: name, money: money),
-     *       and message (string saying what happened)
+     *       and message (string saying what happened) or {"fail": true}
      */
     useBusPass(pass, location) {
         const player = this.playerManager.getCurrentPlayer();
 
         //player does not have the pass
         if (!player.busTickets.has(pass))
-            return -1
+            return {"fail": true}
 
         let json = {};
         let oldDirection = player.forward; // store to reset later
@@ -262,7 +262,7 @@ class Game {
      * @param location to get transported to
      *
      * @return JSON with fields player1/player2? (JSON with name: name, money: money),
-     *       pool (money in pool), and message (string saying what happened)
+     *       pool (money in pool), message (string saying what happened), and location
      */
     taxiRide(location) {
         //location is not on board
@@ -271,7 +271,7 @@ class Game {
 
         const player = this.playerManager.getCurrentPlayer();
         const owner = this.boardManager.isOwned();
-        let json = {};
+        let json = {"location": location};
 
         // pay pool or owner
         if(owner === player.name) {
@@ -485,7 +485,7 @@ class Game {
 
     /**
      * The current player goes through a roll3 ritual.
-     * @return JSON with field message (string saying what happened),
+     * @return JSON with fields message (string saying what happened),
      *       player (name: name, money: amt), card (list of numbers to match),
      *       and rolled (list of numbers that were rolled)
      */

@@ -58,15 +58,21 @@ function emitInGame(host, call, data) {
 // interactions for the socket object
 module.exports = function(socket){
   console.log('a user connected');
-  users[userGenNum] = socket;
+  // users[userGenNum] = socket;
   socket.username = userGenNum;
   userGenNum++;
 
-  // TODO LOGIN
-  socket.on('login', function(username) {
-    socket.username = username;
-    users[username] = socket;
-  });
+  /**
+   * Makes it so that the socket actually joins the system and sets the username
+   * NOTE: other things won't work if this step doesn't happen
+   * @return the username of the client to the client
+   */
+  socket.on('join', function(info) {
+    if(info.username)
+        socket.username = info.username
+        users[socket.username] = socket
+    socket.emit('send client name', socket.username);
+  })
 
   /**
    * Gets the name of the username of the client of this socket
@@ -79,10 +85,11 @@ module.exports = function(socket){
   /**
    * Disconnects the user from the server
    */
-  socket.on('disconnect', function(){
+  socket.on('disconnect', function(info.leave){
     console.log('user disconnected');
     // TODO logic to quit game and pass it on to next host if he was host
-    delete users[socket.username];
+    if(info.leave)
+        delete users[socket.username];
   });
 
   // INSTANT MESSAGING
@@ -182,26 +189,44 @@ module.exports = function(socket){
    */
   socket.on('roll', function() {
     // TODO check if it is this player's turn
-    // simulate actually rolling the dice
-    let json = games[socket.inGame].rollDice();
-
-    // say something moved
-    emitInGame(socket.inGame, 'movement', json);
+    emitInGame(socket.inGame, 'movement', games[socket.inGame].rollDice(););
   });
 
   /**
    * Makes the client do a Mr. Monopoly action to go to the nearest unowned
    *     property that is unowned.
-   * @return JSON with fields rolled (list of what was rolled), action (list
-   *       of actions that the player should perform), movedTo (list of locations
-   *       visited), player (JSON with name: name, money: money), and
+   * @return JSON with fields action (list of actions that the player should perform),
+   *       movedTo (list of locations visited), player (JSON with name: name, money: money), and
    *       message (string saying what happened)
    */
   socket.on('mrmonopoly', function() {
     // TODO check if it's the client's turn
-    let json = games[socket.inGame].unleashMrMonopoly();
-    // say something moved
-    emitInGame(socket.inGame, 'movement', json);
+    emitInGame(socket.inGame, 'movement', games[socket.inGame].unleashMrMonopoly(););
+  });
+
+  /**
+   * Handles a jail turn for the player
+   * @param JSON with field pay (boolean of whether player is paying to leave jail)
+   * @return JSON with fields actions (list of actions that the player should perform), 
+   *       player (JSON with name: name, money: money), and
+   *       message (string saying what happened)
+   */
+  socket.on('jail', function(info) {
+    // TODO check if it is this player's turn
+    emitInGame(socket.inGame, 'jail', games[socket.inGame].handleJail(info.pay););
+  });
+
+  /**
+   * The client teleports to the specified location
+   * @param JSON with field location (place to move to)
+   *
+   * @return JSON with fields action (list of actions that the player should perform),
+   *       movedTo (list of locations visited), player (JSON with name: name, money: money), and
+   *       message (string saying what happened)
+   */
+  socket.on('teleport', function(info) {
+    // TODO check if it's the client's turn
+    emitInGame(socket.inGame, 'movement', games[socket.inGame].teleport(info.location););
   });
 
   /**
@@ -214,25 +239,25 @@ module.exports = function(socket){
   });
 
   /**
-   * Handles if the player is in jail
-   * @param info JSON with field pay (if the player is paying to get out)
-   * @return JSON with field actions (list of actions that the player should perform), 
-   *       player (JSON with name: name, money: money), and
-   *       message (string saying what happened)
+   * Handles the player using a taxi ride
+   * @param info JSON with field location (location to ride to)
+   * @return JSON with fields player1/player2? (JSON with name: name, money: money),
+   *       pool (money in pool), message (string saying what happened), and location
    */
-  socket.on('jail', function(info) {
-    emitInGame(socket.inGame, 'jail', games[socket.inGame].handleJail(info.pay));
+  socket.on('taxi', function(info) {
+    emitInGame(socket.inGame, 'taxi', games[socket.inGame].taxiRide(info.location));
   });
 
   /**
-   * Handles if the player is in jail
-   * @param info JSON with field pay (if the player is paying to get out)
-   * @return JSON with field actions (list of actions that the player should perform), 
-   *       player (JSON with name: name, money: money), and
-   *       message (string saying what happened)
+   * Handles the player riding the bus
+   * @param info JSON with fields pass (name of bus pass) and location (location to ride to)
+   * @return JSON with fields movedTo (list of locations visited), actions (list
+   *       of actions that the player should perform), player (JSON with name: name, money: money),
+   *       and message (string saying what happened)
    */
-  socket.on('taxi', function(info) {
-    emitInGame(socket.inGame, 'taxi', games[socket.inGame].handleJail(info.pay));
+  socket.on('bus', function(info) {
+    // TODO check current player
+    emitInGame(socket.inGame, 'movement', games[socket.inGame].useBusPass(info.pass, info.location));
   });
 
   /**
@@ -242,12 +267,11 @@ module.exports = function(socket){
    *     that the first player is trading), properties2 (list of properties that the
    *     the second player is trading), wealth1 (money that first player is trading),
    *     and wealth2 (money that the second player is trading)
-   * @return updated game data with the trade committed sent to all in game
+   * @return JSON with fields player1/player2 (subfields name, money, and properties
+   *      (list of string names of properties that the player now has)) and message
    */
   socket.on('trade', function(tradeInfo) {
-    // TODO
-    let json = games[socket.inGame].trade(info);
-    emitInGame(socket.inGame, 'trade', json);
+    emitInGame(socket.inGame, 'trade', json = games[socket.inGame].trade(info););
   });
 
   /**
@@ -280,31 +304,31 @@ module.exports = function(socket){
   /**
    * Mortgages the properties for the client
    * @param info list of strings of property names to mortgage
-   * @return updated game data with property morgaged sent to all in game
+   * @return JSON with fields player (name: name, money: money), locations (list of successfully
+   *      mortgaged locations), gain (money gained from mortgaging), message (saying
+   *      what happened).
    */
   socket.on('mortgage', function(info) {
     // TODO check current player
-    let json = games[socket.inGame].mortgageProperty(info);
-
-    emitInGame(socket.inGame, 'mortgage', json);
+    emitInGame(socket.inGame, 'mortgage', json = games[socket.inGame].mortgageProperty(info););
   });
 
   /**
    * Unmortgages the properties for the client
-   * @param info list of strings of property names to mortgage
-   * @return updated game data with property morgaged sent to all in game
+   * @param info list of strings of property names to unmortgage
+   * @return JSON with fields player (name: name, money: money), locations (list of successfully
+   *      unmortgaged locations), gain (money lost from unmortgaging), message (saying
+   *      what happened).
    */
   socket.on('unmortgage', function(info) {
     // TODO check current player
-    let json = games[socket.inGame].unmortgageProperty(info);
-
-    emitInGame(socket.inGame, 'unmortgage', json);
+    emitInGame(socket.inGame, 'unmortgage', json = games[socket.inGame].unmortgageProperty(info););
   });
 
   /**
    * Starts an auction in the game for the property
    * @param property string of property to be put up for auction
-   * @return new auction event sent to all in game
+   * @return new auction event sent to all in game with JSON of relevant property information
    */
   socket.on('up auction', function(property) {
     games[socket.inGame].startAuction(property);
@@ -314,8 +338,7 @@ module.exports = function(socket){
   /**
    * Sets the auction price in the current auction for the client
    * @param price the price for the bid for the client
-   * @return updated auction listing of prices if game not over to all in game, otherwise
-   *     the winner of the auction to all in game
+   * @return the winner of the auction to all in game if there is a winner
    */
   socket.on('set auction price', function(price) {
     games[socket.inGame].addBid(socket.username, price);
@@ -328,27 +351,29 @@ module.exports = function(socket){
 
   /**
    * Draws a chance card for the client
-   * @return updated game data with chance activated for client sent to all in game
+   * @return JSON with field message (string saying what happened),
+   *       player (name: name), and card (title, description, short, play)
    */
   socket.on('draw chance', function() {
     let card = games[socket.inGame].drawChance();
-    // TODO
+    // TODO immediately
     socket.emit('special card', card);
   });
 
   /**
    * Draws a community chest card for the client
-   * @return updated game data with community chest activated for client sent to all in game
+   * @return JSON with field message (string saying what happened),
+   *       player (name: name), and card (title, description, short, play)
    */
   socket.on('draw community chest', function() {
     let card = games[socket.inGame].drawCommunityChest();
-    // TODO
+    // TODO immediately
     socket.emit('special card', card);
   });
 
   /**
    * Uses a chance/community chest card
-   * @return updated game data with community chest activated for client sent to all in game
+   * @return TODO
    */
   socket.on('use special card', function(card) {
     let json = games[socket.inGame].useSpecialCard(socket.username, card);
@@ -357,13 +382,33 @@ module.exports = function(socket){
   });
 
   /**
+   * Performs a roll3 action.
+   * @return JSON with fields message (string saying what happened),
+   *       player (name: name, money: amt), card (list of numbers to match),
+   *       and rolled (list of numbers that were rolled)
+   */
+  socket.on('roll3', function() {
+    emitInGame(socket.inGame, 'roll3', games[socket.inGame].roll3());
+  });
+
+  /**
+   * Performs a squeeze play action.
+   * @return JSON with fields message (string saying what happened),
+   *       players (list of {name: name, money: amt}),
+   *       and rolled (list of numbers that were rolled)
+   */
+  socket.on('squeeze', function() {
+    emitInGame(socket.inGame, 'squeeze', games[socket.inGame].squeezePlay());
+  });
+
+  /**
    * Ends the turn for the client
-   * @return updated game data with next player's turn sent to all in game
+   * @return JSON with field message (string saying what happened), player (name of current player),
+   *       and actions (list of actions that the player can do)
    */
   socket.on('end turn', function() {
-    let json = games[socket.inGame].nextTurn();
-
-    emitInGame(socket.inGame, 'next turn', json);
+    // TODO check if correct player
+    emitInGame(socket.inGame, 'next turn', games[socket.inGame].nextTurn());
   });
 
   /**
