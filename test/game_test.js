@@ -171,7 +171,7 @@ describe('BoardManager', function(){
             // TODO after properties bought
             let toUpdate = {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5};
             let json = board1.setHousesForProperties(player2, toUpdate);
-            let expected = {'properties': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5}, 'delta': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5}, "player": {"name": "Jerry", "money": 170}};
+            let expected = {'properties': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5, 'florida ave': 0}, 'delta': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5, 'florida ave': 0}, "player": {"name": "Jerry", "money": 170}};
             assert.deepEqual(json, expected);
 
             // now try with properties doesn't have
@@ -182,7 +182,7 @@ describe('BoardManager', function(){
 
             // now with the actual owner, sell houses
             json = board1.setHousesForProperties(player2, toUpdate);
-            expected = {'properties': {"biscayne ave": 0, 'miami ave': 0, 'park pl': 4, 'boardwalk': 5}, 'delta': {"biscayne ave": -3, 'miami ave': -2, 'park pl': 0, 'boardwalk': 0}, "player": {"name": "Jerry", "money": 295}};
+            expected = {'properties': {"biscayne ave": 0, 'miami ave': 0, 'park pl': 4, 'boardwalk': 5, 'florida ave': 0}, 'delta': {"biscayne ave": -3, 'miami ave': -2, 'park pl': 0, 'boardwalk': 0, 'florida ave': 0}, "player": {"name": "Jerry", "money": 295}};
             assert.deepEqual(json, expected);
 
             // unbalanced amount should be balanced
@@ -196,9 +196,9 @@ describe('BoardManager', function(){
 
         it('handles mortgaging/unmortgaging', function() {
             // owns
-            let expected = {"player": {"name": "Jerry", "money": 370}, 'location': 'biscayne ave', 'gain': 75};
+            let expected = {"player": {"name": "Jerry", "money": 70}, 'location': 'biscayne ave', 'gain': 75};
             assert.deepEqual(board1.mortgageProperty(player2, 'biscayne ave'), expected);
-            expected = {"player": {"name": "Jerry", "money": 435}, 'location': 'miami ave', 'gain': 65};
+            expected = {"player": {"name": "Jerry", "money": 135}, 'location': 'miami ave', 'gain': 65};
             assert.deepEqual(board1.mortgageProperty(player2, 'miami ave'), expected);
 
             // already mortgaged should fail
@@ -206,7 +206,7 @@ describe('BoardManager', function(){
             assert.deepEqual(board1.mortgageProperty(player2, 'miami ave'), {});
 
             // unmortgage
-            expected = {"player": {"name": "Jerry", "money": 360}, 'location': 'miami ave', 'lose': 75};
+            expected = {"player": {"name": "Jerry", "money": 60}, 'location': 'miami ave', 'lose': 75};
             assert.deepEqual(board1.unmortgageProperty(player2, 'miami ave'), expected);
 
             // doesn't own
@@ -216,7 +216,7 @@ describe('BoardManager', function(){
         it('handles property transfer', function() {
             let properties = ['park pl', 'biscayne ave', 'miami ave', 'boardwalk'];
             let json = board1.transferProperties(player2, player3, properties);
-            let expected = {'player1': 0, 'player2': {'park pl': 4, 'biscayne ave': 0, 'miami ave': 0, 'boardwalk': 5}};
+            let expected = {'player1': 0, 'player2': {'park pl': 3, 'biscayne ave': 0, 'miami ave': 0, 'boardwalk': 3}};
             assert.deepEqual(json, expected)
 
             // add houses and see how it loses money
@@ -244,8 +244,8 @@ describe('BoardManager', function(){
             // actual tests
             assert.equal(board1.getRent(player3, 'biscayne ave'), 55);
             assert.equal(board1.getRent(player3, 'miami ave'), 0);
-            assert.equal(board1.getRent(player3, 'park pl'), 1300);
-            assert.equal(board1.getRent(player3, 'boardwalk'), 2000);
+            assert.equal(board1.getRent(player3, 'park pl'), 1100);
+            assert.equal(board1.getRent(player3, 'boardwalk'), 1400);
             assert.equal(board1.getRent(player2, 'boardwalk'), null);
 
             player2.setLastRoll(11);

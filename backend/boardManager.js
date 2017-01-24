@@ -439,23 +439,65 @@ class BoardManager {
     setHousesForProperties(player, houseMap) {
         // TODO block if impossible
         // NOTE: new return value
-        let delta = {}
-        let properties = {}
-        for (let property in houseMap){
-            if (this.locations[property].owner === player.name){
-                delta[property] = houseMap[property]-this.locations[property].houses
-                this.locations[property].houses += delta[property]
-                if (delta[property] > 0){
-                    player.deltaMoney(-delta[property]*this.locations[property].housePrice)
+        let groups = {};
+        let delta = {};
+        let changeHouse = 0;
+        let changeHotel = 0;
+        let changeSky = 0;
+
+        for(let propertyName in houseMap) {
+            let property = this.locations[propertyName];
+            if(property.owner === player.team.name) {
+                if(groups.hasOwnProperty(property.group)) {
+                    groups[property.group][propertyName] = houseMap[propertyName];
                 }
-                else if (delta[property] < 0){
-                    player.deltaMoney(-delta[property]*(this.locations[property].housePrice/2))
+                else {
+                    groups[property.group] = {}
+                    groups[property.group][propertyName] = houseMap[propertyName]
+                }
+
+                // verify houses
+                if(houseMap[propertyName] <= 4) {
+                    if(property.houses === 6) {
+                        changeSky -= 1;
+                        changeHotel -= 1;
+                        changeHouse -= 4 - houseMap[propertyName];
+                    }
+                    else if(property.houses === 5) {
+                        changeHotel -= 1;
+                        changeHouse -= 4 - houseMap[propertyName];
+                    }
+                    else {
+                        changeHouse -= property.houses - houseMap[propertyName];
+                    }
                 }
             }
             else {
-                delta[property] = 0
+                delta[propertyName] = 0;
             }
-            properties[property] = this.locations[property].houses   
+        }
+
+        // return if impossible
+        if(this.houses + changeHouse < 0 || this.hotels + changeHotel < 0 || this.skyscrapers + changeSky < 0) {
+            return {"fail": true};
+        }
+
+        // actually commit changes
+        for(let groupName in groups) {
+            let houseMap = groups[groupName];
+            Object.assign(delta, this.propertyGroups[groupName].setHouses(player, houseMap));
+        }
+
+        let properties = {};
+        for(let property in delta) {
+            let p = this.locations[property]
+            properties[property] = p.houses;
+            if (delta[property] > 0){
+                player.deltaMoney(-delta[property]*p.housePrice)
+            }
+            else if (delta[property] < 0){
+                player.deltaMoney(-delta[property]*p.housePrice/2)
+            }
         }
 
         return {
@@ -546,7 +588,7 @@ class BoardManager {
      */
     mortgageProperty(player, property) {
         let land = this.locations[property]
-        if (land.houses === 0 && land.owner === player.name && !land.isMortgaged){
+        if (land.houses === 0 && land.owner === player.team.name && !land.isMortgaged){
             land.mortgage()
             player.deltaMoney(land.mortgageValue)
             return {
@@ -574,7 +616,7 @@ class BoardManager {
      */
     unmortgageProperty(player, property) {
         let land = this.locations[property]
-        if (land.houses === 0 && land.owner === player.name && land.isMortgaged){
+        if (land.houses === 0 && land.owner === player.team.name && land.isMortgaged){
             land.unmortgage()
             player.deltaMoney(-Math.round(land.mortgageValue*1.15))
             return {

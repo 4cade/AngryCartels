@@ -315,6 +315,7 @@ class PropertyGroup {
 
         // ghetto solution, change in future if need performance improvement
         toChange.sort(function(a,b) { return a[1] < b[1]});
+        let allIt = 0;
         
         for(let i = 0; i < toChange.length; i++) {
             let val = toChange[i][1];
@@ -326,20 +327,24 @@ class PropertyGroup {
                 val = 0;
             }
             toChange[i][1] = val;
+            allIt += val;
         };
+        let amt = Math.floor(allIt/toChange.length)
+
+        for(let lst of toChange) {
+            let [name, val] = lst;
+            let p = this.getProperty(name);
+            p.houses = amt;
+            allIt -= p.houses;
+        }
 
         for(let lst of toChange) {
             let [name, val] = lst;
             let p = this.getProperty(name);
 
-            while(val - p.houses !== 0) {
-                // console.log(p.houses)
-                if(val - p.houses > 0) {
-                    this.upgrade(p);
-                }
-                else {
-                    this.downgrade(p);
-                }
+            if(allIt > 0) {
+                p.houses += 1;
+                allIt -= 1;
             }
         }
 

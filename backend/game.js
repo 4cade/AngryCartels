@@ -252,7 +252,7 @@ class Game {
         // reset player to how they were before
         player.forward = oldDirection;
 
-        json['message'] = player.name + " used " + pass + " to move to " player.location;
+        json['message'] = player.name + " used " + pass + " to move to " + player.location;
 
         return json;
     }
