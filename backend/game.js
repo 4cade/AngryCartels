@@ -263,6 +263,7 @@ class Game {
      *
      * @return JSON with fields player1/player2? (JSON with name: name, money: money),
      *       pool (money in pool), message (string saying what happened), and location
+     *       or {"fail": true} if not owned
      */
     taxiRide(location) {
         //location is not on board
@@ -270,20 +271,23 @@ class Game {
             return -1
 
         const player = this.playerManager.getCurrentPlayer();
-        const owner = this.boardManager.isOwned();
+        const owner = this.playerManger.getTeamMember(this.boardManager.isOwned());
         let json = {"location": location};
 
         // pay pool or owner
-        if(owner === player.name) {
+        if(owner === player.team.name) {
             let tempjson = this.boardManager.payPool(player, 20);
             json['player1'] = {"name": player.name, 'money': player.money}
             json['pool'] = tempjson['pool'];
         }
-        else {
+        else if(owner){
             player.deltaMoney(-50);
             owner.deltaMoney(50);
             json['player1'] = {"name": player.name, 'money': player.money}
             json['player2'] = {"name": owner.name, 'money': owner.money}
+        }
+        else {
+            return {"fail": true};
         }
 
         let actions = this.boardManager.jumpToLocation(player, location)['actions'];
@@ -396,7 +400,11 @@ class Game {
     setHouses(houseMap) {
         const player = this.playerManager.getCurrentPlayer();
         let json = this.boardManager.setHousesForProperties(houseMap);
-        // TODO message
+
+        if(json["delta"]) {
+            json['message'] = player.name + " changed houses on " + Object.keys(json['delta']).length + " houses"
+        }
+
         return json;
     }
 

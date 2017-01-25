@@ -526,6 +526,20 @@ class PropertyGroup {
 
         return this.properties[i];
     }
+
+    /**
+     * Removes.
+     * @param propertyName the name of the property to find
+     * 
+     * @return property object
+     */
+    removeAllHouses() {
+        let houses = 0;
+        for(let property of this.properties) {
+
+            property.houses = 0;
+        }
+    }
 }
 
 module.exports = PropertyGroup;

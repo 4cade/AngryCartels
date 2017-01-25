@@ -437,8 +437,6 @@ class BoardManager {
     *       delta (map names to change in houses) or {fail: true} if failed
     **/
     setHousesForProperties(player, houseMap) {
-        // TODO block if impossible
-        // NOTE: new return value
         let groups = {};
         let delta = {};
         let changeHouse = 0;
@@ -460,12 +458,11 @@ class BoardManager {
                 if(houseMap[propertyName] <= 4) {
                     if(property.houses === 6) {
                         changeSky += 1;
-                        changeHotel += 1;
-                        changeHouse += 4 - houseMap[propertyName];
+                        changeHouse -= houseMap[propertyName];
                     }
                     else if(property.houses === 5) {
                         changeHotel += 1;
-                        changeHouse += 4 - houseMap[propertyName];
+                        changeHouse -= houseMap[propertyName];
                     }
                     else {
                         changeHouse += property.houses - houseMap[propertyName];
@@ -474,20 +471,21 @@ class BoardManager {
                 else if(houseMap[propertyName] === 5) {
                     if(property.houses === 6) {
                         changeSky += 1;
+                        changeHotel -= 1;
                     }
                     else if(property.houses < 5) {
                         changeHotel -= 1;
-                        changeHouse += property.houses - 4;
+                        changeHouse += property.houses;
                     }
                 }
                 else {
                     if(property.houses === 5) {
-                        changeSky -= 1
+                        changeSky -= 1;
+                        changeHotel += 1;
                     }
                     else if(property.houses < 5) {
                         changeSky -= 1;
-                        changeHotel -= 1;
-                        changeHouse += property.houses - 4;
+                        changeHouse += property.houses;
                     }
                 }
             }
@@ -682,9 +680,73 @@ class BoardManager {
 
         // rebalance for houses + check money gained for destroying houses
         for (let group of groupChanged){
+            let pgroup = this.propertyGroups[group];
+            let house, hotel, sky = (0, 0, 0);
+
+            // count previous houses
+            for(let p of pgroup.properties) {
+                if(p.houses <= 4) {
+                    house += p.houses
+                }
+                else if(p.houses === 5) {
+                    house += 4;
+                    hotel += 1;
+                }
+                else {
+                    house += 4;
+                    hotel += 1;
+                    sky += 1;
+                }
+            }
+
             // TODO break down houses all the way if can't maintain because of limits
-            let houseLost = this.propertyGroups[group].rebalanceHouses();
-            let pricePerHouse = this.propertyGroups[group].properties[0].housePrice;
+            let houseLost = pgroup.rebalanceHouses();
+            let pricePerHouse = pgroup.properties[0].housePrice;
+
+            // count previous houses
+            for(let p of pgroup.properties) {
+                if(p.houses <= 4) {
+                    house -= p.houses
+                }
+                else if(p.houses === 5) {
+                    house -= 4;
+                    hotel -= 1;
+                }
+                else {
+                    house -= 4;
+                    hotel -= 1;
+                    sky -= 1;
+                }
+            }
+
+            // downgrade skyscrapers if can't keep
+            if(this.skyscrapers + sky < 0) {
+                for(let p of pgroup.properties) {
+                    p.houses -= 1;
+                    houseLost += 1;
+                }
+            }
+            // TODOO
+
+            // downgrade hotels if can't keep
+            if(this.hotels + hotel < 0) {
+                for(let p of pgroup.properties) {
+                    p.houses -= 1;
+                    houseLost += 1;
+                }
+            }
+
+            // downgrade houses if can't keep
+            if(this.houses + house < 0) {
+                for(let p of pgroup.properties) {
+                    houseLost += p.houses;
+                    this.houses += p.houses;
+                    p.houses = 0;
+                }
+            }
+
+            // check if houses disrupt balance
+
             money += houseLost*pricePerHouse;
         }
 

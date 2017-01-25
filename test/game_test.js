@@ -174,7 +174,7 @@ describe('BoardManager', function(){
             let json = board1.setHousesForProperties(player2, toUpdate);
             let expected = {'properties': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5, 'florida ave': 0}, 'delta': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5, 'florida ave': 0}, "player": {"name": "Jerry", "money": 170}};
             assert.deepEqual(json, expected);
-            assert.equal(board1.houses, 81-13);
+            assert.equal(board1.houses, 81-9);
             assert.equal(board1.hotels, 30);
             assert.equal(board1.skyscrapers, 16);
 
@@ -284,6 +284,106 @@ describe('BoardManager', function(){
             assert.equal(board1.nextTransit(player2), 'reading railroad');
         });
     });
+
+    describe("#houseLimit", function() {
+
+        const board2 = new BoardManager(board);
+        board2.houses = 12;
+        board2.hotels = 3;
+        board2.skyscrapers = 2;
+
+        const p1 = new Player('burp', 'go', 1);
+        const p2 = new Player('rock', 'go', 1);
+
+        board2.buyProperty(p1, 'biscayne ave');
+        board2.buyProperty(p1, 'miami ave');
+        board2.buyProperty(p1, 'florida ave');
+        board2.buyProperty(p2, 'park pl');
+        board2.buyProperty(p2, 'boardwalk');
+
+        it('blocks from adding houses when there are not enough', function() {
+            // houses check out
+            let json = board2.setHousesForProperties(p1, {'biscayne ave': 4, 'miami ave': 4, 'florida ave': 4});
+            assert(!json.hasOwnProperty('fail'));
+            json = board2.setHousesForProperties(p2, {'park pl': 1});
+            assert.deepEqual(json, {"fail": true});
+            assert.equal(board2.locations['park pl'].houses, 0);
+
+            // hotels check out
+            board2.houses = 8;
+            json = board2.setHousesForProperties(p2, {'park pl': 5, 'boardwalk': 5});
+            assert(!json.hasOwnProperty('fail'));
+            assert.equal(board2.locations['park pl'].houses, 5);
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 5, 'miami ave': 5});
+            assert.deepEqual(json, {"fail": true});
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 5});
+            assert(!json.hasOwnProperty('fail'));
+            assert.equal(board2.locations['biscayne ave'].houses, 5);
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 5, 'miami ave': 5});
+            assert.deepEqual(json, {"fail": true});
+            assert.equal(board2.locations['biscayne ave'].houses, 5);
+            assert.equal(board2.locations['miami ave'].houses, 4);
+
+            // skyscrapers check out
+            board2.hotels = 2;
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 5, 'miami ave': 5, 'florida ave': 5});
+            assert(!json.hasOwnProperty('fail'));
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 6, 'miami ave': 6, 'florida ave': 6});
+            assert.deepEqual(json, {"fail": true});
+            json = board2.setHousesForProperties(p2, {'park pl': 6, 'boardwalk': 6});
+            assert(!json.hasOwnProperty('fail'));
+            assert.equal(board2.locations['boardwalk'].houses, 6);
+            board2.skyscrapers = 1;
+            json = board2.setHousesForProperties(p1, {'florida ave': 6, 'miami ave': 6});
+            assert.deepEqual(json, {"fail": true});
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 6});
+            assert(!json.hasOwnProperty('fail'));
+            assert.equal(board2.locations['biscayne ave'].houses, 6);
+            assert.equal(board2.locations['miami ave'].houses, 5);
+
+            // check actual amounts are there
+            assert.equal(board2.houses, 20);
+            assert.equal(board2.hotels, 3);
+            assert.equal(board2.skyscrapers, 0);
+        });
+
+        it('blocks from removing houses when there are not enough', function() {
+            // check downgrade to hotels
+            board2.hotels = 0;
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 5, 'miami ave': 5, 'florida ave': 5});
+            assert.deepEqual(json, {"fail": true});
+            assert.equal(board2.locations['biscayne ave'].houses, 6);
+            assert.equal(board2.locations['miami ave'].houses, 5);
+            json = board2.setHousesForProperties(p2, {'park pl': 5, 'boardwalk': 5});
+            assert.deepEqual(json, {"fail": true});
+            assert.equal(board2.locations['park pl'].houses, 6);
+            board2.hotels = 3;
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 5, 'miami ave': 5, 'florida ave': 5});
+            assert(!json.hasOwnProperty('fail'));
+            json = board2.setHousesForProperties(p2, {'park pl': 5, 'boardwalk': 5});
+            assert(!json.hasOwnProperty('fail'));
+            assert.equal(board2.locations['miami ave'].houses, 5);
+
+            // check downgrade to houses
+            board2.houses = 0;
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 4, 'miami ave': 5, 'florida ave': 5});
+            assert.deepEqual(json, {"fail": true});
+            json = board2.setHousesForProperties(p2, {'park pl': 0, 'boardwalk': 0});
+            assert(!json.hasOwnProperty('fail'));
+            board2.houses = 20;
+            json = board2.setHousesForProperties(p1, {'biscayne ave': 4, 'miami ave': 3, 'florida ave': 4});
+            assert(!json.hasOwnProperty('fail'));
+
+            // check actual amounts are there
+            assert.equal(board2.houses, 9);
+            assert.equal(board2.hotels, 5);
+            assert.equal(board2.skyscrapers, 3);
+        });
+
+        it('blocks from keeping houses when downgrading if there are not enough', function() {
+            // TODO
+        });
+    })
 });
 
 // tests the Card object
