@@ -15,6 +15,7 @@ public class TileHandler : MonoBehaviour {
     private Tile[] tiles;
 
     private MoveToTile objectToMove = null;
+    //LinkedList<Vector3> movePath = null;
 
     // Use this for initialization
     void Start () {
@@ -27,7 +28,18 @@ public class TileHandler : MonoBehaviour {
         {
             tiles[i] = new Tile();
             tiles[i].index = i;
-            tiles[i].tier = 1;
+            if (i < tier1TileCount)
+            {
+                tiles[i].tier = 1;
+            }
+            else if (i < tier1TileCount + tier2TileCount)
+            {
+                tiles[i].tier = 2;
+            }
+            else if (i < tier1TileCount + tier2TileCount + tier3TileCount)
+            {
+                tiles[i].tier = 3;
+            }
             tiles[i].neighbors = new System.Collections.Generic.List<Tile>();
             tiles[i].location = locTrans[i + 1].position; // +1 for parent object
         }
@@ -50,8 +62,8 @@ public class TileHandler : MonoBehaviour {
 
         for (int i = 0; i < tier2TileCount; ++i)
         {
-            tiles[i].neighbors.Add(tiles[((i + 1) % tier2TileCount) + tier1TileCount]); // forward
-            tiles[i].neighbors.Add(tiles[((tier2TileCount - 1 + i) % tier2TileCount) + tier1TileCount]); // backward
+            tiles[i + tier1TileCount].neighbors.Add(tiles[((i + 1) % tier2TileCount) + tier1TileCount]); // forward
+            tiles[i + tier1TileCount].neighbors.Add(tiles[((tier2TileCount - 1 + i) % tier2TileCount) + tier1TileCount]); // backward
         }
         tiles[5 + tier1TileCount].neighbors.Add(tiles[7]); // link to tier 1
         tiles[25 + tier1TileCount].neighbors.Add(tiles[35]); // link to tier 1
@@ -60,8 +72,8 @@ public class TileHandler : MonoBehaviour {
 
         for (int i = 0; i < tier3TileCount; ++i)
         {
-            tiles[i].neighbors.Add(tiles[((i + 1) % tier3TileCount) + tier1TileCount + tier2TileCount]); // forward
-            tiles[i].neighbors.Add(tiles[((tier3TileCount - 1 + i) % tier3TileCount) + tier1TileCount + tier2TileCount]); // backward
+            tiles[i + tier1TileCount + tier2TileCount].neighbors.Add(tiles[((i + 1) % tier3TileCount) + tier1TileCount + tier2TileCount]); // forward
+            tiles[i + tier1TileCount + tier2TileCount].neighbors.Add(tiles[((tier3TileCount - 1 + i) % tier3TileCount) + tier1TileCount + tier2TileCount]); // backward
         }
         tiles[9 + tier1TileCount + tier2TileCount].neighbors.Add(tiles[15 + tier1TileCount]); // link to tier 2
         tiles[21 + tier1TileCount + tier2TileCount].neighbors.Add(tiles[35 + tier1TileCount]); // link to tier 2
@@ -77,40 +89,104 @@ public class TileHandler : MonoBehaviour {
         moveTo.gameObject.transform.position = tiles[moveTo.startIndex].location;
 
         // Find the path between the two tiles
-        Stack<Vector3> path = new Stack<Vector3>();
+        LinkedList<Vector3> path = new LinkedList<Vector3>();
         path = FindPath(moveTo.startIndex, moveTo.goalIndex, moveTo);
 
         // Prepare to LERP!
         objectToMove = moveTo;
 
-        Vector3 v = path.Pop();
+        Vector3 v = path.First.Value;
         while (path.Count > 0)
         {
-            v = path.Pop();
+            v = path.First.Value;
+            path.RemoveFirst();
         }
         objectToMove.gameObject.transform.position = v;
     }
 
-    private int HeuristicCostEstimate(int startIndex, int goalIndex, MoveToTile moveInfo)
+    private int HeuristicCostEstimate(int currentIndex, int goalIndex, MoveToTile moveInfo, Tile next)
     {
         int isDirF = moveInfo.isForwardDirection ? -1 : 1;
-        return 100 * Math.Abs(tiles[goalIndex].tier - tiles[startIndex].tier) + 
-                isDirF * Math.Abs(goalIndex - startIndex);
+        int directionPenalty = 0;
+        int currentTier = 0;
+
+        // check what tier we at
+        switch (next.tier)
+        {
+            case 1:
+                currentTier = tier1TileCount;
+                break;
+            case 2:
+                currentTier = tier2TileCount;
+                break;
+            case 3:
+                currentTier = tier3TileCount;
+                break;
+        }
+
+        // check to see if we will be heading in the wrong direction.
+        // If we are then penalize the movement.
+        // If statement adds the tier count to compensate for looping indices
+        if (moveInfo.isForwardDirection && 
+            (next.index + currentTier) % currentTier < (currentIndex + currentTier) % currentTier)
+        {
+            directionPenalty = -1;
+        }
+        else if (!moveInfo.isForwardDirection && 
+            (next.index + currentTier) % currentTier > (currentIndex + currentTier) % currentTier)
+        {
+            directionPenalty = -1;
+        }
+
+        int s = -1000 * Math.Abs(tiles[goalIndex].tier - tiles[currentIndex].tier) +
+                isDirF * Math.Abs(goalIndex - currentIndex) +
+                100 * directionPenalty;
+        int s2 = -1000 * Math.Abs(tiles[goalIndex].tier - next.tier) +
+                isDirF * Math.Abs(goalIndex - currentIndex) +
+                100 * directionPenalty;
+        Debug.Log(tiles[currentIndex].index + "-----" + next.index + "======" + s + "_________" + s2);
+        // return the evaluation
+        return -1000 * Math.Abs(tiles[goalIndex].tier - tiles[currentIndex].tier) + 
+                isDirF * Math.Abs(goalIndex - currentIndex) + 
+                100 * directionPenalty;
     }
 
-    private Stack<Vector3> BuildPath(Dictionary<int, int> history, int current)
+    private LinkedList<Vector3> BuildPath(Dictionary<int, int> history, int current)
     {
-        Stack<Vector3> path = new Stack<Vector3>();
-        path.Push(tiles[current].location);
+        LinkedList<int> debugPath = new LinkedList<int>();
+        debugPath.AddFirst(tiles[current].index);
+        LinkedList<Vector3> path = new LinkedList<Vector3>();
+        path.AddFirst(tiles[current].location);
         while (history.ContainsKey(current))
         {
             current = history[current];
-            path.Push(tiles[current].location);
+            path.AddFirst(tiles[current].location);
+            debugPath.AddFirst(tiles[current].index);
         }
         return path;
     }
 
-    private Stack<Vector3> FindPath(int startIndex, int goalIndex, MoveToTile moveTo)
+    private int PopIndexFromOpenSet(SetList<int> open, DictionaryWithDefault<int, int> score)
+    {
+        int savedIndex = -1;
+        int savedScore = int.MinValue;
+
+        for (int i = 0; i < open.Count; ++i)
+        {
+            if (score[open[i]] >= savedScore)
+            {
+                savedScore = score[open[i]];
+                savedIndex = i;
+            }
+        }
+
+        int value = open[savedIndex];
+        open.RemoveAt(savedIndex);
+
+        return value;
+    }
+
+    private LinkedList<Vector3> FindPath(int startIndex, int goalIndex, MoveToTile moveTo)
     {
         // TODO: probably should make this a coroutine
         // find path between start and end
@@ -120,28 +196,35 @@ public class TileHandler : MonoBehaviour {
         Dictionary<int, int> history = new Dictionary<int, int>();
         //DictionaryWithDefault<int, int> gScore = new DictionaryWithDefault<int, int>(int.MaxValue);
         //gScore[startIndex] = 0;
-        DictionaryWithDefault<int, int> score = new DictionaryWithDefault<int, int>(int.MaxValue);
-        score[startIndex] = HeuristicCostEstimate(startIndex, goalIndex, moveTo);
+        DictionaryWithDefault<int, int> score = new DictionaryWithDefault<int, int>(int.MinValue);
+        score[startIndex] = HeuristicCostEstimate(startIndex, goalIndex, moveTo, tiles[startIndex]);
 
         while (open.Count > 0)
         {
-            int current = open[open.Count - 1]; // TODO: should be the lower cost f value
+            //int current = open[open.Count - 1]; // TODO: should be the greatest cost score value
+            int current = PopIndexFromOpenSet(open, score);
             if (current == goalIndex)
             {
                 return BuildPath(history, current);
             }
 
-            open.RemoveAt(open.Count - 1);
             closed.Add(current);
             foreach (Tile tile in tiles[current].neighbors)
             {
-                if (closed.Contains(tile.index)) continue;
-
-                int gCost = score[current] + HeuristicCostEstimate(current, goalIndex, objectToMove);
-                if (!open.Contains(tile.index))
-                    open.Add(tile.index);
-                else if (gCost <= score[tile.index])
+                if (closed.Contains(tile.index))
+                {
                     continue;
+                }
+
+                int gCost = score[current] + HeuristicCostEstimate(current, goalIndex, moveTo, tile);
+                if (!open.Contains(tile.index))
+                {
+                    open.Add(tile.index);
+                }
+                else if (gCost <= score[tile.index])
+                {
+                    continue;
+                }
 
                 history[tile.index] = current;
                 score[tile.index] = gCost;
