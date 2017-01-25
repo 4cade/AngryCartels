@@ -400,6 +400,8 @@ class Game {
         return json;
     }
 
+    // TODO upgrade railroads/cabs
+
     /**
      * The current player pays rent for the property that they are located on.
      * @return JSON with field message (string saying what happened) and

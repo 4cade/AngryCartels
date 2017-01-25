@@ -459,16 +459,35 @@ class BoardManager {
                 // verify houses
                 if(houseMap[propertyName] <= 4) {
                     if(property.houses === 6) {
-                        changeSky -= 1;
-                        changeHotel -= 1;
-                        changeHouse -= 4 - houseMap[propertyName];
+                        changeSky += 1;
+                        changeHotel += 1;
+                        changeHouse += 4 - houseMap[propertyName];
                     }
                     else if(property.houses === 5) {
-                        changeHotel -= 1;
-                        changeHouse -= 4 - houseMap[propertyName];
+                        changeHotel += 1;
+                        changeHouse += 4 - houseMap[propertyName];
                     }
                     else {
-                        changeHouse -= property.houses - houseMap[propertyName];
+                        changeHouse += property.houses - houseMap[propertyName];
+                    }
+                }
+                else if(houseMap[propertyName] === 5) {
+                    if(property.houses === 6) {
+                        changeSky += 1;
+                    }
+                    else if(property.houses < 5) {
+                        changeHotel -= 1;
+                        changeHouse += property.houses - 4;
+                    }
+                }
+                else {
+                    if(property.houses === 5) {
+                        changeSky -= 1
+                    }
+                    else if(property.houses < 5) {
+                        changeSky -= 1;
+                        changeHotel -= 1;
+                        changeHouse += property.houses - 4;
                     }
                 }
             }
@@ -480,6 +499,11 @@ class BoardManager {
         // return if impossible
         if(this.houses + changeHouse < 0 || this.hotels + changeHotel < 0 || this.skyscrapers + changeSky < 0) {
             return {"fail": true};
+        }
+        else {
+            this.houses += changeHouse;
+            this.hotels += changeHotel;
+            this.skyscrapers += changeSky;
         }
 
         // actually commit changes
@@ -696,10 +720,11 @@ class BoardManager {
     **/
     getRent(player, location) {
         let land = this.locations[location]
-        let numOwned = this.propertyGroups[land.group].getNumberOwned(player.name)
+        let owner = this.isOwned(location);
+        let numOwned = this.propertyGroups[land.group].getNumberOwned(owner)
         let monopoly = this.propertyGroups[land.group].hasMonopoly()
 
-        if (land.owner === player.name){
+        if (land.owner && land.owner !== player.team.name){
             if (land.kind === 'property'){
                 return land.getRent(monopoly)
             }
@@ -712,6 +737,9 @@ class BoardManager {
             else if (land.kind === 'cab'){
                 return land.getRent(numOwned)
             }
+        }
+        else if(land.owner) {
+            return 0;
         }
         return null
     }
@@ -887,12 +915,26 @@ class BoardManager {
     }
 
     /**
-     * Gets the location with the highest rent.
+     * Gets the location with the highest rent. (ignore utility/other ones based on multipliers)
      *
      * @return string name of location with highest rent or null if all unowned
      */
     getHighestRent() {
-        // TODO ignore utility/other ones based on multipliers
+        let topName = null;
+        let topRent = 0;
+
+        for(let locName in this.locations) {
+            let loc = this.locations[locName];
+            if(loc.kind === 'property') {
+                let monopoly = this.propertyGroups[loc.group].hasMonopoly();
+                if(loc.getRent(monopoly) > topRent) {
+                    topName = locName;
+                    topRent = loc.getRent(monopoly);
+                }
+            }
+        }
+
+        return topName;
     }
  }
 

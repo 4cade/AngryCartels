@@ -40,6 +40,7 @@ describe('BoardManager', function(){
 
     describe("#movements", function(){
 
+        const player1 = new Player("Bob", "go", 1);
         const player2 = new Player("Jerry", "go", 1);
         const player3 = new Player("Ted", "go", 1);
 
@@ -168,11 +169,14 @@ describe('BoardManager', function(){
         });
 
         it('sets houses on properties', function() {
-            // TODO after properties bought
+            // after properties bought
             let toUpdate = {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5};
             let json = board1.setHousesForProperties(player2, toUpdate);
             let expected = {'properties': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5, 'florida ave': 0}, 'delta': {"biscayne ave": 3, 'miami ave': 2, 'park pl': 4, 'boardwalk': 5, 'florida ave': 0}, "player": {"name": "Jerry", "money": 170}};
             assert.deepEqual(json, expected);
+            assert.equal(board1.houses, 81-13);
+            assert.equal(board1.hotels, 30);
+            assert.equal(board1.skyscrapers, 16);
 
             // now try with properties doesn't have
             toUpdate = {"biscayne ave": 0, 'miami ave': 0, 'park pl': 4, 'boardwalk': 5};
@@ -242,16 +246,19 @@ describe('BoardManager', function(){
             board1.buyProperty(player2, 'short line', 0);
 
             // actual tests
-            assert.equal(board1.getRent(player3, 'biscayne ave'), 55);
+            assert.equal(board1.getRent(player1, 'biscayne ave'), 55);
             assert.equal(board1.getRent(player3, 'miami ave'), 0);
-            assert.equal(board1.getRent(player3, 'park pl'), 1100);
-            assert.equal(board1.getRent(player3, 'boardwalk'), 1400);
-            assert.equal(board1.getRent(player2, 'boardwalk'), null);
+            assert.equal(board1.getRent(player1, 'park pl'), 1100);
+            assert.equal(board1.getRent(player1, 'boardwalk'), 1400);
+            assert.equal(board1.getRent(player3, 'boardwalk'), 0);
 
-            player2.setLastRoll(11);
-            assert.equal(board1.getRent(player3, 'water works'), null);
-            assert.equal(board1.getRent(player2, 'water works'), 440);
-            assert.equal(board1.getRent(player2, 'short line'), 50);
+            player1.setLastRoll(11);
+            assert.equal(board1.getRent(player3, 'water works'), 0);
+            assert.equal(board1.getRent(player1, 'water works'), 440);
+            assert.equal(board1.getRent(player1, 'short line'), 50);
+            assert.equal(board1.getRent(player1, 'mulholland dr'), null);
+
+            assert.equal(board1.getHighestRent(), 'boardwalk');
         });
 
         it('lets you know if you can buy properties', function() {
