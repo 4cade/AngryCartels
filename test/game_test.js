@@ -380,8 +380,24 @@ describe('BoardManager', function(){
             assert.equal(board2.skyscrapers, 3);
         });
 
-        it('blocks from keeping houses when downgrading if there are not enough', function() {
-            // TODO
+        it('blocks from keeping houses when downgrading over trades if there are not enough', function() {
+            board2.setHousesForProperties(p1, {'biscayne ave': 6, 'miami ave': 6, 'florida ave': 6});
+
+            // try transfer from p1 with enough houses to downgrade to
+            board2.transferProperties(p1, p2, ['biscayne ave', 'miami ave']);
+
+            assert.equal(board2.locations['biscayne ave'].houses, 4);
+            assert.equal(board2.locations['miami ave'].houses, 4);
+            assert.equal(board2.locations['florida ave'].houses, 0);
+
+            // try transfer without enough houses to downgrade to
+            board2.transferProperties(p2, p1, ['biscayne ave', 'miami ave']);
+            board2.setHousesForProperties(p1, {'biscayne ave': 6, 'miami ave': 6, 'florida ave': 6});
+            board2.houses = 0;
+            board2.transferProperties(p1, p2, ['biscayne ave', 'miami ave']);
+            assert.equal(board2.locations['biscayne ave'].houses, 0);
+            assert.equal(board2.locations['miami ave'].houses, 0);
+            assert.equal(board2.locations['florida ave'].houses, 0);
         });
     })
 });

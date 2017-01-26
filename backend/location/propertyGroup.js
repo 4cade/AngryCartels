@@ -403,11 +403,12 @@ class PropertyGroup {
     /**
      * Makes sure that the balance of houses is maintained. Highest value properties are
      *      prioritized, unless it has been overridden.
-     *  @offset number of houses that were lost from the property change
+     *  @param offset number of houses that were lost from the property change
+     *  @param housesLeft # of houses that can actually be added (default 1000 so will never be min)
      *
      *  @return number of houses that were lost
      */
-    rebalanceHouses(offset=0) {
+    rebalanceHouses(offset=0, housesLeft=1000) {
         // you can only add houses to HouseProperties
         if(this.properties[0].kind !== 'property') {
             return 0;
@@ -445,7 +446,7 @@ class PropertyGroup {
             return lost;
         }
 
-        let amt = Math.min(maxHouses, houseCount);
+        let amt = Math.min(maxHouses, houseCount, housesLeft);
         let target = Math.floor(amt/ownedProps.length); // this is the target per property
         let excess = amt - target*ownedProps.length;
         let lost = houseCount - amt;

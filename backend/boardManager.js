@@ -688,51 +688,16 @@ class BoardManager {
                 if(p.houses <= 4) {
                     house += p.houses
                 }
-                else if(p.houses === 5) {
-                    house += 4;
-                    hotel += 1;
-                }
-                else {
-                    house += 4;
-                    hotel += 1;
-                    sky += 1;
-                }
             }
 
             // TODO break down houses all the way if can't maintain because of limits
-            let houseLost = pgroup.rebalanceHouses();
+            let houseLost = pgroup.rebalanceHouses(0, this.houses);
             let pricePerHouse = pgroup.properties[0].housePrice;
 
             // count previous houses
             for(let p of pgroup.properties) {
                 if(p.houses <= 4) {
                     house -= p.houses
-                }
-                else if(p.houses === 5) {
-                    house -= 4;
-                    hotel -= 1;
-                }
-                else {
-                    house -= 4;
-                    hotel -= 1;
-                    sky -= 1;
-                }
-            }
-
-            // downgrade skyscrapers if can't keep
-            if(this.skyscrapers + sky < 0) {
-                for(let p of pgroup.properties) {
-                    p.houses -= 1;
-                    houseLost += 1;
-                }
-            }
-            // TODOO
-
-            // downgrade hotels if can't keep
-            if(this.hotels + hotel < 0) {
-                for(let p of pgroup.properties) {
-                    p.houses -= 1;
-                    houseLost += 1;
                 }
             }
 
