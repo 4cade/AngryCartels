@@ -14,7 +14,7 @@ public class TileHandler : MonoBehaviour {
 
     private Tile[] tiles;
 
-    private MoveToTile objectToMove = null;
+    //private MoveToTile objectToMove = null;
     //LinkedList<Vector3> movePath = null;
 
     // Use this for initialization
@@ -92,63 +92,85 @@ public class TileHandler : MonoBehaviour {
         LinkedList<Vector3> path = new LinkedList<Vector3>();
         path = FindPath(moveTo.startIndex, moveTo.goalIndex, moveTo);
 
-        // Prepare to LERP!
-        objectToMove = moveTo;
+        Message message = new Message("pathCreated", path);
+        MessageBus.Instance.Broadcast(message);
 
-        Vector3 v = path.First.Value;
-        while (path.Count > 0)
-        {
-            v = path.First.Value;
-            path.RemoveFirst();
-        }
-        objectToMove.gameObject.transform.position = v;
+        // Prepare to LERP!
+        //objectToMove = moveTo;
+
+        //Vector3 v = path.First.Value;
+        //while (path.Count > 0)
+        //{
+        //    v = path.First.Value;
+        //    path.RemoveFirst();
+        //}
+        //objectToMove.gameObject.transform.position = v;
     }
 
-    private int HeuristicCostEstimate(int currentIndex, int goalIndex, MoveToTile moveInfo, Tile next)
+    private int HeuristicCostEstimate(int nextIndex, int goalIndex, MoveToTile moveInfo, Tile currentTile)
     {
         int isDirF = moveInfo.isForwardDirection ? -1 : 1;
-        int directionPenalty = 0;
-        int currentTier = 0;
+        int currentMaxTier = 0;
+        int currentStartTier = 0;
 
         // check what tier we at
-        switch (next.tier)
+        switch (currentTile.tier)
         {
             case 1:
-                currentTier = tier1TileCount;
+                currentStartTier = 0;
+                currentMaxTier = tier1TileCount;
                 break;
             case 2:
-                currentTier = tier2TileCount;
+                currentStartTier = tier1TileCount;
+                currentMaxTier = tier2TileCount + tier1TileCount;
                 break;
             case 3:
-                currentTier = tier3TileCount;
+                currentStartTier = tier2TileCount + tier1TileCount;
+                currentMaxTier = tier3TileCount + tier2TileCount + tier1TileCount; ;
                 break;
         }
-
+        Debug.Log("Next: " + nextIndex + " goal: " + goalIndex + " Max: " + currentMaxTier + " start: " + currentStartTier);
         // check to see if we will be heading in the wrong direction.
         // If we are then penalize the movement.
         // If statement adds the tier count to compensate for looping indices
-        if (moveInfo.isForwardDirection && 
-            (next.index + currentTier) % currentTier < (currentIndex + currentTier) % currentTier)
+        int distance = currentMaxTier - nextIndex;
+        if (moveInfo.isForwardDirection)
         {
-            directionPenalty = -1;
+            if ((nextIndex + distance + 2) % currentMaxTier < 
+                (currentTile.index + distance + 2) % currentMaxTier)
+            {
+                return int.MinValue / 10;
+            }
         }
-        else if (!moveInfo.isForwardDirection && 
-            (next.index + currentTier) % currentTier > (currentIndex + currentTier) % currentTier)
+        else
         {
-            directionPenalty = -1;
+            if ((nextIndex + distance + 2) % currentMaxTier >
+                (currentTile.index + distance + 2) % currentMaxTier)
+            {
+                return int.MinValue / 10;
+            }
         }
+        //if (moveInfo.isForwardDirection &&
+        //    //(currentTile.index + currentTier) % currentTier < (nextIndex + currentTier) % currentTier)
+        //    (nextIndex + currentTier) % currentTier < (currentTile.index + currentTier) % currentTier)
+        //{
+        //    return int.MinValue;
+        //}
+        //else if (!moveInfo.isForwardDirection &&
+        //    //(currentTile.index + currentTier) % currentTier > (nextIndex + currentTier) % currentTier)
+        //    (nextIndex + currentTier) % currentTier > (currentTile.index + currentTier) % currentTier)
+        //{
+        //    return int.MinValue;
+        //}
 
-        int s = -1000 * Math.Abs(tiles[goalIndex].tier - tiles[currentIndex].tier) +
-                isDirF * Math.Abs(goalIndex - currentIndex) +
-                100 * directionPenalty;
-        int s2 = -1000 * Math.Abs(tiles[goalIndex].tier - next.tier) +
-                isDirF * Math.Abs(goalIndex - currentIndex) +
-                100 * directionPenalty;
-        Debug.Log(tiles[currentIndex].index + "-----" + next.index + "======" + s + "_________" + s2);
+        int s = -100 * Math.Abs(tiles[goalIndex].tier - tiles[nextIndex].tier) +
+                isDirF * Math.Abs(goalIndex - nextIndex);
+        int s2 = -100 * Math.Abs(tiles[goalIndex].tier - currentTile.tier) +
+                isDirF * Math.Abs(goalIndex - nextIndex);
+        //Debug.Log(tiles[currentIndex].index + "-----" + next.index + "======" + s + "_________" + s2);
         // return the evaluation
-        return -1000 * Math.Abs(tiles[goalIndex].tier - tiles[currentIndex].tier) + 
-                isDirF * Math.Abs(goalIndex - currentIndex) + 
-                100 * directionPenalty;
+        return -100 * Math.Abs(tiles[goalIndex].tier - tiles[nextIndex].tier) +
+                isDirF * Math.Abs(goalIndex - nextIndex);
     }
 
     private LinkedList<Vector3> BuildPath(Dictionary<int, int> history, int current)
@@ -163,6 +185,14 @@ public class TileHandler : MonoBehaviour {
             path.AddFirst(tiles[current].location);
             debugPath.AddFirst(tiles[current].index);
         }
+
+        // debug
+        while (debugPath.Count > 0)
+        {
+            Debug.Log(debugPath.First.Value);
+            debugPath.RemoveFirst();
+        }
+
         return path;
     }
 
@@ -173,7 +203,7 @@ public class TileHandler : MonoBehaviour {
 
         for (int i = 0; i < open.Count; ++i)
         {
-            if (score[open[i]] >= savedScore)
+            if (score[open[i]] > savedScore)
             {
                 savedScore = score[open[i]];
                 savedIndex = i;
@@ -196,13 +226,14 @@ public class TileHandler : MonoBehaviour {
         Dictionary<int, int> history = new Dictionary<int, int>();
         //DictionaryWithDefault<int, int> gScore = new DictionaryWithDefault<int, int>(int.MaxValue);
         //gScore[startIndex] = 0;
-        DictionaryWithDefault<int, int> score = new DictionaryWithDefault<int, int>(int.MinValue);
-        score[startIndex] = HeuristicCostEstimate(startIndex, goalIndex, moveTo, tiles[startIndex]);
+        DictionaryWithDefault<int, int> score = new DictionaryWithDefault<int, int>(0);
+        //score[startIndex] = HeuristicCostEstimate(startIndex, goalIndex, moveTo, tiles[startIndex]);
 
         while (open.Count > 0)
         {
             //int current = open[open.Count - 1]; // TODO: should be the greatest cost score value
             int current = PopIndexFromOpenSet(open, score);
+            Debug.Log("openning " + current);
             if (current == goalIndex)
             {
                 return BuildPath(history, current);
@@ -216,7 +247,9 @@ public class TileHandler : MonoBehaviour {
                     continue;
                 }
 
-                int gCost = score[current] + HeuristicCostEstimate(current, goalIndex, moveTo, tile);
+                //int gCost = score[current] + HeuristicCostEstimate(current, goalIndex, moveTo, tile);
+                int gCost = score[current] + HeuristicCostEstimate(tile.index, goalIndex, moveTo, tiles[current]);
+                Debug.Log("Testing neighbor " + tile.index + " with score: " + gCost + " currentscore: " + score[current]);
                 if (!open.Contains(tile.index))
                 {
                     open.Add(tile.index);
@@ -231,15 +264,16 @@ public class TileHandler : MonoBehaviour {
             }
         }
 
+        // a path was not found, you should panic
         return null;
     }
 
     // Update is called once per frame
     void Update () {
-	    if (objectToMove != null)
-        {
-            // TODO perform lerp bs here
-        }
+	    //if (objectToMove != null)
+     //   {
+     //       // TODO perform lerp bs here
+     //   }
 	}
 
     void CreateTileDictionary()
