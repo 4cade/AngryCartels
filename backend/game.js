@@ -14,7 +14,7 @@ class Game {
         if(newGame) {
             // first initialize players
             // TODO decide how to set other board presets, maybe just put in board
-            this.playerManager = new PlayerManager(gamePresets['player'], 'go', 1);
+            this.playerManager = new PlayerManager(gamePresets['players'], 'go', 1);
             this.boardManager = new BoardManager(board);
 
             // auction variables
@@ -28,6 +28,7 @@ class Game {
             // scrambles player order for more fun
             this.playerManager.scrambleTurnOrder();
 
+            console.log(this.toJSON());
             // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
         }
         else {
@@ -71,7 +72,6 @@ class Game {
     nextTurn() {
         this.playerManager.nextTurn();
         const message = "It is now " + this.playerManager.getCurrentPlayer().name + "'s turn!";
-        const actions = ['roll'];
 
         if(player.inJail()) {
             actions = ['jail'];
@@ -759,6 +759,15 @@ class Game {
      */
     getHighestRent() {
         return this.boardManager.getHighestRent();
+    }
+
+    /**
+     * Gets the names of all of the players in the game;
+     *
+     * @return list of string player names
+     */
+    getPlayerNames() {
+        return this.playerManager.getPlayerNames();
     }
 }
 

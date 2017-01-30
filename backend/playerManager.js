@@ -124,13 +124,26 @@ class PlayerManager {
     }
 
     /**
-     * Gets the player object for the specified player name.
-     * @param playerName String name of the player
+     * Gets all of the player objects.
      *
      * @return list of player objects
      */
     getPlayers() {
         return this.turnOrder
+    }
+
+    /**
+     * Gets all of the player names.
+     *
+     * @return list of player names
+     */
+    getPlayerNames() {
+        let names = [];
+
+        for(let player of this.turnOrder) {
+            names.push(player.name);
+        }
+        return names;
     }
 
     /**

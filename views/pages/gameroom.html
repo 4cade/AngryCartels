@@ -1,4 +1,10 @@
-<div class="row">
+<div class="container" ng-controller='gameRoomController'>
+	<form ng-if="!joined" ng-submit='joinSocket(username)'>
+		Enter your username:
+		<br>
+		<input type="text" ng-model="username"><button ng-click=joinSocket(username)>Find Games!</button>
+	</form>
+	<div ng-if="joined">
 	<div ng-if="!gameGoing">
 		<div ng-if="!hostingGame&&!inGame">
 			<ul class="list-group">
@@ -33,5 +39,6 @@
 	</div>
 	<div ng-if="inGame" class="col-sm-3">
 		<chat></chat>
+	</div>
 	</div>
 </div>

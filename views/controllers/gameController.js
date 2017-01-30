@@ -2,25 +2,33 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	$scope.gameData = {};
 	$scope.actions = [];
 	$scope.auctionPrice = 0;
-	socket.emit('get client name', {});
-	socket.emit('request game data', {});
+	// socket.emit('get client name', {});
+	// socket.emit('request game data', {});
 
 	// TODO investigate which of the $scope.$apply()s are needed
 
 	socket.on('game data', function(gameData) {
-		$scope.gameData = gameData;
+		// $scope.gameData = gameData;
 		console.log("got game data");
-		$scope.setup();
-		$scope.$apply();
+		console.log(gameData)
+
+		$scope.players = {};
+		var play = gameData['playerManager']['players']
+		for(var i in play) {
+			$scope.players[play[i].name] = play[i];
+		}
+		$scope.teams = gameData['playerManager']['teams']
+		console.log($scope.players)
+		console.log($scope.teams)
+		$scope.currentPlayer = play[gameData['playerManager']['turnIndex']].name;
+		$scope.actions = ['roll', 'trade', 'build']
+		// $scope.setup();
+		// $scope.$apply();
 	});
 
 	socket.on('movement', function(gameData) {
 		// TODO update locations of players on board
-		$scope.gameData = gameData;
-		$scope.setup();
-		$scope.message = "The dice that " + $scope.currentTurn + " rolled were " + gameData["rolled"];
-		console.log("got move data");
-		$scope.$apply();
+
 	});
 
 	socket.on('actions', function(actions) {
@@ -43,6 +51,7 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 
 	socket.on('send client name', function(name) {
 		$scope.username = name;
+		$scope.joined = true;
 		$scope.$apply();
 	});
 
@@ -104,12 +113,20 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		$scope.$apply();
 	}
 
-	$scope.rollDice = function() {
-		socket.emit('roll', {});
+	$scope.doAction = function(action) {
+		if(action === 'roll') {
+			$scope.rollDice();
+		}
+		else if(action === 'trade') {
+			// TODO make trade menu
+		}
+		else if(action === 'build') {
+			// TODO make build menu
+		}
 	}
 
-	$scope.assignOrder = function() {
-		socket.emit('set order', {});
+	$scope.rollDice = function() {
+		socket.emit('roll', {});
 	}
 
 	$scope.drawBusPass = function() {
