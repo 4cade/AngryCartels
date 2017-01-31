@@ -29,6 +29,13 @@ public class Message
         {
             throw new IndexOutOfRangeException("The specified index is out of range");
         }
+
+        if (typeof(T).IsArray)
+        {
+            T obj = (T)(messageData[index]);
+            return obj;
+        }
+
         return (T)messageData[index];
     }
 }
