@@ -12,7 +12,7 @@ describe('Game', function() {
 
         it('reloads from JSON correctly', function() {
             const playerList = ["Bob", "Jerry", "Guy"];
-            const game1 = new Game({"player": playerList});
+            const game1 = new Game({"players": playerList});
             const json = game1.toJSON();
             const game2 = new Game(json, false);
 
@@ -450,7 +450,8 @@ describe('Card', function() {
     });
 
     it('gets 3 dice rolls', function() {
-        let die1, die2, die3 = (Card.rollDie(), Card.rollDie(), Card.rollDie());
+        let [die1, die2, die3] = [Card.rollDie(), Card.rollDie(), Card.rollDie()];
+        assert(die1);
         assert(1 <= die1 <= 6);
         assert(1 <= die2 <= 6);
         assert(1 <= die3 <= 6);

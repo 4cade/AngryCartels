@@ -73,6 +73,9 @@ class Game {
         this.playerManager.nextTurn();
         const message = "It is now " + this.playerManager.getCurrentPlayer().name + "'s turn!";
 
+        let player = this.playerManager.getCurrentPlayer();
+        let actions = ['roll']
+
         if(player.inJail()) {
             actions = ['jail'];
         }
@@ -92,7 +95,7 @@ class Game {
         let player = this.playerManager.getCurrentPlayer();
         this.playerManager.canRoll = false;
 
-        let die1, die2, die3 = (Card.rollDie(), Card.rollDie(), Card.rollDie());
+        let [die1, die2, die3] = [Card.rollDie(), Card.rollDie(), Card.rollDie()];
         let totalRoll = 0;
         let actions = [];
         let message = "";
@@ -114,6 +117,7 @@ class Game {
 
         // get stuff about the turn
         if(die1 === die2 === die3) {
+            message = player.name + " rolled a triple " + die1;
             // do the teleport action
             actions.push('teleport');
         }
@@ -129,11 +133,14 @@ class Game {
             if(goToJail) {
                 json = Object.assign(json, this.boardManager.jumpToLocation(player, 'go to jail'));
                 // no actions if player is in jail
+                message = player.name + " rolled a third double and was sent to jail";
             }
             else {
                 json = Object.assign(json, this.boardManager.moveLocation(player, totalRoll));
+                message = player.name + " rolled a total of " + totalRoll + " to get to " + json.movedTo.slice(-1)[0];
 
                 if(doubles) {
+                    message += " and also had a double " + die1;
                     this.boardManager.canRoll = true;
                     json['actions'].push('roll');
                 }
@@ -142,7 +149,7 @@ class Game {
         }
 
         // push other actions after based on priority
-        if(isNan(die3)) {
+        if(isNaN(die3)) {
             json['actions'].push(die3);
         }
 
@@ -310,7 +317,7 @@ class Game {
     buyProperty() {
         const player = this.playerManager.getCurrentPlayer();
         let json = this.boardManager.buyProperty(player, player.location);
-        json['message'] = player.name + "bought" + json.location + " for " + json.price;
+        json['message'] = player.name + " bought " + json.location + " for " + json.price;
         this.log.push(json['message']);
         return json;
     }
@@ -326,7 +333,7 @@ class Game {
     buyPropertyAuction(info) {
         const player = this.playerManager.getPlayer(info.player);
         let json = this.boardManager.buyProperty(player, info.location, info.price);
-        json['message'] = player.name + "bought" + json.location + " for " + json.price;
+        json['message'] = player.name + " bought " + json.location + " for " + json.price;
         this.log.push(json['message']);
         return json;
     }

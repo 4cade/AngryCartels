@@ -2,6 +2,8 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	$scope.gameData = {};
 	$scope.actions = [];
 	$scope.auctionPrice = 0;
+	$scope.recentLocation = null;
+
 	// socket.emit('get client name', {});
 	// socket.emit('request game data', {});
 
@@ -11,13 +13,18 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		// $scope.gameData = gameData;
 		console.log("got game data");
 		console.log(gameData)
+		
+		$scope.teams = gameData['playerManager']['teams']
 
-		$scope.players = {};
 		var play = gameData['playerManager']['players']
 		for(var i in play) {
-			$scope.players[play[i].name] = play[i];
+			if($scope.teams[play[i].team].hasOwnProperty('players')) {
+				$scope.teams[play[i].team]['players'].push(play[i]);
+			}
+			else {
+				$scope.teams[play[i].team]['players'] = [play[i]];
+			}
 		}
-		$scope.teams = gameData['playerManager']['teams']
 		console.log($scope.players)
 		console.log($scope.teams)
 		$scope.currentPlayer = play[gameData['playerManager']['turnIndex']].name;
@@ -26,27 +33,59 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		// $scope.$apply();
 	});
 
-	socket.on('movement', function(gameData) {
+	socket.on('next turn', function(json) {
+		$scope.currentPlayer = json.player
+		$scope.message = json.message
+		$scope.actions = json.actions.concat(['trade', 'build'])
+	})
+
+	socket.on('movement', function(json) {
 		// TODO update locations of players on board
+		console.log(json);
+		$scope.message = json.message
+		$scope.recentLocation = json.movedTo.slice(-1)[0];
 
+		for(let tname in $scope.teams) {
+			let team = $scope.teams[tname]
+			for(let index in team.players) {
+				let player = team.players[index]
+				if(player.name === json.player.name) {
+					player.location = $scope.recentLocation;
+					team.money = json.player.money
+				}
+			}
+		}
+
+		if(json.player.name === $scope.username) {
+			// end turn if no new actions?
+			if(json.actions.length === 0) {
+				json.actions.push('end turn')
+			}
+			console.log($scope.actions, 'before')
+			$scope.actions = json.actions.concat($scope.actions);
+			console.log($scope.actions, 'after')
+		}
+		// $scope.$apply();
 	});
 
-	socket.on('actions', function(actions) {
-		$scope.actions.push.apply($scope.actions, actions); // extends the list
-		console.log($scope.actions);
-		$scope.$apply();
-		// TODO carry out the actions and do associated requests
-	});
 
-	socket.on('property bought', function(gameData) {
-		$scope.gameData = gameData;
-		$scope.setup();
-		$scope.message = gameData.message;
-		$scope.finishAction();
-		$scope.$apply();
-		console.log($scope.currentTurn);
-		console.log($scope.username);
-		console.log($scope.currentTurn === $scope.username);
+	socket.on('property bought', function(json) {
+		$scope.message = json.message
+
+		for(let tname in $scope.teams) {
+			let team = $scope.teams[tname]
+			for(let index in team.players) {
+				let player = team.players[index]
+				if(player.name === json.player.name) {
+					team.properties.push(json.location)
+					team.money = json.player.money
+				}
+			}
+		}
+
+		if(json.player.name === $scope.username) {
+			$scope.actions.push('end turn');
+		}
 	});
 
 	socket.on('send client name', function(name) {
@@ -105,15 +144,16 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	$scope.players = $scope.gameData["players"];
 
 	// load all of the gameData info into the scope nicely
-	$scope.setup = function() {
-		$scope.players = $scope.gameData["players"];
-		$scope.currentTurn = $scope.gameData['turnOrder'][$scope.gameData['turnIndex']];
-		$scope.canRoll = $scope.gameData["canRoll"];
-		$scope.recentLocation = $scope.gameData["recentLocation"];
-		$scope.$apply();
-	}
+	// $scope.setup = function() {
+	// 	$scope.players = $scope.gameData["players"];
+	// 	$scope.currentTurn = $scope.gameData['turnOrder'][$scope.gameData['turnIndex']];
+	// 	$scope.canRoll = $scope.gameData["canRoll"];
+	// 	$scope.recentLocation = $scope.gameData["recentLocation"];
+	// 	$scope.$apply();
+	// }
 
 	$scope.doAction = function(action) {
+		console.log(action)
 		if(action === 'roll') {
 			$scope.rollDice();
 		}
@@ -123,10 +163,31 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		else if(action === 'build') {
 			// TODO make build menu
 		}
+		else if(action === 'end turn') {
+			$scope.endTurn();
+		}
+		else if(action === 'buy') {
+			$scope.buyProperty();
+		}
+		else if(action === 'mrmonopoly') {
+			$scope.startMrMonopoly();
+		}
+		else if(action === 'rent') {
+			$scope.payRent();
+		}
+		else if(action === 'chance') {
+			$scope.drawChance();
+		}
+		else if(action === 'community chest') {
+			$scope.drawCommunityChest();
+		}
+		let index = $scope.actions.indexOf(action);
+		$scope.actions.splice(index, 1);
 	}
 
 	$scope.rollDice = function() {
 		socket.emit('roll', {});
+		
 	}
 
 	$scope.drawBusPass = function() {
@@ -155,12 +216,14 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		// TODO
 	}
 
-	$scope.buyProperty = function(property) {
+	$scope.payRent = function() {
+		socket.emit('rent', {});
+	}
+
+	$scope.buyProperty = function() {
 		var info = {};
-		console.log(property);
-		info.property = property;
+		info.location = $scope.recentLocation;
 		info.player = $scope.username;
-		info.auction = false;
 		socket.emit('buy property', info);
 	}
 
@@ -234,33 +297,20 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	}
 
 	// removes the first element of actions
-	$scope.finishAction = function() {
-		$scope.actions = $scope.actions.splice(1);
-		$scope.canAct = true;
-	}
+	// $scope.finishAction = function() {
+	// 	$scope.actions = $scope.actions.splice(1);
+	// 	$scope.canAct = true;
+	// }
 
 	$scope.startTrade = function() {
 		// TODO set it up to give options by selecting player first and stuffsssss
 	}
 
-	$scope.hasProperty = function(player) {
-		return Object.keys(player.property).length > 0;
-	}
-
-	$scope.playerProperties = function(player) {
-		return Object.keys(player.property);
-	}
-
-	// ugh idk why this needs to be a thing....
-	$scope.auctionKeys = function() {
-		return Object.keys($scope.auction);
-	}
-
-	$scope.$watch('actions', function() {
-		// TODO deal with changes to the actions
-		if($scope.canAct) {
-			$scope.startAction();
-		}
-	});
+	// $scope.$watch('actions', function() {
+	// 	// TODO deal with changes to the actions
+	// 	if($scope.canAct) {
+	// 		$scope.startAction();
+	// 	}
+	// });
 
 });

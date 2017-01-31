@@ -1,12 +1,7 @@
 <div ng-controller="gameController">
 	<div class="row">
 		<div class="col-sm-6">
-			<div>
-				Players:
-				<ul>
-					<li ng-repeat="player in players">{{player.name}}: {{player.location}}</li>
-				<ul>
-			</div>
+			<h2>You are {{username}}</h2>
 			<div>
 				Teams:
 				<div ng-repeat="team in teams">
@@ -17,11 +12,19 @@
 						<li>Bus Passes: {{team.busTickets}}</li>
 						<li>Special Cards: {{team.specialCards}}</li>
 					</ul>
+					<div>
+						Players:
+						<ul>
+							<li ng-repeat="player in team.players">{{player.name}}: {{player.location}}</li>
+						<ul>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class='col-sm-6'>
 		It is {{currentPlayer}}'s turn!
+		<br>
+		{{message}}
 		<br>
 			<div ng-if="currentPlayer===username" class="btn-group-vertical">
 				Actions:
