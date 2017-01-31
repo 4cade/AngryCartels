@@ -4,58 +4,8 @@ var users = {};
 var userGenNum = 1;
 var games = {};
 
-/**
- * @return the usernames of all of the players in the current game
- */
-function getUsers () {
-   var userNames = [];
-   for(var name in users) {
-     if(users[name]) {
-       userNames.push(name);
-     }
-   }
-   return userNames;
-}
-
-/**
- * Emits the call to all of the client sockets currently connected to the server
- * @param call the name of the call for the socket
- * @param data the JSON to be sent for the call to the client
- */
-function emitAll(call, data) {
-    for(user in users) {
-        if(users[user]) {
-            users[user].emit(call, data);
-        }
-    }
-}
-
-/**
- * Emits the call to all of the client sockets currently connected to the server
- *     that are in the game being hosted by host
- * @param host the name of the user hosting this game
- * @param call the name of the call for the socket
- * @param data the JSON to be sent for the call to the client
- */
-function emitInGame(host, call, data) {
-    // game has started
-    if(games[host]["players"] == undefined) {
-        for(var player of games[host].getPlayerNames()) {
-            users[player].emit(call, data);
-        }
-
-    }
-    // game has not been started
-    else {
-        for(var index in games[host]["players"]) {
-            var playerName = games[host]["players"][index];
-            users[playerName].emit(call, data);
-        }
-    }
-}
-
 // interactions for the socket object
-module.exports = function(socket){
+module.exports = function(io, socket){
   console.log('a user connected');
   // users[userGenNum] = socket;
   socket.username = userGenNum;
@@ -106,7 +56,7 @@ module.exports = function(socket){
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
     console.log(socket.inGame)
-    emitInGame(socket.inGame, 'chat message', socket.username + ": " + msg);
+    io.to(socket.inGame).emit('chat message', socket.username + ": " + msg);
  });
 
   // HANDLE GAME ACTIONS
@@ -123,7 +73,8 @@ module.exports = function(socket){
     // ensure that the name is a string
     socket.inGame = "" + socket.username;
     console.log(socket.username + " created a game");
-    emitAll('updated games', games);
+    socket.join(socket.username);
+    io.emit('updated games', games);
   });
 
   /**
@@ -133,9 +84,9 @@ module.exports = function(socket){
    */
   socket.on('stop hosting game', function() {
     // kick everyone out of the game
-    emitInGame(socket.username, 'kick game', {});
+    io.to(socket.inGame).emit('kick game', {});
     delete games[socket.username];
-    emitAll('updated games', games);
+    io.emit('updated games', games);
     socket.inGame = null;
   });
 
@@ -147,7 +98,8 @@ module.exports = function(socket){
     games[host]["players"].push(socket.username);
     socket.inGame = host;
     console.log(socket.username + " joined " + host + "'s game");
-    emitAll('updated games', games);
+    socket.join(host);
+    io.emit('updated games', games);
   });
 
   /**
@@ -158,7 +110,7 @@ module.exports = function(socket){
     games[socket.inGame]["players"] = games[socket.inGame]["players"].filter(
         function(el) { return el !== socket.username });
     console.log(socket.username + " left " + socket.inGame + "'s game");
-    emitAll('updated games', games);
+    io.emit('updated games', games);
     socket.inGame = null;
   });
 
@@ -177,10 +129,10 @@ module.exports = function(socket){
    */
   socket.on('start game', function() {
     // tell everyone that the game started, do first for minimal lag since next step is intensive
-    emitInGame(socket.inGame, 'start game', {});
+    io.to(socket.inGame).emit('start game', {});
     // actually populate the game with stuff and make everyone go into the game
     games[socket.inGame] = new Game(games[socket.inGame]);
-    emitInGame(socket.inGame, 'game data', games[socket.inGame].toJSON());
+    io.to(socket.inGame).emit('game data', games[socket.inGame].toJSON());
   });
 
   /**
@@ -192,7 +144,7 @@ module.exports = function(socket){
    */
   socket.on('roll', function() {
     // TODO check if it is this player's turn
-    emitInGame(socket.inGame, 'movement', games[socket.inGame].rollDice());
+    io.to(socket.inGame).emit('movement', games[socket.inGame].rollDice());
   });
 
   /**
@@ -204,7 +156,7 @@ module.exports = function(socket){
    */
   socket.on('mrmonopoly', function() {
     // TODO check if it's the client's turn
-    emitInGame(socket.inGame, 'movement', games[socket.inGame].unleashMrMonopoly());
+    io.to(socket.inGame).emit('movement', games[socket.inGame].unleashMrMonopoly());
   });
 
   /**
@@ -216,7 +168,7 @@ module.exports = function(socket){
    */
   socket.on('jail', function(info) {
     // TODO check if it is this player's turn
-    emitInGame(socket.inGame, 'jail', games[socket.inGame].handleJail(info.pay));
+    io.to(socket.inGame).emit('jail', games[socket.inGame].handleJail(info.pay));
   });
 
   /**
@@ -229,7 +181,7 @@ module.exports = function(socket){
    */
   socket.on('teleport', function(info) {
     // TODO check if it's the client's turn
-    emitInGame(socket.inGame, 'movement', games[socket.inGame].teleport(info.location));
+    io.to(socket.inGame).emit('movement', games[socket.inGame].teleport(info.location));
   });
 
   /**
@@ -238,7 +190,7 @@ module.exports = function(socket){
    *       player/owner (name: name, money: money)
    */
   socket.on('rent', function() {
-    emitInGame(socket.inGame, 'rent', games[socket.inGame].payRent());
+    io.to(socket.inGame).emit('rent', games[socket.inGame].payRent());
   });
 
   /**
@@ -248,7 +200,7 @@ module.exports = function(socket){
    *       pool (money in pool), message (string saying what happened), and location
    */
   socket.on('taxi', function(info) {
-    emitInGame(socket.inGame, 'taxi', games[socket.inGame].taxiRide(info.location));
+    io.to(socket.inGame).emit('taxi', games[socket.inGame].taxiRide(info.location));
   });
 
   /**
@@ -260,7 +212,7 @@ module.exports = function(socket){
    */
   socket.on('bus', function(info) {
     // TODO check current player
-    emitInGame(socket.inGame, 'movement', games[socket.inGame].useBusPass(info.pass, info.location));
+    io.to(socket.inGame).emit('movement', games[socket.inGame].useBusPass(info.pass, info.location));
   });
 
   /**
@@ -274,7 +226,7 @@ module.exports = function(socket){
    *      (list of string names of properties that the player now has)) and message
    */
   socket.on('trade', function(tradeInfo) {
-    emitInGame(socket.inGame, 'trade', json = games[socket.inGame].trade(info));
+    io.to(socket.inGame).emit('trade', json = games[socket.inGame].trade(info));
   });
 
   /**
@@ -290,7 +242,7 @@ module.exports = function(socket){
         json = games[socket.inGame].buyPropertyAuction(info);
     else
         json = games[socket.inGame].buyProperty();
-    emitInGame(socket.inGame, 'property bought', json);
+    io.to(socket.inGame).emit('property bought', json);
   });
 
   /**
@@ -301,7 +253,7 @@ module.exports = function(socket){
   socket.on('set houses', function(info) {
     let json = games[socket.inGame].buyHouse(info);
 
-    emitInGame(socket.inGame, 'update houses', json);
+    io.to(socket.inGame).emit('update houses', json);
   });
 
   /**
@@ -313,7 +265,7 @@ module.exports = function(socket){
    */
   socket.on('mortgage', function(info) {
     // TODO check current player
-    emitInGame(socket.inGame, 'mortgage', json = games[socket.inGame].mortgageProperty(info));
+    io.to(socket.inGame).emit('mortgage', json = games[socket.inGame].mortgageProperty(info));
   });
 
   /**
@@ -325,7 +277,7 @@ module.exports = function(socket){
    */
   socket.on('unmortgage', function(info) {
     // TODO check current player
-    emitInGame(socket.inGame, 'unmortgage', json = games[socket.inGame].unmortgageProperty(info));
+    io.to(socket.inGame).emit('unmortgage', json = games[socket.inGame].unmortgageProperty(info));
   });
 
   /**
@@ -335,7 +287,7 @@ module.exports = function(socket){
    */
   socket.on('up auction', function(property) {
     games[socket.inGame].startAuction(property);
-    emitInGame(socket.inGame, 'new auction', games[socket.inGame].getPropertyInfo(property));
+    io.to(socket.inGame).emit('new auction', games[socket.inGame].getPropertyInfo(property));
   });
 
   /**
@@ -348,7 +300,7 @@ module.exports = function(socket){
     
     let winnerInfo = games[socket.inGame].finishAuction();
     if(winnerInfo) {
-        emitInGame(socket.inGame, 'auction winner', winnerInfo);
+        io.to(socket.inGame).emit('auction winner', winnerInfo);
     }
   });
 
@@ -391,7 +343,7 @@ module.exports = function(socket){
    *       and rolled (list of numbers that were rolled)
    */
   socket.on('roll3', function() {
-    emitInGame(socket.inGame, 'roll3', games[socket.inGame].roll3());
+    io.to(socket.inGame).emit('roll3', games[socket.inGame].roll3());
   });
 
   /**
@@ -401,7 +353,7 @@ module.exports = function(socket){
    *       and rolled (list of numbers that were rolled)
    */
   socket.on('squeeze', function() {
-    emitInGame(socket.inGame, 'squeeze', games[socket.inGame].squeezePlay());
+    io.to(socket.inGame).emit('squeeze', games[socket.inGame].squeezePlay());
   });
 
   /**
@@ -411,7 +363,7 @@ module.exports = function(socket){
    */
   socket.on('end turn', function() {
     // TODO check if correct player
-    emitInGame(socket.inGame, 'next turn', games[socket.inGame].nextTurn());
+    io.to(socket.inGame).emit('next turn', games[socket.inGame].nextTurn());
   });
 
   /**

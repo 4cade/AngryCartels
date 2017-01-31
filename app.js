@@ -28,7 +28,7 @@ db.once('open', function (callback) {
 });
 
 // socket stuff
-io.on('connection', synchronizer);
+io.on('connection', function(socket) {synchronizer(io, socket);});
 
 // make the server start and listen
 server.listen(3000, function () {
