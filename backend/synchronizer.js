@@ -6,7 +6,7 @@ var games = {};
 
 // interactions for the socket object
 module.exports = function(io, socket){
-  console.log('a user connected');
+  // console.log('a user connected');
   // users[userGenNum] = socket;
   socket.username = userGenNum;
   userGenNum++;
@@ -17,15 +17,19 @@ module.exports = function(io, socket){
    * @return the username of the client to the client
    */
   socket.on('join', function(info) {
-    console.log(info)
+    socket.emit('send client name', socket.username);
     if(info.username)
         socket.username = info.username
-        if(users.hasOwnProperty(socket.username)) {
+        if(users[socket.username]) {
           // TODO do appropriate stuff to the socket to allow reconnection
+          // console.log('reconnection')
+          socket.inGame = users[socket.username];
+          socket.join(socket.inGame);
+          socket.emit('in room', {"owner": socket.inGame});
+          if(!games[socket.inGame].hasOwnProperty('host')) {
+            socket.emit('game data', games[socket.inGame].toJSON());
+          }
         }
-        users[socket.username] = socket
-        console.log(socket.username)
-    socket.emit('send client name', socket.username);
   })
 
   /**
@@ -40,10 +44,10 @@ module.exports = function(io, socket){
    * Disconnects the user from the server
    */
   socket.on('disconnect', function(info){
-    console.log('user disconnected');
+    // console.log('user disconnected');
     // TODO logic to quit game and pass it on to next host if he was host
-    if(info.leave)
-        delete users[socket.username];
+    // if(info.leave)
+        // delete users[socket.username];
   });
 
   // INSTANT MESSAGING
@@ -54,8 +58,6 @@ module.exports = function(io, socket){
    * @return the message from the sender to people in the game
    */
   socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
-    console.log(socket.inGame)
     io.to(socket.inGame).emit('chat message', socket.username + ": " + msg);
  });
 
@@ -74,6 +76,8 @@ module.exports = function(io, socket){
     socket.inGame = "" + socket.username;
     console.log(socket.username + " created a game");
     socket.join(socket.username);
+    users[socket.username] = socket.username;
+    socket.emit('in room', {"owner": socket.username});
     io.emit('updated games', games);
   });
 
@@ -99,6 +103,8 @@ module.exports = function(io, socket){
     socket.inGame = host;
     console.log(socket.username + " joined " + host + "'s game");
     socket.join(host);
+    users[socket.username] = socket.inGame;
+    socket.emit('in room', {"owner": socket.inGame});
     io.emit('updated games', games);
   });
 

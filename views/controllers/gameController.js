@@ -13,6 +13,7 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		// $scope.gameData = gameData;
 		console.log("got game data");
 		console.log(gameData)
+		$scope.gameGoing = true;
 		
 		$scope.teams = gameData['playerManager']['teams']
 
@@ -91,7 +92,7 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	socket.on('send client name', function(name) {
 		$scope.username = name;
 		$scope.joined = true;
-		$scope.$apply();
+		// $scope.$apply();
 	});
 
 	socket.on('property info', function(info) {

@@ -25,7 +25,6 @@ angryCartels.controller('gameRoomController', function($scope, $interval, socket
     $scope.joinGame = function(host) {
       socket.emit('join game', host);
       $scope.inGame = host;
-      $scope.$apply();
     }
 
     $scope.leaveGame = function() {
@@ -47,15 +46,24 @@ angryCartels.controller('gameRoomController', function($scope, $interval, socket
   	// gets a new games
     socket.on('updated games', function(games){
         $scope.games = games;
-        $scope.$apply();
+        // $scope.$apply();
     });
 
     socket.on('kick game', function() {
       console.log("I got kicked yooo");
       $scope.inGame = null;
       $scope.hostingGame = false;
-      $scope.$apply();
+      // $scope.$apply();
     });
+
+    socket.on('in room', function(json) {
+      $scope.inGame = true;
+      $scope.owner = json.owner;
+      if($scope.owner === $scope.username) {
+        $scope.hostingGame = true;
+      }
+      console.log("I'm in a room");
+    })
 
     socket.on('send client name', function(name) {
       $scope.username = name;

@@ -8,12 +8,12 @@
 	<div ng-if="!gameGoing">
 		<div ng-if="!hostingGame&&!inGame">
 			<ul class="list-group">
-				<li class="list-group-item" ng-repeat="game in games" ng-if="game.host">{{game.host}} has a game with {{game.players.length}} players
-					<button type="button" class="btn btn-default" ng-click="joinGame(game.host)" ng-if="game.players.length < 8 && !game.recentLocation">
+				<li class="list-group-item" ng-repeat="game in games" ng-if="game.host">{{game.host}} has a game<!--  with {{game.players.length}} players -->
+					<button type="button" class="btn btn-default" ng-click="joinGame(game.host)" ng-if="game.players.length < 8">
 						Join game
 					</button>
-					<label class="label label-default" ng-if="game.players.length === 8">Game Full</label>
-					<label class="label label-default" ng-if="game.recentLocation">Started</label>
+					<!-- <label class="label label-default" ng-if="game.players.length === 8">Game Full</label> -->
+					<!-- <label class="label label-default" ng-if="game.recentLocation">Started</label> -->
 				</li>
 			</ul>	
 			<button type="button" class="btn btn-default" ng-click="createGame()">Create a game</button>
@@ -23,22 +23,18 @@
 			<button type="button" class="btn btn-default" ng-click="stopHosting()">
 				Stop hosting this game.
 			</button>
-			<button type="button" class="btn btn-default" ng-click="startGame()" ng-if="games[inGame].players.length >= 2">
+			<button type="button" class="btn btn-default" ng-click="startGame()">
 				Start!
 			</button>
 		</div>
 		<div ng-if="!hostingGame&&inGame" class="col-sm-9">
-			You are in a game with {{games[inGame].players.length}} players.
+			You are in a game.
 			<button type="button" class="btn btn-default" ng-click="leaveGame()">
 				Leave game
 			</button>
 		</div>
 	</div>
-	<div ng-if="gameGoing" class="col-sm-9">
-		<game></game>
-	</div>
-	<div ng-if="inGame" class="col-sm-3">
-		<chat></chat>
-	</div>
+	<game ng-show="gameGoing" class="col-sm-9"></game>
+	<chat ng-show="inGame" class="col-sm-3"></chat>
 	</div>
 </div>

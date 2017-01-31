@@ -28,7 +28,7 @@ class Game {
             // scrambles player order for more fun
             this.playerManager.scrambleTurnOrder();
 
-            console.log(this.toJSON());
+            // console.log(this.toJSON());
             // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
         }
         else {
