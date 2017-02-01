@@ -238,7 +238,7 @@ describe('Location', function() {
                         "group": "railroad",
                         "rent": [25, 50, 100, 200],
                         "mortgage": 100,
-                        "forward": ["chance middle east", "reverse"],
+                        "forward": ["fortune middle east", "reverse"],
                         "backward": ["pennsylvania ave", "biscayne ave"],
                         "side": [3],
                         "track": [1, 0],
@@ -303,7 +303,7 @@ describe('Location', function() {
                         "backward": ["sewage system"],
                         "side": [3],
                         "track": [1],
-                        "above": ["chance middle east"]
+                        "above": ["fortune middle east"]
                      };
 
         const cc = new CabCompany(name, spot);
@@ -359,14 +359,14 @@ describe('Location', function() {
         const pgroup1 = new PropertyGroup(0);
         const bisc = new HouseProperty("biscayne ave", {"type": "property","group": 0,"rent": [11, 55, 160, 475, 650, 800, 1300],"mortgage": 75,"house": 50,"forward": ["short line"],"backward": ["miami ave"],"side": [3],"track": [0],"below": ["pennsylvania ave"]});
         pgroup1.addProperty(bisc);
-        pgroup1.addProperty(new HouseProperty("miami ave", {"type": "property","group": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["biscayne ave"],"backward": ["holland tunnel ne"],"side": [3],"track": [0],"below": ["community chest middle east"]}));
-        pgroup1.addProperty(new HouseProperty("florida ave", {"type": "property","group": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["holland tunnel ne"],"backward": ["chance inner ne"],"side": [2],"track": [0],"below": ["ventnor ave"]}));
+        pgroup1.addProperty(new HouseProperty("miami ave", {"type": "property","group": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["biscayne ave"],"backward": ["holland tunnel ne"],"side": [3],"track": [0],"below": ["misfortune middle east"]}));
+        pgroup1.addProperty(new HouseProperty("florida ave", {"type": "property","group": 0,"rent": [9, 45, 120, 350, 500, 700, 1200],"mortgage": 65,"house": 50,"forward": ["holland tunnel ne"],"backward": ["fortune inner ne"],"side": [2],"track": [0],"below": ["ventnor ave"]}));
 
         const rrgroup = new PropertyGroup(22);
         rrgroup.addProperty(new Railroad("reading railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["oriental ave", "esplanade ave"],"backward": ["income tax", "checker cab co"],"side": [0],"track": [1, 2],"above": ["telephone company"]}));
-        rrgroup.addProperty(new Railroad("pennsylvania railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["st james pl", "fifth ave"],"backward": ["virginia ave", "newbury st"],"side": [1],"track": [1, 0],"below": ["chance outer west"]}));
-        rrgroup.addProperty(new Railroad("b&o railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["atlantic ave", "community chest outer north"],"backward": ["illinois ave", "yellow cab co"],"side": [2],"track": [1, 2],"above": ["gas company"]}));
-        rrgroup.addProperty(new Railroad("short line", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["chance middle east", "reverse"],"backward": ["pennsylvania ave", "biscayne ave"],"side": [3],"track": [1, 0],"below": ["sewage system"]}));
+        rrgroup.addProperty(new Railroad("pennsylvania railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["st james pl", "fifth ave"],"backward": ["virginia ave", "newbury st"],"side": [1],"track": [1, 0],"below": ["fortune outer west"]}));
+        rrgroup.addProperty(new Railroad("b&o railroad", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["atlantic ave", "misfortune outer north"],"backward": ["illinois ave", "yellow cab co"],"side": [2],"track": [1, 2],"above": ["gas company"]}));
+        rrgroup.addProperty(new Railroad("short line", {"type": "railroad","group": 22,"rent": [25, 50, 100, 200],"mortgage": 100,"forward": ["fortune middle east", "reverse"],"backward": ["pennsylvania ave", "biscayne ave"],"side": [3],"track": [1, 0],"below": ["sewage system"]}));
     
         it('sets an owner correctly', function() {
             pgroup1.setOwner(bisc, player1);

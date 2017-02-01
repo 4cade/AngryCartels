@@ -22,7 +22,7 @@ module.exports = {
             "backward": ["holland tunnel ne"],
             "side": [3],
             "track": [0],
-            "below": ["community chest middle east"]
+            "below": ["misfortune middle east"]
         },
         "florida ave": {
             "type": "property",
@@ -31,7 +31,7 @@ module.exports = {
             "mortgage": 65,
             "house": 50,
             "forward": ["holland tunnel ne"],
-            "backward": ["chance inner ne"],
+            "backward": ["fortune inner ne"],
             "side": [2],
             "track": [0],
             "below": ["ventnor ave"]
@@ -79,10 +79,10 @@ module.exports = {
             "mortgage": 165,
             "house": 200,
             "forward": ["bonus"],
-            "backward": ["community chest inner sw"],
+            "backward": ["misfortune inner sw"],
             "side": [0],
             "track": [0],
-            "below": ["chance middle south"]
+            "below": ["fortune middle south"]
         },
         "boylston st": {
             "type": "property",
@@ -130,7 +130,7 @@ module.exports = {
             "backward": ["fifth ave"],
             "side": [1],
             "track": [0],
-            "below": ["community chest middle east"]
+            "below": ["misfortune middle east"]
         },
         "wall st": {
             "type": "property",
@@ -150,7 +150,7 @@ module.exports = {
             "rent": [1, 5, 15, 45, 80, 125, 625],
             "mortgage": 15,
             "house": 50,
-            "forward": ["community chest outer se"],
+            "forward": ["misfortune outer se"],
             "backward": ["subway"],
             "side": [0],
             "track": [2],
@@ -163,7 +163,7 @@ module.exports = {
             "mortgage": 15,
             "house": 50,
             "forward": ["hennepin ave"],
-            "backward": ["community chest outer se"],
+            "backward": ["misfortune outer se"],
             "side": [0],
             "track": [2],
             "above": ["mediterranean ave"]
@@ -178,7 +178,7 @@ module.exports = {
             "backward": ["nicollet ave"],
             "side": [0],
             "track": [2],
-            "above": ["community chest middle south"]
+            "above": ["misfortune middle south"]
         },
         "esplanade ave": {
             "type": "property",
@@ -234,7 +234,7 @@ module.exports = {
             "rent": [14, 70, 200, 550, 750, 950, 1450],
             "mortgage": 80,
             "house": 100,
-            "forward": ["chance outer west"],
+            "forward": ["fortune outer west"],
             "backward": ["kirby dr"],
             "side": [1],
             "track": [2],
@@ -246,11 +246,11 @@ module.exports = {
             "rent": [5, 25, 80, 225, 360, 600, 1000],
             "mortgage": 50,
             "house": 50,
-            "forward": ["chance outer south"],
+            "forward": ["fortune outer south"],
             "backward": ["esplanade ave"],
             "side": [0],
             "track": [2],
-            "above": ["chance middle south"]
+            "above": ["fortune middle south"]
         },
         "magazine st": {
             "type": "property",
@@ -282,11 +282,11 @@ module.exports = {
             "rent": [17, 85, 240, 670, 840, 1025, 1525],
             "mortgage": 90,
             "house": 100,
-            "forward": ["community chest outer nw"],
+            "forward": ["misfortune outer nw"],
             "backward": ["black & white cab co"],
             "side": [1],
             "track": [2],
-            "above": ["community chest middle west"]
+            "above": ["misfortune middle west"]
         },
         "young int'l blvd": {
             "type": "property",
@@ -295,7 +295,7 @@ module.exports = {
             "mortgage": 90,
             "house": 100,
             "forward": ["decatur st"],
-            "backward": ["community chest outer nw"],
+            "backward": ["misfortune outer nw"],
             "side": [1],
             "track": [2],
             "above": ["new york ave"]
@@ -330,7 +330,7 @@ module.exports = {
             "rent": [23, 115, 345, 825, 1010, 1180, 2180],
             "mortgage": 110,
             "house": 150,
-            "forward": ["chance outer nw"],
+            "forward": ["fortune outer nw"],
             "backward": ["pay day"],
             "side": [2],
             "track": [2],
@@ -343,7 +343,7 @@ module.exports = {
             "mortgage": 110,
             "house": 150,
             "forward": ["wacker dr"],
-            "backward": ["chance outer nw"],
+            "backward": ["fortune outer nw"],
             "side": [2],
             "track": [2],
             "above": ["kentucky ave"]
@@ -358,7 +358,7 @@ module.exports = {
             "backward": ["wacker dr"],
             "side": [2],
             "track": [2],
-            "above": ["chance middle north"]
+            "above": ["fortune middle north"]
         },
         "michigan ave": {
             "type": "property",
@@ -379,7 +379,7 @@ module.exports = {
             "mortgage": 130,
             "house": 200,
             "forward": ["west temple"],
-            "backward": ["community chest outer north"],
+            "backward": ["misfortune outer north"],
             "side": [2],
             "track": [2],
             "above": ["ventnor ave"]
@@ -450,7 +450,7 @@ module.exports = {
             "rent": [55, 225, 630, 1450, 1750, 2050, 3350],
             "mortgage": 160,
             "house": 250,
-            "forward": ["community chest outer east"],
+            "forward": ["misfortune outer east"],
             "backward": ["broad st"],
             "side": [3],
             "track": [2],
@@ -463,10 +463,10 @@ module.exports = {
             "mortgage": 160,
             "house": 250,
             "forward": ["bus ticket east"],
-            "backward": ["community chest outer east"],
+            "backward": ["misfortune outer east"],
             "side": [3],
             "track": [2],
-            "above": ["community chest middle east"]
+            "above": ["misfortune middle east"]
         },
         "mulholland dr": {
             "type": "property",
@@ -486,7 +486,7 @@ module.exports = {
             "rent": [80, 400, 825, 1800, 2175, 2550, 4050],
             "mortgage": 200,
             "house": 300,
-            "forward": ["chance outer se"],
+            "forward": ["fortune outer se"],
             "backward": ["mulholland dr"],
             "side": [3],
             "track": [2],
@@ -499,7 +499,7 @@ module.exports = {
             "mortgage": 250,
             "house": 300,
             "forward": ["subway"],
-            "backward": ["chance outer se"],
+            "backward": ["fortune outer se"],
             "side": [3],
             "track": [2],
             "above": ["go"]
@@ -510,7 +510,7 @@ module.exports = {
             "rent": [2, 10, 30, 90, 160, 250, 400],
             "mortgage": 30,
             "house": 50,
-            "forward": ["community chest middle south"],
+            "forward": ["misfortune middle south"],
             "backward": ["go"],
             "side": [0],
             "track": [1],
@@ -524,7 +524,7 @@ module.exports = {
             "mortgage": 30,
             "house": 50,
             "forward": ["income tax"],
-            "backward": ["community chest middle south"],
+            "backward": ["misfortune middle south"],
             "side": [0],
             "track": [1],
             "above": ["the embarcadero"],
@@ -536,11 +536,11 @@ module.exports = {
             "rent": [6, 30, 90, 270, 400, 550, 900],
             "mortgage": 50,
             "house": 50,
-            "forward": ["chance middle south"],
+            "forward": ["fortune middle south"],
             "backward": ["reading railroad"],
             "side": [0],
             "track": [1],
-            "above": ["community chest inner sw"],
+            "above": ["misfortune inner sw"],
             "below": ["esplanade ave"]
         },
         "vermont ave": {
@@ -550,11 +550,11 @@ module.exports = {
             "mortgage": 50,
             "house": 50,
             "forward": ["connecticut ave"],
-            "backward": ["chance middle south"],
+            "backward": ["fortune middle south"],
             "side": [0],
             "track": [1],
             "above": ["bonus"],
-            "below": ["chance outer sw"]
+            "below": ["fortune outer sw"]
         },
         "connecticut ave": {
             "type": "property",
@@ -614,7 +614,7 @@ module.exports = {
             "rent": [14, 70, 200, 550, 750, 950, 1500],
             "mortgage": 90,
             "house": 100,
-            "forward": ["community chest middle west"],
+            "forward": ["misfortune middle west"],
             "backward": ["pennsylvania railroad"],
             "side": [1],
             "track": [1],
@@ -628,11 +628,11 @@ module.exports = {
             "mortgage": 90,
             "house": 100,
             "forward": ["new york ave"],
-            "backward": ["community chest middle west"],
+            "backward": ["misfortune middle west"],
             "side": [1],
             "track": [1],
             "above": ["stock exchange"],
-            "below": ["community chest outer nw"]
+            "below": ["misfortune outer nw"]
         },
         "new york ave": {
             "type": "property",
@@ -653,7 +653,7 @@ module.exports = {
             "rent": [18, 90, 250, 700, 875, 1050, 1700],
             "mortgage": 110,
             "house": 150,
-            "forward": ["chance middle north"],
+            "forward": ["fortune middle north"],
             "backward": ["free parking"],
             "side": [2],
             "track": [1],
@@ -667,7 +667,7 @@ module.exports = {
             "mortgage": 110,
             "house": 150,
             "forward": ["illinois ave"],
-            "backward": ["chance middle north"],
+            "backward": ["fortune middle north"],
             "side": [2],
             "track": [1],
             "above": ["wall st"],
@@ -696,8 +696,8 @@ module.exports = {
             "backward": ["b&o railroad"],
             "side": [2],
             "track": [1],
-            "above": ["chance inner ne"],
-            "below": ["community chest outer north"]
+            "above": ["fortune inner ne"],
+            "below": ["misfortune outer north"]
         },
         "ventnor ave": {
             "type": "property",
@@ -744,12 +744,12 @@ module.exports = {
             "rent": [26, 120, 390, 900, 1100, 1275, 2050],
             "mortgage": 150,
             "house": 200,
-            "forward": ["community chest middle east"],
+            "forward": ["misfortune middle east"],
             "backward": ["pacific ave"],
             "side": [3],
             "track": [1],
             "above": ["holland tunnel ne"],
-            "below": ["community chest outer east"]
+            "below": ["misfortune outer east"]
         },
         "pennsylvania ave": {
             "type": "property",
@@ -758,7 +758,7 @@ module.exports = {
             "mortgage": 160,
             "house": 200,
             "forward": ["short line"],
-            "backward": ["community chest middle east"],
+            "backward": ["misfortune middle east"],
             "side": [3],
             "track": [1],
             "above": ["biscayne ave"],
@@ -771,7 +771,7 @@ module.exports = {
             "mortgage": 175,
             "house": 200,
             "forward": ["luxury tax"],
-            "backward": ["chance middle east"],
+            "backward": ["fortune middle east"],
             "side": [3],
             "track": [1],
             "above": ["lombard st"],
@@ -807,7 +807,7 @@ module.exports = {
             "rent": [30, 60, 120, 240],
             "mortgage": 150,
             "forward": ["dekalb ave"],
-            "backward": ["chance outer west"],
+            "backward": ["fortune outer west"],
             "side": [1],
             "track": [2],
             "above": ["st james pl"]
@@ -832,7 +832,7 @@ module.exports = {
             "backward": ["sewage system"],
             "side": [3],
             "track": [1],
-            "above": ["chance middle east"]
+            "above": ["fortune middle east"]
         },
         "water works": {
             "type": "utility",
@@ -852,7 +852,7 @@ module.exports = {
             "rent": [4, 10, 20, 40, 80, 100, 120, 150],
             "mortgage": 75,
             "forward": ["magazine st"],
-            "backward": ["chance outer south"],
+            "backward": ["fortune outer south"],
             "side": [0],
             "track": [2],
             "above": ["connecticut ave"]
@@ -885,7 +885,7 @@ module.exports = {
             "group": 21,
             "rent": [4, 10, 20, 40, 80, 100, 120, 150],
             "mortgage": 75,
-            "forward": ["chance inner ne"],
+            "forward": ["fortune inner ne"],
             "backward": ["tax refund"],
             "side": [2],
             "track": [0],
@@ -896,7 +896,7 @@ module.exports = {
             "group": 21,
             "rent": [4, 10, 20, 40, 80, 100, 120, 150],
             "mortgage": 75,
-            "forward": ["community chest inner sw"],
+            "forward": ["misfortune inner sw"],
             "backward": ["fisherman's wharf"],
             "side": [0],
             "track": [0],
@@ -944,14 +944,14 @@ module.exports = {
             "backward": ["newbury st", "virginia ave"],
             "side": [1],
             "track": [0, 1],
-            "below": ["chance outer west"]
+            "below": ["fortune outer west"]
         },
         "b&o railroad": {
             "type": "railroad",
             "group": 22,
             "rent": [25, 50, 100, 200],
             "mortgage": 100,
-            "forward": ["atlantic ave", "community chest outer north"],
+            "forward": ["atlantic ave", "misfortune outer north"],
             "backward": ["illinois ave", "yellow cab co"],
             "side": [2],
             "track": [1, 2],
@@ -962,7 +962,7 @@ module.exports = {
             "group": 22,
             "rent": [25, 50, 100, 200],
             "mortgage": 100,
-            "forward": ["reverse", "chance middle east"],
+            "forward": ["reverse", "fortune middle east"],
             "backward": ["biscayne ave", "pennsylvania ave"],
             "side": [3],
             "track": [0, 1],
@@ -986,48 +986,48 @@ module.exports = {
             "track": [2],
             "above": ["jail"]
         },
-        "chance inner ne": {
-            "type": "chance",
+        "fortune inner ne": {
+            "type": "fortune",
             "forward": ["florida ave"],
             "backward": ["gas company"],
             "side": [2],
             "track": [0],
             "below": ["atlantic ave"]
         },
-        "chance outer west": {
-            "type": "chance",
+        "fortune outer west": {
+            "type": "fortune",
             "forward": ["black & white cab co"],
             "backward": ["cullen blvd"],
             "side": [1],
             "track": [2],
             "above": ["pennsylvania railroad"]
         },
-        "chance outer nw": {
-            "type": "chance",
+        "fortune outer nw": {
+            "type": "fortune",
             "forward": ["lake shore dr"],
             "backward": ["randolph st"],
             "side": [2],
             "track": [2],
             "above": ["free parking"]
         },
-        "chance outer south": {
-            "type": "chance",
+        "fortune outer south": {
+            "type": "fortune",
             "forward": ["cable company"],
             "backward": ["canal st"],
             "side": [0],
             "track": [2],
             "above": ["vermont ave"]
         },
-        "chance outer se": {
-            "type": "chance",
+        "fortune outer se": {
+            "type": "fortune",
             "forward": ["rodeo dr"],
             "backward": ["ventura blvd"],
             "side": [3],
             "track": [2],
             "above": ["go"]
         },
-        "chance middle east": {
-            "type": "chance",
+        "fortune middle east": {
+            "type": "fortune",
             "forward": ["park pl"],
             "backward": ["short line"],
             "side": [3],
@@ -1035,8 +1035,8 @@ module.exports = {
             "above": ["reverse"],
             "below": ["ute cab co"]
         },
-        "chance middle south": {
-            "type": "chance",
+        "fortune middle south": {
+            "type": "fortune",
             "forward": ["vermont ave"],
             "backward": ["oriental ave"],
             "side": [0],
@@ -1044,8 +1044,8 @@ module.exports = {
             "above": ["beacon st"],
             "below": ["canal st"]
         },
-        "chance middle north": {
-            "type": "chance",
+        "fortune middle north": {
+            "type": "fortune",
             "forward": ["indiana ave"],
             "backward": ["kentucky ave"],
             "side": [2],
@@ -1067,7 +1067,7 @@ module.exports = {
             "backward": ["short line"],
             "side": [3],
             "track": [0],
-            "below": ["chance middle east"]
+            "below": ["fortune middle east"]
         },
         "bonus": {
             "type": "collect",
@@ -1089,48 +1089,48 @@ module.exports = {
             "track": [2],
             "above": ["free parking"]
         },
-        "community chest inner sw": {
-            "type": "community chest",
+        "misfortune inner sw": {
+            "type": "misfortune",
             "forward": ["beacon st"],
             "backward": ["telephone company"],
             "side": [0],
             "track": [0],
             "below": ["oriental ave"]
         },
-        "community chest outer se": {
-            "type": "community chest",
+        "misfortune outer se": {
+            "type": "misfortune",
             "forward": ["nicollet ave"],
             "backward": ["lake st"],
             "side": [0],
             "track": [2],
             "above": ["go"]
         },
-        "community chest outer nw": {
-            "type": "community chest",
+        "misfortune outer nw": {
+            "type": "misfortune",
             "forward": ["young int'l blvd"],
             "backward": ["dekalb ave"],
             "side": [1],
             "track": [2],
             "above": ["tennessee ave"]
         },
-        "community chest outer north": {
-            "type": "community chest",
+        "misfortune outer north": {
+            "type": "misfortune",
             "forward": ["south temple"],
             "backward": ["b&o railroad"],
             "side": [2],
             "track": [2],
             "above": ["atlantic ave"],
         },
-        "community chest outer east": {
-            "type": "community chest",
+        "misfortune outer east": {
+            "type": "misfortune",
             "forward": ["market st"],
             "backward": ["walnut st"],
             "side": [3],
             "track": [2],
             "above": ["north carolina ave"]
         },
-        "community chest middle south": {
-            "type": "community chest",
+        "misfortune middle south": {
+            "type": "misfortune",
             "forward": ["baltic ave"],
             "backward": ["mediterranean ave"],
             "side": [0],
@@ -1138,8 +1138,8 @@ module.exports = {
             "above": ["squeeze play"],
             "below": ["hennepin ave"]
         },
-        "community chest middle west": {
-            "type": "community chest",
+        "misfortune middle west": {
+            "type": "misfortune",
             "forward": ["tennessee ave"],
             "backward": ["st james pl"],
             "side": [1],
@@ -1147,8 +1147,8 @@ module.exports = {
             "above": ["madison ave"],
             "below": ["dekalb ave"]
         },
-        "community chest middle east": {
-            "type": "community chest",
+        "misfortune middle east": {
+            "type": "misfortune",
             "forward": ["pennsylvania ave"],
             "backward": ["north carolina ave"],
             "side": [3],

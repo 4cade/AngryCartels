@@ -168,6 +168,7 @@ class BoardManager {
      */
     nextLocation(currentLocation, odd, forward, track) {
         let next = null
+        console.log(currentLocation);
         let current = this.locations[currentLocation]
         let lane = track
         
@@ -398,11 +399,11 @@ class BoardManager {
         if (land.kind === 'railroad'){
             actions.push("bus")             // draw bus pass
         }
-        if (land.kind === 'chance'){
-            actions.push("chance")          // draw chance card
+        if (land.kind === 'fortune'){
+            actions.push("draw fortune")          // draw fortune card
         }
-        if (land.kind === 'community chest'){
-            actions.push("community chest") // draw community chest
+        if (land.kind === 'misfortune'){
+            actions.push("draw misfortune") // draw misfortune
         }
         if (land.kind === 'subway'){
             actions.push("subway")          // take subway

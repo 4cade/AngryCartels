@@ -1,9 +1,9 @@
-const chanceCards = require('./config/chance');
-const communityChestCards = require('./config/communityChest');
+const fortuneCards = require('./config/fortune');
+const misfortuneCards = require('./config/misfortune');
 
 /**
- * Card object allows the player to draw from the various cards in the game (chance,
- *      community chest, bus, roll3, etc.)
+ * Card object allows the player to draw from the various cards in the game (fortune,
+ *      misfortune, bus, roll3, etc.)
  */
 class Card {
 
@@ -57,21 +57,21 @@ class Card {
     };
 
     /**
-     * Simulates drawing a chance card.
+     * Simulates drawing a fortune card.
      * @return a JSON with fields title (name of card), description,
      *      play (when to use the card), and short (short description used internally)
      */
-    static drawChance() {
-        return this.chooseRandom(chanceCards);
+    static drawFortune() {
+        return this.chooseRandom(fortuneCards);
     }
 
     /**
-     * Simulates drawing a community chest card.
+     * Simulates drawing a misfortune card.
      * @return a JSON with fields title (name of card), description,
      *      play (when to use the card), and short (short description used internally)
      */
-    static drawCommunityChest() {
-        return this.chooseRandom(communityChestCards)
+    static drawMisfortune() {
+        return this.chooseRandom(misfortuneCards)
     }
 
     /**

@@ -87,7 +87,7 @@ describe('BoardManager', function(){
 
             // go through a tunnel
             const movedTo = board1.moveLocation(player3, 6)['movedTo'];
-            const expectedMovedTo = ['wall st', 'tax refund', 'gas company', 'chance inner ne', 'florida ave', 'holland tunnel ne', 'holland tunnel sw'];
+            const expectedMovedTo = ['wall st', 'tax refund', 'gas company', 'fortune inner ne', 'florida ave', 'holland tunnel ne', 'holland tunnel sw'];
             assert.equal(player3.location, 'holland tunnel sw');
             assert.equal(player3.track, 2);
             assert.equal(player3.team.money, 3500);
@@ -97,19 +97,19 @@ describe('BoardManager', function(){
             const action6 = board1.moveLocation(player3, 1)['actions'][0];
             assert.equal(action6, 'choose auction'); // TODO test highest rent when all properties are owned
 
-            // chance space
+            // fortune space
             const action7 = board1.moveLocation(player3, 6)['actions'][0];
-            assert.equal(action7, 'chance');
+            assert.equal(action7, 'draw fortune');
 
             // pass pay day even
             const playerCheck = board1.moveLocation(player3, 8)['player'];
             const expectedPlayerCheck = {'name': 'Ted', 'money': 3900};
             assert.deepEqual(playerCheck, expectedPlayerCheck);
 
-            // move backwards & test pay day odd & community chest
+            // move backwards & test pay day odd & misfortune
             player3.switchDirection();
             const action8 = board1.moveLocation(player3, 5)['actions'][0];
-            assert.equal(action8, 'community chest');
+            assert.equal(action8, 'draw misfortune');
             assert.equal(player3.team.money, 4200);
         });
 
@@ -126,7 +126,7 @@ describe('BoardManager', function(){
             // handles switching tracks too
             player3.switchDirection();
             const json = board1.advanceToLocation(player3, 'tennessee ave');
-            assert.deepEqual(json.movedTo, ['boylston st', 'newbury st', 'pennsylvania railroad', 'st james pl', 'community chest middle west', 'tennessee ave']);
+            assert.deepEqual(json.movedTo, ['boylston st', 'newbury st', 'pennsylvania railroad', 'st james pl', 'misfortune middle west', 'tennessee ave']);
             assert.equal(json.actions[0], 'buy');
             const expectedPlayer = {'name': 'Ted', 'money': 4500};
             assert.deepEqual(json.player, expectedPlayer);
@@ -157,13 +157,13 @@ describe('BoardManager', function(){
         });
 
         it('finds the next location for Mr. Monopoly', function() {
-            board1.jumpToLocation(player2, 'chance middle east');
+            board1.jumpToLocation(player2, 'fortune middle east');
             let json = board1.nextMrMonopolyLocation(player2);
             let expected = {"player": {"name": "Jerry", "money": 2220}, 'movedTo': ['park pl', 'luxury tax', 'boardwalk', 'go', 'mediterranean ave'], 'actions': ['buy']};
             assert.deepEqual(json, expected);
 
             json = board1.nextMrMonopolyLocation(player2);
-            expected = {"player": {"name": "Jerry", "money": 2200}, 'movedTo': ['community chest middle south', 'baltic ave'], 'actions': ['buy']};
+            expected = {"player": {"name": "Jerry", "money": 2200}, 'movedTo': ['misfortune middle south', 'baltic ave'], 'actions': ['buy']};
 
             // TODO decide how to handle edge cases (like current track filled/switching tracks)
         });
@@ -269,7 +269,7 @@ describe('BoardManager', function(){
 
         it('gets all properties in the forward direction', function() {
             board1.jumpToLocation(player2, 'checker cab co');
-            let expected = ['reading railroad', 'esplanade ave', 'canal st', 'chance outer south', 'cable company', 'magazine st', 'bourbon st', 'holland tunnel sw', 'jail', 'connecticut ave', 'vermont ave', 'chance middle south', 'oriental ave', 'telephone company', 'community chest inner sw', 'beacon st', 'bonus'];
+            let expected = ['reading railroad', 'esplanade ave', 'canal st', 'fortune outer south', 'cable company', 'magazine st', 'bourbon st', 'holland tunnel sw', 'jail', 'connecticut ave', 'vermont ave', 'fortune middle south', 'oriental ave', 'telephone company', 'misfortune inner sw', 'beacon st', 'bonus'];
             let actual = board1.locationsInForwardDirection(player2);
             expected.sort();
             actual.sort();
@@ -405,19 +405,19 @@ describe('BoardManager', function(){
 // tests the Card object
 describe('Card', function() {
     
-    it('chance card is valid', function() {
+    it('fortune card is valid', function() {
         for(let i = 0; i < 5; i++) {
-            const chance = Card.drawChance();
-            assert(chance.hasOwnProperty('title'));
-            assert(chance.hasOwnProperty('description'));
-            assert(chance.hasOwnProperty('play'));
-            assert(chance.hasOwnProperty('short'));
+            const fortune = Card.drawFortune();
+            assert(fortune.hasOwnProperty('title'));
+            assert(fortune.hasOwnProperty('description'));
+            assert(fortune.hasOwnProperty('play'));
+            assert(fortune.hasOwnProperty('short'));
         }
     });
 
-    it('community chest is valid', function() {
+    it('misfortune is valid', function() {
         for(let i = 0; i < 5; i++) {
-            const cc = Card.drawCommunityChest();
+            const cc = Card.drawMisfortune();
             assert(cc.hasOwnProperty('title'));
             assert(cc.hasOwnProperty('description'));
             assert(cc.hasOwnProperty('play'));
