@@ -175,6 +175,13 @@ class PlayerManager {
         }
         return null;
     }
+
+    /**
+     * Calls start on the first player so it has the correct actions
+     */
+    start() {
+        this.currentPlayer.startTurn();
+    }
 }
 
 module.exports = PlayerManager;

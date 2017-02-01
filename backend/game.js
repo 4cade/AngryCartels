@@ -27,6 +27,7 @@ class Game {
 
             // scrambles player order for more fun
             this.playerManager.scrambleTurnOrder();
+            this.playerManager.start();
 
             // console.log(this.toJSON());
             // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
@@ -74,13 +75,9 @@ class Game {
         const message = "It is now " + this.playerManager.getCurrentPlayer().name + "'s turn!";
 
         let player = this.playerManager.getCurrentPlayer();
-        let actions = ['roll']
+        player.startTurn();
 
-        if(player.inJail()) {
-            actions = ['jail'];
-        }
-
-        return {'message': message, "player": this.playerManager.getCurrentPlayer().name, "actions": actions}
+        return {'message': message, "player": this.playerManager.getCurrentPlayer().name, "actions": player.getActions()}
     }
 
     /**
@@ -93,6 +90,10 @@ class Game {
     rollDice() {
         // need to simulate 3 dice just like the real game
         let player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('roll');
+        if(!go) {
+            return {"fail": true};
+        }
         this.playerManager.canRoll = false;
 
         let [die1, die2, die3] = [Card.rollDie(), Card.rollDie(), Card.rollDie()];
@@ -156,6 +157,9 @@ class Game {
         json['rolled'] = [die1, die2, die3];
         json['message'] = message;
 
+        player.addActions(json['actions']);
+        json['actions'] = player.getActions();
+
         return json;
     }
 
@@ -171,6 +175,10 @@ class Game {
         let player = this.playerManager.getCurrentPlayer();
         let message = "";
         let actions = [];
+        const go = player.useAction('jail');
+        if(!go) {
+            return {"fail": true};
+        }
 
         if(pay) {
             player.leaveJail(true);
@@ -193,6 +201,9 @@ class Game {
             actions.push('roll');
         }
 
+        player.addActions(actions);
+        actions = player.getActions();
+
         return {"player": {"name": player.name, "money": player.getMoney()},
             "message": message, "actions": actions};
     }
@@ -205,8 +216,14 @@ class Game {
      */
     unleashMrMonopoly() {
         const player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('mrmonopoly');
+        if(!go) {
+            return {"fail": true};
+        }
         let json = this.boardManager.nextMrMonopolyLocation(player, this.lastOdd);
-        json['message'] = player.name + " used Mr. Monopoly to get to " + player.location; 
+        json['message'] = player.name + " used Mr. Monopoly to get to " + player.location;
+        player.addActions(json['actions']);
+        json['actions'] = player.getActions();
         return json;
     }
 
@@ -220,8 +237,14 @@ class Game {
      */
     teleport(location){
         const player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('teleport');
+        if(!go) {
+            return {"fail": true};
+        }
         let json = this.boardManager.jumpToLocation(player, location);
-        json['message'] = player.name + " jumped to " + player.location; 
+        json['message'] = player.name + " jumped to " + player.location;
+        player.addActions(json['actions']);
+        json['actions'] = player.getActions();
         return json;
     }
 
@@ -236,6 +259,10 @@ class Game {
      */
     useBusPass(pass, location) {
         const player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('bus');
+        if(!go) {
+            return {"fail": true};
+        }
 
         //player does not have the pass
         if (!player.busTickets.has(pass))
@@ -260,6 +287,8 @@ class Game {
         player.forward = oldDirection;
 
         json['message'] = player.name + " used " + pass + " to move to " + player.location;
+        player.addActions(json['actions']);
+        json['actions'] = player.getActions();
 
         return json;
     }
@@ -278,6 +307,10 @@ class Game {
             return -1
 
         const player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('taxi');
+        if(!go) {
+            return {"fail": true};
+        }
         const owner = this.playerManger.getTeamMember(this.boardManager.isOwned());
         let json = {"location": location};
 
@@ -304,6 +337,9 @@ class Game {
         else
             json["actions"] = [];
 
+        player.addActions(json['actions']);
+        json['actions'] = player.getActions();
+
         json["message"] = player.name + " took a taxi to " + player.location;
         return json;
     }
@@ -316,9 +352,14 @@ class Game {
      */
     buyProperty() {
         const player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('buy');
+        if(!go) {
+            return {"fail": true};
+        }
         let json = this.boardManager.buyProperty(player, player.location);
         json['message'] = player.name + " bought " + json.location + " for " + json.price;
         this.log.push(json['message']);
+        json['actions'] = player.getActions();
         return json;
     }
 
@@ -335,6 +376,7 @@ class Game {
         let json = this.boardManager.buyProperty(player, info.location, info.price);
         json['message'] = player.name + " bought " + json.location + " for " + json.price;
         this.log.push(json['message']);
+        json['actions'] = player.getActions();
         return json;
     }
 
@@ -412,6 +454,8 @@ class Game {
             json['message'] = player.name + " changed houses on " + Object.keys(json['delta']).length + " houses"
         }
 
+        json['actions'] = player.getActions();
+
         return json;
     }
 
@@ -424,6 +468,10 @@ class Game {
      */
     payRent() {
         const player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('rent');
+        if(!go) {
+            return {"fail": true};
+        }
         const rent = this.boardManager.getRent(player, player.location);
         const owner = this.playerManager.getTeamMember(this.boardManager.isOwned(player.location));
         let json = {};
@@ -436,39 +484,48 @@ class Game {
         json['player'] = {'name': player.team, 'money': player.getMoney()};
         owner.deltaMoney(rent);
         json['owner'] = {'name': owner.name, 'money': owner.getMoney()};
+        json['actions'] = player.getActions();
 
         let message = player.name + " paid " + rent + " rent to " + owner.team;
         return {"message": message};
     }
 
     /**
-     * The current player draws a chance card.
+     * The current player draws a fortune card.
      * @return JSON with field message (string saying what happened),
      *       player (name: name), and card (title, description, short, play)
      */
-    drawChance() {
+    drawFortune() {
         let player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('draw fortune');
+        if(!go) {
+            return {"fail": true};
+        }
         let card = Card.drawChance();
         player.gainSpecialCard(card);
         const message = player.name + "drew a chance card";
-        return {"card": card, "player": {"name": player.name}, "message": message};
+        return {"card": card, "player": {"name": player.name}, "message": message, "actions": player.getActions()};
     }
 
     /**
-     * The current player draws a community chest card.
+     * The current player draws a misfortune card.
      * @return JSON with field message (string saying what happened),
      *       player (name: name), and card (title, description, short, play)
      */
-    drawCommunityChest() {
+    drawMisfortune() {
         let player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('draw misfortune');
+        if(!go) {
+            return {"fail": true};
+        }
         let card = Card.drawCommunityChest();
         player.gainSpecialCard(card);
         const message = player.name + "drew a community chest card";
-        return {"card": card, "player": {"name": player.name}, "message": message};
+        return {"card": card, "player": {"name": player.name}, "message": message, "actions": player.getActions()};
     }
 
     /**
-     * The current player uses a chance/community chest card.
+     * The current player uses a special card.
      * @return JSON with field message (string saying what happened),
      *       player (name: name), and card (title, description, short, play)
      */
@@ -508,6 +565,10 @@ class Game {
      */
     roll3(){
         let player = this.boardManager.getCurrentPlayer();
+        const go = player.useAction('roll3');
+        if(!go) {
+            return {"fail": true};
+        }
         const card = Card.drawRoll3()
         let nums = new Set(card);
         let rolled = []
@@ -530,7 +591,7 @@ class Game {
         player.deltaMoney(gain);
 
         let message = player.name + " matched " + matches + " and won " + gain;
-        return {'card': card, 'message': message, "rolled": rolled, "player": {"name": player.name, "money": player.getMoney()}};
+        return {'card': card, 'message': message, "rolled": rolled, "player": {"name": player.name, "money": player.getMoney()}, "actions": player.getActions()};
     }
 
     /**
@@ -540,7 +601,12 @@ class Game {
      *       and rolled (list of numbers that were rolled)
      */
     squeezePlay(){
-        let die1, die2 = (Card.rollDie(), Card.rollDie()); // just need for JSON
+        let player = this.playerManager.getCurrentPlayer();
+        let [die1, die2] = [Card.rollDie(), Card.rollDie()]; // just need for JSON
+        const go = player.useAction('squeeze');
+        if(!go) {
+            return {"fail": true};
+        }
         let total = die1 + die2;
         let collect = 50;
         let json = {"rolled": [die1, die2]};
@@ -552,7 +618,6 @@ class Game {
             collect = 200;
         }
 
-        let player = this.playerManager.getCurrentPlayer();
         let players = this.boardManager.getPlayers();
 
         // grab from each player
@@ -568,6 +633,8 @@ class Game {
         }
 
         json['message'] = player.name + " rolled a total of " + total + " and took " + gain + "from each player";
+
+        json['actions'] = player.getActions();
 
         return json
     }
@@ -614,6 +681,11 @@ class Game {
      */
     startAuction(property) {
         // starts the auction and inits stuff
+        let player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('up auction');
+        if(!go) {
+            return {"fail": true};
+        }
         this.auction = {};
         this.auctionGoing = true;
         this.auctionedProperty = property;
@@ -630,6 +702,11 @@ class Game {
      * @param price the price the player is willing to bid
      */
     addBid(player, price) {
+        let playerObj = this.playerManager.getPlayer(player);
+        const go = playerObj.useAction('set auction price');
+        if(!go) {
+            return {"fail": true};
+        }
         if(this.auctionGoing) {
             this.auction[player] = price;
         }
@@ -682,7 +759,9 @@ class Game {
                     price = top;
                 }
 
-                let json = {"player": player.name, "location": this.auctionedProperty, "price": price};
+                player.addAction('buy');
+
+                let json = {"player": player.name, "location": this.auctionedProperty, "price": price, "actions": player.getActions()};
 
                 this.auction = null;
                 this.auctionGoing = false;

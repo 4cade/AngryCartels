@@ -219,10 +219,33 @@ describe('Player', function() {
             player1.loseProperty(p1);
             player1.loseProperty(p3);
         });
+
+        it("handles actions correctly", function() {
+            // starts turn
+            player1.startTurn();
+            assert.deepEqual(Array.from(player1.actions).sort(), ['roll', 'mortgage', 'unmortgage', 'bus', 'use special', 'build', 'trade'].sort());
+
+            // rolls and nothing happens
+            player1.useAction('roll');
+            assert.deepEqual(Array.from(player1.actions).sort(), ['end turn', 'mortgage', 'unmortgage', 'use special', 'build', 'trade'].sort());
+
+            player1.endTurn();
+            assert.equal(Array.from(player1.actions).length, 0);
+
+            // turn where has to buy a property and got mrmonopoly
+            player1.startTurn();
+            player1.useAction('roll');
+            player1.addActions(['roll', 'mrmonopoly', 'buy']);
+            assert.deepEqual(player1.onHoldActions.sort(), ['roll', 'mrmonopoly'].sort());
+            assert.deepEqual(Array.from(player1.actions).sort(), ['buy', 'mortgage', 'unmortgage', 'use special', 'build', 'trade', 'up auction'].sort());
+            player1.useAction('buy');
+            assert.deepEqual(Array.from(player1.actions).sort(), ['mrmonopoly', 'mortgage', 'unmortgage', 'use special', 'build', 'trade'].sort());
+            assert.deepEqual(player1.onHoldActions, ['roll'])
+            player1.useAction('mrmonopoly');
+            assert.deepEqual(Array.from(player1.actions).sort(), ['roll', 'mortgage', 'unmortgage', 'use special', 'build', 'trade', 'bus'].sort());
+        });
     });
 })
-
-
 
 
 // tests the playerManager objects

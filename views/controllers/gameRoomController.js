@@ -46,14 +46,12 @@ angryCartels.controller('gameRoomController', function($scope, $interval, socket
   	// gets a new games
     socket.on('updated games', function(games){
         $scope.games = games;
-        // $scope.$apply();
     });
 
     socket.on('kick game', function() {
       console.log("I got kicked yooo");
       $scope.inGame = null;
       $scope.hostingGame = false;
-      // $scope.$apply();
     });
 
     socket.on('in room', function(json) {
@@ -74,6 +72,5 @@ angryCartels.controller('gameRoomController', function($scope, $interval, socket
     socket.on('start game', function() {
       $scope.gameGoing = true;
       console.log("game has started");
-      $scope.$apply();
     });
 });

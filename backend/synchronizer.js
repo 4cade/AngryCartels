@@ -241,10 +241,10 @@ module.exports = function(io, socket){
    *      price (price for the property) **only if auction**
    * @return updated game data with property bought by client sent to all in game
    */
-  socket.on('buy property', function(info) {
+  socket.on('buy', function(info) {
     let json = {}
     // different actions if it was auctioned
-    if(info)
+    if(info.price)
         json = games[socket.inGame].buyPropertyAuction(info);
     else
         json = games[socket.inGame].buyProperty();

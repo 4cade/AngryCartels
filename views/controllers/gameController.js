@@ -25,19 +25,22 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 			else {
 				$scope.teams[play[i].team]['players'] = [play[i]];
 			}
+
+			if(play[i].name === $scope.username) {
+				$scope.actions = play[i].actions;
+			}
 		}
-		console.log($scope.players)
-		console.log($scope.teams)
+
 		$scope.currentPlayer = play[gameData['playerManager']['turnIndex']].name;
-		$scope.actions = ['roll', 'trade', 'build']
 		// $scope.setup();
-		// $scope.$apply();
 	});
 
 	socket.on('next turn', function(json) {
 		$scope.currentPlayer = json.player
 		$scope.message = json.message
-		$scope.actions = json.actions.concat(['trade', 'build'])
+		if(json.player.name === $scope.username) {
+			$scope.actions = json.actions;
+		}
 	})
 
 	socket.on('movement', function(json) {
@@ -58,15 +61,8 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		}
 
 		if(json.player.name === $scope.username) {
-			// end turn if no new actions?
-			if(json.actions.length === 0) {
-				json.actions.push('end turn')
-			}
-			console.log($scope.actions, 'before')
-			$scope.actions = json.actions.concat($scope.actions);
-			console.log($scope.actions, 'after')
+			$scope.actions = json.actions;
 		}
-		// $scope.$apply();
 	});
 
 
@@ -85,39 +81,33 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		}
 
 		if(json.player.name === $scope.username) {
-			$scope.actions.push('end turn');
+			$scope.actions = json.actions;
 		}
 	});
 
 	socket.on('send client name', function(name) {
 		$scope.username = name;
 		$scope.joined = true;
-		// $scope.$apply();
 	});
 
 	socket.on('property info', function(info) {
 		$scope.propertyInfo = info;
-		$scope.$apply();
 	});
 
 	socket.on('rent info', function(info) {
 		$scope.rentCost = info;
-		$scope.$apply();
 	});
 
 	socket.on('highest rent', function(info) {
 		$scope.propertyInfo = info;
-		$scope.$apply();
 	});
 
 	socket.on('all locations', function(locations) {
 		$scope.locationList = locations;
-		$scope.$apply();
 	});
 
 	socket.on('all unowned', function(locations) {
 		$scope.locationList = locations;
-		$scope.$apply();
 	});
 
 	socket.on('new auction', function(info) {
@@ -125,12 +115,10 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		$scope.auction = {};
 		$scope.actions.unshift('auction');
 		$scope.notSentAuctionPrice = true;
-		$scope.$apply();
 	});
 
 	socket.on('new auction price', function(info) {
 		$scope.auction[info.player] = info.price;
-		$scope.$apply();
 	});
 
 	socket.on('auction winner', function(winner) {
@@ -138,7 +126,6 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		if(winner.player === $scope.username) {
 			$scope.winAuction($scope.recentLocation, winner.price);
 		}
-		$scope.$apply();
 	})
 
 	// load players names
@@ -150,11 +137,9 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	// 	$scope.currentTurn = $scope.gameData['turnOrder'][$scope.gameData['turnIndex']];
 	// 	$scope.canRoll = $scope.gameData["canRoll"];
 	// 	$scope.recentLocation = $scope.gameData["recentLocation"];
-	// 	$scope.$apply();
 	// }
 
 	$scope.doAction = function(action) {
-		console.log(action)
 		if(action === 'roll') {
 			$scope.rollDice();
 		}
@@ -182,8 +167,8 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		else if(action === 'community chest') {
 			$scope.drawCommunityChest();
 		}
-		let index = $scope.actions.indexOf(action);
-		$scope.actions.splice(index, 1);
+		
+		$scope.actions = [];
 	}
 
 	$scope.rollDice = function() {
@@ -225,7 +210,7 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		var info = {};
 		info.location = $scope.recentLocation;
 		info.player = $scope.username;
-		socket.emit('buy property', info);
+		socket.emit('buy', info);
 	}
 
 	$scope.selectLocation = function(location) {
@@ -240,7 +225,6 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	$scope.setAuctionPrice = function(price) {
 		socket.emit('set auction price', price);
 		$scope.notSentAuctionPrice = false;
-		$scope.$apply();
 	}
 
 	$scope.winAuction = function(property, price) {
@@ -249,7 +233,7 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		info.player = $scope.username;
 		info.auction = true;
 		info.price = price;
-		socket.emit('buy property', info);
+		socket.emit('buy', info);
 	}
 
 	$scope.startMrMonopoly = function() {
@@ -282,7 +266,6 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		}
 
 		$scope.canAct = false;
-		$scope.$apply();
 	}
 
 	$scope.endTurn = function() {

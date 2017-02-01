@@ -11,6 +11,5 @@ angryCartels.controller('chatController', function($scope, socket) {
   	// gets a new chat message
     socket.on('chat message', function(msg){
         $scope.messages.push(msg);
-        // $scope.$apply();
     });
 });

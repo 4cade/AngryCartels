@@ -21,11 +21,17 @@ class Player {
         this.track = startingTrack; // all players start on track 1
         this.lastRolled = 0 // int last value of dice roll
         this.jailTurnsLeft = 0;
+        this.actions = new Set();
+        this.onHoldActions = [];
+        this.onNextTurn = null;
 
         // reload from saved state
         if(savedState) {
             this.forward = savedState['forward'];
             this.lastRolled = savedState['lastRolled'];
+            this.actions = savedState['actions'];
+            this.onHoldActions = savedState['onHoldActions'];
+            this.onNextTurn = savedState['onNextTurn'];
         }
     }
 
@@ -39,7 +45,10 @@ class Player {
             "location": this.location,
             "track": this.track,
             "lastRolled": this.lastRolled,
-            "team": this.team.toJSON()
+            "team": this.team.toJSON(),
+            "actions": this.getActions(),
+            "onHoldActions": this.onHoldActions,
+            "onNextTurn": this.onNextTurn
         }
     }
 
@@ -206,6 +215,149 @@ class Player {
         return this.jailTurnsLeft > 0;
     }
 
+    /**
+     * Sets the players actions for when a turn starts.
+     */
+    startTurn() {
+        this.actions = new Set(['mortgage', 'unmortgage', 'build', 'trade', 'use special'])
+
+        // this will be for jail or teleport (subway)
+        if(this.onNextTurn) {
+            this.actions.add(this.onNextTurn)
+            this.onNextTurn = null;
+        }
+        else {
+            this.actions.add('roll');
+            this.actions.add('bus')
+        }
+    }
+
+    /**
+     * Sets the players actions for when a turn is over.
+     */
+    endTurn() {
+        this.actions = new Set()
+
+        if(this.inJail()) {
+            this.onNextTurn = 'jail';
+        }
+    }
+
+    /**
+     * Adds an action to the player and removes any actions that should not be done yet
+     *      and puts them on-hold.
+     */
+    addActions(actions) {
+        // TODO
+        this.onHoldActions = new Set(this.onHoldActions)
+        this.actions.delete('end turn');
+        for(let action of actions) {
+            this.actions.add(action);
+            this.onHoldActions.delete(action);
+        }
+        this.onHoldActions = Array.from(this.onHoldActions)
+
+        if(this.actions.has('buy')) {
+            const possible = ['roll', 'mrmonopoly', 'bus', 'taxi'];
+            this.actions.add('up auction')
+
+            for(let action of possible) {
+                if(this.actions.delete(action)) {
+                    this.onHoldActions.push(action);
+                }
+            }
+        }
+        else if(this.actions.has('rent') || this.actions.has('roll3') || this.actions.has('squeeze') || this.actions.has('draw misfortune') || this.actions.has('draw fortune')) {
+            const possible = ['roll', 'mrmonopoly', 'bus', 'taxi'];
+
+            for(let action of possible) {
+                if(this.actions.delete(action)) {
+                    this.onHoldActions.push(action);
+                }
+            }
+        }
+        else if(this.actions.has('mrmonopoly')) {
+            const possible = ['roll', 'bus'];
+
+            for(let action of possible) {
+                if(this.actions.delete(action)) {
+                    this.onHoldActions.push(action);
+                }
+            }
+        }
+        else if(this.actions.has('set auction price')) {
+            const possible = this.getActions();
+
+            for(let action of possible) {
+                if(this.actions.delete(action)) {
+                    this.onHoldActions.push(action);
+                }
+            }
+        }
+        else if(this.actions.has('roll')) {
+            this.actions.add('bus');
+        }
+
+        if(Array.from(this.actions).length === 5) {
+            this.actions.add('end turn');
+        }
+    }
+
+    /**
+     * Uses an action from the player and takes any that should be done now off on-hold
+     * @return true if action is used
+     */
+    useAction(action) {
+        let used = this.actions.delete(action);
+
+        if(!used) {
+            return false
+        }
+
+        if(action === 'roll') {
+            this.actions.delete('bus');
+            this.actions.delete('taxi');
+        }
+        else if(action === 'bus') {
+            this.actions.delete('roll');
+        }
+        else if(action === 'mrmonopoly') {
+            this.actions.delete('taxi');
+
+            this.addActions(this.onHoldActions)
+            this.onHoldActions = [];
+        }
+        else if(action === 'end turn') {
+            this.endTurn();
+        }
+        else if(['mortgage', 'unmortgage', 'build', 'trade', 'use special'].includes(action)) {
+            this.actions.add(action);
+        }
+        else if(['buy', 'rent', 'roll3', 'squeeze', 'draw fortune', 'draw misfortune'].includes(action)) {
+            this.actions.delete('up auction');
+            this.addActions(this.onHoldActions)
+        }
+
+        if(Array.from(this.actions).length === 5) {
+            this.actions.add('end turn');
+        }
+
+        return true;
+    }
+
+    /**
+     * Gets all of the possible actions of the player
+     */
+    getActions() {
+        return Array.from(this.actions);
+    }
+
+    /**
+     * @return true if the player can do this action
+     */
+    canDoAction(action) {
+        return this.actions.has(action);
+    }
 }
 
 module.exports = Player;
