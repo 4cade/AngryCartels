@@ -63,6 +63,11 @@ public class Game : MonoBehaviour {
         }
 
         GameObject.Find("PlayerPanel").GetComponent<PlayerCardCreator>().createPlayerCards(numPlayers, playerContainer);
+
+
+        // TEMP
+        MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, 5));
+
     }
 
     private bool tempClick = true;
@@ -74,22 +79,22 @@ public class Game : MonoBehaviour {
         if (Input.GetMouseButton(0) && tempClick)
         {
             int numItems = 5;
-            GameObject[] actionItems = new GameObject[numItems];
-            for (int i = 0; i < actionItems.Length; ++i)
-            {
-                actionItems[i] = Instantiate(actionItemPrefab);
-                //TODO START HERE: actionItems[i].GetComponent<display>
-            }
-            MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItems));
+            //GameObject[] actionItems = new GameObject[numItems];
+            //for (int i = 0; i < actionItems.Length; ++i)
+            //{
+            //    actionItems[i] = Instantiate(actionItemPrefab);
+            //}
+            //MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItems));
+            //MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, numItems));
             tempClick = false;
         }
         if (!Input.GetMouseButton(0))
         {
             if (!tempClick)
             {
-                MessageBus.Instance.Broadcast(new Message("closeActionPanel"));
+                //MessageBus.Instance.Broadcast(new Message("closeActionPanel"));
+                tempClick = true;
             }
-            tempClick = true;
         }
 	}
 

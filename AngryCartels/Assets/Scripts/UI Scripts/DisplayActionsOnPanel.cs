@@ -21,13 +21,15 @@ public class DisplayActionsOnPanel : MonoBehaviour {
 
     private void openActionPanel(Message obj)
     {
-        Debug.Log("TODO: YOU SHOULD SHOW THE ACTION PANEL");
-        GameObject[] actionItems = obj.GetData<GameObject[]>();
+        Debug.Log("YOU SHOULD SHOW THE ACTION PANEL");
+        GameObject actionItemPrefab = obj.GetData<GameObject>();
+        int numItems = obj.GetData<int>(1);
 
-        for (int i = 0; i < actionItems.Length; ++i)
+        for (int i = 0; i < numItems; ++i)
         {
-            actionItems[i].GetComponent<PlayerActionSelected>().SetActionType(ActionType.ROLL, 5);
-            actionItems[i].transform.SetParent(contentPanelTransform);
+            GameObject item = Instantiate(actionItemPrefab);
+            item.GetComponent<PlayerActionSelected>().SetActionType(ActionType.ROLL, 5);
+            item.transform.SetParent(contentPanelTransform);
         }
 
         gameObject.SetActive(true);
@@ -35,7 +37,13 @@ public class DisplayActionsOnPanel : MonoBehaviour {
 
     private void CloseActionPanel(Message obj)
     {
-        Debug.Log("TODO: YOU SHOULD CLOSE THE ACTION PANEL");
+        Debug.Log("YOU SHOULD CLOSE THE ACTION PANEL");
+        // remove all children
+        RectTransform rt = contentPanelTransform.GetComponent<RectTransform>();
+        foreach(RectTransform childT in rt)
+        {
+            Destroy(childT.gameObject);
+        }
         gameObject.SetActive(false);
     }
 

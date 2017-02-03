@@ -32,7 +32,7 @@ public class Message
 
         if (typeof(T).IsArray)
         {
-            T obj = (T)(messageData[index]);
+            T obj = (T)((object)(messageData[index]));
             return obj;
         }
 
