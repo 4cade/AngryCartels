@@ -145,7 +145,7 @@ class Player {
     }
 
     /**
-     * The player acquires the specified chance/community chest card.
+     * The player acquires the specified fortune/misfortune card.
      * @param card Object name of the card
      * @return boolean true if card is added
      */
@@ -154,7 +154,7 @@ class Player {
     }
 
     /**
-     * The player uses the specified chance/community chest card and loses it.
+     * The player uses the specified fortune/misfortune card and loses it.
      * @param card Object name of the card
      * @return boolean true if card is used, false otherwise
      */
@@ -338,7 +338,7 @@ class Player {
             this.addActions(this.onHoldActions)
         }
 
-        if(Array.from(this.actions).length === 5) {
+        if(!(this.actions.has('roll')|| this.actions.has('draw fortune')||this.actions.has('draw misfortune')||this.actions.has('mrmonopoly')||this.actions.has('rent')||this.actions.has('buy')||this.actions.has('roll3')||this.actions.has('squeeze'))){
             this.actions.add('end turn');
         }
 

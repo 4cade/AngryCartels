@@ -88,6 +88,7 @@ class PlayerManager {
             let j = Math.floor(Math.random() * i);
             [this.turnOrder[i - 1], this.turnOrder[j]] = [this.turnOrder[j], this.turnOrder[i - 1]];
         }
+        this.currentPlayer = this.turnOrder[this.turnIndex];
     }
 
     /**

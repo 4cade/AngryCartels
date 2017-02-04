@@ -150,7 +150,13 @@ module.exports = function(io, socket){
    */
   socket.on('roll', function() {
     // TODO check if it is this player's turn
-    io.to(socket.inGame).emit('movement', games[socket.inGame].rollDice());
+    let json = games[socket.inGame].rollDice();
+    if(json['actions'].includes('draw bus pass')) {
+      const i = json['actions'].indexOf('draw bus pass');
+      json['actions'] = json['actions'].splice(i, 1);
+      io.to(socket.inGame).emit('draw bus pass', games[socket.inGame].drawBusPass());
+    }
+    io.to(socket.inGame).emit('movement', json);
   });
 
   /**
@@ -311,29 +317,31 @@ module.exports = function(io, socket){
   });
 
   /**
-   * Draws a chance card for the client
+   * Draws a fortune card for the client
    * @return JSON with field message (string saying what happened),
-   *       player (name: name), and card (title, description, short, play)
+   *       player (name: name), card (title, description, short, play),
+   *       actions (list of actions for the current player)
    */
-  socket.on('draw chance', function() {
-    let card = games[socket.inGame].drawChance();
+  socket.on('draw fortune', function() {
+    let card = games[socket.inGame].drawFortune();
     // TODO immediately
     socket.emit('special card', card);
   });
 
   /**
-   * Draws a community chest card for the client
+   * Draws a misfortune card for the client
    * @return JSON with field message (string saying what happened),
    *       player (name: name), and card (title, description, short, play)
+   *       actions (list of actions for the current player)
    */
-  socket.on('draw community chest', function() {
-    let card = games[socket.inGame].drawCommunityChest();
+  socket.on('draw misfortune', function() {
+    let card = games[socket.inGame].drawMisfortune();
     // TODO immediately
     socket.emit('special card', card);
   });
 
   /**
-   * Uses a chance/community chest card
+   * Uses a fortune/misfortune card
    * @return TODO
    */
   socket.on('use special card', function(card) {
@@ -370,6 +378,15 @@ module.exports = function(io, socket){
   socket.on('end turn', function() {
     // TODO check if correct player
     io.to(socket.inGame).emit('next turn', games[socket.inGame].nextTurn());
+  });
+
+  /**
+   * Get actions for the player.
+   * @param info JSON with field player (name of player)
+   * @return JSON with field actions (list of actions)
+   */
+  socket.on('get actions', function(info) {
+    io.to(socket.inGame).emit('actions', games[socket.inGame].getActions(info.player));
   });
 
   /**

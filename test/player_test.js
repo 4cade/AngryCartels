@@ -243,6 +243,18 @@ describe('Player', function() {
             assert.deepEqual(player1.onHoldActions, ['roll'])
             player1.useAction('mrmonopoly');
             assert.deepEqual(Array.from(player1.actions).sort(), ['roll', 'mortgage', 'unmortgage', 'use special', 'build', 'trade', 'bus'].sort());
+            player1.useAction('roll');
+            player1.addActions(['rent']);
+            assert.deepEqual(Array.from(player1.actions).sort(), ['mortgage', 'unmortgage', 'use special', 'build', 'trade', 'rent'].sort());
+            player1.useAction('rent');
+            assert.deepEqual(Array.from(player1.actions).sort(), ['end turn', 'mortgage', 'unmortgage', 'use special', 'build', 'trade'].sort());
+
+            // fortune card
+            player1.endTurn();
+            player1.startTurn();
+            player1.useAction('roll');
+            player1.addActions(['draw fortune']);
+            assert.deepEqual(Array.from(player1.actions).sort(), ['draw fortune', 'mortgage', 'unmortgage', 'use special', 'build', 'trade'].sort());
         });
     });
 })

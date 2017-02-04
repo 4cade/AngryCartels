@@ -20,12 +20,12 @@ app.on( 'error', function( error ){
     });
 
 // database setup
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
-var db = mongoose.connection;
-db.on('error', function() {console.log('connection error'); });
-db.once('open', function (callback) {
-    console.log("database connected");
-});
+// mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
+// var db = mongoose.connection;
+// db.on('error', function() {console.log('connection error'); });
+// db.once('open', function (callback) {
+//     console.log("database connected");
+// });
 
 // socket stuff
 io.on('connection', function(socket) {synchronizer(io, socket);});

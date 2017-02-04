@@ -19,7 +19,7 @@ class Team {
             this.money = 3200;
             this.properties = new Set(); // set of Property Objects
             this.busTickets = {}; // key of bus ticket type to quantity
-            this.specialCards = {} // key of special cards acquired via chance/community chest to quantity
+            this.specialCards = {} // key of special cards acquired via fortune/misfortune to quantity
 
             // need to start with one bus ticket
             const pass = Card.drawBusPass();
@@ -167,7 +167,7 @@ class Team {
     }
 
     /**
-     * The player acquires the specified chance/community chest card.
+     * The player acquires the specified fortune/misfortune card.
      * @param card Object name of the card
      * @return boolean true if card is added
      */
@@ -180,7 +180,7 @@ class Team {
     }
 
     /**
-     * The player uses the specified chance/community chest card and loses it.
+     * The player uses the specified fortune/misfortune card and loses it.
      * @param card Object name of the card
      * @return boolean true if card is used, false otherwise
      */

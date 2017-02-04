@@ -168,7 +168,6 @@ class BoardManager {
      */
     nextLocation(currentLocation, odd, forward, track) {
         let next = null
-        console.log(currentLocation);
         let current = this.locations[currentLocation]
         let lane = track
         

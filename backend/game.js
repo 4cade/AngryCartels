@@ -29,7 +29,7 @@ class Game {
             this.playerManager.scrambleTurnOrder();
             this.playerManager.start();
 
-            // console.log(this.toJSON());
+            // console.log(this.playerManager.toJSON());
             // TODO hold timestamp so that checks can be made for auctions and stuff if taking too long
         }
         else {
@@ -107,7 +107,7 @@ class Game {
             totalRoll = die1 + die2;
         }
         else if(die3 === 6) {
-            die3 = 'gain bus pass'
+            die3 = 'draw bus pass'
             totalRoll = die1 + die2;
         }
         else {
@@ -501,9 +501,9 @@ class Game {
         if(!go) {
             return {"fail": true};
         }
-        let card = Card.drawChance();
+        let card = Card.drawFortune();
         player.gainSpecialCard(card);
-        const message = player.name + "drew a chance card";
+        const message = player.name + " drew a fortune card";
         return {"card": card, "player": {"name": player.name}, "message": message, "actions": player.getActions()};
     }
 
@@ -518,9 +518,9 @@ class Game {
         if(!go) {
             return {"fail": true};
         }
-        let card = Card.drawCommunityChest();
+        let card = Card.drawMisfortune();
         player.gainSpecialCard(card);
-        const message = player.name + "drew a community chest card";
+        const message = player.name + " drew a misfortune card";
         return {"card": card, "player": {"name": player.name}, "message": message, "actions": player.getActions()};
     }
 
@@ -531,6 +531,7 @@ class Game {
      */
     useSpecialCard(card) {
         let player = this.playerManager.getCurrentPlayer();
+        let message = "";
         //player does not have card
         if (!player.specialCard.hasOwnProperty(card)){
             return -1 // TODO will actually return a JSON
@@ -538,23 +539,49 @@ class Game {
 
         player.useSpecialCard(card)
         let desc = card.short;
-        if (card.play === "immediately"){
-            if (desc.includes("pay")){
+        if (desc.includes("pay")){
 
-            }
-            else if (desc.includes("collect")){
-
-            }
-            else if (desc.includes("trip")){
-
-            }
-            else if (desc.includes("move")){
-
-            }
         }
-        else if (card.play === "keep"){
-            //desc = just say no
+        else if (desc.includes("collect")){
+
         }
+        else if (desc.includes("trip")){
+
+        }
+        else if (desc.includes("move")){
+
+        }
+        else if (desc.includes("gain")){
+            let words = desc.split(' ');
+            const amt = parseInt(words[1])
+            player.deltaMoney(amt);
+            message = player.name + " gained $" + amt;
+        }
+        else if (desc.includes("lose")){
+            let words = desc.split(' ');
+            const amt = parseInt(words[1])
+            player.deltaMoney(-amt);
+            message = player.name + " lost $" + amt;
+        }
+
+        return {"card": card, "player": {"name": player.name}, "message": message}
+    }
+
+    /**
+     * The current player draws a bus pass.
+     * @return JSON with field message (string saying what happened),
+     *       player (name: name), and card (string name of pass)
+     */
+    drawBusPass() {
+        let player = this.playerManager.getCurrentPlayer();
+        const go = player.useAction('draw bus pass');
+        if(!go) {
+            return {"fail": true};
+        }
+        let card = Card.drawBusPass();
+        player.gainBusPass(card);
+        const message = player.name + " drew a " + card + " bus pass";
+        return {"card": card, "player": {"name": player.name}, "message": message, "actions": player.getActions()};
     }
 
     /**
@@ -854,6 +881,16 @@ class Game {
      */
     getPlayerNames() {
         return this.playerManager.getPlayerNames();
+    }
+
+    /**
+     * Gets the actions for the player
+     * @param name name of player asking
+     *
+     * @return JSON with field actions (list of actions)
+     */
+    getActions(name) {
+        return this.playerManager.getPlayer(name).getActions();
     }
 }
 

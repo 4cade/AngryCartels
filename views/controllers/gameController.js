@@ -3,11 +3,13 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	$scope.actions = [];
 	$scope.auctionPrice = 0;
 	$scope.recentLocation = null;
+	$scope.messages = [];
 
 	// socket.emit('get client name', {});
 	// socket.emit('request game data', {});
 
 	// TODO investigate which of the $scope.$apply()s are needed
+	// $interval(function() { if($scope.actions.length === 0 && $scope.gameGoing){socket.emit('get actions', {"player": $scope.username});} }, 5000);
 
 	socket.on('game data', function(gameData) {
 		// $scope.gameData = gameData;
@@ -36,9 +38,11 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 	});
 
 	socket.on('next turn', function(json) {
+		console.log(json);
 		$scope.currentPlayer = json.player
 		$scope.message = json.message
-		if(json.player.name === $scope.username) {
+		$scope.messages.push($scope.message);
+		if(json.player === $scope.username) {
 			$scope.actions = json.actions;
 		}
 	})
@@ -47,6 +51,7 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		// TODO update locations of players on board
 		console.log(json);
 		$scope.message = json.message
+		$scope.messages.push($scope.message);
 		$scope.recentLocation = json.movedTo.slice(-1)[0];
 
 		for(let tname in $scope.teams) {
@@ -68,6 +73,7 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 
 	socket.on('property bought', function(json) {
 		$scope.message = json.message
+		$scope.messages.push($scope.message);
 
 		for(let tname in $scope.teams) {
 			let team = $scope.teams[tname]
@@ -84,6 +90,54 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 			$scope.actions = json.actions;
 		}
 	});
+
+	socket.on('special card', function(json) {
+		$scope.message = json.message
+		$scope.messages.push($scope.message);
+
+		for(let tname in $scope.teams) {
+			let team = $scope.teams[tname]
+			for(let index in team.players) {
+				let player = team.players[index]
+				if(player.name === json.player.name) {
+					if(team.specialCards[json.card]) {
+						team.specialCards[json.card] += 1
+					}
+					else {
+						team.specialCards[json.card] = 1
+					}
+				}
+			}
+		}
+
+		if(json.player.name === $scope.username) {
+			$scope.actions = json.actions;
+		}
+	})
+
+	socket.on('draw bus pass', function(json) {
+		$scope.message = json.message
+		$scope.messages.push($scope.message);
+
+		for(let tname in $scope.teams) {
+			let team = $scope.teams[tname]
+			for(let index in team.players) {
+				let player = team.players[index]
+				if(player.name === json.player.name) {
+					if(team.busTickets[json.card]) {
+						team.busTickets[json.card] += 1
+					}
+					else {
+						team.busTickets[json.card] = 1
+					}
+				}
+			}
+		}
+
+		if(json.player.name === $scope.username) {
+			$scope.actions = json.actions;
+		}
+	})
 
 	socket.on('send client name', function(name) {
 		$scope.username = name;
@@ -108,6 +162,11 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 
 	socket.on('all unowned', function(locations) {
 		$scope.locationList = locations;
+	});
+
+	socket.on('actions', function(json) {
+		console.log('action', json)
+		$scope.actions = json.actions;
 	});
 
 	socket.on('new auction', function(info) {
@@ -161,11 +220,11 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 		else if(action === 'rent') {
 			$scope.payRent();
 		}
-		else if(action === 'chance') {
-			$scope.drawChance();
+		else if(action === 'draw fortune') {
+			socket.emit('draw fortune', {})
 		}
-		else if(action === 'community chest') {
-			$scope.drawCommunityChest();
+		else if(action === 'draw misfortune') {
+			socket.emit('draw misfortune', {})
 		}
 		
 		$scope.actions = [];
@@ -173,21 +232,6 @@ angryCartels.controller('gameController', function($scope, $interval, socket) {
 
 	$scope.rollDice = function() {
 		socket.emit('roll', {});
-		
-	}
-
-	$scope.drawBusPass = function() {
-		// TODO
-	}
-
-	$scope.drawChance = function() {
-		// TODO
-		socket.emit('draw chance', {});
-	}
-
-	$scope.drawCommunityChest = function() {
-		// TODO
-		socket.emit('draw community chest', {});
 	}
 
 	$scope.askBuyHouse = function() {
