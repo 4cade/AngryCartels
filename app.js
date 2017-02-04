@@ -3,7 +3,7 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-var socket = require('./backend/socket.js');
+var synchronizer = require('./backend/synchronizer');
 var mongoose = require('mongoose');
 
 // application -------------------------------------------------------------
@@ -20,15 +20,15 @@ app.on( 'error', function( error ){
     });
 
 // database setup
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
-var db = mongoose.connection;
-db.on('error', function() {console.log('connection error'); });
-db.once('open', function (callback) {
-    console.log("database connected");
-});
+// mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
+// var db = mongoose.connection;
+// db.on('error', function() {console.log('connection error'); });
+// db.once('open', function (callback) {
+//     console.log("database connected");
+// });
 
 // socket stuff
-io.on('connection', socket);
+io.on('connection', function(socket) {synchronizer(io, socket);});
 
 // make the server start and listen
 server.listen(3000, function () {

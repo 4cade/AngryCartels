@@ -1,85 +1,37 @@
 <div ng-controller="gameController">
 	<div class="row">
-		<div class="col-sm-10">
-			<board></board>
+		<div class="col-sm-6">
+			<h2>You are {{username}}</h2>
+			<div>
+				Teams:
+				<div ng-repeat="team in teams">
+					<bold>{{team.name}}</bold>
+					<ul>
+						<li>Money: {{team.money}}</li>
+						<li>Properties: {{team.properties}}</li>
+						<li>Bus Passes: {{team.busTickets}}</li>
+						<li>Special Cards: {{team.specialCards}}</li>
+					</ul>
+					<div>
+						Players:
+						<ul>
+							<li ng-repeat="player in team.players">{{player.name}}: {{player.location}}</li>
+						<ul>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="col-sm-2">
-			<h3>Username: {{username}}</h3>
-			<p>{{message}}</p>
-
-			<button type="button" class="btn btn-default" ng-if="gameData['turnOrder'].length === 0" ng-click="assignOrder()">Give turns</button>
-			<p>Turns: {{gameData['turnOrder']}}</p>
-			<p ng-if="currentTurn"> {{currentTurn}}'s turn</p>
-			<div ng-show="actions.length > 0">
-				<div ng-if="actions[0] === 'buy'">
-					<button type="button" class="btn btn-default" ng-click="buyProperty(recentLocation)">Buy {{recentLocation}}</button>
-					<button type="button" class="btn btn-default" ng-click="upForAuction(recentLocation)">Put {{recentLocation}} up for Auction</button>
-				</div>
-				<div ng-if="actions[0] === 'mrmonopoly'">
-					<button type="button" class="btn btn-default" ng-click="startMrMonopoly()">Start Mr. Monopoly</button>
-				</div>
-				<div ng-if="actions[0] === 'rent'">
-
-				</div>
-				<div ng-if="actions[0] === 'subway'">
-					Choose a property to take the subway to:
-					<ul>
-						<li ng-repeat="index in locationList" ng-click="selectLocation(locationList[index])">{{locationList[index]}}</li>
-					</ul>
-				</div>
-				<div ng-if="actions[0] === 'chance'">
-					<button type="button" class="btn btn-default" ng-click="drawChance()">Draw Chance</button>
-				</div>
-				<div ng-if="actions[0] === 'community chest'">
-					<button type="button" class="btn btn-default" ng-click="drawCommunityChance()">Draw Community Chest</button>
-				</div>
-				<div ng-if="actions[0] === 'bus'">
-					<button type="button" class="btn btn-default" ng-click="drawBusPass()">Draw Bus Pass</button>
-				</div>
-				<div ng-if="actions[0] === 'auction choice'">
-					Choose a property to auction off:
-					<ul>
-						<li ng-repeat="index in locationList" ng-click="selectLocation(locationList[index])">{{locationList[index]}}</li>
-						<button type="button" class="btn btn-default" ng-click="setAuctionProperty()">Auction</button>
-					</ul>
-				</div>
-				<div ng-if="actions[0] === 'auction'">
-					<div ng-if="notSentAuctionPrice">
-						Auction {{recentLocation}} for: <input ng-model="auctionPrice">
-						<button type="button" class="btn btn-default" ng-click="setAuctionPrice(auctionPrice)">setAuctionPrice</button>
-					</div>
-					<div ng-if="!notSentAuctionPrice">
-						Waiting for final results...
-					</div>
-					<div ng-if="auctionKeys().length > 0">Players that have placed bids:
-							<ul><li ng-repeat="index in auctionKeys()">{{index}}</li></ul>
-					</div>
-				</div>
-				<div ng-if="actions[0] === 'highest rent'">
-					
-				</div>
-				<div ng-if="actions[0] === 'nothing'">
-					<!-- maybe just delete this? -->
-				</div>
+		<div class='col-sm-6'>
+		It is {{currentPlayer}}'s turn!
+		<br>
+		{{message}}
+		<br>
+			<div ng-if="currentPlayer===username" class="btn-group-vertical">
+				Actions:
+				<button ng-repeat='action in actions' ng-click="doAction(action)" class="btn btn-primary">{{action}}</button>
 			</div>
-			<div ng-show="currentTurn === username">
-				<div ng-hide="actions.length > 0 && actions[0] != 'auction'">
-					<button type="button" class="btn btn-default" ng-if="canRoll" ng-click="rollDice()">Roll Dice</button>
-					<button type="button" class="btn btn-default" ng-if="!canRoll" ng-click="endTurn()">End Turn</button>
-				</div>
-				<button type="button" class="btn btn-default" ng-click="startTrade()">Trade</button>
-			</div>
-			Players:
-			<div ng-repeat="player in players">
-				<div>Name: {{player.name}} </div>
-				<div>Location: {{player.location}} </div>
-				<div>Money: {{player.money}} </div>
-				<ul ng-if="hasProperty(player)">
-					Properties:<br></br>
-					<li ng-repeat="property in playerProperties(player)">{{property}}</li>
-				</ul>
-				<br></br>
-			</div>
+		<br>
+		{{messages}}
 		</div>
 	</div>
 </div>

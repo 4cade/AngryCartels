@@ -17,5 +17,3 @@ Let's have fun with our version of Ultimate Monopoly.
 
 ##### Miscellaneous
 - Alex Luh
-  
-  
