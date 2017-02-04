@@ -1,6 +1,6 @@
 # ANGRY CARTELS
 
-Let's have fun with our version of Ultimate Monopoly.
+Let's have fun with our innovative property trading game!.
 
 
 ### Contributors:
