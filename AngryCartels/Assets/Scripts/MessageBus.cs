@@ -45,6 +45,18 @@ public class MessageBus
     }
 
     // Loops through all subscribers registered to the specified id
+    internal void Broadcast(string id, params object[] data)
+    {
+        List<Action<Message>> actionList = subscribers[id];
+        Message message = new Message(id, data);
+
+        foreach (Action<Message> action in actionList)
+        {
+            action.Invoke(message);
+        }
+    }
+
+    // Loops through all subscribers registered to the specified id
     internal void Broadcast(Message message)
     {
         List<Action<Message>> actionList = subscribers[message.MessageId];
