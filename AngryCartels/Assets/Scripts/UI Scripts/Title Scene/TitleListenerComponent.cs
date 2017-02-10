@@ -17,7 +17,7 @@ public class TitleListenerComponent : MonoBehaviour {
 
     public void EnterName()
     {
-        Debug.Log("Name Entered");
+        //Debug.Log("Name Entered");
 
         inputField.GetComponent<InputField>().interactable = false;
         string playerName = inputField.transform.Find("Text").GetComponent<Text>().text;
@@ -38,7 +38,7 @@ public class TitleListenerComponent : MonoBehaviour {
 
     public void CreateGame()
     {
-        Debug.Log("TODO: Create Game");
+        MessageBus.Instance.Broadcast("create_game");
     }
 
     public void StartGame()

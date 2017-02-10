@@ -18,11 +18,14 @@ module.exports = function(io, socket){
    */
   socket.on('join', function(info) {
     socket.emit('send client name', socket.username);
+    console.log(info.username + " has emitted a join");
     if(info.username)
         socket.username = info.username
+        console.log("Username is valid");
         if(users[socket.username]) {
           // TODO do appropriate stuff to the socket to allow reconnection
           // console.log('reconnection')
+          console.log("Join in users");
           socket.inGame = users[socket.username];
           socket.join(socket.inGame);
           socket.emit('in room', {"owner": socket.inGame});

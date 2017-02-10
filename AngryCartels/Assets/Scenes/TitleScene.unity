@@ -266,7 +266,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
       propertyPath: url
-      value: ws://localhost:3000/
+      value: ws://localhost:3000/socket.io/?EIO=4&transport=websocket
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
       propertyPath: m_IsActive
@@ -278,7 +278,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
       propertyPath: autoConnect
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+      propertyPath: pingInterval
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+      propertyPath: pingTimeout
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
