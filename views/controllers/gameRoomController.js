@@ -64,6 +64,7 @@ angryCartels.controller('gameRoomController', function($scope, $interval, socket
     })
 
     socket.on('send client name', function(name) {
+	  console.log('gameRoomcontroller send client name ' + name);
       $scope.username = name;
       $scope.joined = true;
       socket.emit('get games', {});

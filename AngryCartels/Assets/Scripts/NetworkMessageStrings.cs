@@ -9,7 +9,8 @@ public abstract class NetworkMessageStrings
     public static readonly string CHAT_MESSAGE = "chat message";
     public static readonly string CREATE_GAME = "create game";
     public static readonly string STOP_HOSTING_GAME = "stop hosting game";
-    public static readonly string JOIN_GAME = "join"; // asdasdf
+    public static readonly string JOIN = "join"; // asdasdf
+    public static readonly string JOIN_GAME = "join game";
     public static readonly string LEAVE_GAME = "leave game";
     public static readonly string GET_GAMES = "get games";
 
@@ -48,4 +49,5 @@ public abstract class NetworkMessageStrings
     public static readonly string NEW_AUCTION_PRICE = "new auction price";
     public static readonly string AUCTION_WINNER= "auction winner";
     public static readonly string ALL_UNOWNED_LOCATIONS = "all unowned locations";
+    public static readonly string IN_ROOM = "in room";
 }

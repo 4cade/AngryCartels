@@ -4,6 +4,8 @@ var users = {};
 var userGenNum = 1;
 var games = {};
 
+var temp_user_name = 'yep';
+
 // interactions for the socket object
 module.exports = function(io, socket){
   // console.log('a user connected');
@@ -21,7 +23,8 @@ module.exports = function(io, socket){
     console.log(info.username + " has emitted a join");
     if(info.username)
         socket.username = info.username
-        console.log("Username is valid");
+        console.log("Username " + socket.username + " is valid");
+		temp_user_name = socket.username;
         if(users[socket.username]) {
           // TODO do appropriate stuff to the socket to allow reconnection
           // console.log('reconnection')
@@ -104,6 +107,7 @@ module.exports = function(io, socket){
   socket.on('join game', function(host) {
     games[host]["players"].push(socket.username);
     socket.inGame = host;
+	socket.username = temp_user_name;
     console.log(socket.username + " joined " + host + "'s game");
     socket.join(host);
     users[socket.username] = socket.inGame;
