@@ -107,7 +107,7 @@ module.exports = function(io, socket){
   socket.on('join game', function(host) {
     games[host]["players"].push(socket.username);
     socket.inGame = host;
-	socket.username = temp_user_name;
+	socket.username = temp_user_name; // socket.username seems to change
     console.log(socket.username + " joined " + host + "'s game");
     socket.join(host);
     users[socket.username] = socket.inGame;

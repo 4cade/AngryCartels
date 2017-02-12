@@ -18,7 +18,6 @@ public class TitleListenerComponent : MonoBehaviour {
     public GameObject playerTextPrefab;
 
     private string lobbyHostName = null;
-    private JSONObject playerJson = null;
 
 	// Use this for initialization
 	void Awake ()
@@ -29,8 +28,7 @@ public class TitleListenerComponent : MonoBehaviour {
 
     private void JoinRoom(Message obj)
     {
-        lobbyHostName = obj.GetData<string>();
-        Debug.Log("TODO WHYYYYY");
+        lobbyHostName = obj.GetData<JSONObject>().list[0].str;
     }
 
     private void TitleResponseReceived(Message obj)
@@ -40,22 +38,15 @@ public class TitleListenerComponent : MonoBehaviour {
             case TitleResponseType.LOBBY_UPDATE:
                 ClearLobbyItems();
                 JSONObject json = obj.GetData<JSONObject>(1);
-                List<string> hostNames = json.keys;
-                // then add all the servers to the list
-                Transform contentTransform = serverList.transform.Find("Content");
-                foreach (string name in hostNames)
-                {
-                    GameObject button = Instantiate(serverButtonlPrefab);
-                    button.transform.SetParent(contentTransform);
-                    button.GetComponentInChildren<Text>().text = name;
-                }
+                CreateLobbyList(json);
 
                 // add people in lobby if we have a host
                 if (lobbyHostName != null)
                 {
                     int index = json.keys.FindIndex(x => x == lobbyHostName);
                     JSONObject childObject = json.list[index];
-                    Debug.Log(childObject.ToString());
+                    ClearPlayerTextInLobby();
+                    CreateLobbyPlayerText(childObject.GetField("players"));
                 }
 
                 break;
@@ -63,8 +54,34 @@ public class TitleListenerComponent : MonoBehaviour {
 
     }
 
+    private void CreateLobbyList(JSONObject json)
+    {
+        List<string> hostNames = json.keys;
+        // then add all the servers to the list
+        Transform contentTransform = serverList.transform.Find("Content");
+        foreach (string name in hostNames)
+        {
+            GameObject button = Instantiate(serverButtonlPrefab);
+            button.transform.SetParent(contentTransform);
+            button.GetComponentInChildren<Text>().text = name;
+        }
+    }
+
+    private void CreateLobbyPlayerText(JSONObject playersObject)
+    {
+        List<JSONObject> nameList = playersObject.list;
+        Transform contentTransform = playerList.transform.Find("Content");
+        foreach(JSONObject json in nameList)
+        {
+            GameObject text = Instantiate(playerTextPrefab);
+            text.transform.SetParent(contentTransform);
+            text.GetComponent<Text>().text = json.str;
+        }
+    }
+
     public void LeaveLobby()
     {
+        Debug.Log("WARNNIG - SERVER DOES NOT KNOW PLAYER LEFT LOBBY");
         ClearPlayerTextInLobby();
         lobbyHostName = null;
     }
@@ -81,7 +98,6 @@ public class TitleListenerComponent : MonoBehaviour {
 
     public void RefreshList()
     {
-        Debug.Log("Refresh List");
         // First remove all children that have been added
         ClearLobbyItems();
         
@@ -115,7 +131,7 @@ public class TitleListenerComponent : MonoBehaviour {
 
     private void ClearPlayerTextInLobby()
     {
-        Text[] textItems = serverList.GetComponentsInChildren<Text>();
+        Text[] textItems = playerList.GetComponentsInChildren<Text>();
         foreach (Text butt in textItems)
         {
             Destroy(butt.gameObject);

@@ -7,15 +7,13 @@ using UnityEngine;
 public class NetworkManager : MonoBehaviour {
 
     private SocketIO.SocketIOComponent socket;
-    private MessageBus bus;
 
     void Awake()
     {
-        // Register MessageBus Events
-        bus = MessageBus.Instance;
-        bus.Register("player_name_set", PlayerNameReceived);
-        bus.Register("refresh", RefreshLobbies);
-        bus.Register("join_lobby", JoinLobby);
+        // Register MessageBus Events     
+        MessageBus.Instance.Register("player_name_set", PlayerNameReceived);
+        MessageBus.Instance.Register("refresh", RefreshLobbies);
+        MessageBus.Instance.Register("join_lobby", JoinLobby);
         //bus.Register("create_game", CreateGame);
 
         DontDestroyOnLoad(gameObject); // Create this object between scenes
@@ -24,7 +22,6 @@ public class NetworkManager : MonoBehaviour {
     private void JoinLobby(Message obj)
     {
         string name = obj.GetData<string>();
-        Debug.Log("unity joining server host " + name);
         socket.Emit(NetworkMessageStrings.JOIN_GAME, name);
     }
 
@@ -35,7 +32,6 @@ public class NetworkManager : MonoBehaviour {
 
     private void RefreshLobbies(Message obj)
     {
-        Debug.Log("TODO get games");
         socket.Emit(NetworkMessageStrings.GET_GAMES);
     }
 
@@ -64,7 +60,7 @@ public class NetworkManager : MonoBehaviour {
     {
         Debug.Log("WARNING: If updated games message is received after the " 
             + "join game message, then the player lobby wont be properly displayed.");
-        bus.Broadcast("joined_room", obj.data.list[0].keys[0]);
+        MessageBus.Instance.Broadcast("joined_room", obj.data);
     }
 
     private void ClientNameCallback(SocketIOEvent obj)
@@ -74,7 +70,6 @@ public class NetworkManager : MonoBehaviour {
 
     private void UpdatedGamesCallback(SocketIOEvent obj)
     {
-        Debug.Log("Updated Games: " + obj.data.ToString());
         MessageBus.Instance.Broadcast(new Message("title_response_received", TitleResponseType.LOBBY_UPDATE, obj.data));
     }
 }
