@@ -2,10 +2,10 @@
 using System.Collections;
 using UnityEngine.Assertions;
 
-public class Game : MonoBehaviour {
+public class GameInfo : MonoBehaviour {
 
-    private static Game instance;
-    public static Game Instance
+    private static GameInfo instance;
+    public static GameInfo Instance
     {
         get
         {

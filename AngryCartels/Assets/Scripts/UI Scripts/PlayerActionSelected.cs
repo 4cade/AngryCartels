@@ -44,7 +44,7 @@ public class PlayerActionSelected : MonoBehaviour
     {
         actionText = GetComponent<Text>();
         type = newType;
-        actionText.text = Game.Instance.GetActionName(actionNameIndex);
+        actionText.text = GameInfo.Instance.GetActionName(actionNameIndex);
     }
 
 }

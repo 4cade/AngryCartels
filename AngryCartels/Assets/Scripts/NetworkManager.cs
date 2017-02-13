@@ -5,6 +5,12 @@ using SocketIO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// NOTES:
+/// We probably should only send the lobby hosts when searching for a lobby
+/// and not include the players already in that lobby.
+/// </summary>
+
 public class NetworkManager : MonoBehaviour {
 
     public int titleScene;
@@ -37,7 +43,8 @@ public class NetworkManager : MonoBehaviour {
 
     private void GameData(SocketIOEvent obj)
     {
-        Debug.Log("Game Data: " + obj.data.ToString());
+        //Debug.Log("Game Data: " + obj.data.ToString());
+        MessageBus.Instance.Broadcast("game_data_received", obj.data);
     }
 
     private void StartGame(SocketIOEvent obj)

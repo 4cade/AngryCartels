@@ -43,7 +43,7 @@ public class PlayerScript : MonoBehaviour {
         playerPlace = 1;
 
 
-        Debug.Log("Hardcoding 14 for card groups");
+    
         cards = new Dictionary<int, List<string>>();
 
         // TEMP: Randomize the cards for each player
