@@ -1991,6 +1991,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42369b77ca15ee149b3c6f4440fb57b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  titleScene: 0
+  gameScene: 1
 --- !u!1 &1769549379
 GameObject:
   m_ObjectHideFlags: 0

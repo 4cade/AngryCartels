@@ -3,8 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using SocketIO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour {
+
+    public int titleScene;
+    public int gameScene;
 
     private SocketIO.SocketIOComponent socket;
 
@@ -14,9 +18,31 @@ public class NetworkManager : MonoBehaviour {
         MessageBus.Instance.Register("player_name_set", PlayerNameReceived);
         MessageBus.Instance.Register("refresh", RefreshLobbies);
         MessageBus.Instance.Register("join_lobby", JoinLobby);
-        //bus.Register("create_game", CreateGame);
+        MessageBus.Instance.Register("create_game", CreateGame);
 
         DontDestroyOnLoad(gameObject); // Create this object between scenes
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+        socket = GetComponent<SocketIO.SocketIOComponent>();
+
+        socket.On(NetworkMessageStrings.SEND_CLIENT_NAME, ClientNameCallback);
+        socket.On(NetworkMessageStrings.UPDATED_GAMES, UpdatedGamesCallback);
+        socket.On(NetworkMessageStrings.IN_ROOM, InRoom);
+        socket.On(NetworkMessageStrings.START_GAME, StartGame);
+        socket.On(NetworkMessageStrings.GAME_DATA, GameData);
+    }
+
+    private void GameData(SocketIOEvent obj)
+    {
+        Debug.Log("Game Data: " + obj.data.ToString());
+    }
+
+    private void StartGame(SocketIOEvent obj)
+    {
+        SceneManager.LoadScene(gameScene);
     }
 
     private void JoinLobby(Message obj)
@@ -45,15 +71,6 @@ public class NetworkManager : MonoBehaviour {
         JSONObject json = new JSONObject(data);
         socket.Emit(NetworkMessageStrings.JOIN, json);
         //Debug.Log("Network Manager Received " + playerName);
-    }
-
-    // Use this for initialization
-    void Start () {
-        socket = GetComponent<SocketIO.SocketIOComponent>();
-
-        socket.On(NetworkMessageStrings.SEND_CLIENT_NAME, ClientNameCallback);
-        socket.On(NetworkMessageStrings.UPDATED_GAMES, UpdatedGamesCallback);
-        socket.On(NetworkMessageStrings.IN_ROOM, InRoom);
     }
 
     private void InRoom(SocketIOEvent obj)

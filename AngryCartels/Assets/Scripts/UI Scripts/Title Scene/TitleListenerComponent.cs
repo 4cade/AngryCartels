@@ -18,6 +18,7 @@ public class TitleListenerComponent : MonoBehaviour {
     public GameObject playerTextPrefab;
 
     private string lobbyHostName = null;
+    private bool isHost = false;
 
 	// Use this for initialization
 	void Awake ()
@@ -75,6 +76,10 @@ public class TitleListenerComponent : MonoBehaviour {
         {
             GameObject text = Instantiate(playerTextPrefab);
             text.transform.SetParent(contentTransform);
+            if (json.str.Length == 0)
+            {
+                Debug.LogError("Invalid player name");
+            }
             text.GetComponent<Text>().text = json.str;
         }
     }
@@ -84,6 +89,7 @@ public class TitleListenerComponent : MonoBehaviour {
         Debug.Log("WARNNIG - SERVER DOES NOT KNOW PLAYER LEFT LOBBY");
         ClearPlayerTextInLobby();
         lobbyHostName = null;
+        isHost = false;
     }
 
     public void EnterName()
@@ -107,17 +113,13 @@ public class TitleListenerComponent : MonoBehaviour {
 
     public void JoinGame()
     {
-        Debug.Log("TODO: Join Game");
+        Debug.Log("unused button");
     }
 
     public void CreateGame()
     {
+        isHost = true;
         MessageBus.Instance.Broadcast("create_game");
-    }
-
-    public void StartGame()
-    {
-        Debug.Log("TODO: Start Game");
     }
 
     private void ClearLobbyItems()

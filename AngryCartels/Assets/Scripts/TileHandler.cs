@@ -129,7 +129,6 @@ public class TileHandler : MonoBehaviour {
                 currentMaxTier = tier3TileCount + tier2TileCount + tier1TileCount; ;
                 break;
         }
-        Debug.Log("Next: " + nextIndex + " goal: " + goalIndex + " Max: " + currentMaxTier + " start: " + currentStartTier);
         // check to see if we will be heading in the wrong direction.
         // If we are then penalize the movement.
         // If statement adds the tier count to compensate for looping indices
@@ -189,7 +188,7 @@ public class TileHandler : MonoBehaviour {
         // debug
         while (debugPath.Count > 0)
         {
-            Debug.Log(debugPath.First.Value);
+            //Debug.Log(debugPath.First.Value);
             debugPath.RemoveFirst();
         }
 
@@ -233,7 +232,6 @@ public class TileHandler : MonoBehaviour {
         {
             //int current = open[open.Count - 1]; // TODO: should be the greatest cost score value
             int current = PopIndexFromOpenSet(open, score);
-            Debug.Log("openning " + current);
             if (current == goalIndex)
             {
                 return BuildPath(history, current);
@@ -249,7 +247,6 @@ public class TileHandler : MonoBehaviour {
 
                 //int gCost = score[current] + HeuristicCostEstimate(current, goalIndex, moveTo, tile);
                 int gCost = score[current] + HeuristicCostEstimate(tile.index, goalIndex, moveTo, tiles[current]);
-                Debug.Log("Testing neighbor " + tile.index + " with score: " + gCost + " currentscore: " + score[current]);
                 if (!open.Contains(tile.index))
                 {
                     open.Add(tile.index);

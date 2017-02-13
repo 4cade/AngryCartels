@@ -2520,9 +2520,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 0
   isForwardDirection: 0
-  goalIndex: 95
-  startIndex: 102
-  lerp: 0.5
+  goalIndex: 0
+  startIndex: 0
+  lerp: 0
 --- !u!1 &470013700
 GameObject:
   m_ObjectHideFlags: 0

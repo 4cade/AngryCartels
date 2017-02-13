@@ -57,7 +57,6 @@ public class MoveToTile : MonoBehaviour {
         {
             int lerpStart = (int) Math.Floor(lerp / lerpSpacer);
             float percentage = (lerp / lerpSpacer - lerpStart);
-            Debug.Log("LerpStart: " + lerpStart + " Lerp: " + lerp + " spacer: " + lerpSpacer);
             Vector3 startPoint = path[Math.Min(lerpStart, path.Count - 1)];
             Vector3 nextPoint = path[Math.Min(lerpStart + 1, path.Count - 1)];
 
