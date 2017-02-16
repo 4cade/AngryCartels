@@ -17,7 +17,7 @@ public class PlayerPair
     private int id;
     public int ID { get { return id; } }
 
-    PlayerPair(string name, int id)
+    public PlayerPair(string name, int id)
     {
         this.name = name;
         this.id = id;
@@ -31,7 +31,7 @@ public class TeamPair
     private int id;
     public int ID { get { return id; } }
 
-    TeamPair(string name, int id)
+    public TeamPair(string name, int id)
     {
         this.name = name;
         this.id = id;
@@ -46,7 +46,7 @@ public class BusTicket
     private int amount;
     public int Amount { get { return amount; } }
 
-    BusTicket(string name, int amount = 0)
+    public BusTicket(string name, int amount = 0)
     {
         this.name = name;
         this.amount = amount;
@@ -61,7 +61,7 @@ public class SpecialCard
     private int amount;
     public int Amount { get { return amount; } }
 
-    SpecialCard(string name, int amount = 0)
+    public SpecialCard(string name, int amount = 0)
     {
         this.name = name;
         this.amount = amount;
@@ -84,232 +84,429 @@ public class GameParser : MonoBehaviour {
 
     public List<string> GetPlayerNames()
     {
-        throw new NotImplementedException();
+        List<string> playerNames = new List<string>();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        foreach (JSONObject player in players.list)
+        {
+            JSONObject nameJson = player.GetField("name");
+            playerNames.Add(nameJson.str);
+        }
+        return playerNames;
     }
 
     public List<PlayerPair> GetPlayerNamesAndId()
     {
-        throw new NotImplementedException();
+        List<PlayerPair> playerNames = new List<PlayerPair>();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        int count = 0;
+        foreach (JSONObject player in players.list)
+        {
+            JSONObject nameJson = player.GetField("name");
+            playerNames.Add(new PlayerPair(nameJson.str, count++));
+        }
+        return playerNames;
     }
 
     public string GetPlayerNameByIndex(int index)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[index];
+        return player.GetField("name").str;
     }
 
     public bool GetPlayerForward(int playerIndex)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        return player.GetField("forward").b;
     }
 
     public string GetPlayerLocationString(int playerIndex)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        return player.GetField("location").str;
     }
 
     public int GetPlayerTrackId(int playerIndex)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        return (int)player.GetField("track").f;
     }
 
     public int GetPlayerLastRolledNumber(int playerIndex)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        return (int)player.GetField("lastRolled").f;
     }
 
     public string GetPlayerTeamString(int playerIndex)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        return player.GetField("taem").str;
     }
 
     public int GetPlayerTeamId(int playerIndex)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        string teamName = player.GetField("team").str;
+
+        int teamIndex = 0;
+        JSONObject teams = gameState.GetField("teams");
+        foreach(JSONObject team in teams.list)
+        {
+            if (team.str == teamName)
+            {
+                return teamIndex;
+            }
+            ++teamIndex;
+        }
+
+        return -1;
     }
 
     public List<string> GetPlayerActions(int playerIndex)
     {
-        throw new NotImplementedException();
+        List<string> actions = new List<string>();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        JSONObject actionJson = player.GetField("actions");
+        foreach (string action in actionJson.keys)
+        {
+            actions.Add(action);
+        }
+        return actions;
     }
 
     public List<string> GetPlayerActionsOnHold(int playerIndex)
     {
-        throw new NotImplementedException();
+        List<string> actions = new List<string>();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        JSONObject actionJson = player.GetField("onHoldActions");
+        foreach (string action in actionJson.keys)
+        {
+            actions.Add(action);
+        }
+        return actions;
     }
 
     public string GetPlayerOnNextTurn(int playerIndex)
     {
-        throw new NotImplementedException();
+        JSONObject players = gameState.GetField("playerManager").GetField("players");
+        JSONObject player = players.list[playerIndex];
+        return player.GetField("onNextTurn").str;
     }
 
     public List<string> GetTeamNames()
     {
-        throw new NotImplementedException();
+        List<string> teamNames = new List<string>();
+        JSONObject teams = gameState.GetField("teams");
+        foreach (JSONObject team in teams.list)
+        {
+            teamNames.Add(team.str);
+        }
+        return teamNames;
     }
 
     public List<TeamPair> GetTeamNamesAndId()
     {
-        throw new NotImplementedException();
+        List<TeamPair> teamNames = new List<TeamPair>();
+        JSONObject teams = gameState.GetField("playerManager").GetField("teams");
+        int count = 0;
+        foreach (JSONObject team in teams.list)
+        {
+            teamNames.Add(new TeamPair(team.str, count++));
+        }
+        return teamNames;
     }
 
     public string GetTeamName(int teamIndex)
     {
-        throw new NotImplementedException();
+        JSONObject teams = gameState.GetField("playerManager").GetField("teams");
+        return teams.list[teamIndex].str;
     }
 
     public int GetTeamMoney(int teamIndex)
     {
-        throw new NotImplementedException();
+        JSONObject teams = gameState.GetField("teams");
+        return (int)teams.list[teamIndex].GetField("money").f;
     }
 
     public List<string> GetTeamProperties(int teamIndex)
     {
-        throw new NotImplementedException();
+        List<string> teamProperties = new List<string>();
+        JSONObject teams = gameState.GetField("playerManager").GetField("teams");
+        JSONObject propertyJson = teams.list[teamIndex].GetField("properties");
+        foreach(string property in propertyJson.keys)
+        {
+            teamProperties.Add(property);
+        }
+        return teamProperties;
     }
 
     public List<BusTicket> GetTeamBusTickets(int teamIndex)
     {
-        throw new NotImplementedException();
+        List<BusTicket> teamBuses = new List<BusTicket>();
+        JSONObject teams = gameState.GetField("playerManager").GetField("teams");
+        JSONObject busJson = teams.list[teamIndex].GetField("busTickets");
+        foreach(JSONObject bus in busJson.list)
+        {
+            teamBuses.Add(new BusTicket(bus.str, (int)bus.list[0].f));
+        }
+        return teamBuses;
     }
 
     public List<SpecialCard> GetTeamSpecialCards(int teamIndex)
     {
-        throw new NotImplementedException();
+        List<SpecialCard> teamSpecial = new List<SpecialCard>();
+        JSONObject teams = gameState.GetField("playerManager").GetField("teams");
+        JSONObject cardsJson = teams.list[teamIndex].GetField("specialCards");
+        foreach (JSONObject card in cardsJson.list)
+        {
+            teamSpecial.Add(new SpecialCard(card.str, (int)card.list[0].f));
+        }
+        return teamSpecial;
     }
 
     public int GetTurnIndex()
     {
-        throw new NotImplementedException();
+        JSONObject playerManager = gameState.GetField("playerManager");
+        return (int)playerManager.GetField("turnIndex").f;
+
     }
 
     public bool GetCanRoll()
     {
-        throw new NotImplementedException();
+        JSONObject playerManager = gameState.GetField("playerManager");
+        return playerManager.GetField("canRoll").b;
+    }
+
+    public int GetDoubleCount()
+    {
+        JSONObject playerManager = gameState.GetField("playerManager");
+        return (int)playerManager.GetField("doubleCount").f;
     }
 
     public int GetAvailableHouses()
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        return (int)boardManager.GetField("houses").f;
     }
 
     public int GetAvailableHotels()
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        return (int)boardManager.GetField("hotels").f;
     }
 
     public int GetAvailableSkyscrapers()
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        return (int)boardManager.GetField("skyscrapers").f;
     }
 
     public int GetNumberPools()
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        return (int)boardManager.GetField("pool").f;
     }
 
     public int GetNumberUnownedProperties()
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        return (int)boardManager.GetField("unownedProperties").f;
     }
 
     public List<string> GetPropertyNames()
     {
-        throw new NotImplementedException();
+        List<string> tiles = new List<string>();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        foreach(JSONObject location in locations.list)
+        {
+            tiles.Add(location.str);
+        }
+        return tiles;
     }
 
     public TileType GetTileType(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return ConvertTypeFromString(tile.GetField("type").str);
     }
 
     public string GetForwardTile(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return tile.GetField("forward").keys[0];
     }
 
     public string GetBackwardTile(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return tile.GetField("backward").keys[0];
     }
 
     public int GetSide(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return Convert.ToInt32(tile.GetField("side").keys[0]);
     }
 
     public int GetTrack(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return Convert.ToInt32(tile.GetField("track").keys[0]);
     }
 
     public string GetAboveTile(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return tile.GetField("above").keys[0];
     }
 
     public string GetBelowTile(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return tile.GetField("below").keys[0];
     }
 
     public bool GetSnapshot(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return tile.GetField("snapshot").b;
     }
 
     public int GetGroup(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return (int)tile.GetField("group").f;
     }
 
     public int GetRentCurrent(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        int numHouses = (int)tile.GetField("houses").f;
+        int rent = Convert.ToInt32(tile.GetField("rent").keys[numHouses + (3 * Math.Min(1, numHouses))]);
+        throw new NotImplementedException(); // TODO: how is rent calculated
+        return rent;
     }
 
     public List<int> GetRentList(string tileName)
     {
-        throw new NotImplementedException();
+        List<int> rents = new List<int>();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        foreach (string key in tile.GetField("rent").keys)
+        {
+            rents.Add(Convert.ToInt32(key));
+        }
+        return rents;
     }
 
     public int GetMortgageValue(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return (int)tile.GetField("mortgageValue").f;
     }
 
     public int GetTileCost(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return (int)tile.GetField("cost").f;
     }
 
-    public PlayerPair GetPropertyOwner(string tileName)
+    public string GetPropertyOwner(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return tile.GetField("owner").str;
     }
 
     public bool GetIsMortgaged(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return tile.GetField("isMortgaged").b;
     }
 
     public int GetNumberHotels(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return (int)tile.GetField("hotels").f;
     }
 
     public int GetNumberHouses(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return (int)tile.GetField("houses").f;
     }
 
     public int GetNumberSkyscrapers(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return (int)tile.GetField("skyscrappers").f;
     }
 
     public int GetHousePrice(string tileName)
     {
-        throw new NotImplementedException();
+        JSONObject boardManager = gameState.GetField("boardManager");
+        JSONObject locations = boardManager.GetField("locations");
+        JSONObject tile = locations.GetField(tileName);
+        return (int)tile.GetField("housePrice").f;
+    }
+
+    public TileType ConvertTypeFromString(string tileTypeStr)
+    {
+        switch (tileTypeStr)
+        {
+            case "property":
+                return TileType.PROPERTY;
+            case "chance":
+                return TileType.CHANCE;
+            case "community chest":
+                return TileType.COMMUNITY_CHEST;
+            default:
+                throw new ArgumentException(tileTypeStr);
+        }
     }
 
     private void OnGameDataReceived(Message obj)
