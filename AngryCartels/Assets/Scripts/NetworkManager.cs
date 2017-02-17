@@ -38,7 +38,93 @@ public class NetworkManager : MonoBehaviour {
         socket.On(NetworkMessageStrings.UPDATED_GAMES, UpdatedGamesCallback);
         socket.On(NetworkMessageStrings.IN_ROOM, InRoom);
         socket.On(NetworkMessageStrings.START_GAME, StartGame);
+
+        // In Game Messages
         socket.On(NetworkMessageStrings.GAME_DATA, GameData);
+        socket.On(NetworkMessageStrings.NEXT_TURN, OnNextTurn);
+        socket.On(NetworkMessageStrings.MOVEMENT, OnMovement);
+        socket.On(NetworkMessageStrings.PROPERTY_BOUGHT, OnPropertyBought);
+        socket.On(NetworkMessageStrings.SPECIAL_CARD, OnSpecialCard);
+        socket.On(NetworkMessageStrings.DRAW_BUS_PASS, OnDrawBusPass);
+        socket.On(NetworkMessageStrings.PROPERTY_INFO, OnPropertyInfo);
+        socket.On(NetworkMessageStrings.RENT_INFO, OnRentInfo);
+        socket.On(NetworkMessageStrings.HIGHEST_RENT, OnHighestRent);
+        socket.On(NetworkMessageStrings.ALL_LOCATIONS, OnAllLocations);
+        socket.On(NetworkMessageStrings.ALL_UNOWNED, OnAllUnowned);
+        socket.On(NetworkMessageStrings.ACTIONS, OnActions);
+        socket.On(NetworkMessageStrings.NEW_AUCTION, OnNewAuction);
+        socket.On(NetworkMessageStrings.NEW_AUCTION_PRICE, OnNewAuctionPrice);
+        socket.On(NetworkMessageStrings.AUCTION_WINNER, OnNewActionWinner);
+    }
+
+    private void OnNewActionWinner(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnNewAuctionPrice(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnNewAuction(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnActions(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnAllUnowned(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnAllLocations(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnHighestRent(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnRentInfo(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnPropertyInfo(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnDrawBusPass(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnSpecialCard(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnPropertyBought(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnMovement(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
+    }
+
+    private void OnNextTurn(SocketIOEvent obj)
+    {
+        Debug.Log(obj.data.ToString());
     }
 
     private void GameData(SocketIOEvent obj)
@@ -73,9 +159,11 @@ public class NetworkManager : MonoBehaviour {
         string playerName = obj.GetData<string>();
 
         //socket.Emit("join", "{\"username\": " + playerName + "}");
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["username"] = playerName;
-        JSONObject json = new JSONObject(data);
+        //Dictionary<string, string> data = new Dictionary<string, string>();
+        //data["username"] = playerName;
+        //JSONObject json = new JSONObject(data);
+        JSONObject json = new JSONObject();
+        json.AddField("username", playerName);
         socket.Emit(NetworkMessageStrings.JOIN, json);
         //Debug.Log("Network Manager Received " + playerName);
     }

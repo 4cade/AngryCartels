@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class PlayerCardCreator : MonoBehaviour {
@@ -31,9 +32,11 @@ public class PlayerCardCreator : MonoBehaviour {
     /// This method should only be called once at the start of the game scene.
     /// </summary>
     /// <param name="numPlayers"></param>
-    internal void createPlayerCards(int numPlayers, GameObject playersContainer)
+    internal void createPlayerCards(List<PlayerPair> playerList, GameObject playersContainer)
     {
         PlayerScript[] players = playersContainer.GetComponentsInChildren<PlayerScript>();
+
+        int numPlayers = playerList.Count;
         int playerCount = 0;
 
         if (enabled) // for debugging
@@ -53,14 +56,14 @@ public class PlayerCardCreator : MonoBehaviour {
                 numPlayersTopRow = MAX_PLAYERS_PER_ROW - 1;
             }
 
+            Debug.Log("Setting player names now");
+
             // Create the top row of player cards
             for (int i = 0; i < numPlayersTopRow; ++i)
             {
                 GameObject instance = Instantiate(playerCardPrefab);
                 instance.transform.SetParent(row1.transform);
-                instance.GetComponent<PlayerCardScript>().player = players[playerCount++];
-                //instance.transform.parent = row1.transform;
-                //instance.GetComponent<RectTransform>().SetParent(row1.transform);
+                instance.GetComponent<PlayerCardScript>().Player = players[playerCount++];
             }
 
             // check if we need a second row
@@ -74,7 +77,7 @@ public class PlayerCardCreator : MonoBehaviour {
                 {
                     GameObject instance = Instantiate(playerCardPrefab);
                     instance.transform.SetParent(row2.transform);
-                    instance.GetComponent<PlayerCardScript>().player = players[playerCount++];
+                    instance.GetComponent<PlayerCardScript>().Player = players[playerCount++];
                 }
             }
         }

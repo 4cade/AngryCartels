@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Assertions;
+using System;
+using System.Collections.Generic;
 
 public class GameInfo : MonoBehaviour {
 
@@ -19,7 +21,8 @@ public class GameInfo : MonoBehaviour {
 
     // Number of players in the game
     [Range(2, 8)]
-    public int numPlayers;
+    private int numPlayers;
+    public int NumPlayers { get { return numPlayers; } }
 
     // Player Objects
     private PlayerScript[] players;
@@ -42,16 +45,18 @@ public class GameInfo : MonoBehaviour {
     // Action Types
     public string[] actionNames;
 
-	// Use this for initialization
-	void Start () {
-        
-        instance = this;
+    private GameParser parser;
 
-	    if (doesGameHaveRoundLimit)
-        {
-            GameObject.Find("RoundPanel").GetComponent<RoundCounter>().setMaxRoundsText(maxRounds);
-        }
+    private void Awake()
+    {
+        MessageBus.Instance.Register("instantiate_players", OnInstantiatePlayers);
+    }
 
+    private void OnInstantiatePlayers(Message obj)
+    {
+        numPlayers = obj.GetData<int>();
+        List<PlayerPair> playerList = parser.GetPlayerNamesAndId();
+        Debug.Log("instantiating players: " + numPlayers);
         // TEMP: add number of players
         GameObject playerContainer = transform.Find("Players").gameObject;
         players = new PlayerScript[numPlayers];
@@ -60,10 +65,29 @@ public class GameInfo : MonoBehaviour {
             GameObject player = Instantiate(playerPrefab);
             player.transform.parent = playerContainer.transform;
             players[i] = player.GetComponent<PlayerScript>();
+
+            // initial player info herer?
+            players[i].PlayerName = playerList[i].Name;
+            players[i].PlayerId = playerList[i].ID;
+            Debug.Log("TODO: set player information here like money and bitches");
+
         }
 
-        GameObject.Find("PlayerPanel").GetComponent<PlayerCardCreator>().createPlayerCards(numPlayers, playerContainer);
+        GameObject.Find("PlayerPanel").GetComponent<PlayerCardCreator>().createPlayerCards(playerList, playerContainer);
+    }
 
+    // Use this for initialization
+    void Start () {
+        
+        instance = this;
+
+	    if (doesGameHaveRoundLimit)
+        {
+            GameObject.Find("RoundPanel").GetComponent<RoundCounter>().setMaxRoundsText(maxRounds);
+        }
+
+        // add the gamestate
+        parser = GetComponent<GameParser>();
 
         // TEMP
         MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, 5));
@@ -79,13 +103,13 @@ public class GameInfo : MonoBehaviour {
         if (Input.GetMouseButton(0) && tempClick)
         {
             int numItems = 5;
-            //GameObject[] actionItems = new GameObject[numItems];
-            //for (int i = 0; i < actionItems.Length; ++i)
-            //{
-            //    actionItems[i] = Instantiate(actionItemPrefab);
-            //}
-            //MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItems));
-            //MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, numItems));
+            GameObject[] actionItems = new GameObject[numItems];
+            for (int i = 0; i < actionItems.Length; ++i)
+            {
+                actionItems[i] = Instantiate(actionItemPrefab);
+            }
+            MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItems));
+            MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, numItems));
             tempClick = false;
         }
         if (!Input.GetMouseButton(0))

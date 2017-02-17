@@ -232,64 +232,40 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+    - target: {fileID: 4525095080760878, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
-      propertyPath: url
-      value: ws://localhost:3000/socket.io/?EIO=4&transport=websocket
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
-      propertyPath: autoConnect
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
-      propertyPath: pingInterval
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
-      propertyPath: pingTimeout
-      value: 60
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
+  m_ParentPrefab: {fileID: 100100000, guid: a73f768d0f5022144ab999dc2c586662, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &295044521
 GameObject:
@@ -1976,23 +1952,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1672908924}
---- !u!1 &1729515097 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 100000, guid: b30cc084d923f0645b55bba668610d48, type: 2}
-  m_PrefabInternal: {fileID: 240659808}
---- !u!114 &1729515098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1729515097}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42369b77ca15ee149b3c6f4440fb57b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleScene: 0
-  gameScene: 1
 --- !u!1 &1769549379
 GameObject:
   m_ObjectHideFlags: 0

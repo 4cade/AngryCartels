@@ -8,11 +8,17 @@ public class PlayerScript : MonoBehaviour {
     static int counter = 0;
 
     // player's in game name
-    private string playerName;
+    private string playerName = "";
     public string PlayerName
     {
         get { return playerName; }
-        //set { playerName = value; }
+        set
+        {
+            if (playerName == "")
+            {
+                playerName = value;
+            }
+        }
     }
 
     // players money
@@ -30,6 +36,21 @@ public class PlayerScript : MonoBehaviour {
         get { return playerPlace; }
         set { playerPlace = value; }
     }
+
+    // player Id
+    private int playerId = -1;
+    public int PlayerId
+    {
+        get { return playerId; }
+        set
+        {
+            if (playerId == -1)
+            {
+                playerId = value;
+            }
+        }
+    }
+
 
 
     // Dictionary of properties held by the player - Temporary, would be stored in the db

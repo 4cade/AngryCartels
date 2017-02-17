@@ -122,6 +122,11 @@ public class TitleListenerComponent : MonoBehaviour {
         MessageBus.Instance.Broadcast("create_game");
     }
 
+    public void StartGame()
+    {
+        Debug.Log("TODO: start game");
+    }
+
     private void ClearLobbyItems()
     {
         Button[] buttons = serverList.GetComponentsInChildren<Button>();

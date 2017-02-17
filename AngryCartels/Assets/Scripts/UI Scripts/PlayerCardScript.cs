@@ -5,7 +5,21 @@ using UnityEngine.UI;
 
 public class PlayerCardScript : MonoBehaviour {
 
-    public PlayerScript player;
+    private PlayerScript player = null;
+    public PlayerScript Player
+    {
+        get { return player; }
+        set
+        {
+            if (player == null)
+            {
+                nameText.text = player.PlayerName;
+                SetMoneyText(player.PlayerMoney);
+                placeText.text = player.PlayerPlace.ToString();
+            }
+        }
+    }
+
 
     GameObject cardGroupPanel;
 
@@ -20,10 +34,6 @@ public class PlayerCardScript : MonoBehaviour {
         nameText = transform.Find("PlayerName").GetComponent<Text>();
         moneyText = transform.Find("MoneyText").GetComponent<Text>();
         placeText = transform.Find("PlaceText").GetComponent<Text>();
-
-        nameText.text = player.PlayerName;
-        SetMoneyText(player.PlayerMoney);
-        placeText.text = player.PlayerPlace.ToString();
     }
 	
     void Update()

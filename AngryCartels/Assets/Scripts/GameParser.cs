@@ -7,7 +7,19 @@ public enum TileType
 {
     PROPERTY,
     COMMUNITY_CHEST,
-    CHANCE
+    CHANCE,
+    PLACE,
+    TELEPORT,
+    AUCTION,
+    MISFORTUNE,
+    COLLECT,
+    SQUEEZE_PLAY,
+    FORTUNE,
+    RAILROAD,
+    BUS,
+    UTILITY,
+    CAB
+
 }
 
 public class PlayerPair
@@ -71,6 +83,7 @@ public class SpecialCard
 public class GameParser : MonoBehaviour {
 
     private JSONObject gameState;
+    private int numPlayers = -1;
 
 	void Awake () {
         gameState = null;
@@ -79,7 +92,10 @@ public class GameParser : MonoBehaviour {
 
     private void Start()
     {
-        // TODO: load info here
+        // TEMP: load info here
+        string file = System.IO.File.ReadAllText(@"C:\Users\chats\Desktop\game.json");
+        //gameState = new JSONObject(file);
+        //Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
     }
 
     public List<string> GetPlayerNames()
@@ -92,6 +108,31 @@ public class GameParser : MonoBehaviour {
             playerNames.Add(nameJson.str);
         }
         return playerNames;
+    }
+
+    public int GetCurrentPlayerIndex()
+    {
+        if (numPlayers == -1)
+        {
+            numPlayers = GetPlayerNames().Count;
+        }
+
+        int turnIndex = GetTurnIndex();
+
+        return turnIndex % numPlayers;
+    }
+
+    public string GetCurrentPlayerName()
+    {
+        if (numPlayers == -1)
+        {
+            numPlayers = GetPlayerNames().Count;
+        }
+
+        int turnIndex = GetTurnIndex();
+        string name = GetPlayerNameByIndex(turnIndex % numPlayers);
+
+        return name;
     }
 
     public List<PlayerPair> GetPlayerNamesAndId()
@@ -509,9 +550,45 @@ public class GameParser : MonoBehaviour {
         }
     }
 
+    public string GetAuction()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsAuctionGoing()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetAuctionedProperty()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetLastOdd()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetLog()
+    {
+        throw new NotImplementedException();
+    }
+
     private void OnGameDataReceived(Message obj)
     {
         gameState = obj.GetData<JSONObject>();
+
+        // used for the start of the game
+        if (numPlayers == -1)
+        {
+            MessageBus.Instance.Broadcast("instantiate_players", GetPlayerNames().Count);
+        }
+
+        Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
+
+        // TEMP
+        System.IO.File.WriteAllText(@"C:\Users\chats\Desktop\game.json", gameState.ToString());
     }
 
 }

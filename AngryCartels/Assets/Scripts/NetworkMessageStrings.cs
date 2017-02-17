@@ -36,6 +36,9 @@ public abstract class NetworkMessageStrings
     public static readonly string ALL_LOCATIONS = "all locations";
     public static readonly string ALL_UNOWNED = "all unowned";
     public static readonly string REQUEST_GAME_DATA = "request game data";
+    public static readonly string NEXT_TURN = "next turn";
+    public static readonly string SPECIAL_CARD = "special card";
+    public static readonly string DRAW_BUS_PASS = "draw bus pass";
 
     // Server to Client
     public static readonly string SEND_CLIENT_NAME = "send client name";
