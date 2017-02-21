@@ -30,6 +30,7 @@ public class TitleListenerComponent : MonoBehaviour {
     private void JoinRoom(Message obj)
     {
         lobbyHostName = obj.GetData<JSONObject>().list[0].str;
+        Debug.Log("joining");
     }
 
     private void TitleResponseReceived(Message obj)
@@ -98,7 +99,7 @@ public class TitleListenerComponent : MonoBehaviour {
 
         inputField.GetComponent<InputField>().interactable = false;
         string playerName = inputField.transform.Find("Text").GetComponent<Text>().text;
-
+        PlayerPrefs.SetString("username", playerName);
         MessageBus.Instance.Broadcast("player_name_set", playerName);
     }
 
@@ -124,7 +125,8 @@ public class TitleListenerComponent : MonoBehaviour {
 
     public void StartGame()
     {
-        Debug.Log("TODO: start game");
+        Debug.Log("TODO: Something is wrong with Unity start game");
+        MessageBus.Instance.Broadcast("start_game");
     }
 
     private void ClearLobbyItems()

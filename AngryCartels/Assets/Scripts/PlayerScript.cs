@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour {
     public float PlayerMoney
     {
         get { return playerMoney; }
-        //set { playerMoney = value; }
+        set { playerMoney = value; }
     }
 
     // player place
@@ -60,25 +60,17 @@ public class PlayerScript : MonoBehaviour {
 	void Start () {
 
         playerName = "PoorSoul_" + counter++;
-        playerMoney = Random.Range(0, 100);
+        playerMoney = 0.0f;
         playerPlace = 1;
 
-
-    
         cards = new Dictionary<int, List<string>>();
 
-        // TEMP: Randomize the cards for each player
-        for(int i = 0, size = Random.Range(0, 14); i < size; ++i)
+        // create the possible cards
+        for (int i = 0, size = 14; i < size; ++i)
         {
-            int size2 = Random.Range(0, 3);
-            cards.Add(i, new List<string>(size2));
-            for (int k = 0; k < size2; ++k)
-            {
-                cards[i].Add("asdf");
-            }
-            
+            cards.Add(i, new List<string>());
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {

@@ -25,8 +25,14 @@ public class NetworkManager : MonoBehaviour {
         MessageBus.Instance.Register("refresh", RefreshLobbies);
         MessageBus.Instance.Register("join_lobby", JoinLobby);
         MessageBus.Instance.Register("create_game", CreateGame);
+        MessageBus.Instance.Register("start_game", StartGameAsHost);
 
         DontDestroyOnLoad(gameObject); // Create this object between scenes
+    }
+
+    private void StartGameAsHost(Message obj)
+    {
+        StartGame(null);
     }
 
     // Use this for initialization
@@ -34,27 +40,27 @@ public class NetworkManager : MonoBehaviour {
     {
         socket = GetComponent<SocketIO.SocketIOComponent>();
 
-        socket.On(NetworkMessageStrings.SEND_CLIENT_NAME, ClientNameCallback);
-        socket.On(NetworkMessageStrings.UPDATED_GAMES, UpdatedGamesCallback);
-        socket.On(NetworkMessageStrings.IN_ROOM, InRoom);
-        socket.On(NetworkMessageStrings.START_GAME, StartGame);
+        socket.On(GameSocketMessages.SEND_CLIENT_NAME, ClientNameCallback);
+        socket.On(GameSocketMessages.UPDATED_GAMES, UpdatedGamesCallback);
+        socket.On(GameSocketMessages.IN_ROOM, InRoom);
+        socket.On(GameSocketMessages.START_GAME, StartGame);
 
         // In Game Messages
-        socket.On(NetworkMessageStrings.GAME_DATA, GameData);
-        socket.On(NetworkMessageStrings.NEXT_TURN, OnNextTurn);
-        socket.On(NetworkMessageStrings.MOVEMENT, OnMovement);
-        socket.On(NetworkMessageStrings.PROPERTY_BOUGHT, OnPropertyBought);
-        socket.On(NetworkMessageStrings.SPECIAL_CARD, OnSpecialCard);
-        socket.On(NetworkMessageStrings.DRAW_BUS_PASS, OnDrawBusPass);
-        socket.On(NetworkMessageStrings.PROPERTY_INFO, OnPropertyInfo);
-        socket.On(NetworkMessageStrings.RENT_INFO, OnRentInfo);
-        socket.On(NetworkMessageStrings.HIGHEST_RENT, OnHighestRent);
-        socket.On(NetworkMessageStrings.ALL_LOCATIONS, OnAllLocations);
-        socket.On(NetworkMessageStrings.ALL_UNOWNED, OnAllUnowned);
-        socket.On(NetworkMessageStrings.ACTIONS, OnActions);
-        socket.On(NetworkMessageStrings.NEW_AUCTION, OnNewAuction);
-        socket.On(NetworkMessageStrings.NEW_AUCTION_PRICE, OnNewAuctionPrice);
-        socket.On(NetworkMessageStrings.AUCTION_WINNER, OnNewActionWinner);
+        socket.On(GameSocketMessages.GAME_DATA, GameData);
+        socket.On(GameSocketMessages.NEXT_TURN, OnNextTurn);
+        socket.On(GameSocketMessages.MOVEMENT, OnMovement);
+        socket.On(GameSocketMessages.PROPERTY_BOUGHT, OnPropertyBought);
+        socket.On(GameSocketMessages.SPECIAL_CARD, OnSpecialCard);
+        socket.On(GameSocketMessages.DRAW_BUS_PASS, OnDrawBusPass);
+        socket.On(GameSocketMessages.PROPERTY_INFO, OnPropertyInfo);
+        socket.On(GameSocketMessages.RENT_INFO, OnRentInfo);
+        socket.On(GameSocketMessages.HIGHEST_RENT, OnHighestRent);
+        socket.On(GameSocketMessages.ALL_LOCATIONS, OnAllLocations);
+        socket.On(GameSocketMessages.ALL_UNOWNED, OnAllUnowned);
+        socket.On(GameSocketMessages.ACTIONS, OnActions);
+        socket.On(GameSocketMessages.NEW_AUCTION, OnNewAuction);
+        socket.On(GameSocketMessages.NEW_AUCTION_PRICE, OnNewAuctionPrice);
+        socket.On(GameSocketMessages.AUCTION_WINNER, OnNewActionWinner);
     }
 
     private void OnNewActionWinner(SocketIOEvent obj)
@@ -135,23 +141,27 @@ public class NetworkManager : MonoBehaviour {
 
     private void StartGame(SocketIOEvent obj)
     {
-        SceneManager.LoadScene(gameScene);
+        socket.Emit(GameSocketMessages.START_GAME);
+        if (SceneManager.GetActiveScene().buildIndex != gameScene)
+        {
+            SceneManager.LoadScene(gameScene);
+        }
     }
 
     private void JoinLobby(Message obj)
     {
         string name = obj.GetData<string>();
-        socket.Emit(NetworkMessageStrings.JOIN_GAME, name);
+        socket.Emit(GameSocketMessages.JOIN_GAME, name);
     }
 
     private void CreateGame(Message obj)
     {
-        socket.Emit(NetworkMessageStrings.CREATE_GAME);
+        socket.Emit(GameSocketMessages.CREATE_GAME);
     }
 
     private void RefreshLobbies(Message obj)
     {
-        socket.Emit(NetworkMessageStrings.GET_GAMES);
+        socket.Emit(GameSocketMessages.GET_GAMES);
     }
 
     private void PlayerNameReceived(Message obj)
@@ -164,7 +174,7 @@ public class NetworkManager : MonoBehaviour {
         //JSONObject json = new JSONObject(data);
         JSONObject json = new JSONObject();
         json.AddField("username", playerName);
-        socket.Emit(NetworkMessageStrings.JOIN, json);
+        socket.Emit(GameSocketMessages.JOIN, json);
         //Debug.Log("Network Manager Received " + playerName);
     }
 

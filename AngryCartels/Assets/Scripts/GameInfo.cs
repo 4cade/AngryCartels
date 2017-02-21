@@ -68,8 +68,19 @@ public class GameInfo : MonoBehaviour {
 
             // initial player info herer?
             players[i].PlayerName = playerList[i].Name;
+            Debug.Log("Player Name: " + players[i].PlayerName);
             players[i].PlayerId = playerList[i].ID;
-            Debug.Log("TODO: set player information here like money and bitches");
+            Debug.Log("Player ID: " + players[i].PlayerId);
+            //Debug.Log("TODO: set player information here like money and bitches");
+            players[i].PlayerMoney = parser.GetTeamMoney(i); // NOTE: hopefully these indecies line up
+            Debug.Log("Player Money: " + players[i].PlayerMoney);
+            List<string> propertyNames = parser.GetTeamProperties(i);
+            foreach (string property in propertyNames)
+            {
+                int groupId = parser.GetGroup(property);
+                players[i].cards[groupId].Add(property);
+                Debug.Log("Player Card: " + groupId + " -- " + property);
+            }
 
         }
 
@@ -90,36 +101,43 @@ public class GameInfo : MonoBehaviour {
         parser = GetComponent<GameParser>();
 
         // TEMP
-        MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, 5));
+        //MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, 5));
+
+        // TODO: 
+        // - Get num of players
+        // - get the current player
+        // - initialize all cards for players
+        // - position all players on board
+        // - show actions of player
+        // - Then start checking game actions
 
     }
 
-    private bool tempClick = true;
+    //private bool tempClick = true;
     // Update is called once per frame
     void Update () {
 	    // TODO: WE CAN DO THE NETWORK CALLS IN HERE FOR NOW
         // ITS PROBABLY NOT THE BEST PLACE BUT WE CAN MAKE A 
         // SEPPORATE NETWORK MANAGER ONCE MORE OBJECTS ARE ADDED
-        if (Input.GetMouseButton(0) && tempClick)
-        {
-            int numItems = 5;
-            GameObject[] actionItems = new GameObject[numItems];
-            for (int i = 0; i < actionItems.Length; ++i)
-            {
-                actionItems[i] = Instantiate(actionItemPrefab);
-            }
-            MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItems));
-            MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, numItems));
-            tempClick = false;
-        }
-        if (!Input.GetMouseButton(0))
-        {
-            if (!tempClick)
-            {
-                //MessageBus.Instance.Broadcast(new Message("closeActionPanel"));
-                tempClick = true;
-            }
-        }
+        //if (Input.GetMouseButton(0) && tempClick)
+        //{
+        //    int numItems = 5;
+        //    GameObject[] actionItems = new GameObject[numItems];
+        //    for (int i = 0; i < actionItems.Length; ++i)
+        //    {
+        //        actionItems[i] = Instantiate(actionItemPrefab);
+        //    }
+        //    MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, numItems));
+        //    tempClick = false;
+        //}
+        //if (!Input.GetMouseButton(0))
+        //{
+        //    if (!tempClick)
+        //    {
+        //        //MessageBus.Instance.Broadcast(new Message("closeActionPanel"));
+        //        tempClick = true;
+        //    }
+        //}
 	}
 
     public string GetActionName(int index)

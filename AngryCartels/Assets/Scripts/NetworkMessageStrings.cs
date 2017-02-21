@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-public abstract class NetworkMessageStrings
+public abstract class GameSocketMessages
 {
     // General requests
     public static readonly string GET_CLIENT_NAME = "get client name";
