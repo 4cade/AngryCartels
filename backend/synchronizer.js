@@ -17,9 +17,7 @@ module.exports = function(io, socket){
    * @return the username of the client to the client
    */
   socket.on('join', function(info) {
-    socket.emit('send client name', socket.username);
-    console.log(info.username + " has emitted a join");
-    if(info.username)
+    if(info.username) {
         socket.username = info.username
         console.log("Username " + socket.username + " is valid");
         if(users[socket.username]) {
@@ -33,6 +31,8 @@ module.exports = function(io, socket){
             socket.emit('game data', games[socket.inGame].toJSON());
           }
         }
+      }
+    socket.emit('send client name', socket.username);
   })
 
   /**
