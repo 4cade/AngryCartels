@@ -141,7 +141,6 @@ public class NetworkManager : MonoBehaviour {
 
     private void StartGame(SocketIOEvent obj)
     {
-        socket.Emit(GameSocketMessages.START_GAME);
         if (SceneManager.GetActiveScene().buildIndex != gameScene)
         {
             SceneManager.LoadScene(gameScene);

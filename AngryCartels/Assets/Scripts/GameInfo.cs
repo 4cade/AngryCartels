@@ -57,29 +57,54 @@ public class GameInfo : MonoBehaviour {
         numPlayers = obj.GetData<int>();
         List<PlayerPair> playerList = parser.GetPlayerNamesAndId();
         Debug.Log("instantiating players: " + numPlayers);
-        // TEMP: add number of players
+        
+        // add number of players
         GameObject playerContainer = transform.Find("Players").gameObject;
         players = new PlayerScript[numPlayers];
         for (int i = 0; i < numPlayers; ++i)
         {
             GameObject player = Instantiate(playerPrefab);
-            player.transform.parent = playerContainer.transform;
+            player.transform.SetParent(playerContainer.transform);
             players[i] = player.GetComponent<PlayerScript>();
 
-            // initial player info herer?
+            // initial player info here
+            // name
             players[i].PlayerName = playerList[i].Name;
-            Debug.Log("Player Name: " + players[i].PlayerName);
+            Debug.Log("Player Name: " + players[i].PlayerName + "--" + playerList[i].Name);
+
+            // game id
             players[i].PlayerId = playerList[i].ID;
             Debug.Log("Player ID: " + players[i].PlayerId);
-            //Debug.Log("TODO: set player information here like money and bitches");
+
+            // money
+            Debug.Log("TODO: set player information here like money and bitches");
             players[i].PlayerMoney = parser.GetTeamMoney(i); // NOTE: hopefully these indecies line up
             Debug.Log("Player Money: " + players[i].PlayerMoney);
+
+            // properties
             List<string> propertyNames = parser.GetTeamProperties(i);
             foreach (string property in propertyNames)
             {
                 int groupId = parser.GetGroup(property);
-                players[i].cards[groupId].Add(property);
                 Debug.Log("Player Card: " + groupId + " -- " + property);
+                players[i].Cards[groupId].Add(property);
+            }
+
+            // bus passes
+            List<BusTicket> busTickets = parser.GetTeamBusTickets(i);
+            foreach (BusTicket ticket in busTickets)
+            {
+                // NEXT TODO: WHY IS THIS BREAKING
+                Debug.Log(players[i].PlayerName + " -- " + ticket.Name + ": " + ticket.Amount);
+                players[i].BusPasses[ticket.Name] = ticket.Amount;
+            }
+
+            // special cards
+            List<SpecialCard> specialCards = parser.GetTeamSpecialCards(i);
+            foreach (SpecialCard card in specialCards)
+            {
+                Debug.Log(players[i].PlayerName + " -- " + card.Name + ": " + card.Amount);
+                players[i].SpecialCards[card.Name] = card.Amount;
             }
 
         }

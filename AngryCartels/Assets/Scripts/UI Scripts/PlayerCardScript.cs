@@ -13,9 +13,9 @@ public class PlayerCardScript : MonoBehaviour {
         {
             if (player == null)
             {
-                nameText.text = player.PlayerName;
-                SetMoneyText(player.PlayerMoney);
-                placeText.text = player.PlayerPlace.ToString();
+                nameText.text = value.PlayerName;
+                SetMoneyText(value.PlayerMoney);
+                placeText.text = value.PlayerPlace.ToString();
             }
         }
     }
@@ -28,14 +28,17 @@ public class PlayerCardScript : MonoBehaviour {
     Text placeText;
 
 	// Use this for initialization
-	void Start () {
-        cardGroupPanel = GameObject.Find("Canvas").transform.Find("CardDisplayPanel").gameObject;
-
+	void Awake () {
         nameText = transform.Find("PlayerName").GetComponent<Text>();
         moneyText = transform.Find("MoneyText").GetComponent<Text>();
         placeText = transform.Find("PlaceText").GetComponent<Text>();
     }
-	
+
+    private void Start()
+    {
+        cardGroupPanel = GameObject.Find("Canvas").transform.Find("CardDisplayPanel").gameObject;
+    }
+
     void Update()
     {
         // Could continuously update money and place here but it only

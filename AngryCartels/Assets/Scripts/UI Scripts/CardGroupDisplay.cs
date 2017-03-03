@@ -33,7 +33,7 @@ public class CardGroupDisplay : MonoBehaviour {
         //cardPanel.SetActive(false);
 
         PlayerScript playerScript = player.GetComponent<PlayerScript>();
-        Dictionary<int, List<string>> cards = playerScript.cards;
+        Dictionary<int, List<string>> cards = playerScript.Cards;
 
         // Destroy all previous children
         foreach (Transform child in groupPanel.transform)

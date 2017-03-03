@@ -52,31 +52,27 @@ public class TeamPair
 
 public class BusTicket
 {
-    private string name;
-    public string Name { get { return name; } }
+    public string Name { get; set; }
 
-    private int amount;
-    public int Amount { get { return amount; } }
+    public int Amount { get; set; }
 
     public BusTicket(string name, int amount = 0)
     {
-        this.name = name;
-        this.amount = amount;
+        Name = name;
+        Amount = amount;
     }
 }
 
 public class SpecialCard
 {
-    private string name;
-    public string Name { get { return name; } }
+    public string Name { get; set; }
 
-    private int amount;
-    public int Amount { get { return amount; } }
+    public int Amount { get; set; }
 
     public SpecialCard(string name, int amount = 0)
     {
-        this.name = name;
-        this.amount = amount;
+        Name = name;
+        Amount = amount;
     }
 }
 
@@ -274,8 +270,9 @@ public class GameParser : MonoBehaviour {
 
     public int GetTeamMoney(int teamIndex)
     {
-        JSONObject teams = gameState.GetField("teams");
-        return (int)teams.list[teamIndex].GetField("money").f;
+        JSONObject teams = gameState.GetField("playerManager").GetField("teams");
+        int value = (int)teams.list[teamIndex].GetField("money").f;
+        return value;
     }
 
     public List<string> GetTeamProperties(int teamIndex)
@@ -283,9 +280,9 @@ public class GameParser : MonoBehaviour {
         List<string> teamProperties = new List<string>();
         JSONObject teams = gameState.GetField("playerManager").GetField("teams");
         JSONObject propertyJson = teams.list[teamIndex].GetField("properties");
-        foreach(string property in propertyJson.keys)
+        foreach(JSONObject property in propertyJson.list)
         {
-            teamProperties.Add(property);
+            teamProperties.Add(property.str);
         }
         return teamProperties;
     }
@@ -295,10 +292,16 @@ public class GameParser : MonoBehaviour {
         List<BusTicket> teamBuses = new List<BusTicket>();
         JSONObject teams = gameState.GetField("playerManager").GetField("teams");
         JSONObject busJson = teams.list[teamIndex].GetField("busTickets");
-        foreach(JSONObject bus in busJson.list)
+
+        foreach (string bus in busJson.keys)
         {
-            teamBuses.Add(new BusTicket(bus.str, (int)bus.list[0].f));
+            teamBuses.Add(new BusTicket(bus, 0));
         }
+        for (int i = 0; i < busJson.list.Count; ++i)
+        {
+            teamBuses[i].Amount = (int)busJson.list[i].f;
+        }
+
         return teamBuses;
     }
 
@@ -307,10 +310,16 @@ public class GameParser : MonoBehaviour {
         List<SpecialCard> teamSpecial = new List<SpecialCard>();
         JSONObject teams = gameState.GetField("playerManager").GetField("teams");
         JSONObject cardsJson = teams.list[teamIndex].GetField("specialCards");
-        foreach (JSONObject card in cardsJson.list)
+
+        foreach (string card in cardsJson.keys)
         {
-            teamSpecial.Add(new SpecialCard(card.str, (int)card.list[0].f));
+            teamSpecial.Add(new SpecialCard(card, 0));
         }
+        for (int i = 0; i < cardsJson.list.Count; ++i)
+        {
+            teamSpecial[i].Amount = (int)cardsJson.list[i].f;
+        }
+
         return teamSpecial;
     }
 
