@@ -20,11 +20,19 @@ public class TitleListenerComponent : MonoBehaviour {
     private string lobbyHostName = null;
     private bool isHost = false;
 
+    private float refreshCounter = 0;
+    public float REFRESH_INTERVAL = 0.5f;
+
 	// Use this for initialization
 	void Awake ()
     {
         MessageBus.Instance.Register("title_response_received", TitleResponseReceived);
         MessageBus.Instance.Register("joined_room", JoinRoom);
+    }
+
+    private void Start()
+    {
+        refreshCounter = REFRESH_INTERVAL;
     }
 
     private void JoinRoom(Message obj)
@@ -125,7 +133,6 @@ public class TitleListenerComponent : MonoBehaviour {
 
     public void StartGame()
     {
-        Debug.Log("TODO: Something is wrong with Unity start game");
         MessageBus.Instance.Broadcast("start_game");
     }
 
@@ -144,6 +151,17 @@ public class TitleListenerComponent : MonoBehaviour {
         foreach (Text butt in textItems)
         {
             Destroy(butt.gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        refreshCounter -= Time.deltaTime;
+        if (refreshCounter <= 0)
+        {
+            // TODO: Create automatic refresh
+            //MessageBus.Instance.Broadcast("ping_lobbies");
+            refreshCounter = REFRESH_INTERVAL;
         }
     }
 }

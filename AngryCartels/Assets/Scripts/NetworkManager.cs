@@ -26,13 +26,20 @@ public class NetworkManager : MonoBehaviour {
         MessageBus.Instance.Register("join_lobby", JoinLobby);
         MessageBus.Instance.Register("create_game", CreateGame);
         MessageBus.Instance.Register("start_game", StartGameAsHost);
+        MessageBus.Instance.Register("ping_lobbies", GetGames);
 
         DontDestroyOnLoad(gameObject); // Create this object between scenes
     }
 
+    private void GetGames(Message obj)
+    {
+        socket.Emit(GameSocketMessages.GET_GAMES);
+    }
+
     private void StartGameAsHost(Message obj)
     {
-        StartGame(null);
+        socket.Emit(GameSocketMessages.START_GAME);
+        //StartGame(null);
     }
 
     // Use this for initialization
