@@ -20,8 +20,10 @@ public class TitleListenerComponent : MonoBehaviour {
     private string lobbyHostName = null;
     private bool isHost = false;
 
-    private float refreshCounter = 0;
-    public float REFRESH_INTERVAL = 0.5f;
+    private float serverRefreshCounter = 0;
+    public float SERVER_REFRESH_INTERVAL = 3.0f;
+    private float lobbyRefreshCounter = 0;
+    public float LOBBY_REFRESH_INTERVAL = 1.0f;
 
 	// Use this for initialization
 	void Awake ()
@@ -32,7 +34,7 @@ public class TitleListenerComponent : MonoBehaviour {
 
     private void Start()
     {
-        refreshCounter = REFRESH_INTERVAL;
+        serverRefreshCounter = SERVER_REFRESH_INTERVAL;
     }
 
     private void JoinRoom(Message obj)
@@ -156,12 +158,14 @@ public class TitleListenerComponent : MonoBehaviour {
 
     private void Update()
     {
-        refreshCounter -= Time.deltaTime;
-        if (refreshCounter <= 0)
+        serverRefreshCounter -= Time.deltaTime;
+        //lobbyRefreshCounter -= Time.deltaTime;
+
+        if (serverRefreshCounter <= 0)
         {
             // TODO: Create automatic refresh
-            //MessageBus.Instance.Broadcast("ping_lobbies");
-            refreshCounter = REFRESH_INTERVAL;
+            MessageBus.Instance.Broadcast("ping_lobbies");
+            serverRefreshCounter = SERVER_REFRESH_INTERVAL;
         }
     }
 }

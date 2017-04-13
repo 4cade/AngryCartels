@@ -34,3 +34,6 @@ node_modules/
 
 # MAC OS X
 .DS_Store
+
+# Asset Files
+*.obj
