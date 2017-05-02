@@ -7,6 +7,7 @@ Let's have fun with our innovative property trading game!
 
 ##### Frontend
 - Leif Myer **(Lead)**
+- Eric Tu
 
 ##### Backend
 - Zachery Miranda **(Lead)**
