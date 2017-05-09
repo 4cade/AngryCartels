@@ -4,18 +4,30 @@ using System.Collections.Generic;
 using System.Xml;
 using System;
 
+/// <summary>
+/// The TileHandler class links game tiles together based on the 
+/// moveLocationsContainerObject and stores those tiles in the 
+/// tiles array. The hardcoded tile count values are the tile
+/// ammount on each tier on the game board. This class also 
+/// performs an A* search of the tiles in the array.
+/// </summary>
 public class TileHandler : MonoBehaviour {
 
+    // The container that holds all the tiles in the editor
     public GameObject moveLocationsContainerObject;
 
+    // Tile count of tier 1
     private int tier1TileCount = 56;
+
+    // Tile count of tier 2
     private int tier2TileCount = 40;
+
+    // Tile count of tier 3
     private int tier3TileCount = 24;
 
+    // Stores created tiles when the game starts.
+    // TODO: if we know this at game start we should create the entire array.
     private Tile[] tiles;
-
-    //private MoveToTile objectToMove = null;
-    //LinkedList<Vector3> movePath = null;
 
     // Use this for initialization
     void Start () {
@@ -82,6 +94,10 @@ public class TileHandler : MonoBehaviour {
         MessageBus.Instance.Register("goalChange", PlayerChangedGoal);
     }
 
+    /// <summary>
+    /// Called whenever the 'goalChange' message is raised is the moveToTile script.
+    /// </summary>
+    /// <param name="obj">The moveToTileComponent</param>
     private void PlayerChangedGoal(Message obj)
     {
         // reset the player to start
@@ -94,19 +110,16 @@ public class TileHandler : MonoBehaviour {
 
         Message message = new Message("pathCreated", path);
         MessageBus.Instance.Broadcast(message);
-
-        // Prepare to LERP!
-        //objectToMove = moveTo;
-
-        //Vector3 v = path.First.Value;
-        //while (path.Count > 0)
-        //{
-        //    v = path.First.Value;
-        //    path.RemoveFirst();
-        //}
-        //objectToMove.gameObject.transform.position = v;
     }
 
+    /// <summary>
+    /// Estimates the cost of a move based on the current tile, the goal and magic numbers.
+    /// </summary>
+    /// <param name="nextIndex">The index that is being estimated for movement.</param>
+    /// <param name="goalIndex">The goal index for movement.</param>
+    /// <param name="moveInfo">Information relating to direction and tier.</param>
+    /// <param name="currentTile">The current location of the moving object.</param>
+    /// <returns>Heuristic value of the move from the current tile to the nextIndex.</returns>
     private int HeuristicCostEstimate(int nextIndex, int goalIndex, MoveToTile moveInfo, Tile currentTile)
     {
         int isDirF = moveInfo.isForwardDirection ? -1 : 1;
@@ -149,29 +162,23 @@ public class TileHandler : MonoBehaviour {
                 return int.MinValue / 10;
             }
         }
-        //if (moveInfo.isForwardDirection &&
-        //    //(currentTile.index + currentTier) % currentTier < (nextIndex + currentTier) % currentTier)
-        //    (nextIndex + currentTier) % currentTier < (currentTile.index + currentTier) % currentTier)
-        //{
-        //    return int.MinValue;
-        //}
-        //else if (!moveInfo.isForwardDirection &&
-        //    //(currentTile.index + currentTier) % currentTier > (nextIndex + currentTier) % currentTier)
-        //    (nextIndex + currentTier) % currentTier > (currentTile.index + currentTier) % currentTier)
-        //{
-        //    return int.MinValue;
-        //}
 
         int s = -100 * Math.Abs(tiles[goalIndex].tier - tiles[nextIndex].tier) +
                 isDirF * Math.Abs(goalIndex - nextIndex);
         int s2 = -100 * Math.Abs(tiles[goalIndex].tier - currentTile.tier) +
                 isDirF * Math.Abs(goalIndex - nextIndex);
-        //Debug.Log(tiles[currentIndex].index + "-----" + next.index + "======" + s + "_________" + s2);
-        // return the evaluation
+        
         return -100 * Math.Abs(tiles[goalIndex].tier - tiles[nextIndex].tier) +
                 isDirF * Math.Abs(goalIndex - nextIndex);
     }
 
+    /// <summary>
+    /// Constructs a path after a goal node has been reached.
+    /// </summary>
+    /// <param name="history">A dictionary that contains movement in reverse order.</param>
+    /// <param name="current">The current tile location.</param>
+    /// <returns>A linked List of Nodes containing a path from the current location
+    /// to the goal location.</returns>
     private LinkedList<Vector3> BuildPath(Dictionary<int, int> history, int current)
     {
         LinkedList<int> debugPath = new LinkedList<int>();
@@ -195,6 +202,12 @@ public class TileHandler : MonoBehaviour {
         return path;
     }
 
+    /// <summary>
+    /// Pops the highest scoring tile index from the open set.
+    /// </summary>
+    /// <param name="open">Open set containing unexplored tiles.</param>
+    /// <param name="score">Dictionary containing scores of all tiles.</param>
+    /// <returns>The tile index to explore next.</returns>
     private int PopIndexFromOpenSet(SetList<int> open, DictionaryWithDefault<int, int> score)
     {
         int savedIndex = -1;
@@ -215,22 +228,27 @@ public class TileHandler : MonoBehaviour {
         return value;
     }
 
+    /// <summary>
+    /// Performs A* search from startIndex tile to the goalIndex tile.
+    /// </summary>
+    /// <param name="startIndex">The starting index.</param>
+    /// <param name="goalIndex">The goal Index.</param>
+    /// <param name="moveTo">The MoveToTile component of the moving object.</param>
+    /// <returns>A path from startIndex to GoalIndex or null if a path cannot be found.</returns>
     private LinkedList<Vector3> FindPath(int startIndex, int goalIndex, MoveToTile moveTo)
     {
         // TODO: probably should make this a coroutine
         // find path between start and end
         SetList<int> closed = new SetList<int>();
         SetList<int> open = new SetList<int>();
+
         open.Add(startIndex);
+
         Dictionary<int, int> history = new Dictionary<int, int>();
-        //DictionaryWithDefault<int, int> gScore = new DictionaryWithDefault<int, int>(int.MaxValue);
-        //gScore[startIndex] = 0;
         DictionaryWithDefault<int, int> score = new DictionaryWithDefault<int, int>(0);
-        //score[startIndex] = HeuristicCostEstimate(startIndex, goalIndex, moveTo, tiles[startIndex]);
 
         while (open.Count > 0)
         {
-            //int current = open[open.Count - 1]; // TODO: should be the greatest cost score value
             int current = PopIndexFromOpenSet(open, score);
             if (current == goalIndex)
             {
@@ -245,7 +263,6 @@ public class TileHandler : MonoBehaviour {
                     continue;
                 }
 
-                //int gCost = score[current] + HeuristicCostEstimate(current, goalIndex, moveTo, tile);
                 int gCost = score[current] + HeuristicCostEstimate(tile.index, goalIndex, moveTo, tiles[current]);
                 if (!open.Contains(tile.index))
                 {
@@ -264,15 +281,10 @@ public class TileHandler : MonoBehaviour {
         // a path was not found, you should panic
         return null;
     }
-
-    // Update is called once per frame
-    void Update () {
-	    //if (objectToMove != null)
-     //   {
-     //       // TODO perform lerp bs here
-     //   }
-	}
-
+    
+    /// <summary>
+    /// Links tile string names to tile indexeseses.
+    /// </summary>
     void CreateTileDictionary()
     {
         Dictionary<string, int> tileMap = new Dictionary<string, int>();

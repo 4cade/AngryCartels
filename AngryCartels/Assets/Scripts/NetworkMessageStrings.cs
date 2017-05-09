@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 
+/// <summary>
+/// Abstract class of messages to communicate with node.
+/// </summary>
 public abstract class GameSocketMessages
 {
     // General requests
