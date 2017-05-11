@@ -3,8 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Displays the available actions for a player on the action ui panel.
+/// </summary>
 public class DisplayActionsOnPanel : MonoBehaviour {
 
+    // The transform of the content game object on the action panel.
     private Transform contentPanelTransform;
 
 	// Use this for initialization
@@ -19,9 +23,14 @@ public class DisplayActionsOnPanel : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Called when the showActionPanel message is thrown. Will enable the
+    /// action panel so a player can select an action.
+    /// </summary>
+    /// <param name="obj">An action item prefab to display on the action panel</param>
     private void openActionPanel(Message obj)
     {
-        Debug.Log("YOU SHOULD SHOW THE ACTION PANEL");
+        Debug.Log("TODO:YOU SHOULD SHOW THE ACTION PANEL");
         GameObject actionItemPrefab = obj.GetData<GameObject>();
         int numItems = obj.GetData<int>(1);
 
@@ -35,6 +44,10 @@ public class DisplayActionsOnPanel : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Called when the action panel should be closed
+    /// </summary>
+    /// <param name="obj">Null</param>
     private void CloseActionPanel(Message obj)
     {
         Debug.Log("YOU SHOULD CLOSE THE ACTION PANEL");
@@ -46,9 +59,4 @@ public class DisplayActionsOnPanel : MonoBehaviour {
         }
         gameObject.SetActive(false);
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 }

@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+/// <summary>
+/// Creates Player cards based on the number of players that are in the game.
+/// </summary>
 public class PlayerCardCreator : MonoBehaviour {
 
     // Used to organize rows of player cards
@@ -16,16 +19,6 @@ public class PlayerCardCreator : MonoBehaviour {
     int numPlayers;
 
     const int MAX_PLAYERS_PER_ROW = 4;
-
-	// Use this for initialization
-	void Start () {
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     /// <summary>
     /// Creates Player UI Cards to display in this attached game object.

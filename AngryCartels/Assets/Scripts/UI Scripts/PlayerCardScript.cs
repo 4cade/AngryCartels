@@ -2,7 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// Represents the player on the UI layer.
+/// </summary>
 public class PlayerCardScript : MonoBehaviour {
 
     private PlayerScript player = null;
@@ -11,6 +13,7 @@ public class PlayerCardScript : MonoBehaviour {
         get { return player; }
         set
         {
+            // do not set player a second time
             if (player == null)
             {
                 nameText.text = value.PlayerName;
@@ -20,9 +23,10 @@ public class PlayerCardScript : MonoBehaviour {
         }
     }
 
-
+    // Reference to the card group panel
     GameObject cardGroupPanel;
 
+    // Default UI properties that are displayed about the player
     Text nameText;
     Text moneyText;
     Text placeText;
@@ -34,17 +38,17 @@ public class PlayerCardScript : MonoBehaviour {
         placeText = transform.Find("PlaceText").GetComponent<Text>();
     }
 
+    /// <summary>
+    /// Called before the game is run, after object have been created
+    /// </summary>
     private void Start()
     {
         cardGroupPanel = GameObject.Find("Canvas").transform.Find("CardDisplayPanel").gameObject;
     }
 
-    void Update()
-    {
-        // Could continuously update money and place here but it only
-        // should happen when an event in thrown.
-    }
-
+    /// <summary>
+    /// Called when a player clicks on a player card.
+    /// </summary>
 	public void CardSelected()
     {
         //Debug.Log("TODO: card selected~");
@@ -52,6 +56,10 @@ public class PlayerCardScript : MonoBehaviour {
         cardGroupPanel.GetComponent<CardGroupDisplay>().DisplayCardGroup(player.gameObject);
     }
 
+    /// <summary>
+    /// Sets the text of the money UI object.
+    /// </summary>
+    /// <param name="money">The money value the player has.</param>
     private void SetMoneyText(float money)
     {
         moneyText.text = "$" + money.ToString("n1") + " M";

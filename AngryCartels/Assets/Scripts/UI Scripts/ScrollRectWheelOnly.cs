@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEditor;
 
+/// <summary>
+/// Disables the scroll wheel for scrollable panels
+/// </summary>
 [CustomEditor(typeof(ScrollRect), true)]
 public class ScrollRectWheelOnly : ScrollRect
 {

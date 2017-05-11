@@ -4,6 +4,10 @@ using UnityEngine.Assertions;
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// The GameInfo class contains replicated information from the server to 
+/// the local machine. 
+/// </summary>
 public class GameInfo : MonoBehaviour {
 
     private static GameInfo instance;
@@ -45,13 +49,22 @@ public class GameInfo : MonoBehaviour {
     // Action Types
     public string[] actionNames;
 
+    // The node Json parser
     private GameParser parser;
 
+    /// <summary>
+    /// Called after this object is constructed
+    /// </summary>
     private void Awake()
     {
         MessageBus.Instance.Register("instantiate_players", OnInstantiatePlayers);
     }
 
+    /// <summary>
+    /// Called when the game should begin and players should be created on the local
+    /// host.
+    /// </summary>
+    /// <param name="obj">Contains the number of players that should be created</param>
     private void OnInstantiatePlayers(Message obj)
     {
         numPlayers = obj.GetData<int>();
@@ -124,47 +137,11 @@ public class GameInfo : MonoBehaviour {
 
         // add the gamestate
         parser = GetComponent<GameParser>();
-
-        // TEMP
-        //MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, 5));
-
-        // TODO: 
-        // - Get num of players
-        // - get the current player
-        // - initialize all cards for players
-        // - position all players on board
-        // - show actions of player
-        // - Then start checking game actions
-
     }
 
-    //private bool tempClick = true;
-    // Update is called once per frame
-    void Update () {
-	    // TODO: WE CAN DO THE NETWORK CALLS IN HERE FOR NOW
-        // ITS PROBABLY NOT THE BEST PLACE BUT WE CAN MAKE A 
-        // SEPPORATE NETWORK MANAGER ONCE MORE OBJECTS ARE ADDED
-        //if (Input.GetMouseButton(0) && tempClick)
-        //{
-        //    int numItems = 5;
-        //    GameObject[] actionItems = new GameObject[numItems];
-        //    for (int i = 0; i < actionItems.Length; ++i)
-        //    {
-        //        actionItems[i] = Instantiate(actionItemPrefab);
-        //    }
-        //    MessageBus.Instance.Broadcast(new Message("showActionPanel", actionItemPrefab, numItems));
-        //    tempClick = false;
-        //}
-        //if (!Input.GetMouseButton(0))
-        //{
-        //    if (!tempClick)
-        //    {
-        //        //MessageBus.Instance.Broadcast(new Message("closeActionPanel"));
-        //        tempClick = true;
-        //    }
-        //}
-	}
-
+    /// <summary>
+    /// Returns an action string from a given index.
+    /// </summary>
     public string GetActionName(int index)
     {
         return actionNames[index];
