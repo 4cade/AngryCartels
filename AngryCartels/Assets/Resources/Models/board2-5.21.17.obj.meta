@@ -1,27 +1,47 @@
 fileFormatVersion: 2
-guid: 23df18a719745124eaf255b678dcf830
-timeCreated: 1491622139
+guid: 50fa6c0d7a721954cb758bc8a150a89d
+timeCreated: 1495424023
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pCube778
-    100004: pCube781
-    100006: pCylinder240
+    100002: pCube330
+    100004: pCylinder101
+    100006: pCylinder102
+    100008: pCylinder261
+    100010: pCylinder84
+    100012: pCylinder86
+    100014: pCylinder89
     400000: //RootNode
-    400002: pCube778
-    400004: pCube781
-    400006: pCylinder240
-    2300000: pCube778
-    2300002: pCube781
-    2300004: pCylinder240
-    3300000: pCube778
-    3300002: pCube781
-    3300004: pCylinder240
-    4300000: pCube778
-    4300002: pCube781
-    4300004: pCylinder240
+    400002: pCube330
+    400004: pCylinder101
+    400006: pCylinder102
+    400008: pCylinder261
+    400010: pCylinder84
+    400012: pCylinder86
+    400014: pCylinder89
+    2300000: pCube330
+    2300002: pCylinder101
+    2300004: pCylinder102
+    2300006: pCylinder261
+    2300008: pCylinder84
+    2300010: pCylinder86
+    2300012: pCylinder89
+    3300000: pCube330
+    3300002: pCylinder101
+    3300004: pCylinder102
+    3300006: pCylinder261
+    3300008: pCylinder84
+    3300010: pCylinder86
+    3300012: pCylinder89
+    4300000: pCube330
+    4300002: pCylinder101
+    4300004: pCylinder102
+    4300006: pCylinder261
+    4300008: pCylinder84
+    4300010: pCylinder86
+    4300012: pCylinder89
   materials:
     importMaterials: 1
     materialName: 0
@@ -32,6 +52,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 

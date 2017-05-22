@@ -45,7 +45,7 @@ public abstract class GamePair
 /// </summary>
 public class PlayerPair : GamePair
 {
-    PlayerPair(string name, int id) : base(name, id) { }
+    public PlayerPair(string name, int id) : base(name, id) { }
 }
 
 /// <summary>
@@ -53,7 +53,7 @@ public class PlayerPair : GamePair
 /// </summary>
 public class TeamPair : GamePair
 {
-    TeamPair(string name, int id) : base(name, id) { }
+    public TeamPair(string name, int id) : base(name, id) { }
 }
 
 public class BusTicket
