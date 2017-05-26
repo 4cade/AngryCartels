@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
+/// <summary>
+/// Counts how long the game has been going on
+/// </summary>
 public class GameClock : MonoBehaviour {
          
     // Text UI object to display the time to

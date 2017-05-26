@@ -2,6 +2,9 @@
 using System.Collections;
 using System;
 
+/// <summary>
+/// A message hold information to be passed between objects.
+/// </summary>
 public class Message
 {
     // Getter for the messageId

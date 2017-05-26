@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+/// <summary>
+/// Singlton MessageBus class can pass variable abouts of data
+/// between objects.
+/// </summary>
 public class MessageBus
 {
     // Declare class as singleton

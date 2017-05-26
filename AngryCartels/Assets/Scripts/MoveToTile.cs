@@ -2,15 +2,26 @@
 using System.Collections.Generic;
 using System;
 
+/// <summary>
+/// The MoveToTile class allows for game objects to travel to different tiles.
+/// This component also provides a lerp parameter to move the object smoothly 
+/// from one tile to another.
+/// </summary>
 public class MoveToTile : MonoBehaviour {
 
+    // The ID of the player this component is attached to.
     public int playerID = 0;
 
+    // Used to check if the attached game object should move forward or backward.
     public bool isForwardDirection = true;
 
+    // The goal index of movement.
     public int goalIndex = 0;
+
+    // The starting index of movement.
     public int startIndex = 0;
 
+    // The percentage [0,1] of startIndex to GoalIndex.
     [Range(0, 1)]
     public float lerp;
 
@@ -19,7 +30,10 @@ public class MoveToTile : MonoBehaviour {
     private int prevStart;
     private bool prevDir;
 
+    // The path to travel
     private List<Vector3> path;
+
+    // The space between each tile.
     private float lerpSpacer;
 
     // Use this for initialization
@@ -34,6 +48,10 @@ public class MoveToTile : MonoBehaviour {
         MessageBus.Instance.Register("pathCreated", MovementPathCreated);
 	}
 
+    /// <summary>
+    /// This function gets called when a path has been created after searching.
+    /// </summary>
+    /// <param name="obj">The linked list of the movement path</param>
     private void MovementPathCreated(Message obj)
     {
         path = new List<Vector3>(obj.GetData<LinkedList<Vector3>>());
