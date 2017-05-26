@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The types of tiles that exist.
+/// </summary>
 public enum TileType
 {
     PROPERTY,
@@ -19,35 +22,38 @@ public enum TileType
     BUS,
     UTILITY,
     CAB
-
 }
 
-public class PlayerPair
+/// <summary>
+/// Holds name and id information
+/// </summary>
+public abstract class GamePair
 {
-    private string name;
-    public string Name { get { return name; } }
-    private int id;
-    public int ID { get { return id; } }
+    protected KeyValuePair<string, int> data;
 
-    public PlayerPair(string name, int id)
+    public string Name { get { return data.Key; } }
+    public int ID { get { return data.Value; } }
+
+    public GamePair(string name, int id)
     {
-        this.name = name;
-        this.id = id;
+        data = new KeyValuePair<string, int>(name, id);
     }
 }
 
-public class TeamPair
+/// <summary>
+/// Holds player name and player id
+/// </summary>
+public class PlayerPair : GamePair
 {
-    private string name;
-    public string Name { get { return name; } }
-    private int id;
-    public int ID { get { return id; } }
+    public PlayerPair(string name, int id) : base(name, id) { }
+}
 
-    public TeamPair(string name, int id)
-    {
-        this.name = name;
-        this.id = id;
-    }
+/// <summary>
+/// holds team name and id
+/// </summary>
+public class TeamPair : GamePair
+{
+    public TeamPair(string name, int id) : base(name, id) { }
 }
 
 public class BusTicket
@@ -463,7 +469,7 @@ public class GameParser : MonoBehaviour {
         JSONObject tile = locations.GetField(tileName);
         int numHouses = (int)tile.GetField("houses").f;
         int rent = Convert.ToInt32(tile.GetField("rent").keys[numHouses + (3 * Math.Min(1, numHouses))]);
-        throw new NotImplementedException(); // TODO: how is rent calculated
+        //throw new NotImplementedException(); // TODO: how is rent calculated
         return rent;
     }
 
@@ -597,7 +603,7 @@ public class GameParser : MonoBehaviour {
         Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
 
         // TEMP
-        System.IO.File.WriteAllText(@"C:\Users\chats\Desktop\game.json", gameState.ToString());
+        //System.IO.File.WriteAllText(@"C:\Users\chats\Desktop\game.json", gameState.ToString());
     }
 
 }

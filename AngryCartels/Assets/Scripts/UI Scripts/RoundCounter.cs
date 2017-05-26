@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/// <summary>
+/// Counts the the number of rounds for a game.
+/// </summary>
 public class RoundCounter : MonoBehaviour {
 
     // The text ui element to display the round count

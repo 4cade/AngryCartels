@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 // TODO: Alot of this information should be moved to a 'team'
-// info class so it can be shared amongst playesr
+// oe 'info' class so it can be shared amongst playesr
 
+/// <summary>
+/// The player script hold information relating to that player.
+/// TODO: Should the play be able to call player actions in here?
+/// For example, auction, buy, sell etc...
+/// </summary>
 public class PlayerScript : MonoBehaviour {
 
     // player's in game name
@@ -29,7 +34,7 @@ public class PlayerScript : MonoBehaviour {
         set { playerMoney = value; }
     }
 
-    // player place
+    // player place - 1rst, 2nd, 3rd...
     private uint playerPlace;
     public uint PlayerPlace
     {
@@ -51,16 +56,19 @@ public class PlayerScript : MonoBehaviour {
         }
     }
 
-    // Dictionary of properties held by the player - Temporary, this sh
+    // The player's property cards.
     public Dictionary<int, List<string>> Cards;
 
-    // bus passes
+    // The player's bus passes.
     public Dictionary<string, int> BusPasses;
 
-    // special cards
+    // The player's special cards.
     public Dictionary<string, int> SpecialCards;
 
-    // Use this for initialization
+    /// <summary>
+    /// Use this for initialization. Note: not all game objects may exist
+    /// yet.
+    /// </summary>
     private void Awake()
     {
         playerMoney = 0.0f;
@@ -76,14 +84,4 @@ public class PlayerScript : MonoBehaviour {
             Cards.Add(i, new List<string>());
         }
     }
-
-    // Use this to run before first update cycle
-	void Start () {
-        
-    }
-	
-	// Update is called once per frame
-	void Update () {
-	    
-	}
 }
