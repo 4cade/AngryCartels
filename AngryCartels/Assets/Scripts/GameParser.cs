@@ -218,9 +218,9 @@ public class GameParser : MonoBehaviour {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
         JSONObject player = players.list[playerIndex];
         JSONObject actionJson = player.GetField("actions");
-        foreach (string action in actionJson.keys)
+        foreach (JSONObject action in actionJson.list)
         {
-            actions.Add(action);
+            actions.Add(action.str);
         }
         return actions;
     }
@@ -231,9 +231,9 @@ public class GameParser : MonoBehaviour {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
         JSONObject player = players.list[playerIndex];
         JSONObject actionJson = player.GetField("onHoldActions");
-        foreach (string action in actionJson.keys)
+        foreach (JSONObject action in actionJson.list)
         {
-            actions.Add(action);
+            actions.Add(action.str);
         }
         return actions;
     }
