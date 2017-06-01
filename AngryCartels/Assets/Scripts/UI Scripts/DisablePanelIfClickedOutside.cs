@@ -2,11 +2,19 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/// <summary>
+/// Disables a panel if the mouse is clicked outside said panel.
+/// </summary>
 public class DisablePanelIfClickedOutside : MonoBehaviour {
 
+    /// <summary>
+    ///  The panel that should be hidden when clicked outside of
+    /// </summary>
     public GameObject panelToHide;
 
-    // Update is called once per frame
+    /// <summary>
+    /// Checks if we should hide the panel.
+    /// </summary>
     void Update()
     {
         if (Input.GetMouseButton(0) && gameObject.activeSelf)

@@ -4,17 +4,31 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
 
+/// <summary>
+/// Displays all the groups of cards.
+/// </summary>
 public class CardGroupDisplay : MonoBehaviour {
 
+    /// <summary>
+    /// The panel that exists in the canvas that displays all card groups
+    /// </summary>
     public GameObject groupPanel;
+
+    /// <summary>
+    /// The panel that exists in the canvas that displays all the cards of a group.
+    /// </summary>
     public GameObject cardPanel;
+
+    /// <summary>
+    /// TEMP: used to leave the card display panel
+    /// </summary>
     public Button backButton;
 
+    /// <summary>
+    /// The prefab game object used to represent a group of cards.
+    /// </summary>
     public GameObject cardGroupPrefab;
-
-    //public GameObject playerContainerGameObject;
-    //private PlayerScript[] players;
-
+    
 	// Use this for initialization
 	void Start () {
         //players = playerContainerGameObject.GetComponentsInChildren<PlayerScript>();
@@ -22,11 +36,10 @@ public class CardGroupDisplay : MonoBehaviour {
         backButton.onClick.AddListener(Reset);
 	}
 
-    // Update is called once per frame
-    void Update () {
-	
-	}
-
+    /// <summary>
+    /// Displays all the owned card groups owned by the given player.
+    /// </summary>
+    /// <param name="player">The desired player.</param>
     public void DisplayCardGroup(GameObject player)
     {
         // display the card panel if being displayed
@@ -51,6 +64,9 @@ public class CardGroupDisplay : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// TODO: resets the displayed cards.
+    /// </summary>
     public void Reset()
     {
         gameObject.SetActive(true);

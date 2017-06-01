@@ -9,7 +9,9 @@ using System;
 /// </summary>
 public class MessageBus
 {
-    // Declare class as singleton
+    /// <summary>
+    /// Declare class as singleton
+    /// </summary>    
     private static MessageBus instance;
     public static MessageBus Instance
     {
@@ -23,16 +25,25 @@ public class MessageBus
         }
     }
 
-    // holds all registered subscribers for a particular event T
+    /// <summary>
+    /// holds all registered subscribers for a particular event T
+    /// </summary>    
     private Dictionary<string, List<Action<Message>>> subscribers;
 
-    // Ctor: create the dictionary
+    /// <summary>
+    /// Ctor: create the dictionary
+    /// </summary>
     private MessageBus()
     {
         subscribers = new Dictionary<string, List<Action<Message>>>();
     }
 
-    // Register the specified action with the T id
+    /// <summary>
+    /// Register the specified action with the T id
+    /// </summary>
+    /// <param name="id">The string id to register</param>
+    /// <param name="onPublisherReceive">The function delegate that will be called
+    /// when a message with 'id' is invoked.</param>    
     internal void Register(string id, Action<Message> onPublisherReceive)
     {
         // Check if the id already exists
@@ -48,7 +59,11 @@ public class MessageBus
         }
     }
 
-    // Loops through all subscribers registered to the specified id
+    /// <summary>
+    /// Loops through all subscribers registered to the specified id
+    /// </summary>
+    /// <param name="id">The id of the message.</param>
+    /// <param name="data">The variable data to send to each object listening.</param>
     internal void Broadcast(string id, params object[] data)
     {
         List<Action<Message>> actionList = subscribers[id];
@@ -60,7 +75,10 @@ public class MessageBus
         }
     }
 
-    // Loops through all subscribers registered to the specified id
+    /// <summary>
+    /// Loops through all subscribers registered to the specified id
+    /// </summary>
+    /// <param name="message">The message to send to all objects listening.</param>
     internal void Broadcast(Message message)
     {
         List<Action<Message>> actionList = subscribers[message.MessageId];
