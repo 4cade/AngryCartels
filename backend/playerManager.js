@@ -10,6 +10,7 @@ const Team = require('./team');
 class PlayerManager {
     constructor(players, startLocation, startTrack, savedState, locationObjs) {
         if(!savedState) {
+            // TODO : create a teams variable in playermanager that keeps track of all the teams
             this.turnOrder = [];
 
             players.forEach(p =>{

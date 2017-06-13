@@ -280,8 +280,8 @@ describe('BoardManager', function(){
             assert.deepEqual(board1.locationsInForwardDirection(player2), ['pay day']);
         });
 
-        it('gets the next transit in the forward direction', function() {
-            assert.equal(board1.nextTransit(player2), 'reading railroad');
+        it('gets the next railroad in the forward direction', function() {
+            assert.equal(board1.nextRailroad(player2), 'reading railroad');
         });
     });
 
@@ -407,7 +407,7 @@ describe('Card', function() {
     
     it('fortune card is valid', function() {
         for(let i = 0; i < 5; i++) {
-            const fortune = Card.drawFortune();
+            const fortune = Card.drawFortuneMisfortune();
             assert(fortune.hasOwnProperty('title'));
             assert(fortune.hasOwnProperty('description'));
             assert(fortune.hasOwnProperty('play'));
@@ -417,7 +417,7 @@ describe('Card', function() {
 
     it('misfortune is valid', function() {
         for(let i = 0; i < 5; i++) {
-            const cc = Card.drawMisfortune();
+            const cc = Card.drawFortuneMisfortune();
             assert(cc.hasOwnProperty('title'));
             assert(cc.hasOwnProperty('description'));
             assert(cc.hasOwnProperty('play'));

@@ -353,8 +353,8 @@ describe('Location', function() {
     });
 
     describe("#propertyGroupTests", function() {
-        const player1 = new Player('Dude', 'go', 2);
-        const player2 = new Player('baby', 'jail', 3)
+        const player1 = new Player('Dude', 'go', 1);
+        const player2 = new Player('baby', 'jail', 2)
 
         const pgroup1 = new PropertyGroup(0);
         const bisc = new HouseProperty("biscayne ave", {"type": "property","group": 0,"rent": [11, 55, 160, 475, 650, 800, 1300],"mortgage": 75,"house": 50,"forward": ["short line"],"backward": ["miami ave"],"side": [3],"track": [0],"below": ["pennsylvania ave"]});
@@ -429,7 +429,7 @@ describe('Location', function() {
         });
 
         it('loses all houses after losing majority', function() {
-            assert.equal(pgroup1.setOwner(bisc, new Player('derp', 'go', 2)), 0);
+            assert.equal(pgroup1.setOwner(bisc, new Player('derp', 'go', 1)), 0);
             pgroup1.properties.forEach(p => {
                 if(p !== bisc) {
                     assert.equal(p.houses, 4);

@@ -229,7 +229,6 @@ class BoardManager {
                 }
     }
 
-
     /**
      * Returns the information to get to the desired location moving incrementally
      * @param player the player object that is going to move there
@@ -238,7 +237,7 @@ class BoardManager {
      * @return JSON with fields movedTo (list of locations visited), actions (list
      *       of actions that the player should perform), and player (JSON with name: name, money: money)
      */
-     advanceToLocation(player, desiredLocation) {
+    advanceToLocation(player, desiredLocation) {
         let odd = player.lastRolled%2===1
         let visited = []
         let landed = false
@@ -246,32 +245,34 @@ class BoardManager {
         // finds the path with shortest distance
         let visitedLoc = []
         let paths = [this.locations[player.location].forward]
-        let connected = null
-
+        if(!player.forward){
+            paths = [this.locations[player.location].backward]
+        }
+        let connected = []
+        let path = []
         while (paths.length > 0){
-            for (let path of paths){
-                let place = path[path.length-1]
-                if (place === desiredLocation){
-                    visited = path
-                    paths = [] 
+            path = paths.shift()
+            const place = path[path.length-1]
+            if (place === desiredLocation) {
+                visited = path
+                paths = []
+            }
+            else {
+                connected = this.locations[place].forward
+                if(!player.forward){
+                    connected = this.locations[place].backward
                 }
-                else {
-                    if(player.forward){
-                        connected = this.locations[place].forward
-                    }
-                    else{
-                        connected = this.locations[place].backward
-                    }
-                    if (connected.length === 2 && visitedLoc.indexOf(connected[1]) === -1){
-                        let copy = path.concat()
-                        copy.push(connected[1])
-                        paths.push(copy)
-                        visitedLoc.push(connected[1])
-                    }
-                    if (visitedLoc.indexOf(connected[0]) === -1){
-                        path.push(connected[0])
-                        visitedLoc.push(connected[0])
-                    }
+
+                if (connected.length === 2 && visitedLoc.indexOf(connected[1]) === -1) {
+                    let copy = path.concat()
+                    copy.push(connected[1])
+                    paths.push(copy.concat())
+                    visitedLoc.push(connected[1])
+                }
+                if (visitedLoc.indexOf(connected[0]) === -1) {
+                    path.push(connected[0])
+                    paths.push(path.concat())
+                    visitedLoc.push(connected[0])
                 }
             }
         }
@@ -347,6 +348,12 @@ class BoardManager {
                 }
     }
 
+    /**
+     * Finds the next rentable location in the player's forward direction
+     * @param player
+     * 
+     * @return the name of the next rentable location
+     **/
     nextRentLocation(player){
         let odd = player.lastRolled%2===1
         let visited = []
@@ -360,7 +367,6 @@ class BoardManager {
             
             location = nextInfo["next"]
             track = nextInfo["track"]
-            loc = this.locations[location]
             visited.push(location)
 
             if (this.collects.hasOwnProperty(location)){
@@ -379,6 +385,93 @@ class BoardManager {
                 }
     }
 
+    /**
+     * Gets the next railroad in the forward direction
+     * @param player the player that wants to take the next transit
+     *
+     * @return name of next railroad in the forward direction
+     */
+    nextRailroad(player) {
+        let location = player.location
+        let track = player.track
+        let nextInfo = {"next": location, "track": track}
+
+        while (this.locations[location].kind !== "railroad"){
+            nextInfo = this.nextLocation(location, true, player.forward, track)
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+        }
+        return location
+    }
+
+    /**
+     * Gets the next utility in the forward direction
+     * @param player the player that wants to take the next transit
+     *
+     * @return name of next railroad in the forward direction
+     */
+    nextUtility(player) {
+        let location = player.location
+        let track = player.track
+        let nextInfo = {"next": location, "track": track}
+
+        while (this.locations[location].kind !== "utility"){
+            nextInfo = this.nextLocation(location, true, player.forward, track)
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+        }
+        return location
+    }
+
+    /**
+     * Gets the next unowned transit (rr or cab) in the forward direction
+     * @param player the player that wants to take the next transit
+     *
+     * @return name of next railroad in the forward direction
+     */
+    nextUnownedTransit(player) {
+        let location = player.location
+        let track = player.track
+        let nextInfo = {"next": location, "track": track}
+
+        if (this.unownedProperties === 0) {
+            return undefined
+        }
+
+        while ((this.locations[location].kind !== "cab" || this.locations[location].kind !== "railroad") && !this.isOwned(location)){
+            nextInfo = this.nextLocation(location, true, player.forward, track)
+            location = nextInfo["next"]
+            track = nextInfo["track"]
+        }
+        return location
+    }
+
+    /**
+     * Identifies the track that is directly above the player
+     * @param player
+     * 
+     * @return the name of the location directly above
+     **/
+     nextTrackAbove(player) {
+        if (player.track !== 0) {
+            return this.locations[player.location]['above'];
+        }
+     }
+
+     /**
+     * Identifies the track that is directly below the player. If more than 1 location, randomly chooses one of them.
+     * @param player
+     * 
+     * @return the name of the location directly below
+     **/
+      nextTrackBelow(player) {
+        let below = null;
+        if (player.track !== 2) {
+            below = this.locations[player.location]['below'];
+            var i = Math.floor(Math.random()*below.length);
+            return below[i];
+        }
+      }
 
     /**
      * Specifies what kind of action should occur on the current location that was landed on.
@@ -844,25 +937,6 @@ class BoardManager {
         }
 
         return forwards
-    }
-
-    /**
-     * Gets the next railroad in the forward direction
-     * @param player the player that wants to take the next transit
-     *
-     * @return name of next railroad in the forward direction
-     */
-    nextTransit(player) {
-        let location = player.location
-        let track = player.track
-        let nextInfo = {"next": location, "track": track}
-
-        while (this.locations[location].kind !== "railroad"){
-            nextInfo = this.nextLocation(location, true, player.forward, track)
-            location = nextInfo["next"]
-            track = nextInfo["track"]
-        }
-        return location
     }
 
     /**

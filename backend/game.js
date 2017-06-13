@@ -2,6 +2,7 @@ var board = require('./config/large_board');
 var Card = require('./card');
 var BoardManager = require('./boardManager');
 var PlayerManager = require('./playerManager');
+var CardManager = require('./cardUsage');
 
 /**
  * The Game object is the main entry point into the game. It manages everything
@@ -16,6 +17,7 @@ class Game {
             // TODO decide how to set other board presets, maybe just put in board
             this.playerManager = new PlayerManager(gamePresets['players'], 'go', 1);
             this.boardManager = new BoardManager(board);
+            this.cardManager = new CardManager(this.boardManager, this.playerManager);
 
             // auction variables
             this.auction = null; // object of player names : auction price

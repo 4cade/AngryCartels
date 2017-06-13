@@ -1,5 +1,4 @@
 const fortuneCards = require('./config/fortune');
-const misfortuneCards = require('./config/misfortune');
 
 /**
  * Card object allows the player to draw from the various cards in the game (fortune,
@@ -57,21 +56,12 @@ class Card {
     };
 
     /**
-     * Simulates drawing a fortune card.
+     * Simulates drawing a fortune/misfortune card.
      * @return a JSON with fields title (name of card), description,
      *      play (when to use the card), and short (short description used internally)
      */
-    static drawFortune() {
+    static drawFortuneMisfortune() {
         return this.chooseRandom(fortuneCards);
-    }
-
-    /**
-     * Simulates drawing a misfortune card.
-     * @return a JSON with fields title (name of card), description,
-     *      play (when to use the card), and short (short description used internally)
-     */
-    static drawMisfortune() {
-        return this.chooseRandom(misfortuneCards)
     }
 
     /**

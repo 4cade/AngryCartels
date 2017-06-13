@@ -154,7 +154,7 @@ class Team {
      * @param pass String name of the bus pass
      * @return boolean true if pass is used, false if do not own pass
      */
-    useBusPass(pass) {
+    useBusPass(player, pass) {
         // actual ticket usage handled by some other class
         if (this.busTickets.hasOwnProperty(pass)){
             this.busTickets[pass] -= 1
@@ -184,7 +184,7 @@ class Team {
      * @param card Object name of the card
      * @return boolean true if card is used, false otherwise
      */
-    useSpecialCard(card) {
+    useSpecialCard(player, card) {
         // Actual card usage handled by some other class
         if (this.specialCards.hasOwnProperty(card)){
             this.specialCards[card] -= 1

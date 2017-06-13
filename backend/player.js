@@ -141,7 +141,7 @@ class Player {
      * @return boolean true if pass is used, false if do not own pass
      */
     useBusPass(pass) {
-        return this.team.useBusPass(pass)
+        return this.team.useBusPass(this, pass)
     }
 
     /**
@@ -159,7 +159,7 @@ class Player {
      * @return boolean true if card is used, false otherwise
      */
     useSpecialCard(card) {
-        return this.team.useSpecialCard(card);
+        return this.team.useSpecialCard(this, card);
     }
 
     /**
