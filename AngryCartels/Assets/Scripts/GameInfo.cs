@@ -57,6 +57,9 @@ public class GameInfo : MonoBehaviour {
     /// </summary>
     private void Awake()
     {
+        // add the gamestate
+        parser = GetComponent<GameParser>();
+
         MessageBus.Instance.Register("instantiate_players", OnInstantiatePlayers);
     }
 
@@ -135,8 +138,6 @@ public class GameInfo : MonoBehaviour {
             GameObject.Find("RoundPanel").GetComponent<RoundCounter>().setMaxRoundsText(maxRounds);
         }
 
-        // add the gamestate
-        parser = GetComponent<GameParser>();
     }
 
     /// <summary>

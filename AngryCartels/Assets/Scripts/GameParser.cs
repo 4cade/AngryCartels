@@ -118,7 +118,7 @@ public class GameParser : MonoBehaviour {
     private void Start()
     {
         // TEMP: load info here
-        string file = System.IO.File.ReadAllText(@"C:\Users\chats\Desktop\game.json");
+        //string file = System.IO.File.ReadAllText(@"C:\Users\chats\Desktop\game.json");
         //gameState = new JSONObject(file);
         //Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
     }
@@ -881,11 +881,6 @@ public class GameParser : MonoBehaviour {
         {
             MessageBus.Instance.Broadcast("instantiate_players", GetPlayerNames().Count);
         }
-
-        Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
-
-        // TEMP
-        //System.IO.File.WriteAllText(@"C:\Users\chats\Desktop\game.json", gameState.ToString());
     }
 
 }

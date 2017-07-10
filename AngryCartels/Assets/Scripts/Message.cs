@@ -11,7 +11,7 @@ public class Message
     /// Getter for the messageId
     /// </summary>
     protected string messageId;
-    public string MessageId
+    public string ID
     {
         get { return messageId; }
     }
@@ -19,7 +19,24 @@ public class Message
     /// <summary>
     /// Getter for the Message Data
     /// </summary>
-    private object[] messageData;
+    protected object[] messageData;
+    public object[] Data
+    {
+        get { return messageData; }
+    }
+
+    /// <summary>
+    /// If this is set to false, the message will persist until
+    /// a receiver has consumed the message via MessageBus.Broadcast
+    /// Default is true
+    /// </summary>
+    protected bool deleteIfNoReceivers;
+    public bool DeleteIfNoReceivers
+    {
+        get { return deleteIfNoReceivers; }
+        set { deleteIfNoReceivers = value; }
+    }
+    
 
     /// <summary>
     /// Ctor requires message type and data to be passed
@@ -30,6 +47,7 @@ public class Message
     {
         messageId = id;
         messageData = data;
+        deleteIfNoReceivers = true;
     }
 
     /// <summary>

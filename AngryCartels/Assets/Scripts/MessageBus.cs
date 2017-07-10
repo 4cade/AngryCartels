@@ -31,11 +31,18 @@ public class MessageBus
     private Dictionary<string, List<Action<Message>>> subscribers;
 
     /// <summary>
+    /// Holds a list of messages that were sent before a subscriber 
+    /// was registered
+    /// </summary>
+    private Dictionary<string, List<Message>> backlog;
+
+    /// <summary>
     /// Ctor: create the dictionary
     /// </summary>
     private MessageBus()
     {
         subscribers = new Dictionary<string, List<Action<Message>>>();
+        backlog = new Dictionary<string, List<Message>>();
     }
 
     /// <summary>
@@ -44,18 +51,27 @@ public class MessageBus
     /// <param name="id">The string id to register</param>
     /// <param name="onPublisherReceive">The function delegate that will be called
     /// when a message with 'id' is invoked.</param>    
-    internal void Register(string id, Action<Message> onPublisherReceive)
+    public void Register(string id, Action<Message> onPublisherReceive)
     {
         // Check if the id already exists
-        if (subscribers.ContainsKey(id))
+        if (!subscribers.ContainsKey(id))
         {
-            subscribers[id].Add(onPublisherReceive);
+            subscribers[id] = new List<Action<Message>>();
         }
-        else // otherwise create a new list of subscribers for that id
+        subscribers[id].Add(onPublisherReceive);
+
+        // check if there is anything stored in the backlog
+        // if there is, then send it
+        if (backlog.ContainsKey(id))
         {
-            List<Action<Message>> actionList = new List<Action<Message>>();
-            actionList.Add(onPublisherReceive);
-            subscribers.Add(id, actionList);
+            List<Message> messageList = backlog[id];
+
+            foreach(Message m in messageList)
+            {
+                Broadcast(m.ID, m.Data);
+            }
+
+            messageList.Clear();
         }
     }
 
@@ -64,7 +80,7 @@ public class MessageBus
     /// </summary>
     /// <param name="id">The id of the message.</param>
     /// <param name="data">The variable data to send to each object listening.</param>
-    internal void Broadcast(string id, params object[] data)
+    public void Broadcast(string id, params object[] data)
     {
         List<Action<Message>> actionList = subscribers[id];
         Message message = new Message(id, data);
@@ -76,16 +92,34 @@ public class MessageBus
     }
 
     /// <summary>
-    /// Loops through all subscribers registered to the specified id
+    /// Loops through all subscribers registered to the specified id. Could also use
+    /// this method to send messages before subscribers are registered
     /// </summary>
     /// <param name="message">The message to send to all objects listening.</param>
-    internal void Broadcast(Message message)
+    public void Broadcast(Message message)
     {
-        List<Action<Message>> actionList = subscribers[message.MessageId];
-
-        foreach (Action<Message> action in actionList)
+        if (!subscribers.ContainsKey(message.ID))
         {
-            action.Invoke(message);
+            // if we want this message to reach its future consumer
+            // add it to the backlog
+            if (!message.DeleteIfNoReceivers)
+            {
+                if (!backlog.ContainsKey(message.ID))
+                {
+                    backlog[message.ID] = new List<Message>();
+                }
+
+                backlog[message.ID].Add(message);
+            }
+        }
+        else
+        {
+            List<Action<Message>> actionList = subscribers[message.ID];
+            foreach (Action<Message> action in actionList)
+            {
+                action.Invoke(message);
+            }
         }
     }
+
 }
