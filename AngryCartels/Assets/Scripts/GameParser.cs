@@ -870,6 +870,7 @@ public class GameParser : MonoBehaviour {
 
     /// <summary>
     /// Gets called when the client receives a new gamestate update from the server.
+    /// This is basically the main game loop for now
     /// </summary>
     /// <param name="obj"></param>
     private void OnGameDataReceived(Message obj)
@@ -880,6 +881,10 @@ public class GameParser : MonoBehaviour {
         if (numPlayers == -1)
         {
             MessageBus.Instance.Broadcast("instantiate_players", GetPlayerNames().Count);
+        }
+        else
+        {
+            MessageBus.Instance.Broadcast("handle_player_turn");
         }
     }
 

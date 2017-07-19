@@ -65,6 +65,15 @@ public class PlayerScript : MonoBehaviour {
     // The player's special cards.
     public Dictionary<string, int> SpecialCards;
 
+    // Is this player controlled on the local machine
+    private bool isLocal = false;
+    public bool IsLocal
+    {
+        get { return isLocal; }
+        set { isLocal = value; }
+    }
+
+
     /// <summary>
     /// Use this for initialization. Note: not all game objects may exist
     /// yet.

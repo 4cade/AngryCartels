@@ -73,7 +73,10 @@ public class GameInfo : MonoBehaviour {
         numPlayers = obj.GetData<int>();
         List<PlayerPair> playerList = parser.GetPlayerNamesAndId();
         Debug.Log("instantiating players: " + numPlayers);
-        
+
+        // TEMP: This will not work in local multiplayer
+        string localUserName = PlayerPrefs.GetString("username");
+
         // add number of players
         GameObject playerContainer = transform.Find("Players").gameObject;
         players = new PlayerScript[numPlayers];
@@ -87,6 +90,10 @@ public class GameInfo : MonoBehaviour {
             // name
             players[i].PlayerName = playerList[i].Name;
             Debug.Log("Player Name: " + players[i].PlayerName + "--" + playerList[i].Name);
+            if (playerList[i].Name == localUserName)
+            {
+                players[i].IsLocal = true;
+            }
 
             // game id
             players[i].PlayerId = playerList[i].ID;
@@ -138,6 +145,7 @@ public class GameInfo : MonoBehaviour {
             GameObject.Find("RoundPanel").GetComponent<RoundCounter>().setMaxRoundsText(maxRounds);
         }
 
+        MessageBus.Instance.Register("handle_player_turn", OnBeginPlayerTurn);
     }
 
     /// <summary>
@@ -147,4 +155,17 @@ public class GameInfo : MonoBehaviour {
     {
         return actionNames[index];
     }
+
+    /// <summary>
+    /// Gets called whenever new data is recieved from the server, not when it's the player's turn.
+    /// This shuld be fine more of the time
+    /// </summary>
+    /// <param name="obj"></param>
+    private void OnBeginPlayerTurn(Message obj)
+    {
+        // TODO: remake thing
+        Debug.Log("OnBeginPlayerTurn");
+    }
+
+
 }
