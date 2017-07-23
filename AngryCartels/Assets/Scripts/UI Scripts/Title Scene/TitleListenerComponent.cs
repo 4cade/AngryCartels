@@ -183,6 +183,9 @@ public class TitleListenerComponent : MonoBehaviour {
         MessageBus.Instance.Broadcast("start_game");
     }
 
+    /// <summary>
+    /// Clears all the lobbies in the server list.
+    /// </summary>
     private void ClearLobbyItems()
     {
         Button[] buttons = serverList.GetComponentsInChildren<Button>();
@@ -192,6 +195,9 @@ public class TitleListenerComponent : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Clears all the players in the current lobby.
+    /// </summary>
     private void ClearPlayerTextInLobby()
     {
         Text[] textItems = playerList.GetComponentsInChildren<Text>();
@@ -201,6 +207,9 @@ public class TitleListenerComponent : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Refreshes server list and lobby information.
+    /// </summary>
     private void Update()
     {
         serverRefreshCounter -= Time.deltaTime;

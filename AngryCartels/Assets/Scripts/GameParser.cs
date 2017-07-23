@@ -41,7 +41,8 @@ public abstract class GamePair
 }
 
 /// <summary>
-/// Holds player name and player id
+/// Holds information relating to a player and its id
+/// on the server.
 /// </summary>
 public class PlayerPair : GamePair
 {
@@ -49,13 +50,17 @@ public class PlayerPair : GamePair
 }
 
 /// <summary>
-/// holds team name and id
+/// Holds the information relating to a team and its 
+/// id on the server.
 /// </summary>
 public class TeamPair : GamePair
 {
     public TeamPair(string name, int id) : base(name, id) { }
 }
 
+/// <summary>
+/// Represents a bus ticket
+/// </summary>
 public class BusTicket
 {
     public string Name { get; set; }
@@ -69,6 +74,9 @@ public class BusTicket
     }
 }
 
+/// <summary>
+/// Represents a special card
+/// </summary>
 public class SpecialCard
 {
     public string Name { get; set; }
@@ -82,11 +90,26 @@ public class SpecialCard
     }
 }
 
+/// <summary>
+/// Parsers the JSON object that is sent from the server.
+/// The Json received from the server represents the entire 
+/// gamestate.
+/// </summary>
 public class GameParser : MonoBehaviour {
 
+    /// <summary>
+    /// The gamestate of the last received json
+    /// </summary>
     private JSONObject gameState;
+
+    /// <summary>
+    /// TEMP: The number of players, I forgot why this was here.
+    /// </summary>
     private int numPlayers = -1;
 
+    /// <summary>
+    /// called before the game begins.
+    /// </summary>
 	void Awake () {
         gameState = null;
         MessageBus.Instance.Register("game_data_received", OnGameDataReceived);		
@@ -95,7 +118,7 @@ public class GameParser : MonoBehaviour {
     private void Start()
     {
         // TEMP: load info here
-        string file = System.IO.File.ReadAllText(@"C:\Users\chats\Desktop\game.json");
+        //string file = System.IO.File.ReadAllText(@"C:\Users\chats\Desktop\game.json");
         //gameState = new JSONObject(file);
         //Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
     }
@@ -112,6 +135,10 @@ public class GameParser : MonoBehaviour {
         return playerNames;
     }
 
+    /// <summary>
+    /// Returns the index of the player whose turn it is
+    /// </summary>
+    /// <returns>Dat player id tho.</returns>
     public int GetCurrentPlayerIndex()
     {
         if (numPlayers == -1)
@@ -124,6 +151,10 @@ public class GameParser : MonoBehaviour {
         return turnIndex % numPlayers;
     }
 
+    /// <summary>
+    /// Returns the current players name
+    /// </summary>
+    /// <returns>The in game name of the current player</returns>
     public string GetCurrentPlayerName()
     {
         if (numPlayers == -1)
@@ -137,6 +168,10 @@ public class GameParser : MonoBehaviour {
         return name;
     }
 
+    /// <summary>
+    /// Returns all the player in the game.
+    /// </summary>
+    /// <returns></returns>
     public List<PlayerPair> GetPlayerNamesAndId()
     {
         List<PlayerPair> playerNames = new List<PlayerPair>();
@@ -150,6 +185,11 @@ public class GameParser : MonoBehaviour {
         return playerNames;
     }
 
+    /// <summary>
+    /// Returns the string name of the player by the specified index.
+    /// </summary>
+    /// <param name="index">The index of the player in the game.</param>
+    /// <returns></returns>
     public string GetPlayerNameByIndex(int index)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -157,6 +197,11 @@ public class GameParser : MonoBehaviour {
         return player.GetField("name").str;
     }
 
+    /// <summary>
+    /// Returns if the player is moving forward around the map or backwards
+    /// </summary>
+    /// <param name="playerIndex">The index of the player to check</param>
+    /// <returns>True if moving forward, false if moving in reverse</returns>
     public bool GetPlayerForward(int playerIndex)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -164,6 +209,11 @@ public class GameParser : MonoBehaviour {
         return player.GetField("forward").b;
     }
 
+    /// <summary>
+    /// Gets the string tile name of the player at a specfiied player index.
+    /// </summary>
+    /// <param name="playerIndex">The index of the player to query</param>
+    /// <returns></returns>
     public string GetPlayerLocationString(int playerIndex)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -171,6 +221,11 @@ public class GameParser : MonoBehaviour {
         return player.GetField("location").str;
     }
 
+    /// <summary>
+    /// Gets the track of the player given by the player index
+    /// </summary>
+    /// <param name="playerIndex">The index of the player to query</param>
+    /// <returns>returns 1, 2, or 3</returns>
     public int GetPlayerTrackId(int playerIndex)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -178,6 +233,11 @@ public class GameParser : MonoBehaviour {
         return (int)player.GetField("track").f;
     }
 
+    /// <summary>
+    /// Returns the last rolled number of a player
+    /// </summary>
+    /// <param name="playerIndex">The player to query.</param>
+    /// <returns></returns>
     public int GetPlayerLastRolledNumber(int playerIndex)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -185,6 +245,11 @@ public class GameParser : MonoBehaviour {
         return (int)player.GetField("lastRolled").f;
     }
 
+    /// <summary>
+    /// Gets the player team name
+    /// </summary>
+    /// <param name="playerIndex">The player to query.</param>
+    /// <returns></returns>
     public string GetPlayerTeamString(int playerIndex)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -192,6 +257,11 @@ public class GameParser : MonoBehaviour {
         return player.GetField("taem").str;
     }
 
+    /// <summary>
+    /// Gets the team id of a particular player
+    /// </summary>
+    /// <param name="playerIndex">The player to query.</param>
+    /// <returns></returns>
     public int GetPlayerTeamId(int playerIndex)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -212,6 +282,11 @@ public class GameParser : MonoBehaviour {
         return -1;
     }
 
+    /// <summary>
+    /// Gets the available actions of a player.
+    /// </summary>
+    /// <param name="playerIndex">The player to query.</param>
+    /// <returns></returns>
     public List<string> GetPlayerActions(int playerIndex)
     {
         List<string> actions = new List<string>();
@@ -225,6 +300,11 @@ public class GameParser : MonoBehaviour {
         return actions;
     }
 
+    /// <summary>
+    /// TODO: 
+    /// </summary>
+    /// <param name="playerIndex"></param>
+    /// <returns></returns>
     public List<string> GetPlayerActionsOnHold(int playerIndex)
     {
         List<string> actions = new List<string>();
@@ -238,6 +318,11 @@ public class GameParser : MonoBehaviour {
         return actions;
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <param name="playerIndex"></param>
+    /// <returns></returns>
     public string GetPlayerOnNextTurn(int playerIndex)
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
@@ -245,6 +330,10 @@ public class GameParser : MonoBehaviour {
         return player.GetField("onNextTurn").str;
     }
 
+    /// <summary>
+    /// Gets all the team names
+    /// </summary>
+    /// <returns></returns>
     public List<string> GetTeamNames()
     {
         List<string> teamNames = new List<string>();
@@ -256,6 +345,10 @@ public class GameParser : MonoBehaviour {
         return teamNames;
     }
 
+    /// <summary>
+    /// Gets all the team names and their ID
+    /// </summary>
+    /// <returns></returns>
     public List<TeamPair> GetTeamNamesAndId()
     {
         List<TeamPair> teamNames = new List<TeamPair>();
@@ -268,12 +361,23 @@ public class GameParser : MonoBehaviour {
         return teamNames;
     }
 
+    /// <summary>
+    /// Gets the team name of a given team index.
+    /// </summary>
+    /// <param name="teamIndex"></param>
+    /// <returns></returns>
     public string GetTeamName(int teamIndex)
     {
         JSONObject teams = gameState.GetField("playerManager").GetField("teams");
         return teams.list[teamIndex].str;
     }
 
+    /// <summary>
+    /// Gets the money of a particular team.
+    /// </summary>
+    /// <param name="teamIndex">The index of the team, will be the same 
+    /// as the playerIndex if game is FFA</param>
+    /// <returns></returns>
     public int GetTeamMoney(int teamIndex)
     {
         JSONObject teams = gameState.GetField("playerManager").GetField("teams");
@@ -281,6 +385,12 @@ public class GameParser : MonoBehaviour {
         return value;
     }
 
+    /// <summary>
+    /// Gets all the property names owned by the tema.
+    /// </summary>
+    /// <param name="teamIndex">The team index to query, will be the same 
+    /// as the playerIndex if game is FFA</param>
+    /// <returns></returns>
     public List<string> GetTeamProperties(int teamIndex)
     {
         List<string> teamProperties = new List<string>();
@@ -293,6 +403,12 @@ public class GameParser : MonoBehaviour {
         return teamProperties;
     }
 
+    /// <summary>
+    /// Gets the bus tickets owned by a team.
+    /// </summary>
+    /// <param name="teamIndex">The team index to query, will be the same 
+    /// as the playerIndex if game is FFA</param>
+    /// <returns></returns>
     public List<BusTicket> GetTeamBusTickets(int teamIndex)
     {
         List<BusTicket> teamBuses = new List<BusTicket>();
@@ -311,6 +427,12 @@ public class GameParser : MonoBehaviour {
         return teamBuses;
     }
 
+    /// <summary>
+    /// Gets the special cards owned by a particular team.
+    /// </summary>
+    /// <param name="teamIndex">The team index to query, will be the same 
+    /// as the playerIndex if game is FFA</param>
+    /// <returns></returns>
     public List<SpecialCard> GetTeamSpecialCards(int teamIndex)
     {
         List<SpecialCard> teamSpecial = new List<SpecialCard>();
@@ -329,6 +451,10 @@ public class GameParser : MonoBehaviour {
         return teamSpecial;
     }
 
+    /// <summary>
+    /// Gets the current turn that the game is on.
+    /// </summary>
+    /// <returns></returns>
     public int GetTurnIndex()
     {
         JSONObject playerManager = gameState.GetField("playerManager");
@@ -336,48 +462,80 @@ public class GameParser : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <returns></returns>
     public bool GetCanRoll()
     {
         JSONObject playerManager = gameState.GetField("playerManager");
         return playerManager.GetField("canRoll").b;
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <returns></returns>
     public int GetDoubleCount()
     {
         JSONObject playerManager = gameState.GetField("playerManager");
         return (int)playerManager.GetField("doubleCount").f;
     }
 
+    /// <summary>
+    /// Gets the number of available houses.
+    /// </summary>
+    /// <returns></returns>
     public int GetAvailableHouses()
     {
         JSONObject boardManager = gameState.GetField("boardManager");
         return (int)boardManager.GetField("houses").f;
     }
 
+    /// <summary>
+    /// Gets the number of available hotels.
+    /// </summary>
+    /// <returns></returns>
     public int GetAvailableHotels()
     {
         JSONObject boardManager = gameState.GetField("boardManager");
         return (int)boardManager.GetField("hotels").f;
     }
 
+    /// <summary>
+    /// Gets the number of available skyscrypesersers
+    /// </summary>
+    /// <returns></returns>
     public int GetAvailableSkyscrapers()
     {
         JSONObject boardManager = gameState.GetField("boardManager");
         return (int)boardManager.GetField("skyscrapers").f;
     }
 
+    /// <summary>
+    /// Gets the number of Pools
+    /// </summary>
+    /// <returns></returns>
     public int GetNumberPools()
     {
         JSONObject boardManager = gameState.GetField("boardManager");
         return (int)boardManager.GetField("pool").f;
     }
 
+    /// <summary>
+    /// Gets the number of unowned property
+    /// </summary>
+    /// <returns>List of strings</returns>
     public int GetNumberUnownedProperties()
     {
         JSONObject boardManager = gameState.GetField("boardManager");
         return (int)boardManager.GetField("unownedProperties").f;
     }
 
+    /// <summary>
+    /// Gets all the property names.
+    /// </summary>
+    /// <returns></returns>
     public List<string> GetPropertyNames()
     {
         List<string> tiles = new List<string>();
@@ -390,6 +548,11 @@ public class GameParser : MonoBehaviour {
         return tiles;
     }
 
+    /// <summary>
+    /// Gets the type of tile based on its name
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public TileType GetTileType(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -398,6 +561,11 @@ public class GameParser : MonoBehaviour {
         return ConvertTypeFromString(tile.GetField("type").str);
     }
 
+    /// <summary>
+    /// Gets the tile in the forward position of the tile name.
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public string GetForwardTile(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -406,6 +574,11 @@ public class GameParser : MonoBehaviour {
         return tile.GetField("forward").keys[0];
     }
 
+    /// <summary>
+    /// Gets the tile name of the tile behind a given tilename.
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public string GetBackwardTile(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -414,6 +587,11 @@ public class GameParser : MonoBehaviour {
         return tile.GetField("backward").keys[0];
     }
 
+    /// <summary>
+    /// Gets the tile to the side of the tilename
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetSide(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -422,6 +600,11 @@ public class GameParser : MonoBehaviour {
         return Convert.ToInt32(tile.GetField("side").keys[0]);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetTrack(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -430,6 +613,11 @@ public class GameParser : MonoBehaviour {
         return Convert.ToInt32(tile.GetField("track").keys[0]);
     }
 
+    /// <summary>
+    /// Gets the tile about the given tileName.
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns>can return "" of the tile is on the highest track.</returns>
     public string GetAboveTile(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -438,6 +626,11 @@ public class GameParser : MonoBehaviour {
         return tile.GetField("above").keys[0];
     }
 
+    /// <summary>
+    /// Gets the tile below the given tielName
+    /// </summary>
+    /// <param name="tileName">can return "" if the tile is on the lowest track.</param>
+    /// <returns></returns>
     public string GetBelowTile(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -446,6 +639,11 @@ public class GameParser : MonoBehaviour {
         return tile.GetField("below").keys[0];
     }
 
+    /// <summary>
+    /// TODO: 
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public bool GetSnapshot(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -454,6 +652,11 @@ public class GameParser : MonoBehaviour {
         return tile.GetField("snapshot").b;
     }
 
+    /// <summary>
+    /// Gets the number representing a card group from a given tilename
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetGroup(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -462,6 +665,11 @@ public class GameParser : MonoBehaviour {
         return (int)tile.GetField("group").f;
     }
 
+    /// <summary>
+    /// Gets the current rent for a given tilename
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetRentCurrent(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -473,6 +681,11 @@ public class GameParser : MonoBehaviour {
         return rent;
     }
 
+    /// <summary>
+    /// Gets the list of rent values for a given tileName
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public List<int> GetRentList(string tileName)
     {
         List<int> rents = new List<int>();
@@ -486,6 +699,11 @@ public class GameParser : MonoBehaviour {
         return rents;
     }
 
+    /// <summary>
+    /// Gets the value of morgaging the property of a given tileName
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetMortgageValue(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -494,6 +712,11 @@ public class GameParser : MonoBehaviour {
         return (int)tile.GetField("mortgageValue").f;
     }
 
+    /// <summary>
+    /// Gets the cost of a property of a given tileName
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetTileCost(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -502,6 +725,11 @@ public class GameParser : MonoBehaviour {
         return (int)tile.GetField("cost").f;
     }
 
+    /// <summary>
+    /// Returns the owner of a property of the given tileName
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns>Can return "" if no owner</returns>
     public string GetPropertyOwner(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -510,6 +738,11 @@ public class GameParser : MonoBehaviour {
         return tile.GetField("owner").str;
     }
 
+    /// <summary>
+    /// Returns if a property is mortgaged given a tileName.
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns>Returns true if mortgaged and false if otherwise.</returns>
     public bool GetIsMortgaged(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -518,6 +751,11 @@ public class GameParser : MonoBehaviour {
         return tile.GetField("isMortgaged").b;
     }
 
+    /// <summary>
+    /// Gets the number of hotels on a property given by its tileName
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetNumberHotels(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -526,6 +764,11 @@ public class GameParser : MonoBehaviour {
         return (int)tile.GetField("hotels").f;
     }
 
+    /// <summary>
+    /// Returns the number of houses on a tile given by a tileName.
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetNumberHouses(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -534,6 +777,11 @@ public class GameParser : MonoBehaviour {
         return (int)tile.GetField("houses").f;
     }
 
+    /// <summary>
+    /// Gets the number of skyscrappers on a tile given by the tileName
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetNumberSkyscrapers(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -542,6 +790,11 @@ public class GameParser : MonoBehaviour {
         return (int)tile.GetField("skyscrappers").f;
     }
 
+    /// <summary>
+    /// Gets the price for a house on a tileName
+    /// </summary>
+    /// <param name="tileName"></param>
+    /// <returns></returns>
     public int GetHousePrice(string tileName)
     {
         JSONObject boardManager = gameState.GetField("boardManager");
@@ -550,6 +803,11 @@ public class GameParser : MonoBehaviour {
         return (int)tile.GetField("housePrice").f;
     }
 
+    /// <summary>
+    /// Converts a type type string to an TileType integer
+    /// </summary>
+    /// <param name="tileTypeStr"></param>
+    /// <returns></returns>
     public TileType ConvertTypeFromString(string tileTypeStr)
     {
         switch (tileTypeStr)
@@ -565,31 +823,55 @@ public class GameParser : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <returns></returns>
     public string GetAuction()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <returns></returns>
     public bool IsAuctionGoing()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <returns></returns>
     public string GetAuctionedProperty()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <returns></returns>
     public int GetLastOdd()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// TODO:
+    /// </summary>
+    /// <returns></returns>
     public string GetLog()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Gets called when the client receives a new gamestate update from the server.
+    /// </summary>
+    /// <param name="obj"></param>
     private void OnGameDataReceived(Message obj)
     {
         gameState = obj.GetData<JSONObject>();
@@ -599,11 +881,6 @@ public class GameParser : MonoBehaviour {
         {
             MessageBus.Instance.Broadcast("instantiate_players", GetPlayerNames().Count);
         }
-
-        Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
-
-        // TEMP
-        //System.IO.File.WriteAllText(@"C:\Users\chats\Desktop\game.json", gameState.ToString());
     }
 
 }

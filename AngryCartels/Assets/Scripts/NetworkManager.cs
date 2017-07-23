@@ -218,8 +218,10 @@ public class NetworkManager : MonoBehaviour {
     /// <param name="obj">JSON data.</param>
     private void GameData(SocketIOEvent obj)
     {
-        //Debug.Log("Game Data: " + obj.data.ToString());
-        MessageBus.Instance.Broadcast("game_data_received", obj.data);
+        Debug.Log("Game Data: " + obj);
+        Message m = new Message("game_data_received", obj.data);
+        m.DeleteIfNoReceivers = false;
+        MessageBus.Instance.Broadcast(m);
     }
 
     /// <summary>
