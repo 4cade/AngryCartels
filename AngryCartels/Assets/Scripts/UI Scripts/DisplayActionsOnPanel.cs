@@ -13,7 +13,7 @@ public class DisplayActionsOnPanel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        contentPanelTransform = transform.FindChild("Content");
+        contentPanelTransform = transform.Find("Content");
 
         MessageBus.Instance.Register("showActionPanel", openActionPanel);
         MessageBus.Instance.Register("closeActionPanel", CloseActionPanel);

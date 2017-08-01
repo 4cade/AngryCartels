@@ -5,7 +5,7 @@ using System;
 
 /// <summary>
 /// Singlton MessageBus class can pass variable abouts of data
-/// between objects.
+/// between objects. TODO: add clear bus and clear message.
 /// </summary>
 public class MessageBus
 {
