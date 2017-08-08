@@ -6,7 +6,10 @@ using UnityEngine;
 /// Astract class that controls what should be displayed
 /// on the canvas. Ideally there should be one inherited SceneGui per scene.
 /// </summary>
-public abstract class SceneGui {
+public abstract class SceneGui : MonoBehaviour {
+
+    // All first generational children of the canvas object
+    public List<GameObject> controls;
 
     /// <summary>
     /// Updates the this canvas gui based on new game state information.
@@ -25,4 +28,17 @@ public abstract class SceneGui {
     /// if you want some fancy effect for your SceneGui to transition into.
     /// </summary>
     public virtual void OnSceneEnter() { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="gameObj"></param>
+    /// <returns></returns>
+    public GameObject InstantiateAndAdd(GameObject gameObj)
+    {
+        GameObject instance = Instantiate(gameObj);
+        controls.Add(instance);
+        return instance;
+    }
+
 }

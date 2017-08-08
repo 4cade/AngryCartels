@@ -11,11 +11,23 @@ using UnityEngine;
 /// </summary>
 public class GameCanvas : MonoBehaviour {
 
+    // Used to spoof the inspector so SceneGuis can be configured like a dictionary.
+    [System.Serializable]
+    public class SceneGuiEntry
+    {
+        public int sceneIndex;
+        public GameObject sceneGuiPrefab;
+    }
+
+    // List of gui items mapped to scene indicies in the unity editor.
+    // Find scene indicies in build settings.
+    public SceneGuiEntry[] sceneGuis;
+
     // Current gui being display for the scene
-    private SceneGui currentSceneGui;
+    private SceneGui currentSceneGui = null;
 
     // the number of game canvases created
-    static int restrictionCounter = 0;
+    private static int restrictionCounter = 0;
 
     /// <summary>
     /// Updates the current scene gui based on a newly received gamestate.
@@ -58,12 +70,38 @@ public class GameCanvas : MonoBehaviour {
     /// <param name="obj"></param>
     private void OnSceneSwitch(Message obj)
     {
-        // TODO: Need to have a map of scene indicies to scene objects
         int sceneIndex = obj.GetData<int>();
 
-        currentSceneGui.OnSceneExit();
-        // Instantiate(NextScene)
-        // currentSceneGui = NextSceneGui
+        // transition out of the scene
+        if (currentSceneGui != null)
+        {
+            currentSceneGui.OnSceneExit();
+        }
+
+        // Find the next scene to start up
+        SceneGui nextScene = null;
+        foreach (SceneGuiEntry entry in sceneGuis)
+        {
+            if (entry.sceneIndex == sceneIndex)
+            {
+                GameObject gameObj = Instantiate(entry.sceneGuiPrefab);
+                nextScene = gameObj.GetComponent<SceneGui>();
+                break;
+            }
+        }
+
+        // destroy and replace
+        Destroy(currentSceneGui.gameObject);
+        currentSceneGui = nextScene;
+
+        // Add all the controls that have been created in the editor to the SceneGui for reference
+        int childCount = currentSceneGui.transform.childCount;
+        for (int i = 0; i < childCount; ++i)
+        {
+            currentSceneGui.controls.Add(currentSceneGui.transform.GetChild(i).gameObject);
+        }
+
+        // transition into the scene
         currentSceneGui.OnSceneEnter();
     }
 
