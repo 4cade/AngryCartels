@@ -1,5 +1,4 @@
-aight we need to figure out how to do this
-
+test
 
 game canvas
 - needs to display the game's state
