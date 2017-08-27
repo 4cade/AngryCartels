@@ -7,7 +7,7 @@ using System;
 /// <summary>
 /// Displays all the groups of cards.
 /// </summary>
-public class CardGroupDisplay : MonoBehaviour {
+public class PropertyPanel : MonoBehaviour {
 
     /// <summary>
     /// The panel that exists in the canvas that displays all card groups
@@ -27,26 +27,27 @@ public class CardGroupDisplay : MonoBehaviour {
     /// <summary>
     /// The prefab game object used to represent a group of cards.
     /// </summary>
-    public GameObject cardGroupPrefab;
-    
-	// Use this for initialization
-	void Start () {
-        //players = playerContainerGameObject.GetComponentsInChildren<PlayerScript>();
-        //backButton = transform.GetComponentInChildren<Button>();
-        backButton.onClick.AddListener(Reset);
-	}
+    public GameObject propertyGroupPrefab;
 
+    /// <summary>
+    /// The prefab of a game game obect when inspecting the 
+    /// cards in a group.
+    /// </summary>
+    public GameObject propertyCardPrefab;
+
+    /// <summary>
+    /// The Player we are currently inspecting
+    /// </summary>
+    public PlayerScript selectedPlayer;
+    
     /// <summary>
     /// Displays all the owned card groups owned by the given player.
     /// </summary>
     /// <param name="player">The desired player.</param>
-    public void DisplayCardGroup(GameObject player)
+    public void DisplayPropertyGroups(GameObject player)
     {
-        // display the card panel if being displayed
-        //cardPanel.SetActive(false);
-
-        PlayerScript playerScript = player.GetComponent<PlayerScript>();
-        Dictionary<int, List<string>> cards = playerScript.Cards;
+        selectedPlayer = player.GetComponent<PlayerScript>();
+        Dictionary<int, List<string>> cards = selectedPlayer.Cards;
 
         // Destroy all previous children
         foreach (Transform child in groupPanel.transform)
@@ -55,12 +56,15 @@ public class CardGroupDisplay : MonoBehaviour {
         }
 
         // Add the new card groups
-        foreach (var key in cards.Keys)
+        foreach (KeyValuePair<int, List<string>> group in cards)
         {
-            GameObject instance = Instantiate(cardGroupPrefab);
-            instance.transform.SetParent(groupPanel.transform);
-            List<string> test = cards[key];
-            instance.GetComponent<CardGroupSelected>().cards = cards[key];
+            if (group.Value.Count > 0)
+            {
+                GameObject instance = Instantiate(propertyGroupPrefab);
+                instance.GetComponent<PropertyGroup>().propertyPanel = this;
+                instance.GetComponent<PropertyGroup>().propertyGroup = group;
+                instance.transform.SetParent(groupPanel.transform);
+            }
         }
     }
 
@@ -74,4 +78,5 @@ public class CardGroupDisplay : MonoBehaviour {
         cardPanel.SetActive(false);
         backButton.gameObject.SetActive(false);
     }
+
 }

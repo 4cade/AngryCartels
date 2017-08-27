@@ -16,15 +16,15 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 224000013917613396}
-  - 222: {fileID: 222000011254281466}
-  - 114: {fileID: 114000011120804658}
-  - 114: {fileID: 114000014035547706}
-  - 114: {fileID: 114000011365359878}
+  - component: {fileID: 224000013917613396}
+  - component: {fileID: 222000011254281466}
+  - component: {fileID: 114000011120804658}
+  - component: {fileID: 114000014035547706}
+  - component: {fileID: 114000011365359878}
   m_Layer: 5
-  m_Name: PlayerCardRow
+  m_Name: PlayerBadgeRow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,6 +77,8 @@ MonoBehaviour:
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
 --- !u!114 &114000014035547706
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,6 +97,7 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!222 &222000011254281466
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -110,10 +113,10 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
