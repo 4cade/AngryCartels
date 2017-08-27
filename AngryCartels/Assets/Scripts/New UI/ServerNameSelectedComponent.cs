@@ -6,7 +6,8 @@ using UnityEngine.UI;
 /// <summary>
 /// Gets called when a user selects a server / lobby
 /// </summary>
-public class ServerNameSelectedComponent : MonoBehaviour {
+public class ServerNameSelectedComponent : MonoBehaviour
+{
 
     private Text nameText;
 

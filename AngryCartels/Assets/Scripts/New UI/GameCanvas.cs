@@ -24,7 +24,7 @@ public class GameCanvas : MonoBehaviour {
     public SceneGuiEntry[] sceneGuis;
 
     // Current gui being display for the scene
-    private SceneGui currentSceneGui = null;
+    public SceneGui currentSceneGui = null;
 
     // the number of game canvases created
     private static int restrictionCounter = 0;
@@ -103,6 +103,9 @@ public class GameCanvas : MonoBehaviour {
 
         // transition into the scene
         currentSceneGui.OnSceneEnter();
+
+        // make canvas parent
+        currentSceneGui.transform.parent = transform;
     }
 
 }

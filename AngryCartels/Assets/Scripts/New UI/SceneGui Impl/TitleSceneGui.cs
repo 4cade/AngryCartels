@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
 /// <summary>
 /// Used to switch on the type of responses from the server.
@@ -16,7 +16,7 @@ enum TitleResponseType
 /// Sends messagse to the network manager based on the input the user does 
 /// in the title screen.
 /// </summary>
-public class TitleListenerComponent : MonoBehaviour {
+public class TitleSceneGui : SceneGui {
 
     // some temporary game objects in the title screen.
     public GameObject inputField;
@@ -35,8 +35,18 @@ public class TitleListenerComponent : MonoBehaviour {
     private float lobbyRefreshCounter = 0;
     public float LOBBY_REFRESH_INTERVAL = 1.0f;
 
-	// Use this for initialization
-	void Awake ()
+    public override void GameStateUpdate(GameState gs)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnSceneEnter()
+    {
+        base.OnSceneEnter();
+    }
+
+    // Use this for initialization
+    void Awake()
     {
         MessageBus.Instance.Register("title_response_received", TitleResponseReceived);
         MessageBus.Instance.Register("joined_room", JoinRoom);
@@ -112,7 +122,7 @@ public class TitleListenerComponent : MonoBehaviour {
     {
         List<JSONObject> nameList = playersObject.list;
         Transform contentTransform = playerList.transform.Find("Content");
-        foreach(JSONObject json in nameList)
+        foreach (JSONObject json in nameList)
         {
             GameObject text = Instantiate(playerTextPrefab);
             text.transform.SetParent(contentTransform);
@@ -156,7 +166,7 @@ public class TitleListenerComponent : MonoBehaviour {
     {
         // First remove all children that have been added
         ClearLobbyItems();
-        
+
         // add items to list
         MessageBus.Instance.Broadcast("refresh");
     }
@@ -181,6 +191,7 @@ public class TitleListenerComponent : MonoBehaviour {
     public void StartGame()
     {
         MessageBus.Instance.Broadcast("start_game");
+        MessageBus.Instance.Broadcast(MessageStrings.SWITCH_SCENE, 1);
     }
 
     /// <summary>
