@@ -254,7 +254,7 @@ public class GameParser : MonoBehaviour {
     {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
         JSONObject player = players.list[playerIndex];
-        return player.GetField("taem").str;
+        return player.GetField("team").str;
     }
 
     /// <summary>
@@ -882,5 +882,4 @@ public class GameParser : MonoBehaviour {
             MessageBus.Instance.Broadcast("instantiate_players", GetPlayerNames().Count);
         }
     }
-
 }
