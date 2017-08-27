@@ -5,10 +5,10 @@ using UnityEngine.UI;
 /// <summary>
 /// Represents the player on the UI layer.
 /// </summary>
-public class PlayerCardScript : MonoBehaviour {
+public class PlayerBadgeInfo : MonoBehaviour {
 
-    private PlayerScript player = null;
-    public PlayerScript Player
+    private GameObject player = null;
+    public GameObject Player
     {
         get { return player; }
         set
@@ -16,44 +16,40 @@ public class PlayerCardScript : MonoBehaviour {
             // do not set player a second time
             if (player == null)
             {
-                nameText.text = value.PlayerName;
-                SetMoneyText(value.PlayerMoney);
-                placeText.text = value.PlayerPlace.ToString();
+                player = value;
+                PlayerScript ps = value.GetComponent<PlayerScript>();
+                nameText.text = ps.PlayerName;
+                SetMoneyText(ps.PlayerMoney);
+                placeText.text = ps.PlayerPlace.ToString();
             }
         }
     }
 
     // Reference to the card group panel
-    GameObject cardGroupPanel;
+    private GameBoardGui sceneGui;
 
     // Default UI properties that are displayed about the player
-    Text nameText;
-    Text moneyText;
-    Text placeText;
+    private Text nameText;
+    private Text moneyText;
+    private Text placeText;
 
 	// Use this for initialization
 	void Awake () {
+        sceneGui = GameObject.Find("Canvas").GetComponent<GameCanvas>().currentSceneGui as GameBoardGui;
+
         nameText = transform.Find("PlayerName").GetComponent<Text>();
         moneyText = transform.Find("MoneyText").GetComponent<Text>();
         placeText = transform.Find("PlaceText").GetComponent<Text>();
     }
 
     /// <summary>
-    /// Called before the game is run, after object have been created
-    /// </summary>
-    private void Start()
-    {
-        cardGroupPanel = GameObject.Find("Canvas").transform.Find("CardDisplayPanel").gameObject;
-    }
-
-    /// <summary>
     /// Called when a player clicks on a player card.
     /// </summary>
-	public void CardSelected()
+	public void BadgeSelected()
     {
-        //Debug.Log("TODO: card selected~");
-        cardGroupPanel.GetComponent<CardGroupDisplay>().Reset();
-        cardGroupPanel.GetComponent<CardGroupDisplay>().DisplayCardGroup(player.gameObject);
+        PropertyPanel gd = sceneGui.PropertyPanel.GetComponent<PropertyPanel>();
+        gd.Reset();
+        gd.DisplayPropertyGroups(player);
     }
 
     /// <summary>

@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114358199240733290}
   - component: {fileID: 114530585849116736}
   m_Layer: 5
-  m_Name: ServerJoinButton_TEMP
+  m_Name: ServerJoinButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1981832218776124}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe1ab46f25e90974dbf6273bd70bfd0d, type: 3}
+  m_Script: {fileID: 11500000, guid: a1322b3e9469c744f9a26965f7de6965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114787793613355504

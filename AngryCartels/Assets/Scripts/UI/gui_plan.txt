@@ -1,0 +1,12 @@
+test
+
+game canvas
+- needs to display the game's state
+- game may have different modes (ie playing versus minigame versus title)
+- has access to game state
+
+- titleGui
+    - 
+- BoardGui
+- nullGui
+- other for different minigames ...
