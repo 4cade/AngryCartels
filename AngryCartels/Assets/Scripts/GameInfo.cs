@@ -52,6 +52,12 @@ public class GameInfo : MonoBehaviour {
     // The node Json parser
     private GameParser parser;
 
+
+    public GameObject GetPlayerGameObject(int index)
+    {
+        return players[index].gameObject;
+    }
+
     /// <summary>
     /// Called after this object is constructed
     /// </summary>
@@ -138,18 +144,20 @@ public class GameInfo : MonoBehaviour {
             GameObject.Find("RoundPanel").GetComponent<RoundCounter>().setMaxRoundsText(maxRounds);
         }
 
+
+
+
         // TEMP: Debugging the new ui
-        GameObject canvas = GameObject.Find("Canvas");
-        GameState.Instance = new GameState();
-        GameState.Instance.Players = new GameObject[1];
-        GameState.Instance.Players[0] = Instantiate(playerPrefab);
-        PlayerScript ps = GameState.Instance.Players[0].GetComponent<PlayerScript>();
-        ps.PlayerName = "TEST_NAME";
-        ps.PlayerMoney = 100.5f;
-        ps.PlayerPlace = 2;
-        ps.Cards[1].Add("boardwalk");
-        ps.Cards[1].Add("mother clucker");
-        canvas.GetComponent<GameCanvas>().currentSceneGui.OnSceneEnter();
+        //GameObject canvas = GameObject.Find("Canvas");
+        //players = new GameObject[1];
+        //GameState.Instance.Players[0] = Instantiate(playerPrefab);
+        //PlayerScript ps = GameState.Instance.Players[0].GetComponent<PlayerScript>();
+        //ps.PlayerName = "TEST_NAME";
+        //ps.PlayerMoney = 100.5f;
+        //ps.PlayerPlace = 2;
+        //ps.Cards[1].Add("boardwalk");
+        //ps.Cards[1].Add("mother clucker");
+        //canvas.GetComponent<GameCanvas>().currentSceneGui.OnSceneEnter();
 
     }
 

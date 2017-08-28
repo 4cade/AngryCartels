@@ -17,7 +17,7 @@ public class GameBoardGui : SceneGui
     
     private const int MAX_PLAYERS_PER_ROW = 4;
 
-    public override void GameStateUpdate(GameState gs)
+    public override void GameStateUpdate(GameInfo gi)
     {
         throw new NotImplementedException();
     }
@@ -34,7 +34,7 @@ public class GameBoardGui : SceneGui
 
     private void CreatePlayerBadges()
     {
-        int numPlayers = GameState.Instance.NumPlayers;
+        int numPlayers = GameInfo.Instance.NumPlayers;
 
         Debug.Log("Creating " + numPlayers + " player badges");
 
@@ -60,7 +60,7 @@ public class GameBoardGui : SceneGui
             {
                 GameObject instance = Instantiate(playerBadgePrefab);
                 instance.transform.SetParent(row1.transform);
-                instance.GetComponent<PlayerBadgeInfo>().Player = GameState.Instance.GetPlayerGameObject(playerScriptCounter++);
+                instance.GetComponent<PlayerBadgeInfo>().Player = GameInfo.Instance.GetPlayerGameObject(playerScriptCounter++);
             }
 
             // check if we need a second row
@@ -74,7 +74,7 @@ public class GameBoardGui : SceneGui
                 {
                     GameObject instance = Instantiate(playerBadgePrefab);
                     instance.transform.SetParent(row2.transform);
-                    instance.GetComponent<PlayerBadgeInfo>().Player = GameState.Instance.GetPlayerGameObject(playerScriptCounter++);
+                    instance.GetComponent<PlayerBadgeInfo>().Player = GameInfo.Instance.GetPlayerGameObject(playerScriptCounter++);
                 }
             }
         }
