@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114122853295195702}
   - component: {fileID: 114453063390532788}
   m_Layer: 5
-  m_Name: ActionButton
+  m_Name: PlayerActionItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,6 +41,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7310ac54407827d4785b70800943240e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActionText: {fileID: 0}
 --- !u!114 &114453063390532788
 MonoBehaviour:
   m_ObjectHideFlags: 1

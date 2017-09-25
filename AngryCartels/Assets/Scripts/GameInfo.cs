@@ -46,8 +46,6 @@ public class GameInfo : MonoBehaviour {
     // handles location data of the game
     public GameObject mapManager;
 
-    // Action Types
-    public string[] actionNames;
 
     // The node Json parser
     private GameParser parser;
@@ -161,11 +159,4 @@ public class GameInfo : MonoBehaviour {
 
     }
 
-    /// <summary>
-    /// Returns an action string from a given index.
-    /// </summary>
-    public string GetActionName(int index)
-    {
-        return actionNames[index];
-    }
 }
