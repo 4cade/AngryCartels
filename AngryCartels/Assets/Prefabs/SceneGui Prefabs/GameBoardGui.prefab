@@ -255,7 +255,6 @@ GameObject:
   - component: {fileID: 224379986333289318}
   - component: {fileID: 222079678725244216}
   - component: {fileID: 114607249202107934}
-  - component: {fileID: 114895664240255898}
   - component: {fileID: 114608251680878248}
   - component: {fileID: 114303322695771060}
   m_Layer: 5
@@ -982,22 +981,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114895664240255898
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1974384016384066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b14089da9061f2478f812000d8057f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCardRowPrefab: {fileID: 1000011551648054, guid: aed8a7072374898468c42f9b3ad359db,
-    type: 2}
-  playerCardPrefab: {fileID: 1000013258956324, guid: f59c44494b0457f429195f1783614230,
-    type: 2}
-  numPlayers: 0
 --- !u!114 &114994671938170952
 MonoBehaviour:
   m_ObjectHideFlags: 1

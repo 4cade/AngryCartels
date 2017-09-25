@@ -10,7 +10,7 @@ using UnityEngine;
 /// Any canvas objects that are created after attaching this component will be destroyed.
 /// </summary>
 public class GameCanvas : MonoBehaviour {
-
+    
     // Used to spoof the inspector so SceneGuis can be configured like a dictionary.
     [System.Serializable]
     public class SceneGuiEntry
@@ -24,7 +24,7 @@ public class GameCanvas : MonoBehaviour {
     public SceneGuiEntry[] sceneGuis;
 
     // Current gui being display for the scene
-    public SceneGui currentSceneGui = null;
+    public static SceneGui currentSceneGui = null;
 
     // the number of game canvases created
     private static int restrictionCounter = 0;
@@ -59,6 +59,13 @@ public class GameCanvas : MonoBehaviour {
     {
         // do not destroy the canvas
         DontDestroyOnLoad(gameObject);
+
+        // We should always have a gui attached when the game starts
+        if (currentSceneGui == null)
+        {
+            currentSceneGui = transform.GetChild(0).GetComponent<SceneGui>();
+        }
+
         // Register scene switch so any game object can tell the canvas to switch scenes
         MessageBus.Instance.Register(MessageStrings.SWITCH_SCENE, OnSceneSwitch);
     }

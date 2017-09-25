@@ -16,7 +16,7 @@ public class MoveToTile : MonoBehaviour {
     public bool isForwardDirection = true;
 
     // The goal index of movement.
-    public int goalIndex = 0;
+    public int goalIndex = 1;
 
     // The starting index of movement.
     public int startIndex = 0;
@@ -29,6 +29,10 @@ public class MoveToTile : MonoBehaviour {
     private int prevGoal;
     private int prevStart;
     private bool prevDir;
+
+    Vector3 startPoint;
+    Vector3 nextPoint;
+    public Vector3 MovementDirection;
 
     // The path to travel
     private List<Vector3> path;
@@ -44,6 +48,10 @@ public class MoveToTile : MonoBehaviour {
         path = null;
         lerp = 0;
         lerpSpacer = 1;
+
+        startPoint = GameObject.Find("MapManager").GetComponent<TileHandler>().tiles[0].location;
+        nextPoint = GameObject.Find("MapManager").GetComponent<TileHandler>().tiles[1].location;
+        MovementDirection = (nextPoint - startPoint).normalized;
 
         MessageBus.Instance.Register("pathCreated", MovementPathCreated);
 	}
@@ -75,12 +83,15 @@ public class MoveToTile : MonoBehaviour {
         {
             int lerpStart = (int) Math.Floor(lerp / lerpSpacer);
             float percentage = (lerp / lerpSpacer - lerpStart);
-            Vector3 startPoint = path[Math.Min(lerpStart, path.Count - 1)];
-            Vector3 nextPoint = path[Math.Min(lerpStart + 1, path.Count - 1)];
+
+            startPoint = path[Math.Min(lerpStart, path.Count - 1)];
+            nextPoint = path[Math.Min(lerpStart + 1, path.Count - 1)];
+            MovementDirection = (nextPoint - startPoint).normalized;
 
             Vector3 lerpVector = Vector3.Lerp(startPoint, nextPoint, percentage);
 
             gameObject.transform.position = lerpVector;
         }
 	}
+
 }

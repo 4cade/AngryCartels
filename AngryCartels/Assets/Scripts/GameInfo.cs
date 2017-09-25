@@ -34,8 +34,6 @@ public class GameInfo : MonoBehaviour {
     //TODO:
     public GameObject playerPrefab;
 
-    // TODO: Going to store action prefab here for now
-    public GameObject actionItemPrefab;
 
     // Used to check if numRounds should be used
     public bool doesGameHaveRoundLimit;
@@ -77,7 +75,7 @@ public class GameInfo : MonoBehaviour {
         numPlayers = obj.GetData<int>();
         List<PlayerPair> playerList = parser.GetPlayerNamesAndId();
         Debug.Log("instantiating players: " + numPlayers);
-        
+
         // add number of players
         GameObject playerContainer = transform.Find("Players").gameObject;
         players = new PlayerScript[numPlayers];
@@ -126,10 +124,7 @@ public class GameInfo : MonoBehaviour {
                 Debug.Log(players[i].PlayerName + " -- " + card.Name + ": " + card.Amount);
                 players[i].SpecialCards[card.Name] = card.Amount;
             }
-
         }
-
-        //GameObject.Find("PlayerPanel").GetComponent<PlayerCardCreator>().createPlayerCards(playerList, playerContainer);
     }
 
     // Use this for initialization

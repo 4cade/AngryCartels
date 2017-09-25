@@ -1145,6 +1145,7 @@ GameObject:
   - component: {fileID: 148877595}
   - component: {fileID: 148877594}
   - component: {fileID: 148877593}
+  - component: {fileID: 148877598}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1215,13 +1216,28 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 148877592}
-  m_LocalRotation: {x: -0.5393682, y: 0.31640762, z: -0.22873877, w: -0.7460877}
-  m_LocalPosition: {x: 305, y: 1101, z: -295}
+  m_LocalRotation: {x: 0.42737466, y: -0, z: -0, w: 0.9040746}
+  m_LocalPosition: {x: 0, y: 750.4, z: -745.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 71.728004, y: -45.963, z: 0}
+  m_LocalEulerAnglesHint: {x: 50.602, y: 0, z: 0}
+--- !u!114 &148877598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 148877592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14fec5b1adf2954dae5780911f22341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 0}
+  DistanceFromPlayer: 100
+  PitchOffsetAngle: 0
+  LookOffset: 0
 --- !u!1 &174564705
 GameObject:
   m_ObjectHideFlags: 0
@@ -3810,7 +3826,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneGuis: []
-  currentSceneGui: {fileID: 742170249}
 --- !u!1 &555894199
 GameObject:
   m_ObjectHideFlags: 0
@@ -4179,7 +4194,7 @@ GameObject:
   - component: {fileID: 578286491}
   - component: {fileID: 578286490}
   m_Layer: 5
-  m_Name: Button
+  m_Name: TestSpawnSinglePlayer-ChangeJSONPathIfUse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4201,7 +4216,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 320, y: 0}
+  m_AnchoredPosition: {x: 385, y: 227}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &578286490
@@ -6162,7 +6177,6 @@ GameObject:
   - component: {fileID: 951640049}
   - component: {fileID: 951640054}
   - component: {fileID: 951640053}
-  - component: {fileID: 951640052}
   - component: {fileID: 951640051}
   - component: {fileID: 951640050}
   m_Layer: 5
@@ -6234,18 +6248,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &951640052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114895664240255898, guid: def071789f09a4b4798a36856cd8fdd3,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 951640048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &951640053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8865,7 +8867,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1b667483cd0cf974ab76d88251b57f7b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1b667483cd0cf974ab76d88251b57f7b, type: 3}
@@ -11419,31 +11421,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1192573532368110, guid: 29461afd860e2ed4b9437db83bb72666,
     type: 2}
-  actionItemPrefab: {fileID: 1742283281378314, guid: 916270d4992d81f40b215d732e1f3bb6,
-    type: 2}
   doesGameHaveRoundLimit: 0
   maxRounds: 10
   mapManager: {fileID: 1316118841}
-  actionNames:
-  - Build
-  - Mortgage
-  - Unmortgage
-  - Trade
-  - Use Special
-  - Roll
-  - Mr. Monopoly
-  - Jail
-  - Teleport
-  - Bus
-  - Buy
-  - Rent
-  - Taxi
-  - Up Auction
-  - Set Auction Price
-  - Roll 3
-  - Squeeze
-  - Draw Misfortune
-  - Draw Fortune
 --- !u!4 &1978398467
 Transform:
   m_ObjectHideFlags: 0

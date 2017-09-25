@@ -16,7 +16,9 @@ public class ActionPanel : MonoBehaviour
 
     public void TestOpenPanel()
     {
-        OpenActionPanel(new string[] { GameSocketMessages.ROLL, GameSocketMessages.SELL_HOUSE, GameSocketMessages.TRADE });
+        MessageBus.Instance.Broadcast("instantiate_players", 1);
+        (GameCanvas.currentSceneGui as GameBoardGui).OnSceneEnter();
+        Camera.main.GetComponent<CameraFollowPlayer>().Player = GameInfo.Instance.GetPlayerGameObject(0);
     }
 
     /// <summary>

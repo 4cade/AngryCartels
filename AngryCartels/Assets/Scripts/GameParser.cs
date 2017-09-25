@@ -117,10 +117,9 @@ public class GameParser : MonoBehaviour {
 
     private void Start()
     {
-        // TEMP: load info here
-        //string file = System.IO.File.ReadAllText(@"C:\Users\chats\Desktop\game.json");
+        Debug.Log("TEMP: load info here");
+        //string file = System.IO.File.ReadAllText(@"C:\Users\lemyer\Desktop\game.json");
         //gameState = new JSONObject(file);
-        //Debug.Log("It is: " + GetCurrentPlayerName() + " turn");
     }
 
     public List<string> GetPlayerNames()

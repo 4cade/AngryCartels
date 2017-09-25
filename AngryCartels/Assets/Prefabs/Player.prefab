@@ -74,6 +74,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33845196323277412
 MeshFilter:
@@ -107,9 +108,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 0
   isForwardDirection: 1
-  goalIndex: 0
+  goalIndex: 1
   startIndex: 0
   lerp: 0
+  MovementDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &114220908326436490
 MonoBehaviour:
   m_ObjectHideFlags: 1

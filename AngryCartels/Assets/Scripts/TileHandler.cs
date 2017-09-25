@@ -27,7 +27,7 @@ public class TileHandler : MonoBehaviour {
 
     // Stores created tiles when the game starts.
     // TODO: if we know this at game start we should create the entire array.
-    private Tile[] tiles;
+    public Tile[] tiles;
 
     // Use this for initialization
     void Start () {

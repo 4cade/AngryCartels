@@ -26,7 +26,7 @@ public class PlayerBadgeInfo : MonoBehaviour {
     }
 
     // Reference to the card group panel
-    private GameBoardGui sceneGui;
+    private static GameBoardGui sceneGui;
 
     // Default UI properties that are displayed about the player
     private Text nameText;
@@ -35,7 +35,7 @@ public class PlayerBadgeInfo : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        sceneGui = GameObject.Find("Canvas").GetComponent<GameCanvas>().currentSceneGui as GameBoardGui;
+        sceneGui = GameCanvas.currentSceneGui as GameBoardGui;
 
         nameText = transform.Find("PlayerName").GetComponent<Text>();
         moneyText = transform.Find("MoneyText").GetComponent<Text>();
