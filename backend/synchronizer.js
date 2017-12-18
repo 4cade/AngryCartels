@@ -64,7 +64,7 @@ module.exports = function(io, socket){
     io.to(socket.inGame).emit('chat message', socket.username + ": " + msg);
  });
 
-  // HANDLE GAME ACTIONS
+  // HANDLE GAME LOGISTICS
 
   /**
    * Makes the requesting client the host of a new game
@@ -143,6 +143,9 @@ module.exports = function(io, socket){
     games[socket.inGame] = new Game(games[socket.inGame]);
     io.to(socket.inGame).emit('game data', games[socket.inGame].toJSON());
   });
+
+
+  // ACTUAL GAME ACTIONS
 
   /**
    * Rolls the dice for the client
