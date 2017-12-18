@@ -1,8 +1,8 @@
-var Game = require('./game');
+var api = require('./api');
 
 var users = {};
 var userGenNum = 1;
-var games = {};
+var setup = {};
 
 // interactions for the socket object
 module.exports = function(io, socket){
@@ -27,8 +27,8 @@ module.exports = function(io, socket){
           socket.inGame = users[socket.username];
           socket.join(socket.inGame);
           socket.emit('in room', {"owner": socket.inGame});
-          if(!games[socket.inGame].hasOwnProperty('host')) {
-            socket.emit('game data', games[socket.inGame].toJSON());
+          if(!setup[socket.inGame].hasOwnProperty('host')) {
+            socket.emit('game data', setup[socket.inGame].toJSON());
           }
         }
       }
@@ -68,10 +68,10 @@ module.exports = function(io, socket){
 
   /**
    * Makes the requesting client the host of a new game
-   * @return updated list of games to everyone
+   * @return updated list of setup to everyone
    */
   socket.on('create game', function() {
-    games[socket.username] = {
+    setup[socket.username] = {
         "host": socket.username,
         "players": [socket.username]
     }
@@ -81,54 +81,54 @@ module.exports = function(io, socket){
     socket.join(socket.username);
     users[socket.username] = socket.username;
     socket.emit('in room', {"owner": socket.username});
-    io.emit('updated games', games);
+    io.emit('updated games', setup);
   });
 
   /**
    * Deletes the game being hosted by the sending client and kicks out any people
    *     in the game.
-   * @return updating listing of games to everyone
+   * @return updating listing of setup to everyone
    */
   socket.on('stop hosting game', function() {
     // kick everyone out of the game
     io.to(socket.inGame).emit('kick game', {});
-    delete games[socket.username];
-    io.emit('updated games', games);
+    delete setup[socket.username];
+    io.emit('updated games', setup);
     socket.inGame = null;
   });
 
   /**
    * Joins the game of the host
-   * @return updating listing of games to everyone
+   * @return updating listing of setup to everyone
    */
   socket.on('join game', function(host) {
-    games[host]["players"].push(socket.username);
+    setup[host]["players"].push(socket.username);
     socket.inGame = host;
     console.log(socket.username + " joined " + host + "'s game");
     socket.join(host);
     users[socket.username] = socket.inGame;
     socket.emit('in room', {"owner": socket.inGame});
-    io.emit('updated games', games);
+    io.emit('updated games', setup);
   });
 
   /**
    * Leaves the game of the client is in.
-   * @return updating listing of games to everyone
+   * @return updating listing of setup to everyone
    */
   socket.on('leave game', function() {
-    games[socket.inGame]["players"] = games[socket.inGame]["players"].filter(
+    setup[socket.inGame]["players"] = setup[socket.inGame]["players"].filter(
         function(el) { return el !== socket.username });
     console.log(socket.username + " left " + socket.inGame + "'s game");
-    io.emit('updated games', games);
+    io.emit('updated games', setup);
     socket.inGame = null;
   });
 
   /**
-   * Sends the listing of games to the client
-   * @return updating listing of games to client
+   * Sends the listing of setup to the client
+   * @return updating listing of setup to client
    */
-  socket.on('get games', function() {
-    socket.emit('updated games', games);
+  socket.on('get setup', function() {
+    socket.emit('updated games', setup);
   });
 
   /**
@@ -140,8 +140,7 @@ module.exports = function(io, socket){
     // tell everyone that the game started, do first for minimal lag since next step is intensive
     io.to(socket.inGame).emit('start game', {});
     // actually populate the game with stuff and make everyone go into the game
-    games[socket.inGame] = new Game(games[socket.inGame]);
-    io.to(socket.inGame).emit('game data', games[socket.inGame].toJSON());
+    io.to(socket.inGame).emit('game data', api.createGame(socket.inGame, setup[socket.inGame]));
   });
 
 
@@ -156,11 +155,11 @@ module.exports = function(io, socket){
    */
   socket.on('roll', function() {
     // TODO check if it is this player's turn
-    let json = games[socket.inGame].rollDice();
+    let json = api.handleRequest(socket.inGame, socket.username, 'roll', {});
     if(json['actions'].includes('draw bus pass')) {
       const i = json['actions'].indexOf('draw bus pass');
       json['actions'] = json['actions'].splice(i, 1);
-      io.to(socket.inGame).emit('draw bus pass', games[socket.inGame].drawBusPass());
+      io.to(socket.inGame).emit('draw bus pass', api.handleRequest(socket.inGame, socket.username, 'draw bus pass', {}));
     }
     io.to(socket.inGame).emit('movement', json);
   });
@@ -174,7 +173,7 @@ module.exports = function(io, socket){
    */
   socket.on('mrmonopoly', function() {
     // TODO check if it's the client's turn
-    io.to(socket.inGame).emit('movement', games[socket.inGame].unleashMrMonopoly());
+    io.to(socket.inGame).emit('movement', api.handleRequest(socket.inGame, socket.username, 'mrmonopoly', {}));
   });
 
   /**
@@ -186,7 +185,7 @@ module.exports = function(io, socket){
    */
   socket.on('jail', function(info) {
     // TODO check if it is this player's turn
-    io.to(socket.inGame).emit('jail', games[socket.inGame].handleJail(info.pay));
+    io.to(socket.inGame).emit('jail', api.handleRequest(socket.inGame, socket.username, 'jail', info));
   });
 
   /**
@@ -199,7 +198,7 @@ module.exports = function(io, socket){
    */
   socket.on('teleport', function(info) {
     // TODO check if it's the client's turn
-    io.to(socket.inGame).emit('movement', games[socket.inGame].teleport(info.location));
+    io.to(socket.inGame).emit('movement', api.handleRequest(socket.inGame, socket.username, 'teleport', info));
   });
 
   /**
@@ -208,7 +207,7 @@ module.exports = function(io, socket){
    *       player/owner (name: name, money: money)
    */
   socket.on('rent', function() {
-    io.to(socket.inGame).emit('rent', games[socket.inGame].payRent());
+    io.to(socket.inGame).emit('rent', api.handleRequest(socket.inGame, socket.username, 'rent', info));
   });
 
   /**
@@ -218,7 +217,7 @@ module.exports = function(io, socket){
    *       pool (money in pool), message (string saying what happened), and location
    */
   socket.on('taxi', function(info) {
-    io.to(socket.inGame).emit('taxi', games[socket.inGame].taxiRide(info.location));
+    io.to(socket.inGame).emit('taxi', api.handleRequest(socket.inGame, socket.username, 'taxi', info));
   });
 
   /**
@@ -230,7 +229,7 @@ module.exports = function(io, socket){
    */
   socket.on('bus', function(info) {
     // TODO check current player
-    io.to(socket.inGame).emit('movement', games[socket.inGame].useBusPass(info.pass, info.location));
+    io.to(socket.inGame).emit('movement', api.handleRequest(socket.inGame, socket.username, 'bus', info));
   });
 
   /**
@@ -243,8 +242,8 @@ module.exports = function(io, socket){
    * @return JSON with fields player1/player2 (subfields name, money, and properties
    *      (list of string names of properties that the player now has)) and message
    */
-  socket.on('trade', function(tradeInfo) {
-    io.to(socket.inGame).emit('trade', json = games[socket.inGame].trade(info));
+  socket.on('trade', function(info) {
+    io.to(socket.inGame).emit('trade', api.handleRequest(socket.inGame, socket.username, 'trade', info));
   });
 
   /**
@@ -254,13 +253,7 @@ module.exports = function(io, socket){
    * @return updated game data with property bought by client sent to all in game
    */
   socket.on('buy', function(info) {
-    let json = {}
-    // different actions if it was auctioned
-    if(info.price)
-        json = games[socket.inGame].buyPropertyAuction(info);
-    else
-        json = games[socket.inGame].buyProperty();
-    io.to(socket.inGame).emit('property bought', json);
+    io.to(socket.inGame).emit('property bought', api.handleRequest(socket.inGame, socket.username, 'buy', info));
   });
 
   /**
@@ -269,9 +262,7 @@ module.exports = function(io, socket){
    * @return updated game data with house bought by client sent to all in game
    */
   socket.on('set houses', function(info) {
-    let json = games[socket.inGame].buyHouse(info);
-
-    io.to(socket.inGame).emit('update houses', json);
+    io.to(socket.inGame).emit('update houses', api.handleRequest(socket.inGame, socket.username, 'set houses', info));
   });
 
   /**
@@ -283,7 +274,7 @@ module.exports = function(io, socket){
    */
   socket.on('mortgage', function(info) {
     // TODO check current player
-    io.to(socket.inGame).emit('mortgage', json = games[socket.inGame].mortgageProperty(info));
+    io.to(socket.inGame).emit('mortgage', api.handleRequest(socket.inGame, socket.username, 'mortgage', info));
   });
 
   /**
@@ -295,7 +286,7 @@ module.exports = function(io, socket){
    */
   socket.on('unmortgage', function(info) {
     // TODO check current player
-    io.to(socket.inGame).emit('unmortgage', json = games[socket.inGame].unmortgageProperty(info));
+    io.to(socket.inGame).emit('unmortgage', api.handleRequest(socket.inGame, socket.username, 'unmortgage', info));
   });
 
   /**
@@ -304,8 +295,7 @@ module.exports = function(io, socket){
    * @return new auction event sent to all in game with JSON of relevant property information
    */
   socket.on('up auction', function(property) {
-    games[socket.inGame].startAuction(property);
-    io.to(socket.inGame).emit('new auction', games[socket.inGame].getPropertyInfo(property));
+    io.to(socket.inGame).emit('new auction', api.handleRequest(socket.inGame, socket.username, 'buy', {location: property}));
   });
 
   /**
@@ -314,9 +304,7 @@ module.exports = function(io, socket){
    * @return the winner of the auction to all in game if there is a winner
    */
   socket.on('set auction price', function(price) {
-    games[socket.inGame].addBid(socket.username, price);
-    
-    let winnerInfo = games[socket.inGame].finishAuction();
+    let winnerInfo = api.handleRequest(socket.inGame, socket.username, 'set auction price', {price: price});
     if(winnerInfo) {
         io.to(socket.inGame).emit('auction winner', winnerInfo);
     }
@@ -329,9 +317,8 @@ module.exports = function(io, socket){
    *       actions (list of actions for the current player)
    */
   socket.on('draw fortune', function() {
-    let card = games[socket.inGame].drawFortune();
     // TODO immediately
-    socket.emit('special card', card);
+    socket.emit('special card', api.handleRequest(socket.inGame, socket.username, 'draw fortune', {}));
   });
 
   /**
@@ -341,9 +328,8 @@ module.exports = function(io, socket){
    *       actions (list of actions for the current player)
    */
   socket.on('draw misfortune', function() {
-    let card = games[socket.inGame].drawMisfortune();
     // TODO immediately
-    socket.emit('special card', card);
+    socket.emit('special card', api.handleRequest(socket.inGame, socket.username, 'draw misfortune', {}));
   });
 
   /**
@@ -351,9 +337,7 @@ module.exports = function(io, socket){
    * @return TODO
    */
   socket.on('use special card', function(card) {
-    let json = games[socket.inGame].useSpecialCard(socket.username, card);
-    // TODO
-    socket.emit('special card used', json);
+    socket.emit('special card used', api.handleRequest(socket.inGame, socket.username, 'use special card', {card: card}));
   });
 
   /**
@@ -363,7 +347,7 @@ module.exports = function(io, socket){
    *       and rolled (list of numbers that were rolled)
    */
   socket.on('roll3', function() {
-    io.to(socket.inGame).emit('roll3', games[socket.inGame].roll3());
+    io.to(socket.inGame).emit('roll3', api.handleRequest(socket.inGame, socket.username, 'roll3', {}));
   });
 
   /**
@@ -373,7 +357,7 @@ module.exports = function(io, socket){
    *       and rolled (list of numbers that were rolled)
    */
   socket.on('squeeze', function() {
-    io.to(socket.inGame).emit('squeeze', games[socket.inGame].squeezePlay());
+    io.to(socket.inGame).emit('squeeze', api.handleRequest(socket.inGame, socket.username, 'squeeze', {}));
   });
 
   /**
@@ -383,7 +367,7 @@ module.exports = function(io, socket){
    */
   socket.on('end turn', function() {
     // TODO check if correct player
-    io.to(socket.inGame).emit('next turn', games[socket.inGame].nextTurn());
+    io.to(socket.inGame).emit('next turn', api.handleRequest(socket.inGame, socket.username, 'end turn', {}));
   });
 
   /**
@@ -392,7 +376,7 @@ module.exports = function(io, socket){
    * @return JSON with field actions (list of actions)
    */
   socket.on('get actions', function(info) {
-    io.to(socket.inGame).emit('actions', games[socket.inGame].getActions(info.player));
+    io.to(socket.inGame).emit('actions', api.handleRequest(socket.inGame, socket.username, 'get actions', info));
   });
 
   /**
@@ -401,7 +385,7 @@ module.exports = function(io, socket){
    * @return JSON object with information about the property to the client
    */
   socket.on('property info', function(property) {
-    socket.emit('property info', games[socket.inGame].getPropertyInfo(property));
+    socket.emit('property info', api.handleRequest(socket.inGame, socket.username, 'property info', {location: property}));
   });
 
   /**
@@ -410,7 +394,7 @@ module.exports = function(io, socket){
    * @return JSON object with rent information about the property to the client
    */
   socket.on('rent info', function(property) {
-    socket.emit('rent info', games[socket.inGame].getRent(socket.username, property));
+    socket.emit('rent info', api.handleRequest(socket.inGame, socket.username, 'rent info', {location: property}));
   });
 
   /**
@@ -418,8 +402,7 @@ module.exports = function(io, socket){
    * @return JSON object with information about the property with highest rent to the client
    */
   socket.on('highest rent', function() {
-    let property = games[socket.inGame].getHighestRent()
-    socket.emit('highest rent', games[socket.inGame].getPropertyInfo(property));
+    socket.emit('highest rent', api.handleRequest(socket.inGame, socket.username, 'highest rent', {}));
   });
 
   /**
@@ -427,7 +410,7 @@ module.exports = function(io, socket){
    * @return list of all locations on the board to the client
    */
   socket.on('all locations', function() {
-    socket.emit('all locations', games[socket.inGame].getAllLocations());
+    socket.emit('all locations', api.handleRequest(socket.inGame, socket.username, 'all locations', {}));
   });
 
   /**
@@ -435,7 +418,7 @@ module.exports = function(io, socket){
    * @return list of all unowned locations on the board to the client
    */
   socket.on('all unowned', function() {
-    socket.emit('all unowned', games[socket.inGame].getAllUnownedLocations());
+    socket.emit('all unowned', api.handleRequest(socket.inGame, socket.username, 'all unowned', {}));
   });
 
   /**
@@ -444,6 +427,6 @@ module.exports = function(io, socket){
    */
   socket.on('request game data', function() {
     console.log("someone wants to get game data");
-    socket.emit('game data', games[socket.inGame].toJSON());
+    socket.emit('game data', api.handleRequest(socket.inGame, socket.username, 'request game data', {}));
   });
 }

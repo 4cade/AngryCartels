@@ -1,4 +1,4 @@
-
+var Game = require('./game');
 
 // cache of games, TODO persist on the persistent store in case of crash
 let games = {};
@@ -29,6 +29,10 @@ function persistGame(gameObj) {
 
 function createGame(gameId, gamePresets) {
     // TODO
+    if(!games.hasOwnProperty(gameId)) {
+        games[gameId] = new Game(gamePresets);
+        return games[gameId].toJSON();
+    }
 }
 
 /**
@@ -39,91 +43,104 @@ function createGame(gameId, gamePresets) {
 */
 function handleRequest(gameId, username, action, info) {
     const game = getGame(gameId);
+    console.log(gameId + ' ' + username + " " + action + " " + JSON.stringify(info));
 
     switch(action) {
         case 'roll':
-            // TODO
+            return game.rollDice();
+
+        case 'draw bus pass':
+            return game.drawBusPass();
 
         case 'mrmonopoly':
-            // TODO
+            return game.unleashMrMonopoly();
 
         case 'jail':
-            // TODO
+            return game.handleJail(info.pay);
 
         case 'teleport':
-            // TODO
+            return game.teleport(info.location);
 
         case 'rent':
-            // TODO
+            return game.payRent();
 
         case 'taxi':
-            // TODO
+            return game.taxiRide(info.location);
 
         case 'bus':
-            // TODO
+            return game.useBusPass(info.pass, info.location);
 
         case 'trade':
-            // TODO
+            return game.trade(info);
 
         case 'buy':
-            // TODO
+            // different actions if was auctioned
+            if(info.price)
+                return game.buyPropertyAuction(info);
+            else
+                return game.buyProperty();
 
         case 'set houses':
-            // TODO
+            return game.setHouses(info);
 
         case 'mortgage':
-            // TODO
+            return game.mortgageProperty(info);
 
         case 'unmortgage':
-            // TODO
+            return game.unmortgageProperty(info);
 
         case 'up auction':
-            // TODO
+            game.startAuction(info.location);
+            return game.getPropertyInfo(info.location);
 
         case 'set auction price':
-            // TODO
+            game.addBid(username, info.price);
+            return game.finishAuction();
 
         case 'draw fortune':
-            // TODO
+            return game.drawFortune();
 
         case 'draw misfortune':
-            // TODO
+            return game.drawMisfortune();
 
         case 'use special card':
-            // TODO
+            return game.useSpecialCard(username, info.card);
 
         case 'roll3':
-            // TODO
+            return game.roll3();
 
         case 'squeeze':
-            // TODO
+            return game.squeezePlay();
 
         case 'end turn':
-            // TODO
+            return game.nextTurn();
 
         case 'get actions':
-            // TODO
+            return game.getActions(info.player);
 
         case 'property info':
-            // TODO
+            return game.getPropertyInfo(info.location);
 
         case 'rent info':
-            // TODO
+            return game.getRent(username, info.location);
 
         case 'highest rent':
-            // TODO
+            let property = game.getHighestRent();
+            return game.getPropertyInfo(property);
 
         case 'all locations':
-            // TODO
+            return game.getAllLocations();
 
         case 'all unowned':
-            // TODO
+            return game.getAllUnownedLocations();
 
         case 'request game data':
-            // TODO
+            return game.toJSON();
 
         default:
             // if the case doesn't exist
             return {'error': true, 'message': 'invalid action: ' + action};
     }
 }
+
+module.exports = {'createGame': createGame, 'handleRequest': handleRequest}
