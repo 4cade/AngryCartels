@@ -141,6 +141,8 @@ function handleRequest(gameId, username, action, info) {
             // if the case doesn't exist
             return {'error': true, 'message': 'invalid action: ' + action};
     }
+
+    persistGame(game);
 }
 
 module.exports = {'createGame': createGame, 'handleRequest': handleRequest}

@@ -4,6 +4,20 @@ var users = {};
 var userGenNum = 1;
 var setup = {};
 
+// create game that appears by default for testing
+const testing = true;
+if(testing) {
+  users['test1'] = 'test1';
+  users['test2'] = 'test1';
+  setup['test1'] = {
+        "host": 'test1',
+        "players": ['test1', 'test2'],
+        "started": true
+    }
+  api.createGame('test1', setup['test1']);
+}
+
+
 // interactions for the socket object
 module.exports = function(io, socket){
   // console.log('a user connected');
@@ -27,8 +41,8 @@ module.exports = function(io, socket){
           socket.inGame = users[socket.username];
           socket.join(socket.inGame);
           socket.emit('in room', {"owner": socket.inGame});
-          if(!setup[socket.inGame].hasOwnProperty('host')) {
-            socket.emit('game data', setup[socket.inGame].toJSON());
+          if(setup[socket.inGame]['started']) {
+            socket.emit('game data', api.handleRequest(socket.inGame, socket.username, 'request game data', {}));
           }
         }
       }
@@ -73,7 +87,8 @@ module.exports = function(io, socket){
   socket.on('create game', function() {
     setup[socket.username] = {
         "host": socket.username,
-        "players": [socket.username]
+        "players": [socket.username],
+        "started": false
     }
     // ensure that the name is a string
     socket.inGame = "" + socket.username;
@@ -141,6 +156,7 @@ module.exports = function(io, socket){
     io.to(socket.inGame).emit('start game', {});
     // actually populate the game with stuff and make everyone go into the game
     io.to(socket.inGame).emit('game data', api.createGame(socket.inGame, setup[socket.inGame]));
+    setup[socket.inGame]['started'] = true;
   });
 
 
