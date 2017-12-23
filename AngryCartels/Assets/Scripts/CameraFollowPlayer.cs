@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This will only objects that have a MoveToTileComponent
+/// </summary>
 public class CameraFollowPlayer : MonoBehaviour {
 
     // The player the camera is currently following
-    public GameObject Player;
+    public GameObject target;
 
     public float DistanceFromPlayer = 100;
     public float PitchOffsetAngle = 0.0f;
@@ -14,13 +17,13 @@ public class CameraFollowPlayer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate () {
-        if (Player != null)
+        if (target != null)
         {
-            Vector3 movementDir = Player.GetComponent<MoveToTile>().MovementDirection;
+            Vector3 movementDir = target.GetComponent<MoveToTile>().MovementDirection;
             Debug.Log(movementDir);
-            transform.position = Player.transform.position + (DistanceFromPlayer * Player.transform.position.normalized);
-            transform.RotateAround(Player.transform.position, movementDir, PitchOffsetAngle);
-            transform.LookAt(Player.transform.position + (movementDir * LookOffset));
+            transform.position = target.transform.position + (DistanceFromPlayer * target.transform.position.normalized);
+            transform.RotateAround(target.transform.position, movementDir, PitchOffsetAngle);
+            transform.LookAt(target.transform.position + (movementDir * LookOffset));
         }
 	}
 }

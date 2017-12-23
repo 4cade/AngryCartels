@@ -73,7 +73,7 @@ public class GameInfo : MonoBehaviour {
     private void OnInstantiatePlayers(Message obj)
     {
         numPlayers = obj.GetData<int>();
-        List<PlayerPair> playerList = parser.GetPlayerNamesAndId();
+        //List<PlayerPair> playerList = parser.GetPlayerNamesAndId();
         Debug.Log("instantiating players: " + numPlayers);
 
         // add number of players
@@ -87,43 +87,43 @@ public class GameInfo : MonoBehaviour {
 
             // initial player info here
             // name
-            players[i].PlayerName = playerList[i].Name;
-            Debug.Log("Player Name: " + players[i].PlayerName + "--" + playerList[i].Name);
+            //players[i].PlayerName = playerList[i].Name;
+            //Debug.Log("Player Name: " + players[i].PlayerName + "--" + playerList[i].Name);
 
-            // game id
-            players[i].PlayerId = playerList[i].ID;
-            Debug.Log("Player ID: " + players[i].PlayerId);
+            //// game id
+            //players[i].PlayerId = playerList[i].ID;
+            //Debug.Log("Player ID: " + players[i].PlayerId);
 
-            // money
-            Debug.Log("TODO: set player information here like money and bitches");
-            players[i].PlayerMoney = parser.GetTeamMoney(i); // NOTE: hopefully these indecies line up
-            Debug.Log("Player Money: " + players[i].PlayerMoney);
+            //// money
+            //Debug.Log("TODO: set player information here like money and bitches");
+            //players[i].PlayerMoney = parser.GetTeamMoney(i); // NOTE: hopefully these indecies line up
+            //Debug.Log("Player Money: " + players[i].PlayerMoney);
 
-            // properties
-            List<string> propertyNames = parser.GetTeamProperties(i);
-            foreach (string property in propertyNames)
-            {
-                int groupId = parser.GetGroup(property);
-                Debug.Log("Player Card: " + groupId + " -- " + property);
-                players[i].Cards[groupId].Add(property);
-            }
+            //// properties
+            //List<string> propertyNames = parser.GetTeamProperties(i);
+            //foreach (string property in propertyNames)
+            //{
+            //    int groupId = parser.GetGroup(property);
+            //    Debug.Log("Player Card: " + groupId + " -- " + property);
+            //    players[i].Cards[groupId].Add(property);
+            //}
 
-            // bus passes
-            List<BusTicket> busTickets = parser.GetTeamBusTickets(i);
-            foreach (BusTicket ticket in busTickets)
-            {
-                // NEXT TODO: WHY IS THIS BREAKING
-                Debug.Log(players[i].PlayerName + " -- " + ticket.Name + ": " + ticket.Amount);
-                players[i].BusPasses[ticket.Name] = ticket.Amount;
-            }
+            //// bus passes
+            //List<BusTicket> busTickets = parser.GetTeamBusTickets(i);
+            //foreach (BusTicket ticket in busTickets)
+            //{
+            //    // NEXT TODO: WHY IS THIS BREAKING
+            //    Debug.Log(players[i].PlayerName + " -- " + ticket.Name + ": " + ticket.Amount);
+            //    players[i].BusPasses[ticket.Name] = ticket.Amount;
+            //}
 
-            // special cards
-            List<SpecialCard> specialCards = parser.GetTeamSpecialCards(i);
-            foreach (SpecialCard card in specialCards)
-            {
-                Debug.Log(players[i].PlayerName + " -- " + card.Name + ": " + card.Amount);
-                players[i].SpecialCards[card.Name] = card.Amount;
-            }
+            //// special cards
+            //List<SpecialCard> specialCards = parser.GetTeamSpecialCards(i);
+            //foreach (SpecialCard card in specialCards)
+            //{
+            //    Debug.Log(players[i].PlayerName + " -- " + card.Name + ": " + card.Amount);
+            //    players[i].SpecialCards[card.Name] = card.Amount;
+            //}
         }
     }
 

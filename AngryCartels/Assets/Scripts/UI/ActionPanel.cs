@@ -18,7 +18,7 @@ public class ActionPanel : MonoBehaviour
     {
         MessageBus.Instance.Broadcast("instantiate_players", 1);
         (GameCanvas.currentSceneGui as GameBoardGui).OnSceneEnter();
-        Camera.main.GetComponent<CameraFollowPlayer>().Player = GameInfo.Instance.GetPlayerGameObject(0);
+        Camera.main.GetComponent<CameraFollowPlayer>().target = GameInfo.Instance.GetPlayerGameObject(0);
     }
 
     /// <summary>
