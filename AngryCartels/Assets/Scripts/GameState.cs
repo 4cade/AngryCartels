@@ -97,6 +97,30 @@ public class SpecialCard
 /// </summary>
 public class GameState : MonoBehaviour {
 
+    private static GameState instance;
+    public static GameState Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Logger.e("GameState", "Gamestate is NULL");
+            }
+            return instance;
+        }
+        set
+        {
+            if (instance != null)
+            {
+                Logger.e("GameState", "Why are you trying to set GameState again?");
+            }
+            else
+            {
+                instance = value;
+            }
+        }
+    }
+
     /// <summary>
     /// The gamestate of the last received json
     /// </summary>
@@ -113,6 +137,7 @@ public class GameState : MonoBehaviour {
 	void Awake () {
         DontDestroyOnLoad(gameObject);
         gameState = null;
+        Instance = this;
 	}
 
     private void Start()
@@ -296,9 +321,9 @@ public class GameState : MonoBehaviour {
         JSONObject players = gameState.GetField("playerManager").GetField("players");
         JSONObject player = players.list[playerIndex];
         JSONObject actionJson = player.GetField("actions");
-        foreach (string action in actionJson.keys)
+        foreach (JSONObject action in actionJson.list)
         {
-            actions.Add(action);
+            actions.Add(action.str);
         }
         return actions;
     }

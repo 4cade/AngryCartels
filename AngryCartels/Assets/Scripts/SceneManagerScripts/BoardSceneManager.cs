@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,8 @@ public class BoardSceneManager : GameSceneManager {
         }
     }
 
+    private GameBoardGui gameGui;
+
     private PlayerScript[] players;
 
     private GameState gameState = null;
@@ -28,12 +31,28 @@ public class BoardSceneManager : GameSceneManager {
 
     // Use this for initialization
     void Awake() {
-        gameState = GameObject.Find("GameState").GetComponent<GameState>();
+        gameState = GameState.Instance;
+
+        MessageBus bus = MessageBus.Instance;
+        bus.Register(GameMessages.ON_MOVEMENT, HandleOnMovement);
 	}
+
+    private void HandleOnMovement(Message obj)
+    {
+        MovementJSON movement = obj.GetData<MovementJSON>();
+        Logger.d("BoardSceneManager", "Movement data has been received {0} {1} {2} {3}", 
+            movement.player, movement.movedTo, movement.actions, movement.message);
+
+    }
+
+    private void Start()
+    {
+        gameGui = (GameBoardGui)(GameCanvas.currentSceneGui);
+    }
 
     override public void OnSceneExit()
     {
-
+        
     }
 
     override public void OnSceneEnter()
@@ -106,9 +125,12 @@ public class BoardSceneManager : GameSceneManager {
     {
         Logger.d("BoardScenemanager", "Starting Game...");
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+
         int ii = gameState.GetCurrentPlayerIndex();
         GameObject cp = players[ii].gameObject;
         CameraFollowPlayer cfp = Camera.main.GetComponent<CameraFollowPlayer>();
         cfp.target = cp;
+
+        gameGui.DisplayPlayerActions(ii);
     }
 }

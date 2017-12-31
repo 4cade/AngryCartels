@@ -15,7 +15,7 @@ public abstract class SceneGui : MonoBehaviour {
     /// Updates the this canvas gui based on new game state information.
     /// </summary>
     /// <param name="gs"></param>
-    public abstract void GameStateUpdate(GameInfo gi);
+    public abstract void GameStateUpdate();
 
     /// <summary>
     /// Method executes when this scene is exitting. Override this method 

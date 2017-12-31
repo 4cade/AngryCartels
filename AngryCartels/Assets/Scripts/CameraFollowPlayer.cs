@@ -20,7 +20,7 @@ public class CameraFollowPlayer : MonoBehaviour {
         if (target != null)
         {
             Vector3 movementDir = target.GetComponent<MoveToTile>().MovementDirection;
-            Debug.Log(movementDir);
+            //Debug.Log(movementDir);
             transform.position = target.transform.position + (DistanceFromPlayer * target.transform.position.normalized);
             transform.RotateAround(target.transform.position, movementDir, PitchOffsetAngle);
             transform.LookAt(target.transform.position + (movementDir * LookOffset));

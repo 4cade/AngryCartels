@@ -53,11 +53,11 @@ public class NetworkManager : MonoBehaviour {
         }
 
         // Register MessageBus Events     
-        MessageBus.Instance.Register("refresh", RefreshLobbies);
-        MessageBus.Instance.Register("join_lobby", JoinLobby);
-        MessageBus.Instance.Register("create_game", CreateGame);
+        MessageBus.Instance.Register("refresh", CmdRefreshLobbies);
+        MessageBus.Instance.Register("join_lobby", CmdJoinLobby);
+        MessageBus.Instance.Register("create_game", CmdCreateGame);
         //MessageBus.Instance.Register("start_game", StartGame);
-        MessageBus.Instance.Register("ping_lobbies", GetGames);
+        MessageBus.Instance.Register("ping_lobbies", CmdGetGames);
 
         DontDestroyOnLoad(gameObject); // Create this object between scenes
     }
@@ -66,7 +66,7 @@ public class NetworkManager : MonoBehaviour {
     /// Called when we want to ask the server what game lobbies exist.
     /// </summary>
     /// <param name="obj">null</param>
-    private void GetGames(Message obj)
+    private void CmdGetGames(Message obj)
     {
         socket.Emit(GameSocketMessages.GET_GAMES);
     }
@@ -75,7 +75,7 @@ public class NetworkManager : MonoBehaviour {
     /// Called when we want to start the game as the host.
     /// </summary>
     /// <param name="obj"></param>
-    private void StartGameAsHost(Message obj)
+    private void CmdStartGameAsHost(Message obj)
     {
         socket.Emit(GameSocketMessages.START_GAME);
         //StartGame(null);
@@ -88,10 +88,10 @@ public class NetworkManager : MonoBehaviour {
 
         socket = GetComponent<SocketIO.SocketIOComponent>();
 
-        socket.On(GameSocketMessages.SEND_CLIENT_NAME, ClientNameCallback);
-        socket.On(GameSocketMessages.UPDATED_GAMES, UpdatedGamesCallback);
-        socket.On(GameSocketMessages.IN_ROOM, InRoom);
-        socket.On(GameSocketMessages.START_GAME, StartGame);
+        socket.On(GameSocketMessages.SEND_CLIENT_NAME, OnClientNameReceived);
+        socket.On(GameSocketMessages.UPDATED_GAMES, OnUpdatedGames);
+        socket.On(GameSocketMessages.IN_ROOM, OnInRoom);
+        socket.On(GameSocketMessages.START_GAME, OnStartGame);
 
         // In Game Messages
         socket.On(GameSocketMessages.GAME_DATA, OnGameStateUpdate);
@@ -329,6 +329,8 @@ public class NetworkManager : MonoBehaviour {
         string data = obj.data.ToString();
         Debug.Log(data);
         MovementJSON movementJSON = MovementJSON.CreateFromJSON(data);
+
+        MessageBus.Instance.Broadcast(GameMessages.ON_MOVEMENT, movementJSON);
         
         // Functionality
         // GameObject playerObject = GameObject.Find(movementJSON.player.name); // Check functionality
@@ -361,7 +363,7 @@ public class NetworkManager : MonoBehaviour {
     /// Response when the game is started.
     /// </summary>
     /// <param name="obj">JSON data.</param>
-    private void StartGame(SocketIOEvent obj)
+    private void OnStartGame(SocketIOEvent obj)
     {
         if (SceneManager.GetActiveScene().buildIndex != gameScene)
         {
@@ -369,6 +371,37 @@ public class NetworkManager : MonoBehaviour {
             //SceneManager.LoadScene(gameScene);
         }
     }
+
+    /// <summary>
+    /// Called when the player joins a room.
+    /// </summary>
+    /// <param name="obj">JSON data.</param>
+    private void OnInRoom(SocketIOEvent obj)
+    {
+        Logger.w("NetworkManager", "If updated games message is received after the "
+            + "join game message, then the player lobby wont be properly displayed.");
+        MessageBus.Instance.Broadcast("joined_room", obj.data);
+    }
+
+
+    /// <summary>
+    /// Called when the server has set the player's name.
+    /// </summary>
+    /// <param name="obj">JSON data.</param>
+    private void OnClientNameReceived(SocketIOEvent obj)
+    {
+        Logger.d("NetworkManager", "ClientNameCallback " + obj.data.ToString());
+    }
+
+    /// <summary>
+    /// Gets called when there is an updated games request.
+    /// </summary>
+    /// <param name="obj">JSON data.</param>
+    private void OnUpdatedGames(SocketIOEvent obj)
+    {
+        MessageBus.Instance.Broadcast(new Message("title_response_received", TitleResponseType.LOBBY_UPDATE, obj.data));
+    }
+
 
     #endregion Listening
 
@@ -378,7 +411,7 @@ public class NetworkManager : MonoBehaviour {
     /// What gets called when the player wants to join a lobby.
     /// </summary>
     /// <param name="obj">JSON data.</param>
-    private void JoinLobby(Message obj)
+    private void CmdJoinLobby(Message obj)
     {
         string name = obj.GetData<string>();
         socket.Emit(GameSocketMessages.JOIN_GAME, name);
@@ -388,7 +421,7 @@ public class NetworkManager : MonoBehaviour {
     /// Called when the player creates a game.
     /// </summary>
     /// <param name="obj"></param>
-    private void CreateGame(Message obj)
+    private void CmdCreateGame(Message obj)
     {
         socket.Emit(GameSocketMessages.CREATE_GAME);
     }
@@ -397,7 +430,7 @@ public class NetworkManager : MonoBehaviour {
     /// Called when the user wants to refresh the lobbies.
     /// </summary>
     /// <param name="obj">JSON data.</param>
-    private void RefreshLobbies(Message obj)
+    private void CmdRefreshLobbies(Message obj)
     {
         socket.Emit(GameSocketMessages.GET_GAMES);
     }
@@ -413,157 +446,136 @@ public class NetworkManager : MonoBehaviour {
         socket.Emit(GameSocketMessages.JOIN, json);
     }
 
+    public void CmdRoll()
+    {
+        socket.Emit(GameSocketMessages.ROLL);
+    }
+
     #endregion Commands
-
-    /// <summary>
-    /// Called when the player joins a room.
-    /// </summary>
-    /// <param name="obj">JSON data.</param>
-    private void InRoom(SocketIOEvent obj)
-    {
-        Logger.w("NetworkManager", "If updated games message is received after the " 
-            + "join game message, then the player lobby wont be properly displayed.");
-        MessageBus.Instance.Broadcast("joined_room", obj.data);
-    }
-
-
-    /// <summary>
-    /// Called when the server has set the player's name.
-    /// </summary>
-    /// <param name="obj">JSON data.</param>
-    private void ClientNameCallback(SocketIOEvent obj)
-    {
-        Logger.d("NetworkManager", "ClientNameCallback " + obj.data.ToString());
-    }
-
-    /// <summary>
-    /// Gets called when there is an updated games request.
-    /// </summary>
-    /// <param name="obj">JSON data.</param>
-    private void UpdatedGamesCallback(SocketIOEvent obj)
-    {
-        MessageBus.Instance.Broadcast(new Message("title_response_received", TitleResponseType.LOBBY_UPDATE, obj.data));
-    }
-
-    #region JSONMessageClasses
-    [Serializable]
-    public class ActionListJSON
-    {
-        public string message;
-        public string player;
-        public string[] actions;
-
-        public static ActionListJSON CreateFromJSON(string data)
-        {
-            return JsonUtility.FromJson<ActionListJSON>(data);
-        }
-    }
-
-    [Serializable]
-    public class AuctionJSON
-    {
-        public string player;
-        public string location;
-        public int price;
-        // public List<string> actions; // is this needed?
-        public static AuctionJSON CreateFromJSON(string data)
-        {
-            // TODO: wrap this in try/catch to handle deserialization exceptions
-            return JsonUtility.FromJson<AuctionJSON>(data);
-        }
-    }
-
-    [Serializable]
-    public class AllPropertyNamesJSON
-    {
-        public string[] names;
-
-        public static AllPropertyNamesJSON CreateFromJSON(string data)
-        {
-            // TODO: wrap this in try/catch to handle deserialization exceptions
-            return JsonUtility.FromJson<AllPropertyNamesJSON>(data);
-        }
-    }
-
-    [Serializable]
-    public class DrawCardJSON
-    {
-        string card;
-        JSONObject player; // TODO test this works?
-        // string player; // if backend just uses player name instead of  "player": {"name": player.name}
-        string message;
-        string[] actions;
-
-        public static DrawCardJSON CreateFromJSON(string data)
-        {
-            // TODO: wrap this in try/catch to handle deserialization exceptions
-            return JsonUtility.FromJson<DrawCardJSON>(data);
-        }
-    }
-
-    [Serializable]
-    public class MovementJSON
-    {
-        JSONObject player;
-        string[] movedTo; // locations visited by player
-        string[] actions;
-        string message;
-
-        public static MovementJSON CreateFromJSON(string data)
-        {
-            // TODO: wrap this in try/catch to handle deserialization exceptions
-            return JsonUtility.FromJson<MovementJSON>(data);
-        }
-    }
-
-    [Serializable]
-    public class PropertyJSON
-    {
-        public string name;
-        public string type;
-        public List<string> forward;
-        public List<string> backward;
-        public List<int> num;
-        public List<string> below;
-        public bool snapshot;
-        public int group;
-        public List<int> rent;
-        public int mortgageValue;
-        public int cost;
-        public string owner;
-        public bool isMortgaged;
-        public int houses;
-        public int housePrice;
-
-        public static PropertyJSON CreateFromJSON(string data)
-        {
-            // TODO: wrap this in try/catch to handle deserialization exceptions
-            return JsonUtility.FromJson<PropertyJSON>(data);
-        }
-    }
-
-    [Serializable]
-    public class UnownedPropertyNamesJSON
-    {
-        public string[] names;
-
-        public static UnownedPropertyNamesJSON CreateFromJSON(string data)
-        {
-            // TODO: wrap this in try/catch to handle deserialization exceptions
-            return JsonUtility.FromJson<UnownedPropertyNamesJSON>(data);
-        }
-    }
-    
-    [Serializable]
-    public class RentJSON
-    {
-        public string name;
-        public int price;
-
-        public static RentJSON CreateFromJSON(string data)
-        {
-            return JsonUtility.FromJson<RentJSON>(data);
-        }
-    }
-    #endregion
 }
+
+/// <summary>
+/// TODO: These should probably be moved somewhere else
+/// </summary>
+
+#region JSONMessageClasses
+[Serializable]
+public struct ActionListJSON
+{
+    public string message;
+    public string player;
+    public string[] actions;
+
+    public static ActionListJSON CreateFromJSON(string data)
+    {
+        return JsonUtility.FromJson<ActionListJSON>(data);
+    }
+}
+
+[Serializable]
+public struct AuctionJSON
+{
+    public string player;
+    public string location;
+    public int price;
+    // public List<string> actions; // is this needed?
+    public static AuctionJSON CreateFromJSON(string data)
+    {
+        // TODO: wrap this in try/catch to handle deserialization exceptions
+        return JsonUtility.FromJson<AuctionJSON>(data);
+    }
+}
+
+[Serializable]
+public struct AllPropertyNamesJSON
+{
+    public string[] names;
+
+    public static AllPropertyNamesJSON CreateFromJSON(string data)
+    {
+        // TODO: wrap this in try/catch to handle deserialization exceptions
+        return JsonUtility.FromJson<AllPropertyNamesJSON>(data);
+    }
+}
+
+[Serializable]
+public struct DrawCardJSON
+{
+    public string card;
+    public JSONObject player; // TODO test this works?
+                       // string player; // if backend just uses player name instead of  "player": {"name": player.name}
+    public string message;
+    public string[] actions;
+
+    public static DrawCardJSON CreateFromJSON(string data)
+    {
+        // TODO: wrap this in try/catch to handle deserialization exceptions
+        return JsonUtility.FromJson<DrawCardJSON>(data);
+    }
+}
+
+[Serializable]
+public struct MovementJSON
+{
+    public object player;
+    public string[] movedTo; // locations visited by player
+    public string[] actions;
+    public string message;
+
+    public static MovementJSON CreateFromJSON(string data)
+    {
+        // TODO: wrap this in try/catch to handle deserialization exceptions
+        return JsonUtility.FromJson<MovementJSON>(data);
+    }
+}
+
+[Serializable]
+public struct PropertyJSON
+{
+    public string name;
+    public string type;
+    public List<string> forward;
+    public List<string> backward;
+    public List<int> num;
+    public List<string> below;
+    public bool snapshot;
+    public int group;
+    public List<int> rent;
+    public int mortgageValue;
+    public int cost;
+    public string owner;
+    public bool isMortgaged;
+    public int houses;
+    public int housePrice;
+
+    public static PropertyJSON CreateFromJSON(string data)
+    {
+        // TODO: wrap this in try/catch to handle deserialization exceptions
+        return JsonUtility.FromJson<PropertyJSON>(data);
+    }
+}
+
+[Serializable]
+public struct UnownedPropertyNamesJSON
+{
+    public string[] names;
+
+    public static UnownedPropertyNamesJSON CreateFromJSON(string data)
+    {
+        // TODO: wrap this in try/catch to handle deserialization exceptions
+        return JsonUtility.FromJson<UnownedPropertyNamesJSON>(data);
+    }
+}
+
+[Serializable]
+public struct RentJSON
+{
+    public string name;
+    public int price;
+
+    public static RentJSON CreateFromJSON(string data)
+    {
+        return JsonUtility.FromJson<RentJSON>(data);
+    }
+}
+#endregion

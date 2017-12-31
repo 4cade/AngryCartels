@@ -70,4 +70,5 @@ public abstract class GameSocketMessages
 public abstract class GameMessages
 {
     public const string GAME_DATA_UPDATED = "game_data_updated";
+    public const string ON_MOVEMENT = "on_movement";
 }

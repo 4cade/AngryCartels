@@ -87,8 +87,6 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        Canvas.SwitchSceneGui(nextEntry.sceneGuiPrefab);
-
         GameObject sceneObj = Instantiate(nextEntry.sceneManagerPrefab);
         GameSceneManager nextSceneManager = sceneObj.GetComponent<GameSceneManager>();
 
@@ -111,6 +109,8 @@ public class GameManager : MonoBehaviour {
             Logger.d("GameManager", "Loading next Unity scene...");
             SceneManager.LoadScene(sceneIndex);
         }
+
+        Canvas.SwitchSceneGui(nextEntry.sceneGuiPrefab);
     }
 
     public void SetUpTestGame(Message obj)

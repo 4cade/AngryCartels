@@ -8,10 +8,10 @@ using System.Collections.Generic;
 /// The GameInfo class contains replicated information from the server to 
 /// the local machine. 
 /// </summary>
-public class GameInfo : MonoBehaviour {
+public class GameInfoz : MonoBehaviour {
 
-    private static GameInfo instance;
-    public static GameInfo Instance
+    private static GameInfoz instance;
+    public static GameInfoz Instance
     {
         get
         {

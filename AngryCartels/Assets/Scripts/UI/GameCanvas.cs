@@ -32,9 +32,9 @@ public class GameCanvas : MonoBehaviour {
     /// <summary>
     /// Updates the current scene gui based on a newly received gamestate.
     /// </summary>
-    public void UpdateCanvasGameState(GameInfo newState)
+    public void UpdateCanvasGameState()
     {
-        currentSceneGui.GameStateUpdate(newState);
+        currentSceneGui.GameStateUpdate();
     }
 
     /// <summary>

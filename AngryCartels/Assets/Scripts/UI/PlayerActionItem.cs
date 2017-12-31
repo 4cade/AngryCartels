@@ -11,6 +11,12 @@ public class PlayerActionItem : MonoBehaviour
 {
     public Text ActionText = null;
 
+    private NetworkManager netManager;
+
+    private void Start()
+    {
+        netManager = NetworkManager.Instance;
+    }
 
     /// <summary>
     /// Gets called when the player selects this action item gameobject
@@ -39,7 +45,7 @@ public class PlayerActionItem : MonoBehaviour
                 Debug.Log("TODO: Action not implemented");
                 break;
             case GameSocketMessages.ROLL:
-                Debug.Log("TODO: Action not implemented");
+                netManager.CmdRoll();
                 break;
             case GameSocketMessages.MRMONOPOLY:
                 Debug.Log("TODO: Action not implemented");

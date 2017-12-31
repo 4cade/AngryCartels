@@ -35,7 +35,7 @@ public class TitleSceneGui : SceneGui {
     public float SERVER_REFRESH_INTERVAL = 3.0f;
     public float LOBBY_REFRESH_INTERVAL = 1.0f;
 
-    public override void GameStateUpdate(GameInfo gi)
+    public override void GameStateUpdate()
     {
         throw new NotImplementedException();
     }

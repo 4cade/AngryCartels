@@ -14,27 +14,50 @@ public class GameBoardGui : SceneGui
     // Prefabs
     public GameObject playerBadgeRowPrefab;
     public GameObject playerBadgePrefab;
+
+    // Panel Scripts
+    ActionPanel actionPanelScript;
     
     private const int MAX_PLAYERS_PER_ROW = 4;
 
-    public override void GameStateUpdate(GameInfo gi)
+    private GameState gameState;
+
+    public override void GameStateUpdate()
     {
         throw new NotImplementedException();
     }
 
+    private void Awake()
+    {
+        gameState = GameState.Instance;
+    }
+
+    private void Start()
+    {
+        actionPanelScript = ActionPanel.GetComponent<ActionPanel>();
+    }
+
     public override void OnGuiExit()
     {
-        CreatePlayerBadges();
+        
     }
 
     public override void OnGuiEnter()
     {
-        base.OnGuiEnter();
+        Logger.d("GameBoardGui", "TODO: Set up game gui here");
+        //CreatePlayerBadges();
+    }
+
+    public void DisplayPlayerActions(int playerIndex)
+    {
+        List<string> actionStrings = gameState.GetPlayerActions(playerIndex);
+        Logger.d("GameBoardGui", "Player Actions for {0} {1}", playerIndex, actionStrings.Count);
+        actionPanelScript.OpenActionPanel(actionStrings.ToArray());
     }
 
     private void CreatePlayerBadges()
     {
-        int numPlayers = GameInfo.Instance.NumPlayers;
+        int numPlayers = 0;// GameInfo.Instance.NumPlayers;
 
         Debug.Log("Creating " + numPlayers + " player badges");
 
@@ -60,7 +83,7 @@ public class GameBoardGui : SceneGui
             {
                 GameObject instance = Instantiate(playerBadgePrefab);
                 instance.transform.SetParent(row1.transform);
-                instance.GetComponent<PlayerBadgeInfo>().Player = GameInfo.Instance.GetPlayerGameObject(playerScriptCounter++);
+                //instance.GetComponent<PlayerBadgeInfo>().Player = GameInfo.Instance.GetPlayerGameObject(playerScriptCounter++);
             }
 
             // check if we need a second row
@@ -74,7 +97,7 @@ public class GameBoardGui : SceneGui
                 {
                     GameObject instance = Instantiate(playerBadgePrefab);
                     instance.transform.SetParent(row2.transform);
-                    instance.GetComponent<PlayerBadgeInfo>().Player = GameInfo.Instance.GetPlayerGameObject(playerScriptCounter++);
+                    //instance.GetComponent<PlayerBadgeInfo>().Player = GameInfo.Instance.GetPlayerGameObject(playerScriptCounter++);
                 }
             }
         }
