@@ -14,11 +14,26 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class NetworkManager : MonoBehaviour {
 
+    private static NetworkManager instance;
+    public static NetworkManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Debug.LogError("NETWORK MANAGER IS NULL YOU TWAT");
+            }
+            return instance;
+        }
+    }
+
     // The build index for the title scene
     public int titleScene;
 
     // The build index for the game scene.
     public int gameScene;
+
+    private GameState gameState;
 
     private SocketIO.SocketIOComponent socket;
 
@@ -28,12 +43,20 @@ public class NetworkManager : MonoBehaviour {
     /// </summary>
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Logger.e("NetworkManager", "Trying to reinstantiate singlton");
+        }
+
         // Register MessageBus Events     
-        MessageBus.Instance.Register("player_name_set", PlayerNameReceived);
         MessageBus.Instance.Register("refresh", RefreshLobbies);
         MessageBus.Instance.Register("join_lobby", JoinLobby);
         MessageBus.Instance.Register("create_game", CreateGame);
-        MessageBus.Instance.Register("start_game", StartGameAsHost);
+        //MessageBus.Instance.Register("start_game", StartGame);
         MessageBus.Instance.Register("ping_lobbies", GetGames);
 
         DontDestroyOnLoad(gameObject); // Create this object between scenes
@@ -61,6 +84,8 @@ public class NetworkManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        gameState = GameObject.Find("GameState").GetComponent<GameState>();
+
         socket = GetComponent<SocketIO.SocketIOComponent>();
 
         socket.On(GameSocketMessages.SEND_CLIENT_NAME, ClientNameCallback);
@@ -69,7 +94,7 @@ public class NetworkManager : MonoBehaviour {
         socket.On(GameSocketMessages.START_GAME, StartGame);
 
         // In Game Messages
-        socket.On(GameSocketMessages.GAME_DATA, GameData);
+        socket.On(GameSocketMessages.GAME_DATA, OnGameStateUpdate);
         socket.On(GameSocketMessages.NEXT_TURN, OnNextTurn);
         socket.On(GameSocketMessages.MOVEMENT, OnMovement);
         socket.On(GameSocketMessages.PROPERTY_BOUGHT, OnPropertyBought);
@@ -326,12 +351,10 @@ public class NetworkManager : MonoBehaviour {
     /// TODO: Response when the game data is queried.
     /// </summary>
     /// <param name="obj">JSON data.</param>
-    private void GameData(SocketIOEvent obj)
+    private void OnGameStateUpdate(SocketIOEvent obj)
     {
-        Debug.Log("Game Data: " + obj);
-        Message m = new Message("game_data_received", obj.data);
-        m.DeleteIfNoReceivers = false;
-        MessageBus.Instance.Broadcast(m);
+        Logger.d("NetworkManager", "Game Data: " + obj);
+        gameState.UpdateGameState(obj.data);
     }
 
     /// <summary>
@@ -342,7 +365,8 @@ public class NetworkManager : MonoBehaviour {
     {
         if (SceneManager.GetActiveScene().buildIndex != gameScene)
         {
-            SceneManager.LoadScene(gameScene);
+            Logger.d("NetworkManager", "Starting Game Should happen here");
+            //SceneManager.LoadScene(gameScene);
         }
     }
 
@@ -379,12 +403,11 @@ public class NetworkManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Called when the player sets their name.
+    /// Called whne the player logs into the server
     /// </summary>
-    /// <param name="obj">JSON data.</param>
-    private void PlayerNameReceived(Message obj)
+    /// <param name="obj">Player Name</param>
+    public void CmdLogIn(string playerName)
     {
-        string playerName = obj.GetData<string>();
         JSONObject json = new JSONObject();
         json.AddField("username", playerName);
         socket.Emit(GameSocketMessages.JOIN, json);
@@ -398,7 +421,7 @@ public class NetworkManager : MonoBehaviour {
     /// <param name="obj">JSON data.</param>
     private void InRoom(SocketIOEvent obj)
     {
-        Debug.Log("WARNING: If updated games message is received after the " 
+        Logger.w("NetworkManager", "If updated games message is received after the " 
             + "join game message, then the player lobby wont be properly displayed.");
         MessageBus.Instance.Broadcast("joined_room", obj.data);
     }
@@ -410,7 +433,7 @@ public class NetworkManager : MonoBehaviour {
     /// <param name="obj">JSON data.</param>
     private void ClientNameCallback(SocketIOEvent obj)
     {
-        Debug.Log("Name received " + obj.data.ToString());
+        Logger.d("NetworkManager", "ClientNameCallback " + obj.data.ToString());
     }
 
     /// <summary>

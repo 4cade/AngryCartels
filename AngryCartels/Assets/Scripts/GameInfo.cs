@@ -46,7 +46,7 @@ public class GameInfo : MonoBehaviour {
 
 
     // The node Json parser
-    private GameParser parser;
+    private GameState parser;
 
 
     public GameObject GetPlayerGameObject(int index)
@@ -60,9 +60,9 @@ public class GameInfo : MonoBehaviour {
     private void Awake()
     {
         // add the gamestate
-        parser = GetComponent<GameParser>();
+        parser = GetComponent<GameState>();
 
-        MessageBus.Instance.Register("instantiate_players", OnInstantiatePlayers);
+        MessageBus.Instance.Register("instantiate_players", RpcInstantiatePlayers);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class GameInfo : MonoBehaviour {
     /// host.
     /// </summary>
     /// <param name="obj">Contains the number of players that should be created</param>
-    private void OnInstantiatePlayers(Message obj)
+    private void RpcInstantiatePlayers(Message obj)
     {
         numPlayers = obj.GetData<int>();
         //List<PlayerPair> playerList = parser.GetPlayerNamesAndId();
@@ -88,6 +88,7 @@ public class GameInfo : MonoBehaviour {
             // initial player info here
             // name
             //players[i].PlayerName = playerList[i].Name;
+            players[i].PlayerName = parser.GetPlayerName(i);
             //Debug.Log("Player Name: " + players[i].PlayerName + "--" + playerList[i].Name);
 
             //// game id
@@ -96,34 +97,34 @@ public class GameInfo : MonoBehaviour {
 
             //// money
             //Debug.Log("TODO: set player information here like money and bitches");
-            //players[i].PlayerMoney = parser.GetTeamMoney(i); // NOTE: hopefully these indecies line up
-            //Debug.Log("Player Money: " + players[i].PlayerMoney);
+            players[i].PlayerMoney = parser.GetTeamMoney(i); // NOTE: hopefully these indecies line up
+            Debug.Log("Player Money: " + players[i].PlayerMoney);
 
             //// properties
-            //List<string> propertyNames = parser.GetTeamProperties(i);
-            //foreach (string property in propertyNames)
-            //{
-            //    int groupId = parser.GetGroup(property);
-            //    Debug.Log("Player Card: " + groupId + " -- " + property);
-            //    players[i].Cards[groupId].Add(property);
-            //}
+            List<string> propertyNames = parser.GetTeamProperties(i);
+            foreach (string property in propertyNames)
+            {
+                int groupId = parser.GetGroup(property);
+                Debug.Log("Player Card: " + groupId + " -- " + property);
+                players[i].Cards[groupId].Add(property);
+            }
 
             //// bus passes
-            //List<BusTicket> busTickets = parser.GetTeamBusTickets(i);
-            //foreach (BusTicket ticket in busTickets)
-            //{
-            //    // NEXT TODO: WHY IS THIS BREAKING
-            //    Debug.Log(players[i].PlayerName + " -- " + ticket.Name + ": " + ticket.Amount);
-            //    players[i].BusPasses[ticket.Name] = ticket.Amount;
-            //}
+            List<BusTicket> busTickets = parser.GetTeamBusTickets(i);
+            foreach (BusTicket ticket in busTickets)
+            {
+                // NEXT TODO: WHY IS THIS BREAKING
+                Debug.Log(players[i].PlayerName + " -- " + ticket.Name + ": " + ticket.Amount);
+                players[i].BusPasses[ticket.Name] = ticket.Amount;
+            }
 
             //// special cards
-            //List<SpecialCard> specialCards = parser.GetTeamSpecialCards(i);
-            //foreach (SpecialCard card in specialCards)
-            //{
-            //    Debug.Log(players[i].PlayerName + " -- " + card.Name + ": " + card.Amount);
-            //    players[i].SpecialCards[card.Name] = card.Amount;
-            //}
+            List<SpecialCard> specialCards = parser.GetTeamSpecialCards(i);
+            foreach (SpecialCard card in specialCards)
+            {
+                Debug.Log(players[i].PlayerName + " -- " + card.Name + ": " + card.Amount);
+                players[i].SpecialCards[card.Name] = card.Amount;
+            }
         }
     }
 

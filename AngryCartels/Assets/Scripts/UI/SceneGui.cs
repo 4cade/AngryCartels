@@ -21,14 +21,14 @@ public abstract class SceneGui : MonoBehaviour {
     /// Method executes when this scene is exitting. Override this method 
     /// if you want some fancy effect for your SceneGui to transition out of.
     /// </summary>
-    public virtual void OnSceneExit() { }
+    public virtual void OnGuiEnter() { }
     
     /// <summary>
     /// Method executes when this scene is being entered. Override this method 
     /// if you want some fancy effect for your SceneGui to transition into.
     /// Also can be used to resize canvas elements.
     /// </summary>
-    public virtual void OnSceneEnter() { }
+    public virtual void OnGuiExit() { }
 
     /// <summary>
     /// 

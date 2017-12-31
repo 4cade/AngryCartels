@@ -95,7 +95,7 @@ public class SpecialCard
 /// The Json received from the server represents the entire 
 /// gamestate.
 /// </summary>
-public class GameParser : MonoBehaviour {
+public class GameState : MonoBehaviour {
 
     /// <summary>
     /// The gamestate of the last received json
@@ -111,13 +111,13 @@ public class GameParser : MonoBehaviour {
     /// called before the game begins.
     /// </summary>
 	void Awake () {
+        DontDestroyOnLoad(gameObject);
         gameState = null;
-        MessageBus.Instance.Register("game_data_received", OnGameDataReceived);		
 	}
 
     private void Start()
     {
-        Debug.Log("TEMP: load info here");
+        //Debug.Log("TEMP: load info here");
         //string file = System.IO.File.ReadAllText(@"C:\Users\lemyer\Desktop\game.json");
         //gameState = new JSONObject(file);
     }
@@ -134,17 +134,26 @@ public class GameParser : MonoBehaviour {
         return playerNames;
     }
 
+    public string GetPlayerName(int index)
+    {
+        return GetPlayerNames()[index];
+    }
+
+    public int GetNumberOfPlayers()
+    {
+        if (numPlayers == -1)
+        {
+            numPlayers = GetPlayerNames().Count;
+        }
+        return numPlayers;
+    }
+
     /// <summary>
     /// Returns the index of the player whose turn it is
     /// </summary>
     /// <returns>Dat player id tho.</returns>
     public int GetCurrentPlayerIndex()
     {
-        if (numPlayers == -1)
-        {
-            numPlayers = GetPlayerNames().Count;
-        }
-
         int turnIndex = GetTurnIndex();
 
         return turnIndex % numPlayers;
@@ -156,11 +165,6 @@ public class GameParser : MonoBehaviour {
     /// <returns>The in game name of the current player</returns>
     public string GetCurrentPlayerName()
     {
-        if (numPlayers == -1)
-        {
-            numPlayers = GetPlayerNames().Count;
-        }
-
         int turnIndex = GetTurnIndex();
         string name = GetPlayerNameByIndex(turnIndex % numPlayers);
 
@@ -871,14 +875,14 @@ public class GameParser : MonoBehaviour {
     /// Gets called when the client receives a new gamestate update from the server.
     /// </summary>
     /// <param name="obj"></param>
-    private void OnGameDataReceived(Message obj)
+    public void UpdateGameState(JSONObject data)
     {
-        gameState = obj.GetData<JSONObject>();
+        gameState = data;
 
-        // used for the start of the game
-        if (numPlayers == -1)
-        {
-            MessageBus.Instance.Broadcast("instantiate_players", GetPlayerNames().Count);
-        }
+        MessageBus.Instance.Broadcast(GameMessages.GAME_DATA_UPDATED);
+        
+        // TODO: Still might want to have an event be thrown that the game state has updated
+        // Although it would probably be more efficient to check what changed but I'm not sure 
+        // how to do that when we get the whole game state everytime.
     }
 }

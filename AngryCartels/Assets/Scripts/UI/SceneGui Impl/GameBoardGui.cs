@@ -22,14 +22,14 @@ public class GameBoardGui : SceneGui
         throw new NotImplementedException();
     }
 
-    public override void OnSceneEnter()
+    public override void OnGuiExit()
     {
         CreatePlayerBadges();
     }
 
-    public override void OnSceneExit()
+    public override void OnGuiEnter()
     {
-        base.OnSceneExit();
+        base.OnGuiEnter();
     }
 
     private void CreatePlayerBadges()

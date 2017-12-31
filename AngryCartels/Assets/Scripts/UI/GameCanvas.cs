@@ -21,7 +21,7 @@ public class GameCanvas : MonoBehaviour {
 
     // List of gui items mapped to scene indicies in the unity editor.
     // Find scene indicies in build settings.
-    public SceneGuiEntry[] sceneGuis;
+    //public SceneGuiEntry[] sceneGuis;
 
     // Current gui being display for the scene
     public static SceneGui currentSceneGui = null;
@@ -63,43 +63,26 @@ public class GameCanvas : MonoBehaviour {
         // We should always have a gui attached when the game starts
         if (currentSceneGui == null)
         {
-            currentSceneGui = transform.GetChild(0).GetComponent<SceneGui>();
+            //currentSceneGui = transform.GetChild(0).GetComponent<SceneGui>();
         }
 
         // Register scene switch so any game object can tell the canvas to switch scenes
-        MessageBus.Instance.Register(MessageStrings.SWITCH_SCENE, OnSceneSwitch);
+        //MessageBus.Instance.Register(MessageStrings.SWITCH_SCENE, SwitchSceneGui);
     }
 
-    /// <summary>
-    /// Gets called by the message bus when the SceneGui should change to a new instance.
-    /// Typically would get called on scene switches.
-    /// </summary>
-    /// <param name="obj"></param>
-    private void OnSceneSwitch(Message obj)
-    {
-        int sceneIndex = obj.GetData<int>();
 
+    public void SwitchSceneGui(GameObject guiPrefab)
+    {
+        // destroy and replace
         // transition out of the scene
         if (currentSceneGui != null)
         {
-            currentSceneGui.OnSceneExit();
+            currentSceneGui.OnGuiExit();
+            Destroy(currentSceneGui.gameObject);
         }
 
-        // Find the next scene to start up
-        SceneGui nextScene = null;
-        foreach (SceneGuiEntry entry in sceneGuis)
-        {
-            if (entry.sceneIndex == sceneIndex)
-            {
-                GameObject gameObj = Instantiate(entry.sceneGuiPrefab);
-                nextScene = gameObj.GetComponent<SceneGui>();
-                break;
-            }
-        }
-
-        // destroy and replace
-        Destroy(currentSceneGui.gameObject);
-        currentSceneGui = nextScene;
+        GameObject guiObj = Instantiate(guiPrefab);
+        currentSceneGui = guiObj.GetComponent<SceneGui>();
 
         // Add all the controls that have been created in the editor to the SceneGui for reference
         int childCount = currentSceneGui.transform.childCount;
@@ -108,11 +91,12 @@ public class GameCanvas : MonoBehaviour {
             currentSceneGui.controls.Add(currentSceneGui.transform.GetChild(i).gameObject);
         }
 
-        // transition into the scene
-        currentSceneGui.OnSceneEnter();
-
         // make canvas parent
-        currentSceneGui.transform.parent = transform;
+        //currentSceneGui.transform.parent = transform;
+        currentSceneGui.transform.SetParent(transform, false);
+
+        // transition into the scene
+        currentSceneGui.OnGuiEnter();
     }
 
 }

@@ -75,6 +75,19 @@ public class MessageBus
         }
     }
 
+    public void Unregister(string id, Action<Message> registeredFn)
+    {
+        List<Action<Message>> list = subscribers[id];
+        foreach (Action<Message> fn in list)
+        {
+            if (fn == registeredFn)
+            {
+                list.Remove(fn);
+                return;
+            }
+        }
+    }
+
     /// <summary>
     /// Loops through all subscribers registered to the specified id
     /// </summary>

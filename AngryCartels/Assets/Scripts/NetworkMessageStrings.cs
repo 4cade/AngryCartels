@@ -66,3 +66,8 @@ public abstract class GameSocketMessages
     public const string ALL_UNOWNED_LOCATIONS = "all unowned locations";
     public const string IN_ROOM = "in room";
 }
+
+public abstract class GameMessages
+{
+    public const string GAME_DATA_UPDATED = "game_data_updated";
+}

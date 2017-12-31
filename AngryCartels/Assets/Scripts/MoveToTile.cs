@@ -49,9 +49,11 @@ public class MoveToTile : MonoBehaviour {
         lerp = 0;
         lerpSpacer = 1;
 
-        startPoint = GameObject.Find("MapManager").GetComponent<TileHandler>().tiles[0].location;
-        nextPoint = GameObject.Find("MapManager").GetComponent<TileHandler>().tiles[1].location;
-        MovementDirection = (nextPoint - startPoint).normalized;
+        //GameObject mapManager = GameObject.Find("MapManager");
+        //TileHandler th = mapManager.GetComponent<TileHandler>();
+        //startPoint = th.tiles[0].location;
+        //nextPoint = th.tiles[1].location;
+        //MovementDirection = (nextPoint - startPoint).normalized;
 
         MessageBus.Instance.Register("pathCreated", MovementPathCreated);
 	}

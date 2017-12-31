@@ -18,7 +18,8 @@ enum TitleResponseType
 /// </summary>
 public class TitleSceneGui : SceneGui {
 
-    // some temporary game objects in the title screen.
+    TitleSceneManager scene = null;
+
     public GameObject inputField;
     public GameObject serverList;
     public GameObject serverButtonlPrefab;
@@ -32,7 +33,6 @@ public class TitleSceneGui : SceneGui {
     // some refresh counters
     private float serverRefreshCounter = 0;
     public float SERVER_REFRESH_INTERVAL = 3.0f;
-    private float lobbyRefreshCounter = 0;
     public float LOBBY_REFRESH_INTERVAL = 1.0f;
 
     public override void GameStateUpdate(GameInfo gi)
@@ -40,16 +40,16 @@ public class TitleSceneGui : SceneGui {
         throw new NotImplementedException();
     }
 
-    public override void OnSceneEnter()
+    public override void OnGuiExit()
     {
-        base.OnSceneEnter();
+        base.OnGuiExit();
     }
 
     // Use this for initialization
     void Awake()
     {
-        MessageBus.Instance.Register("title_response_received", TitleResponseReceived);
-        MessageBus.Instance.Register("joined_room", JoinRoom);
+        //MessageBus.Instance.Register("title_response_received", TitleResponseReceived);
+        //MessageBus.Instance.Register("joined_room", JoinRoom);
     }
 
     /// <summary>
@@ -58,6 +58,7 @@ public class TitleSceneGui : SceneGui {
     private void Start()
     {
         serverRefreshCounter = SERVER_REFRESH_INTERVAL;
+        scene = (TitleSceneManager)GameManager.Instance.CurrentSceneManager;
     }
 
     /// <summary>
@@ -67,7 +68,7 @@ public class TitleSceneGui : SceneGui {
     private void JoinRoom(Message obj)
     {
         lobbyHostName = obj.GetData<JSONObject>().list[0].str;
-        Debug.Log("joining");
+        Debug.Log("joining room " + lobbyHostName);
     }
 
     /// <summary>
@@ -155,8 +156,17 @@ public class TitleSceneGui : SceneGui {
 
         inputField.GetComponent<InputField>().interactable = false;
         string playerName = inputField.transform.Find("Text").GetComponent<Text>().text;
-        PlayerPrefs.SetString("username", playerName);
-        MessageBus.Instance.Broadcast("player_name_set", playerName);
+
+        GameManager.Instance.currentUser.Username = playerName;
+        GameManager.Instance.currentUser.Id = 0;
+
+        scene.LogIn(ref GameManager.Instance.currentUser);;
+
+        if (playerName == "test1" || playerName == "test2")
+        {
+            Logger.d("TitleSceneGui", "Running test game");
+            MessageBus.Instance.Register(GameMessages.GAME_DATA_UPDATED, GameManager.Instance.SetUpTestGame);
+        }
     }
 
     /// <summary>
@@ -168,7 +178,7 @@ public class TitleSceneGui : SceneGui {
         ClearLobbyItems();
 
         // add items to list
-        MessageBus.Instance.Broadcast("refresh");
+        //MessageBus.Instance.Broadcast("refresh");
     }
 
     /// <summary>
@@ -185,13 +195,13 @@ public class TitleSceneGui : SceneGui {
     public void CreateGame()
     {
         isHost = true;
-        MessageBus.Instance.Broadcast("create_game");
+        //MessageBus.Instance.Broadcast("create_game");
     }
 
     public void StartGame()
     {
-        MessageBus.Instance.Broadcast("start_game");
-        MessageBus.Instance.Broadcast(MessageStrings.SWITCH_SCENE, 1);
+        //MessageBus.Instance.Broadcast("start_game");
+        //MessageBus.Instance.Broadcast(MessageStrings.SWITCH_SCENE, 1);
     }
 
     /// <summary>
@@ -224,12 +234,10 @@ public class TitleSceneGui : SceneGui {
     private void Update()
     {
         serverRefreshCounter -= Time.deltaTime;
-        //lobbyRefreshCounter -= Time.deltaTime;
 
         if (serverRefreshCounter <= 0)
         {
-            // TODO: Create automatic refresh
-            MessageBus.Instance.Broadcast("ping_lobbies");
+            //sceneManager.RefreshGameLobbies();
             serverRefreshCounter = SERVER_REFRESH_INTERVAL;
         }
     }
