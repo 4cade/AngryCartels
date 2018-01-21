@@ -12,5 +12,4 @@ public class Tile {
     public Vector3 location;
     public int index;
     public int tier;
-    
 }

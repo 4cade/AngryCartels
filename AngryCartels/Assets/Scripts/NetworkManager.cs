@@ -515,11 +515,24 @@ public struct DrawCardJSON
 }
 
 [Serializable]
+public struct PlayerJSON
+{
+    public string name;
+    public int money;
+
+    public static PlayerJSON CreateFromJson(string data)
+    {
+        return JsonUtility.FromJson<PlayerJSON>(data);
+    }
+}
+
+[Serializable]
 public struct MovementJSON
 {
-    public object player;
+    public PlayerJSON player;
     public string[] movedTo; // locations visited by player
     public string[] actions;
+    public int[] rolled;
     public string message;
 
     public static MovementJSON CreateFromJSON(string data)

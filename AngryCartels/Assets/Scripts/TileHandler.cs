@@ -29,6 +29,9 @@ public class TileHandler : MonoBehaviour {
     // TODO: if we know this at game start we should create the entire array.
     public Tile[] tiles;
 
+    //private Dictionary<string, int> tileNameToTileIndex;
+    private Dictionary<int, string> tileNameToTileIndex;
+
     // Use this for initialization
     void Start () {
 
@@ -59,9 +62,8 @@ public class TileHandler : MonoBehaviour {
         // Destroy tile location container
         foreach (Transform t in locTrans)
         {
-            Destroy(t.gameObject);
+            //Destroy(t.gameObject);
         }
-        Destroy(moveLocationsContainerObject);
 
         // Set tile neighbors
         for (int i = 0; i < tier1TileCount; ++i)
@@ -90,8 +92,12 @@ public class TileHandler : MonoBehaviour {
         tiles[9 + tier1TileCount + tier2TileCount].neighbors.Add(tiles[15 + tier1TileCount]); // link to tier 2
         tiles[21 + tier1TileCount + tier2TileCount].neighbors.Add(tiles[35 + tier1TileCount]); // link to tier 2
 
+        CreateTileDictionary();
+
+        //Destroy(moveLocationsContainerObject);
+
         // Subscribe to the changed goal/start event
-        MessageBus.Instance.Register("goalChange", PlayerChangedGoal);
+        MessageBus.Instance.Register(GameMessages.PATHING_GOAL_CHANGE, PlayerChangedGoal);
     }
 
     /// <summary>
@@ -287,12 +293,59 @@ public class TileHandler : MonoBehaviour {
     /// </summary>
     void CreateTileDictionary()
     {
-        Dictionary<string, int> tileMap = new Dictionary<string, int>();
+        TextAsset asset = Resources.Load<TextAsset>("tile_mapping");
 
-        TextAsset asset = Resources.Load<TextAsset>("tile_mapping.xml");
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(asset.text);
 
-        // TODO: load mapping here
+        XmlNodeList nodes = doc.DocumentElement.SelectNodes("tile");
+
+        Logger.d("TileHandler", "Found {0} tile nodes.", nodes.Count);
+
+        tileNameToTileIndex = new Dictionary<int, string>();
+
+        foreach (XmlNode node in nodes)
+        {
+            string tileName = node["name"].InnerText;
+            Debug.Log(tileName);
+            if (tileName == null)
+            {
+                Logger.e("TileHandler", "TILE NAME CANNOT BE NULL");
+            }
+
+            if (node["index"] != null)
+            {
+                string strIndex = node["index"].InnerText;
+                if (strIndex == null)
+                {
+                    Logger.e("TileHandler", "TILE INDEX CANNOT BE NULL");
+                }
+                int tileIndex = Convert.ToInt32(strIndex);
+                tileNameToTileIndex[tileIndex] = tileName;
+            }
+            else
+            {
+                // This tile corresponds to multiple indecies
+                // Most likely a railroad
+                string strTop = node["top"]["index"].InnerText;
+                string strBot = node["bottom"]["index"].InnerText;
+
+                if (strTop == null || strBot == null)
+                {
+                    Logger.e("TileHandler", "Top/Bot tile index should not be null");
+                }
+
+                int topIdx = Convert.ToInt32(strTop);
+                int botIdx = Convert.ToInt32(strBot);
+
+                tileNameToTileIndex[topIdx] = tileName;
+                tileNameToTileIndex[botIdx] = tileName;
+            }       
+        }
+    }
+
+    public int GetTileIndexFromName(string v)
+    {
+        throw new NotImplementedException();
     }
 }

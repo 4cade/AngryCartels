@@ -71,4 +71,8 @@ public abstract class GameMessages
 {
     public const string GAME_DATA_UPDATED = "game_data_updated";
     public const string ON_MOVEMENT = "on_movement";
+
+    //
+    public const string PATHING_GOAL_CHANGE = "pathing_goal_change";
+    public const string PATH_CREATED = "path_created";
 }

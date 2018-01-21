@@ -16,6 +16,8 @@ public class BoardSceneManager : GameSceneManager {
         }
     }
 
+    private TileHandler tileHandler;
+
     private GameBoardGui gameGui;
 
     private PlayerScript[] players;
@@ -43,11 +45,32 @@ public class BoardSceneManager : GameSceneManager {
         Logger.d("BoardSceneManager", "Movement data has been received {0} {1} {2} {3}", 
             movement.player, movement.movedTo, movement.actions, movement.message);
 
+        MoveToTile mtt = CurrentPlayer.GetComponent<MoveToTile>();
+
+        //mtt.lerp = 1; // Currently no animation for movement
+        // mtt.goalIndex can tell us what tier we are on
+        // if goalindex >0 <54 
+        //    tier 1
+        // if goal >54 <109 etc....
+        mtt.startIndex = mtt.goalIndex;
+        mtt.goalIndex = tileHandler.GetTileIndexFromName(movement.movedTo[0]); // pass in the tier here to figure out what index to use
+
+        //MessageBus.Instance.Broadcast(GameMessages.PATHING_GOAL_CHANGE, mtt);
+
+        // WHY YOU NO DO!!!!!!
+        Logger.d("BoardSceneManager", "Goal index is {0}", mtt.goalIndex);
+
     }
 
     private void Start()
     {
         gameGui = (GameBoardGui)(GameCanvas.currentSceneGui);
+        MessageBus.Instance.Register(GameMessages.GAME_DATA_UPDATED, HandleGameStateUpdated);
+    }
+
+    private void HandleGameStateUpdated(Message obj /* we already have reference to gameState */)
+    {
+        // TODO: Might have current player index be updated here
     }
 
     override public void OnSceneExit()
@@ -64,7 +87,7 @@ public class BoardSceneManager : GameSceneManager {
     {
         if (++isBoardReadyCounter >= BOARD_READY)
         {
-            StartGame();
+            PostSceneLoadSetup();
         }
     }
 
@@ -86,6 +109,12 @@ public class BoardSceneManager : GameSceneManager {
             players[i].PlayerName = gameState.GetPlayerName(i);
             players[i].PlayerId = i; // TODO: This should be something better than just the index
             players[i].PlayerMoney = gameState.GetTeamMoney(i);
+
+            if (players[i].PlayerName == GameManager.Instance.currentUser.Username)
+            {
+                Logger.w("BoardSceneManager", "We should not be assuming the local user based on their username");
+                players[i].IsLocal = true;
+            }
 
             Logger.d("BoardSceneManager", "Creating Player({0}) {1} with money {2}.", players[i].PlayerId, players[i].PlayerName, players[i].PlayerMoney);
 
@@ -117,15 +146,22 @@ public class BoardSceneManager : GameSceneManager {
 
         if (++isBoardReadyCounter >= BOARD_READY)
         {
-            StartGame();
+            PostSceneLoadSetup();
         }
     }
 
-    private void StartGame()
+    private void PostSceneLoadSetup()
     {
         Logger.d("BoardScenemanager", "Starting Game...");
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 
+        tileHandler = GameObject.Find("TileHandler").GetComponent<TileHandler>();
+
+        StartGame();
+    }
+
+    private void StartGame()
+    {
         int ii = gameState.GetCurrentPlayerIndex();
         GameObject cp = players[ii].gameObject;
         CameraFollowPlayer cfp = Camera.main.GetComponent<CameraFollowPlayer>();

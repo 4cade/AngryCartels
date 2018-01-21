@@ -56,6 +56,15 @@ public class PlayerScript : MonoBehaviour {
         }
     }
 
+    // is the player playing on the local machine?
+    private bool isLocal = false;
+    public bool IsLocal
+    {
+        get { return isLocal; }
+        set { isLocal = value; }
+    }
+
+
     // The player's property cards.
     public Dictionary<int, List<string>> Cards;
 
