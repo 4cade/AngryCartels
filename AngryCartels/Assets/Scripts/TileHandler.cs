@@ -30,7 +30,8 @@ public class TileHandler : MonoBehaviour {
     public Tile[] tiles;
 
     //private Dictionary<string, int> tileNameToTileIndex;
-    private Dictionary<int, string> tileNameToTileIndex;
+    //private Dictionary<int, string> tileNameToTileIndex;
+    private Dictionary<string, int[]> tileNameToTileIndex;
 
     // Use this for initialization
     void Start () {
@@ -94,10 +95,11 @@ public class TileHandler : MonoBehaviour {
 
         CreateTileDictionary();
 
-        //Destroy(moveLocationsContainerObject);
+        Destroy(moveLocationsContainerObject);
 
         // Subscribe to the changed goal/start event
         MessageBus.Instance.Register(GameMessages.PATHING_GOAL_CHANGE, PlayerChangedGoal);
+        ((BoardSceneManager)(GameManager.Instance.CurrentSceneManager)).IncrementDependencyReady();
     }
 
     /// <summary>
@@ -300,14 +302,15 @@ public class TileHandler : MonoBehaviour {
 
         XmlNodeList nodes = doc.DocumentElement.SelectNodes("tile");
 
-        Logger.d("TileHandler", "Found {0} tile nodes.", nodes.Count);
+        //Logger.d("TileHandler", "Found {0} tile nodes.", nodes.Count);
 
-        tileNameToTileIndex = new Dictionary<int, string>();
+        //tileNameToTileIndex = new Dictionary<int, string>();
+        tileNameToTileIndex = new Dictionary<string, int[]>();
 
         foreach (XmlNode node in nodes)
         {
             string tileName = node["name"].InnerText;
-            Debug.Log(tileName);
+            //Debug.Log(tileName);
             if (tileName == null)
             {
                 Logger.e("TileHandler", "TILE NAME CANNOT BE NULL");
@@ -321,7 +324,9 @@ public class TileHandler : MonoBehaviour {
                     Logger.e("TileHandler", "TILE INDEX CANNOT BE NULL");
                 }
                 int tileIndex = Convert.ToInt32(strIndex);
-                tileNameToTileIndex[tileIndex] = tileName;
+                //tileNameToTileIndex[tileIndex] = tileName;
+                //GetTileIndexFromName. new int[]{tileIndex, -1};
+                tileNameToTileIndex.Add(tileName, new int[] {tileIndex});
             }
             else
             {
@@ -338,14 +343,24 @@ public class TileHandler : MonoBehaviour {
                 int topIdx = Convert.ToInt32(strTop);
                 int botIdx = Convert.ToInt32(strBot);
 
-                tileNameToTileIndex[topIdx] = tileName;
-                tileNameToTileIndex[botIdx] = tileName;
+                //tileNameToTileIndex[topIdx] = tileName;
+                //tileNameToTileIndex[botIdx] = tileName;
+                tileNameToTileIndex.Add(tileName, new int[] {topIdx, botIdx});
             }       
         }
     }
 
-    public int GetTileIndexFromName(string v)
+    public int[] GetTileIndexFromName(string v)
     {
-        throw new NotImplementedException();
+        int[] result = null;
+        if (tileNameToTileIndex.ContainsKey(v))
+        {
+            result = tileNameToTileIndex[v];
+        }
+        else
+        {
+            Logger.e("TileHandler", "Could not find tile index with key: " + v);
+        }
+        return result;
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
+/// Is this class no longer needed, scene managers take care of this stuff? - Leif 1.21.18
 /// The GameInfo class contains replicated information from the server to 
 /// the local machine. 
 /// </summary>

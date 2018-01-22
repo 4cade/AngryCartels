@@ -9,9 +9,6 @@ using System;
 /// </summary>
 public class MoveToTile : MonoBehaviour {
 
-    // The ID of the player this component is attached to.
-    public int playerID = 0;
-
     // Used to check if the attached game object should move forward or backward.
     public bool isForwardDirection = true;
 

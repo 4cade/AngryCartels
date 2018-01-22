@@ -327,7 +327,7 @@ public class NetworkManager : MonoBehaviour {
         // returns {'player': {'name': player.name, 'money': player.getMoney()},'movedTo': visited,'actions': this.locationAction(player.location), 'message':message}
         // how to handle {'player': {'name': player.name, 'money': player.getMoney()}
         string data = obj.data.ToString();
-        Debug.Log(data);
+
         MovementJSON movementJSON = MovementJSON.CreateFromJSON(data);
 
         MessageBus.Instance.Broadcast(GameMessages.ON_MOVEMENT, movementJSON);

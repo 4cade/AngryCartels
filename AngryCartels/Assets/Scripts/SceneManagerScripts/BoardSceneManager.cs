@@ -28,7 +28,7 @@ public class BoardSceneManager : GameSceneManager {
 
     // Used to check if the scene has been loaded and all UI elements
     private byte isBoardReadyCounter = 0;
-    private const byte BOARD_READY = 2;
+    private const byte BOARD_READY = 3; // TODO: this is a really shitty way to handle dependencies. Should fix this later - LM 1.21.18
 
 
     // Use this for initialization
@@ -52,13 +52,24 @@ public class BoardSceneManager : GameSceneManager {
         // if goalindex >0 <54 
         //    tier 1
         // if goal >54 <109 etc....
+        mtt.lerp = 1;
         mtt.startIndex = mtt.goalIndex;
-        mtt.goalIndex = tileHandler.GetTileIndexFromName(movement.movedTo[0]); // pass in the tier here to figure out what index to use
+        int[] result = tileHandler.GetTileIndexFromName(movement.movedTo[movement.movedTo.Length - 1]); // pass in the tier here to figure out what index to use
 
-        //MessageBus.Instance.Broadcast(GameMessages.PATHING_GOAL_CHANGE, mtt);
+        if (result.Length == 1)
+        {
+            mtt.goalIndex = result[0];
+        }
+        else
+        {
+            // TODO: The player will always choose the bottom tile if they
+            // land on a junction space. Will have to pass more data to figure
+            // out if they want to stay on the bottom/top portion of the tile
+            Logger.d("BoardSceneManager", "Landed on junction space " + result);
+            mtt.goalIndex = result[0];
+        }
 
-        // WHY YOU NO DO!!!!!!
-        Logger.d("BoardSceneManager", "Goal index is {0}", mtt.goalIndex);
+        MessageBus.Instance.Broadcast(GameMessages.PATHING_GOAL_CHANGE, mtt);
 
     }
 
@@ -85,10 +96,7 @@ public class BoardSceneManager : GameSceneManager {
 
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        if (++isBoardReadyCounter >= BOARD_READY)
-        {
-            PostSceneLoadSetup();
-        }
+        IncrementDependencyReady();
     }
 
     public void SetUpBoard()
@@ -144,10 +152,7 @@ public class BoardSceneManager : GameSceneManager {
             }
         }
 
-        if (++isBoardReadyCounter >= BOARD_READY)
-        {
-            PostSceneLoadSetup();
-        }
+        IncrementDependencyReady();
     }
 
     private void PostSceneLoadSetup()
@@ -162,11 +167,32 @@ public class BoardSceneManager : GameSceneManager {
 
     private void StartGame()
     {
+        PlacePlayersOnStart();
+
         int ii = gameState.GetCurrentPlayerIndex();
         GameObject cp = players[ii].gameObject;
         CameraFollowPlayer cfp = Camera.main.GetComponent<CameraFollowPlayer>();
         cfp.target = cp;
 
         gameGui.DisplayPlayerActions(ii);
+    }
+
+    private void PlacePlayersOnStart()
+    {
+        foreach (PlayerScript ps in players)
+        {
+            MoveToTile mtt = ps.GetComponent<MoveToTile>();
+            mtt.startIndex = 0; // TODO: should later change to START_LOCATION instead of using the first index
+            mtt.goalIndex = 0;
+            MessageBus.Instance.Broadcast(GameMessages.PATHING_GOAL_CHANGE, mtt);
+        }
+    }
+
+    public void IncrementDependencyReady()
+    {
+        if (++isBoardReadyCounter >= BOARD_READY)
+        {
+            PostSceneLoadSetup();
+        }
     }
 }
