@@ -195,4 +195,10 @@ public class BoardSceneManager : GameSceneManager {
             PostSceneLoadSetup();
         }
     }
+
+    public void UpdateActions()
+    {
+        int ii = gameState.GetCurrentPlayerIndex();
+        gameGui.DisplayPlayerActions(ii);
+    }
 }

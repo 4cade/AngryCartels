@@ -14,6 +14,13 @@ public class ActionPanel : MonoBehaviour
     // holds the action items
     public GameObject ContentPanel;
 
+    private RectTransform rt;
+
+    private void Start()
+    {
+        rt = ContentPanel.GetComponent<RectTransform>();
+    }
+
     public void TestOpenPanel()
     {
         MessageBus.Instance.Broadcast("instantiate_players", 1);
@@ -39,11 +46,23 @@ public class ActionPanel : MonoBehaviour
         {
             GameObject item = Instantiate(PlayerActionItemPrefab);
             PlayerActionItem playerAction = item.GetComponent<PlayerActionItem>();
+            playerAction.ActionPanel = this;
             playerAction.InitControls();
             playerAction.ActionText.text = actionText;
             item.transform.SetParent(ContentPanel.transform);
         }
 
+    }
+
+    /// <summary>
+    /// Clears all the actions in the panel
+    /// </summary>
+    public void ClearActions() 
+    {
+        foreach (RectTransform childT in rt)
+        {
+            Destroy(childT.gameObject);
+        }
     }
 
     /// <summary>
@@ -54,11 +73,8 @@ public class ActionPanel : MonoBehaviour
         Debug.Log("Hiding Actions for player");
         
         // remove all children
-        RectTransform rt = ContentPanel.GetComponent<RectTransform>();
-        foreach (RectTransform childT in rt)
-        {
-            Destroy(childT.gameObject);
-        }
+        ClearActions();
+        
         gameObject.SetActive(false);
     }
 }

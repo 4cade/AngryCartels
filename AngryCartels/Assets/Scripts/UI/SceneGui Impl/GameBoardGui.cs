@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Note to myself, GUIs should not perform any game actions or requests, they
+// should only take input and pass any parameters off to the active scene manager
 public class GameBoardGui : SceneGui
 {
     // Panels

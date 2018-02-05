@@ -11,11 +11,16 @@ public class PlayerActionItem : MonoBehaviour
 {
     public Text ActionText = null;
 
+    public ActionPanel ActionPanel;
+
     private NetworkManager netManager;
+    private BoardSceneManager sceneManager;
+
 
     private void Start()
     {
         netManager = NetworkManager.Instance;
+        sceneManager = (BoardSceneManager)(GameManager.Instance.CurrentSceneManager);
     }
 
     /// <summary>
@@ -88,9 +93,11 @@ public class PlayerActionItem : MonoBehaviour
                 break;
             default:
                 Debug.Log("Action not supported");
-                break;
+                return;
         }
 
+        ActionPanel.ClearActions();
+        sceneManager.UpdateActions();
     }
 
     public void InitControls()
